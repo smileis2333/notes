@@ -1,0 +1,95 @@
+#+TITLE: design pattern
+#+STARTUP: indent
+* design principle
+- Identify the aspects of your application that vary and separate them from what stays the same
+- Program to an interface, not an implementation.
+- Favor composition over inheritance
+- Strive for loosely coupled designs between objects that interact
+- Classes should be open for extension, but closed for modifi cation
+- Depend upon abstractions.  Do not depend upon concrete classes
+- Principle of Least Knowledge -  talk only to your immediate friends
+- The Hollywood Principle Don’t call us, we’ll call you
+- A class should have only one reason to  change
+* desgin pattern
+** The Strategy Pattern
+defines a family of algorithms, encapsulates each one, and makes them interchangeable.  Strategy lets the algorithm vary independently from clients that use it.
+** the Observer Pattern
+defines a one-to-many dependency between objects so that when one object changes state, all of its dependents are notified and updated automatically.
+#+BEGIN_SRC java
+java.util.Observable
+java.util.Observer
+#+END_SRC
+做法: 被观察对象持有观察者的引用列表，在状态发生变更时，由被观察者主动调用每个观察者的状态变更方法
+** The Decorator Pattern
+attaches additional responsibilities to an object dynamically.  Decorators provide a fl exible alternative to subclassing for extending functionality
+范本: java io
+缺点：过度使用导致可读性差，产生大量小类
+** The Factory Method Pattern
+defines an interface for creating an object, but lets subclasses decide which class to instantiate.  Factory Method lets a class defer instantiation to subclasses.
+** The Abstract Factory Pattern
+provides an interface for creating families of related or dependent objects without specifying their concrete classes
+** The Singleton Pattern
+ensures a class has only one instance, and provides a global point of access to it
+- double check locking 符合延迟加载与线程安全的特性
+- eager instantiation 早初始化，线程安全，无法延迟加载
+- Synchronize 线程安全，懒加载，效率低,实现起来最简单
+** The Command Pattern
+encapsulates a request as an object, thereby letting you parameterize other objects with different requests, queue or log requests, and support undoable operations.
+特点: 将一个对象的一个或者多个操作封装为一个动作，重复操作多个对象封装，使得一个逻辑命令可以完成物理意义上的多个操作
+** The Adapter Pattern
+converts the interface of a class into another interface the clients expect.  Adapter lets classes work together that couldn’t otherwise because of incompatible interfaces
+- Object adapter
+- class adapters
+与decorator的差别: 直觉性的行为，adaptor是为了复用旧代码，解决与新代码交互的问题，而decorator是为对某个行为进行一系列的强化；decorator只能对拥有的ref进行逐层增强；而adaptor可以拥有多个旧类的ref来进行对符合新街口的操作
+** The Facade Pattern
+provides a unifi ed interface to a set of interfaces in a subsytem.  Facade defi nes a higher-level interface that makes the subsystem easier to use.
+** The Template Method Pattern
+defi nes the skeleton of an algorithm in a method, deferring some steps to subclasses.  Template Method lets subclasses redefi ne certain steps of an algorithm without changing the algorithm’s structure
+用途场景: 提供hook method， 提供空实现，让子类决定是否插入执行代码
+tip: 作为提供算法的父类，其模板方法应当尽可能使用final防止子类修改
+#+BEGIN_SRC java
+public abstract class CaffeineBeverageWithHook {
+  final void prepareRecipe{
+    boilWater();
+    brew();
+    pourInCup();
+    if (customerWantsCondiments()) {
+      addCondiments();
+      }
+  }
+  abstract void brew();
+
+  abstract void addCondiments();
+
+  void boilWater() {
+    System.out.println(“Boiling water”);
+  }
+
+  void pourInCup() {
+    System.out.println(“Pouring into cup”);
+  }
+
+  boolean customerWantsCondiments() {
+    return true;
+  }
+}
+#+END_SRC
+- The Factory Method is a specialization of Template Method
+- he Strategy and Template Method Patterns both encapsulate algorithms, one by inheritance and one by composition
+与Strategy区别在于Strategy是提供组合来实现切换实现，并且主要目的是在运行时切换，而模板方法是主要通过继承(也有变种，如Java自带的排序算法，对容器的元素进行转换为Comparable接口，其模板方法即为接口中的compareTo)来实现，并且没有运行时切换的能力
+** The Iterator Pattern
+provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation.
+- “internal” iterators
+- “external” iterators
+** The Composite Pattern
+allows you to compose objects into tree structures to represent part-whole hierarchies.  Composite lets clients treat individual objects and compositions of objects uniformly.
+类似： 文件夹与文件
+** The State Pattern
+allows an object to alter its behavior when its internal state changes.  The object will appear to change its class
+缺点： 与io相似，导致大量小类
+实现： Context控制维持多个State的引用，在动作发生时，委派给当前的主State，根据Context执行的操作，或者被委派的State内部的动作，可能会导致当前的主State切换Context拥有的别的State，从而实现复杂的状态切换，关键在于该模式封装了状态与动作，从而可以规避在复杂情况下的condition语句
+** The Proxy Pattern
+provides a surrogate or placeholder for another object to control access to it.
+- As we know, a remote proxy controls access to a remote object.
+- A virtual proxy controls access to a resource that is expensive to create.
+- A protection proxy controls access to a resource based on access rights.

@@ -1,0 +1,71 @@
+* reference
+- include
+<include src="footer.wxml"/> 将目标文件中除了 <template/> <wxs/> 外的整个代码引入
+- import
+ import 有作用域的概念，即只会 import 目标文件中定义的 template
+<import src="footer.wxml"/>
+
+
+data-*	Any	自定义属性	组件上触发的事件时，会发送给事件处理函数
+bind*/catch*	EventHandler	组件的事件
+* WXSS 样式
+** 样式组织
+根目录中的app.wxss为项目公共样式
+app.json注册了pages/rpx/index页面，那pages/rpx/index.wxss为页面pages/rpx/index.wxml的样式
+** 尺寸单位
+rpx
+** 样式导入
+@import './test_0.wxss'
+
+- 内联样式
+<!--可动态变化的内联样式-->
+<!--
+{
+  eleColor: 'red',
+  eleFontsize: '48rpx'
+}
+-->
+<view style="color: {{eleColor}}; font-size: {{eleFontsize}}"></view>
+权重越高越优先。在优先级相同的情况下，后设置的样式优先级高于先设置的样式。
+view{ // 权重为 1
+  color: blue
+}
+
+.ele{ // 权重为 10
+  color: red
+}
+
+#ele{ // 权重为 100
+  color: pink
+}
+
+view#ele{ // 权重为 1 + 100 = 101，优先级最高，元素颜色为orange
+  color: orange
+}
+
+view.ele{ // 权重为 1 + 10 = 11
+  color: green
+}
+* js
+** 模块导入
+// moduleA.js
+module.exports = function( value ){
+  return value * 2;
+}
+
+// B.js
+
+// 在B.js中引用模块A
+var multiplyBy2 = require('./moduleA')
+var result = multiplyBy2(4)
+** 变量作用域
+*** 全局作用域
+
+// a.js
+// 获取全局变量
+var global = getApp()
+global.globalValue = 'globalValue'
+// b.js
+// 访问全局变量
+var global = getApp()
+console.log(global.globalValue) // 输出 globalValue

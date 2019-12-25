@@ -1,0 +1,151 @@
+#+TITLE:  Vuejs
+#+STARTUP: indent
+* 模板语法
+与Mustache类似，{{value}}，括号中可以获取组件的数据，支持三元运算
+* 基本指令
+- v-for 遍历循环
+- v-if 渲染效果是根据条件来完全从dom中去除或者加入
+- v-show 渲染效果是display: none
+- v-on 可以简写为@，用于绑定方法
+- v-bind 可以简写为:，用于绑定属性
+- v-model 双向数据绑定，用于表单
+** 自定义指令
+* 生命周期
+ #+BEGIN_SRC javascript
+ var vm = new Vue(){
+    el: '#app',
+    data:{
+        msg: 'hello'
+    }
+    methos:{
+        show(){
+            console.log('show')
+        }
+    }
+
+    //该阶段，变量和方法都未初始化
+    beforeCreated(){
+        console.log(this.msg); //undefined
+        this.show(); //error
+    },
+
+    //可以使用了
+    created(){
+        console.log(this.msg);
+        this.show();
+    },
+
+    //模板已经编译好了，尚未展示在页面中
+    beforeMount(){
+        console.log(document.getElementById('pp').innerText) //为{{msg}}，还未被替换
+    },
+
+    mounted(){
+        console.log(document.getElementById('pp').innerText) //为hello，已经完成替换
+    },
+
+    // 数据改了，页面还没改
+    beforeUpdated(){
+
+    },
+
+    update(){
+
+    },
+
+    beforeDestroy(){
+
+    },
+
+    destroy(){
+
+    }
+}
+ #+END_SRC
+* 组件方法
+** compute
+** watch
+* 插槽
+** 匿名插槽
+** 具名插槽
+** 作用域插槽
+* 数据交互
+** axios
+用于申请服务器接口的数据
+** 父子组件传值
+*** 父->子
+#+BEGIN_SRC html
+<div id='app'>
+<com1 :parentMsg="msg"><com1>
+</div>
+
+<script>
+var vm = new Vue({
+    el: '#app',
+    data:{
+        msg: '我是父亲',
+    }
+    components:{
+        com1:{
+            template: '<h1>我是子组件啊 {{parentMsg}}<h1>'
+            data(){
+                return {
+
+                }
+            },
+            // 父组件通过props向子组件传值,建议只读,否则可能报错
+            props:['parentMsg']
+        }
+    }
+})
+</script>
+
+#+END_SRC
+*** 子->父
+拿父组件的方法引用
+#+BEGIN_SRC html
+<!--componentId为组件id,是一个占位符  -->
+
+
+<div id='app'>
+<com1 @func="getfromSon"><com1>
+</div>
+
+<script>
+var vm = new Vue({
+    el: '#app',
+    data:{
+        msg: '我是父亲',
+        parentPerson:null,
+    },
+    methods:{
+        getfromSon(data){
+            this.parentPerson=data;
+        }
+    }
+
+
+    components:{
+        com1:{
+            template: '<h1>我是子组件啊 {{parentMsg}}<h1>'
+            data(){
+                return {
+                    person:{
+                        name: '哈哈',
+                        age: 6,
+                    }
+                }
+            },
+            methods:{
+                sendToPrant(){
+                    this.$emit('func',this.person)
+                }
+            }
+        }
+    }
+})
+</script>
+#+END_SRC
+* 动画支持
+* UI配合
+** Element-ui

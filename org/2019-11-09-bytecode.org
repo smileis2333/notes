@@ -1,0 +1,150 @@
+* 字节码分析
+** class文件结构
+1. 使用javap -verbose命令分析前一个字节码文件时，将会分析字节码文件的魔数、版本号、常量池、类信息、类的构造方法、类中的方法信息、类变量和成员变量等信息2. 使用javap -verbose命令分析前一个字节码文件时，将会分析字节码文件的魔数、版本号、常量池、类信息、类的构造方法、类中的方法信息、类变量和成员变量等信息使用javap -verbose命令分析前一个字节码文件时，将会分析字节码文件的魔数、版本号、常量池、类信息、类的构造方法、类中的方法信息、类变量和成员变量等信息使用javap -verbose命令分析前一个字节码文件时，将会分析字节码文件的魔数、版本号、常量池、类信息、类的构造方法、类中的方法信息、类变量和成员变量等信息使用javap -verbose命令分析前一个字节码文件时，将会分析字节码文件的魔数、版本号、常量池、类信息、类的构造方法、类中的方法信息、类变量和成员变量等信息使用javap -verbose命令分析前一个字节码文件时，将会分析字节码文件的魔数、版本号、常量池、类信息、类的构造方法、类中的方法信息、类变量和成员变量等信息使用javap -verbose命令分析前一个字节码文件时，将会分析字节码文件的魔数、版本号、常量池、类信息、类的构造方法、类中的方法信息、类变量和成员变量等信息使用javap -verbose命令分析前一个字节码文件时，将会分析字节码文件的魔数、版本号、常量池、类信息、类的构造方法、类中的方法信息、类变量和成员变量等信息使用javap -verbose命令分析前一个字节码文件时，将会分析字节码文件的魔数、版本号、常量池、类信息、类的构造方法、类中的方法信息、类变量和成员变量等信息
+2. 魔数：所有的.class字节码文件的前四个字节都是魔数，魔数固定值为：0xCAFEBABE
+3. 魔数之后的四个字节为版本信息、前两个字节表示minor version(次版本号)，后两个字节表示主版本号(主版本号)。这里的版本号为00 00 00 34，换算成十进制，表示次版本号为0，主版本号为52.所以，所文件的版本号为：1.8.0。可以通过java -version验证
+4. 常量池(constant pool)：紧接着主版本号之后的就是常量池入口。一个Java类中定义的很多信息都是由常量池来维护和描述，可以将常量池看作Class文件的资源仓库，比如说Java类中定义的方法与变量信息，都是存储在常量池中。常量池中主要存储两类常量：字面量与符号引用。字面量比方字符串，Java中声明为final的常量值等，而符号引用比如类和接口的全局限定名，字段的名称和描述符，方法的名称和描述符等。
+5. 常量池的总体结构：Java类所对应的常量池的主要是由常量池数量和常量池数组(常量表)这两部分共同组成。常量池数据紧跟在主版本号后面，占据两个字节；常量池数组则紧跟在常量池数量之后。常量池数组与一般的数组不同的是，常量池数组中不同的元素类型、结构都是不同的；但是，每一种元素的第一个数据都是一个u1类型，该类型是个标志位，占据一个字节。JVM在解析常量池时，会根据这个ul类型来获取元素的具体类型。值得注意的是，常量池数组中的元素个数=常量池数-1(其中0暂时不使用)，目的是满足某些常量池索引值的数据在特定情况下需要表达【不引用任何一个常量池】的含义：根本原因在于，索引为0也是一个常量(保留常量)，只不过它不位于常量表中，这个常量就对应NULL值；所以，常量池的索引从1而非0开始
+6. 在JVM规范中，每个变量/字段都有描述信息，描述信息主要的信息主要是描述字段的数据类型、方法的参数列表（包括数量、类型与顺序）与返回值。根据描述符规则。基本数据类型和代表无返回值的void类型都用一个大写字符来表示，对象类型则使用字符L加对象的全限定名称来表示。为了压缩字节码文件的体积，对于基本数据类型，JMV都只使用一个大写字符来表示，如下所示：B - byte，C - char， D - double， F - float， I - int， J -long， S - short， Z - boolean，V -void， L - 对象类型，如Ljava/lang/String;
+7. 对于数组类型来说，每一个维度使用一个前置的 [ 来表示，如int[]被记录为[I，String[][]被记录为[[Ljava/lang/String;
+8. 用描述符描述方法时，按照先参数列表，后返回值的顺序来描述。参数列表按照参数的严格顺序放在一组内()之内，如方法：String getRealNameByIdAndNickName(int id, String nickname)的描述符为：(I,Llang/lang/String)Ljava/lanng/String;
+9. 字节码层面上对源码发生的多次复制: 将放置在字段的初始化上的代码复制到全部的构造方法的前面，异常处理将finally的代码段全部复制到catch处生成的字节码后面
+#+BEGIN_SRC C
+ClassFile {
+    u4             magic;
+    u2             minor_version;
+    u2             major_version;
+    u2             constant_pool_count;
+    cp_info        constant_pool[constant_pool_count-1];
+    u2             access_flags;
+    u2             this_class;
+    u2             super_class;
+    u2             interfaces_count;
+    u2             interfaces[interfaces_count];
+    u2             fields_count;
+    field_info     fields[fields_count];
+    u2             methods_count;
+    method_info    methods[methods_count];
+    u2             attributes_count;
+    attribute_info attributes[attributes_count];
+}
+
+field_info {
+    u2             access_flags;
+    u2             name_index;
+    u2             descriptor_index;
+    u2             attributes_count;
+    attribute_info attributes[attributes_count];
+}
+
+method_info {
+    u2             access_flags;
+    u2             name_index;
+    u2             descriptor_index;
+    u2             attributes_count;
+    attribute_info attributes[attributes_count];
+}
+
+Code_attribute {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 max_stack;
+    u2 max_locals;
+    u4 code_length;
+    u1 code[code_length];
+    u2 exception_table_length;
+    {   u2 start_pc;
+        u2 end_pc;
+        u2 handler_pc;
+        u2 catch_type;
+    } exception_table[exception_table_length];
+    u2 attributes_count;
+    attribute_info attributes[attributes_count];
+}
+
+LineNumberTable_attribute {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 line_number_table_length;
+    {   u2 start_pc;
+        u2 line_number;
+    } line_number_table[line_number_table_length];
+}
+
+LocalVariableTypeTable_attribute {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 local_variable_type_table_length;
+    {   u2 start_pc;
+        u2 length;
+        u2 name_index;
+        u2 signature_index;
+        u2 index;
+    } local_variable_type_table[local_variable_type_table_length];
+}
+#+END_SRC
+
+
+| Flag Name              |  Value | Interpretation                                                                    |
+|------------------------+--------+-----------------------------------------------------------------------------------|
+| ACC_PUBLIC             | 0x0001 | Declared public; may be accessed from outside its package.                        |
+| ACC_FINAL              | 0x0010 | Declared final; no subclasses allowed.                                            |
+| ACC_SUPER              | 0x0020 | Treat superclass methods specially when invoked by the invokespecial instruction. |
+| ACC_INTERFACE          | 0x0200 | Is an interface, not a class.                                                     |
+| ACC_ABSTRACT           | 0x0400 | Declared abstract; must not be instantiated.                                      |
+| ACC_SYNTHETIC          | 0x1000 | Declared synthetic; not present in the source code.                               |
+| ACC_ANNOTATION	 | 0x2000 | Declared as an annotation type.                                                   |
+| ACC_ENUM               | 0x4000 | Declared as an enum type.                                                         |
+
+** Java字节码对于异常的处理方式：
+1. 统一采用异常表来对异常进行处理
+2. 在jdk1.4.2之前的版本中，并不是使用异常表的方式来对异常进行处理的，而是采用特定的指定方式
+3. 当异常处理存在finally语句块时，现代化的JVM的处理方式是将finally语句块拼接到每一个catch快后面，换句话说，程序中存在多少catch块，就会在每一个catch块后面重复多少个finally语句块的代码+1(正常逻辑最后也会走)
+** 栈帧（stack frame）
+栈帧是一种用于帮助虚拟机执行方法调用与方法执行的数据结构
+战阵本身是一种数据结构，封装了方法的局部变量表、动态链接信息、方法的返回地址以及操作数栈等
+符号引用、直接引用
+有些符号引用是在加载阶段或是第一次使用时就会转换为直接引用，这种转换就称为静态解析；另外一些符号引用则是在每次运行期转换为直接引用，这种转换称为动态链接，这体现在Java的多态性
+** 解析
+1. invokeinterface：调用接口中的方法，实际上是在运行期决定的，决定到底调用该接口的哪个对象的特定方法
+2. invokestatic：调用静态方法
+3. invokespecial：调用自己的私有方法，构造方法（<init>）以及父类的方法
+4. invokevirtual：调用虚方法，在运行期查找的过程
+5. invokedynamic：动态调用方法
+ 静态解析的四种情形：
+1. 静态方法
+2. 父类方法
+3. 构函方法
+4. 私有方法（无法被重写）
+
+方法的静态分分派
+变量的静态类型是不会发生变化的，而变量的实际类型则是可以发生变化的（多态的一种体现），实际类型是在运行期就可以确定
+方法重载是一种静态行为，编译器可以完全确定
+
+方法的动态分派
+方法的动态分派涉及到一个重要概念：方法接收者
+invokevirtual字节码指令的多态查找流程
+比较方法重载（overload）与方法重写（overwrite），我们可以得到结论：
+方法重载是静态的，是编译器行为（直接编译为确定的字节码）；方法重写是动态的，是运行期行为（JVM跑起来才去真正查找方法）
+
+针对于方法调用动态分派的过程，JVM会在类的方法区建立一个虚方法表的数据结构（vitual method table, vtable）
+针对于invokeinterface指令来说，JVM会建立一个叫做接口方法表的数据结构（interface method table，itable）
+表的目的是提高搜索效率（空间换时间）
+** JIT
+现代JVM在执行Java代码时，通常都会将解释执行与编译执行两者结合起来进行
+所谓解释执行，就是通过解释器来读取字节码，遇到相应的指令就去执行该指令
+所谓编译执行，就是通过即时编译器（JIT）将字节码转换为本地机器码来执行；现代JVM会根据代码热点来生成相应的本地机器码
+** 基于栈的指令集与基于寄存器的指令集之间的关系
+1. JVM执行指令时所采用的方式是基于栈的指令集
+2. 基于栈的指令集主要的操作有入栈和出栈两种
+3. 基于栈的指令集的优势在于它可以在不同平台之间移植，而基于寄存器的指令集是与硬件架构紧密关联的，无法做到可移植
+4. 基于栈的指令集的缺点在于完成相同的操作，指令数量通常要比基于寄存器的指令集数量要多；基于栈的指令集是在内存中完成操作的，而基于寄存器的指令集是直接由CPU执行的，它是在高速缓冲区中进行执行的，速度要快很多。虽然虚拟机可以采用一些优化手段，但总体来说，基于栈的指令集的执行速度要慢一些
+
+** JVM内存结构(1.8)
+虚拟机栈：stack frame
+程序计数器（Program counter）
+本地方法栈：主要用于处理本地方法
+堆（Heap）：JVM管理的最大一块内存空间
+方法区（Method Area）：存储元信息。永久代（Pemanent Generation），从JDK1.8开始，已经彻底废弃了永久代，使用元空间（meta space）
+运行时常量池：方法区的一部分内容
+直接内存：Direct Memory

@@ -1,0 +1,64 @@
+#+TITLE: XML
+#+STARTUP: indent
+* Namespaces
+如果需要同时使用这两份文档，由于解析器的无法对不同内容和定义的 <table> 元素，就会发生命名冲突。解决的方法与语言上的处理类似，Java有package的概念，XML有Namespaces的概念，都是用于区别描述某些可能会冲突的问题，Java以此处理包同名的问题，XML以此解决元素内容解析冲突的问题。Tip: 规范要求Namespaces必须为URI。
+前缀: 同样，Namespaces与package都是作为标识符而存在的，即唯一性标注，其次才是将其与前缀进行绑定。举例来说，Spring配置文件简单模板如下applicationContext.xml，内容如下
+#+BEGIN_SRC xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"                            xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:test="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+</beans>
+#+END_SRC
+* Prefix
+Namespaces的使用是用xmlns[:prefix]="URI"进行定义，上图我在xmlns:aop下一行设置了xmlns:test，其两者的URI一致，此时，两个前缀使用的是同一个Namespaces(也即是说，用的是同个Namespace)，前缀的存在意义好比速写(或者说简写)，比方说，想要表达"啊我死了"或者"笑死我了"，弹幕一般喜欢用awsl, xswl。因为比起打全中文，快速打出去并且能表意才是目的所在，如果没有前缀，那意味着我们标识不同Namespace的同名标签就得打出命名空间的全程如 &lt;http://twww.springframework.org/schema/aop.table &gt; 诸如此类冗长写法。
+* 约束文件
+约束文件：前面说到URI只是作为一个类似变量名的标识存在，但是可以配合xsi:schemaLocation可以实现XML文件约束，约束文件可以是xsd或者dtd文件，xsi:schemaLocation这个属性用于指定每个Namespace所对应的约束文件(对文件中可使用的标签或属性等进行预先设定和限制的描述文件)的下载URL。而各类IDE的标签的智能提示和报错警告功能也是通过索引约束文件来实现的。简单来说，约束文件是一类文件，这类文件可以用来约束其他文件的内容。如下为Spring AOP模块的约束文件:
+#+BEGIN_SRC xml
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<xsd:schema xmlns="http://www.springframework.org/schema/aop"
+                        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                        xmlns:tool="http://www.springframework.org/schema/tool"
+                        targetNamespace="http://www.springframework.org/schema/aop"
+                        elementFormDefault="qualified"
+                        attributeFormDefault="unqualified">
+
+        <xsd:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans-4.3.xsd"/>
+        <xsd:import namespace="http://www.springframework.org/schema/tool" schemaLocation="http://www.springframework.org/schema/tool/spring-tool-4.3.xsd"/>
+
+        <xsd:annotation>
+                <xsd:documentation><![CDATA[
+        Defines the configuration elements for the Spring Framework's AOP support.
+                ]]></xsd:documentation>
+        ...
+#+END_SRC
+如果输入了不属于该约束文件定义的标签或者属性，智能些的IDE都会有报错的功能，因为违反了约束。
+盲点: xsi:schemaLocation中的xsi作为Namespace "http://www.w3.org/2001/XMLSchema-instance"的前缀，却使用了schemaLocation这个属性，明显是在约束文件所限定的属性了，该属性不是XML自带的规范，那么，他的约束文件从何而来，一般来讲，命令空间的URI选定可以任意，只要在schemaLocation指定映射就行就行，约束文件地址才是具有意义的，但是URI通常是被设置为官方提供约束文件列表的上级URI，如下
+一般的URI指定意义，其大部分的实际意义都是在指定对应的约束文件时才具有意义，因为之后通过映射取得真正的约束文件内容才能进行使用(IDE使用，或者解析器使用)。而xsi:schemaLocation本身具有着兼顾着通过属性来设定各个Namespace 映射的责任，schemaLocation这个属性究竟是什么时候被索引的，自己总要事先能够索引约束文件才能使用约束文件指定的属性，原因是其URI具有独特含义，"http://www.w3.org/2001/XMLSchema-instance"，通过Bash(浏览器无法正常查看)直接下载该地址，可以观察到，获得的就是约束文件本身
+#+BEGIN_SRC bash
+$curl http://www.w3.org/2001/XMLSchema-instance
+<?xml version='1.0'?>
+<!DOCTYPE xs:schema SYSTEM "XMLSchema.dtd" [
+<!ELEMENT p ANY>
+<!ELEMENT a ANY>
+<!ATTLIST a href CDATA #IMPLIED>
+<!ELEMENT hr ANY>
+<!ELEMENT h1 ANY>
+<!ELEMENT br ANY>
+...
+#+END_SRC
+，前面所提到的，也就是说几乎绝大部分情况下的Namespace 的URI是没有任何意义的(单纯就是约定俗成)，除了某些设定的URI本身就可以直接返回约束文件类型的，这种Namespace 在设置的时候，映射的约束文件就自动下载回来了。再次重申，仅在如下情况，XML Namespace设置的URI 才有意义
+#+BEGIN_SRC sh
+$wget http://www.w3.org/2001/XMLSchema-instance #下载可得到约束文件的内容本身
+$wget http://127.0.0.1/aop
+#可以模仿这种上述例子，将Spring的aop约束文件丢在本机服务器，这样的话,Namespace的URI可以改写为http://127.0.0.1/aop并且xsi:schemaLocation不必在配置aop的约束文件映射，因为本身这个URI就可以得到约束文件的内容，可以直接被IDE之类的进行索引了(不过一般没人这么干，没什么作用
+#+END_SRC

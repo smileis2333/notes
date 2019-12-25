@@ -1,0 +1,43 @@
+#+TITLE: JPA
+#+AUTHOR: HJ
+#+EMAIL: hj980959100@gmail.com
+#+STARTUP: indent
+
+* ORM
+主要目的：操作实体类等价于操作数据库表
+建立两个映射关系：
+- 实体类和表的映射关系
+- 实体类中属性和表中字段的映射关系
+* Hibernate
+Hibernate是一个开放源代码的对象关系映射框架，它对JDBC进行了非常轻量级的对象封装，它将POJO与数据库表建立映射关系，是一个全自动的orm框架，hibernate可以自动生成SQL语句，自动执行，使得Java程序员可以随心所欲的使用对象编程思维来操纵数据库。
+* JPA
+JPA的全称是Java Persistence API， 即Java 持久化API，是SUN公司推出的一套基于ORM的规范，内部是由一系列的接口和抽象类构成。
+JPA通过JDK 5.0注解描述对象－关系表的映射关系，并将运行期的实体对象持久化到数据库中。
+** 常用注解
+- @Entity
+指定当前类是实体类。
+- @Table
+指定实体类和表之间的对应关系
+- name：指定数据库表的名称
+- @Id
+指定当前字段是主键。
+- @GeneratedValue
+指定主键的生成方式  strategy ：指定主键生成策略。
+- @Column
+指定实体类属性和数据库表之间的对应关系
+属性：
+name：指定数据库表的列名称。
+                        unique：是否唯一
+                        nullable：是否可以为空
+                        inserttable：是否可以插入
+                        updateable：是否可以更新
+                        columnDefinition: 定义建表时创建此列的DDL
+                        secondaryTable: 从表名。如果此列不建在主表上（默认建在主表），该属性定义该列所在从表的名字搭建开发环境[重点]
+* Spring Data JPA
+概念：是对JPA的在封装
+原来：创建继承自JpaRepository和JpaSpecificationExecutor的接口，设置配置后，使用时，Spring会自动创建该接口的实现类，将基本请求转发到SimpleJPARepositoy
+** 基本用法
+*** JPQL
+*** SQL
+*** 方法名
+** Specification

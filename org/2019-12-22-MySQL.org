@@ -1,0 +1,689 @@
+#+TITLE:  MySQL
+#+STARTUP: indent
+* Start Service
+** 包管理器安装
+*** redhat系(npm)
+service mysqld start
+service mysqld stop
+** 直接装
+- 启动
+/usr/bin/mysqld_safe &
+- 关闭
+以下命令是root用户还不存在密码的情况下
+mysqladmin -uroot shutdown
+如果root用户已经设置了密码
+mysqladmin -uroot shutdown -p
+* Connect Server
+mysql -u root -p (打开buffer，接收密码(非回显))
+mysql -u root -p123 (root是账户，123就是密码)
+mysql -u root -D test -p123 (-D指定指定数据库)
+mysql -u root -p -S /var/lib/mysql.sock (-S指定套接字文件)
+mysql -u root -p -h 192.168.1.103 -P 3306 (-h指定host,-P指定服务端口)
+mysql -u root -p123 -e 'use mysql; select user,host,password from user;'
+mysql -uroot -p123123 -e 'create database if not exists testdb;show databases;'
+连接数据库的常用选项
+--host=host_name, -h host_name：服务端地址；
+--user=user_name, -u user_name：用户名；
+--port=port_num, -P port_num：服务端端口；
+--socket=path, -S path
+--database=db_name, -D db_name：
+--compress, -C：数据压缩传输
+--execute=statement, -e statement：非交互模式执行SQL语句；
+--vertical, -E：查询结果纵向显示；
+--protocol={TCP|SOCKET|PIPE|MEMORY}：
+* Help
+help获取帮助信息
+help content 获取分类的信息
+help command(command代表具体指令，如create)
+* Variable
+** System Variable
+所有变量设置再重启后会失效，如果需要持久保持，需要配置文件配置
+*** Global
+- read
+show global variables;
+show global variables like '%version%';
+show global variables where variable_name like 'character%';
+show global variables where variable_name like '%log%' and value='off';
+
+- write, just affect after newly session
+SET GLOBAL var_name = value;
+SET @@GLOBAL.var_name = value;
+*** Session
+- read
+show session variables; -- show variables; 不指定则从session拿
+
+- write(affect current session)
+SET SESSION var_name = value;
+SET @@SESSION.var_name = value;
+*** concrete
+select @@global.back_log;
+select @@session.basedir; -- 存储过程如果需要使用，也是适用@@xxx.xxx
+** State Variable(Read-only)
+*** Global
+show global status;
+*** Session
+show status;
+* 用户管理语句
+** prepare
+MySQL账户格式: username@host
+root@'10.1.%.%'
+** query
+select * from mysql.`user`;
+** craete
+create user 'hj1'@127.0.0.1;
+create user 'hj2'@'127.0.0.1' identified by '111111';
+
+-- 授权的时候如果没有，会被创建
+grant all on test.* to hj3@127.0.0.1 identified by '111111';
+** delete
+-- 权限没有回收，在再次创建用户时，可能会出问题，可以flush privileges刷新
+delete from mysql.user where user like '%xxx%'
+
+-- 完全删除全部相关
+drop user hj2@127.0.0.1;
+** rename
+rename user hj1@127.0.0.1 to hj5@127.0.0.1;
+** password
+*** terminal
+-- 记得密码才改密码的情况
+mysqladmin -uroot -p123123 password 123456
+
+-- 刚初始化，还没有密码，直接指定密码
+mysqladmin -uroot password 123456
+*** after login
+set password for hj3@127.0.0.1 = password('88888');
+-- 直接改表(需要确定版本)
+update mysql.`user` set password = password('11111') where user = 'hj3'; -- before 5.7
+update mysql.`user` set authentication_string = password('22222') where user = 'hj3'; -- 5.7 and after
+*** reset
+1. 停止服务
+2. mysqld_safe --skip-grant-tables &
+3. mysql -uroot
+4. 用通过语法或者改表的方法改密码
+5. flush privilege
+6. restart
+** 授权相关
+*** grant
+-- identified by 会更改对应账号的密码
+grant all privileges on test.* to hj3@127.0.0.1 (identified by '123123')
+flush privileges
+
+-- 特定权限
+grant select on test.* to hj2@127.0.0.1
+
+-- 一次授权多个用户
+grant select,insert,update,delete on test.* to hj1@127.0.0.1,hj2@127.0.0.1
+
+-- 更小粒度，具体到字段
+grant select(name,age) on test.* to hj1@127.0.0.1
+
+-- 表名可能与函数/存储过程/视图同名，操作类似
+grant execute on function/procedure/view test.* to hj1@127.0.0.1
+
+-- 强制用户ssl建立会话/取消限制
+grant usage on *.* to hj@127.0.0.1 require ssl;
+grant usage on *.* to hj@127.0.0.1 require none;
+
+-- 被授权的用户是否可以在授权给别的用户
+grant select on test.* to hj2@127.0.0.1 with grant option;
+
+-- 额外配置
+MAX_QUERIES_PER_HOUR：限制用户每小时执行的查询语句数量；
+MAX_UPDATES_PER_HOUR：限制用户每小时执行的更新语句数量；
+MAX_CONNECTIONS_PER_HOUR：限制用户每小时连接数据库的次数；
+MAX_USER_CONNECTIONS：限制用户使用当前账号同时连接服务器的连接数量；
+
+上述各限制选项的示例如下。
+grant select on *.* to zsy@'192.168.%.%' identified by '123456' with max_queries_per_hour 20;
+grant select on *.* to zsy@'192.168.%.%' identified by '123456' with max_updates_per_hour 10;
+grant select on *.* to zsy@'192.168.%.%' identified by '123456' with max_connections_per_hour 15;
+grant select on *.* to zsy@'192.168.%.%' identified by '123456' with max_user_connections 2;
+*** query
+-- 看用户对哪些库有哪些权限
+show grant for hj@127.0.0.1;
+
+-- 看某个库授权了哪些权限给了哪些用户
+select * from mysql.db where `Db` = 'test';
+*** 收回
+-- 全收回
+revoke all on test.* from hj2@127.0.0.1;
+
+-- 收回一部分
+revoke select,update on test.* from hj3@127.0.0.1;
+* 库管理语句
+选了字符集可以在从多个排序规则中选一个，但是选了一个排序规则直接决定了是什么字符集，因为排序规则是字符集为基准的
+** create
+create database testdb;
+create database if not exists testdb;
+create database if not exists testdb default character set utf16;
+** query
+show databases;
+
+-- 查看建立库的语句
+show create database testdb;
+
+-- 查看支持的字符集
+show character set;
+
+-- 查看排序
+show collation;
+
+-- 查看当前连接的概要信息
+status;
+** update
+alter database testdb character set utf8;
+
+-- 该库下的所有表默认使用该字符集
+alter database testdb default character set utf8;
+* 表管理语句
+** query
+show tables;
+-- 查看的表信息包括每张表的名称，所使用的存储引擎，版本，字符集，描述信息，创建时间等信息
+show table status;
+
+-- 查看students表的字段，类型，表结构。
+desc student;
+
+-- 查看建表语句
+show create table student;
+** create
+CREATE TABLE [IF NOT EXISTS] tbl_name (create_definition,...)
+
+我们可以把上述语法分为两个部分查看：
+- 前半部分为create table [IF NOT EXISTS] tbl_name ，很容易理解，create table是关键字，表示创建表，tbl_name为表名， [IF NOT EXISTS]为可选的，表示如果表不存在时才创建。
+- 后半部分为(create_definition,...)，首先要注意的是，create_definition需要被括号括起来。
+那么我们来看看create_definition中都包含什么，我们可以将create_definition中的定义分为如下几类：字段定义、表级别约束定义、索引定义。
+
+create table test(
+id int(11),
+name varchar(60)
+)
+
+-- 定义字段顺便指定主键
+create table test1(
+id int(11)key,
+name varchar(60) not null comment 'student name'
+)
+
+-- 后指定主键
+create table test2(
+id int(11),
+name varchar(60) not null comment 'student name',
+primary key(id)
+)
+
+-- 联合主键
+create table test3(
+id int(11),
+name varchar(60) not null comment 'student name',
+primary key(id,name)
+)
+
+-- 指定外键
+create table test4(
+id int(11),
+name varchar(60),
+tid int,
+foreign key(tid) references test1(id)
+)
+
+-- key 和 index 都可以用于创建索引
+create table test5(
+id int(11),
+name varchar(60),
+key ind_name(name),
+index ind_id(id)
+)
+
+-- 复制表数据，结构会丢失
+create table test6 select * from test1;
+
+-- 复制表结构
+create table test7 like test5;
+** delete
+drop table test7;
+** update
+-- 改表名
+alter table test2 rename as test8;
+
+-- 加字段(字段后与定义表字段类似，可指定约束)
+alter table test8 add column age int;
+
+-- 字段添加位置
+alter table test8 add column iid int first; -- 加到第一个
+alter table test8 add column cid int after name;  -- name字段之后
+
+-- 删字段
+alter table test8 drop cid;
+
+-- 字段改名
+alter table test8 change name3 name char(5);
+
+-- 字段类型更改
+alter table test8 modify name int;
+* 约束管理、索引管理、键管理语句
+- primary key
+- unique key
+- foreign key
+** 非空约束
+alter table testdb modify name varchar(100) not null;
+alter table testdb modify name varchar(100) null;
+** 自动增长
+alter table testdb modify id int auto_increment;
+alter table testdb change id int auto_increment;
+** 删除自动增长
+alter table testdb modify id int;
+alter table testdb change id int;
+** 主键约束
+alter table testdb add primary key(id)
+
+-- 如果存在自动增长，需要先取消自动增长，才可以取消主键
+alter table testdb drop primary key
+** 唯一键约束
+-- 索引名以uid_，开始后跟数字，可以重复对某个字段进行创建unique key(不建议)
+alter table testdb add unique key(uid);
+
+-- 指定对应的索引名
+alter table testdb add unique key uni_test(uid);
+
+-- 取消索引
+alter table drop index uni_test;
+** 查看约束
+select * from information_schema.`KEY_COLUMN_USAGE` where `TABLE_NAME` = 'test1';
+
+desc test1
+
+-- 看自己拿了哪些表的主键作为自己的外键
+select `TABLE_NAME`,`COLUMN_NAME`,`CONSTRAINT_NAME`,`REFERENCED_TABLE_NAME`,`REFERENCED_COLUMN_NAME` from information_schema.`KEY_COLUMN_USAGE` where `TABLE_NAME` ='test1' and `REFERENCED_TABLE_NAME` is not null;
+
+-- 看自己被哪些表的外键所引用
+select `TABLE_NAME`,`COLUMN_NAME`,`CONSTRAINT_NAME`,`REFERENCED_TABLE_NAME`,`REFERENCED_COLUMN_NAME` from information_schema.`KEY_COLUMN_USAGE` where `REFERENCED_TABLE_NAME`='test1'
+** 外键约束
+alter table test1 add column tid int default 0 not null;
+alter table test1 add constraint test1_tid_fk foreign key(tid) references test2(id)
+
+-- 去除约束
+alter table test4 drop foreign key test1_tid_fk;
+** 索引管理
+alter table test1 add index ind_name(name)
+
+-- 创建索引
+create index_ind_name on testtb(name(20) desc);
+create index_ind_name on testtb(name(20));
+create index_ind_name on testtb(name);
+
+-- 联合索引
+create index ind_name on testtb(name(20) desc);
+create index ind_name on testtb(name(20));
+create index ind_name on testtb(name);
+
+-- 重建索引(mariadb的innodb不支持重建)
+repair table test1 quick;
+
+-- 删除索引
+alter table test2 drop index ind_name;
+
+-- 查看索引
+show index from test1;
+show index from test1 where key_name like '%xxx%';
+* 视图管理
+视图是一个虚表的概念，不存在实际存储的数据格式(每次访问视图时，通过执行视图对应的SQL语句来进行展示，目的，更灵活的将复杂SQL封装起来，方便以SQL语句为粒度进行授权)
+** create
+create view test1View as select id from test1;
+select * from test1view;
+
+-- 指定视图的字段名
+create or replace view testvi(a,b) as select * from classes where classid<=4;
+** 支持的算法
+- merge 将视图的sql语句与我们对视图的sql语句合并在执行，可以增删改查，效率低
+- temptable 先查询后置放结果在临时表，在调用我们的sql语句去执行，只能查
+- undefinded 系统自动设置，更倾向于merge
+
+** delete
+drop view test1view;
+drop view test1view if exists testview;
+** update
+alter view test1view as select * from test2
+** 不可更新关联表的情况
+- 当视图设定了 ALGORITHM = TEMPTABLE。
+- 聚合函数（SUM(), MIN(), MAX(), COUNT()等）。
+- 位于选择列表中的子查询。
+- FROM子句中存在不可更新视图。
+- WHERE子句中的子查询，引用FROM子句中的表。
+- 仅引用文字值（此时没有要更新的基表）。
+- 基表中的其他字段中的约束不被满足。
+- DISTINCT
+- GROUP BY
+- HAVING
+- UNION 或 UNION ALL
+- Join
+* insert语句
+-- 值与指定的字段必须匹配
+insert into tablename(字段1名称,字段2名称,...) values(字段1值,字段2值,...)
+
+-- 更灵活一点
+insert into tablename set 字段1名称=字段1值,字段2名称=字段2值
+
+-- sql_mode变量控制数据插入时的数据校验，比如定义一个字段类型为varchar(500)，当输出超过500时，不会报错，被其自动截断，如果要强制严格校验，将global.sql_mode变量的值设置为TRADITIONAL（使用的存储引擎为innodb），同时在配置文件中设置sql_mode=TRADITIONAL（使用的存储引擎为innodb），以免重启后失效
+sql_mode最常用的几种重要模式如下：
+ANSI：宽松模式，对插入数据进行校验，如果不符合定义类型或长度，对数据截断保存，报警告信息，默认应该就是这种。
+STRICT_TRANS_TABLES：只在事务型表中进行严格限制。
+STRICT_ALL_TABLES：对所有表进行严格限制。
+TRADITIONAL ：严格模式，当插入数据时，进行数据的严格校验，错误的数据将不能被插入，报error错误。用于事物时，会进行事物的回滚，官方提醒我们说，如果我们使用的存储引擎是非事务型的存储引擎（比如myisam），当我们使用这种模式时， 如果执行非法的插入或更新数据操作时，可能会出现部分完成的情况。
+* delete与update常用语句
+** delete
+-- 清空test1表的数据
+delete from test1
+
+-- 匹配后删除
+delete from test1 where id=1 or name = 2
+
+-- 从tb1表中找出age>30的数据行，然后将这些行按照age进行降序排列，排列后删除第一个。
+delete from test1 where age >30 order by age desc limit 1
+** update
+
+-- 设置test1表数据name的字段全部改为2
+update test1 set name = '2'
+
+-- 条件匹配
+update test1 set name = '2' where id = 3
+
+-- 多字段设置
+update test1 set name = 2, age=100 where id=4
+
+-- 连表信息更新
+update test1,tes2 set test1.age=test.age where test1.id=test.id
+* select语句
+** 通配符like
+- % 任意长的字符串
+- _ 同%，但是代表单个字符
+-
+** 正则rlike
+select * from student where name rlike '^t.*'
+** 排序(不指定默认从小到大，小大的概念依据选中的排序规则或者字符集)
+select * from test1 order by name desc
+
+select * from test1 order by name desc,age desc
+** 去重
+select distinct name from test1
+** 分组
+min(col)返回指定列的最小值
+max(col)返回指定列的最大值
+avg（col）返回指定列的平均值
+count（col）返回指定列中非null值的个数
+sum（col）返回指定列的所有值之和
+group_concat(col)返回指定列拼串值
+
+-- having关键字
+select classId,avg(age) as ageavg from students group by classId having ageavg >25
+** 多表查询
+*** 内连接
+**** cross join
+select * from t1,t2
+
+-- 正式写法
+select * from t1 cross join t2
+**** inner join(the cross join with condition)
+
+-- 正式写法
+select * from t1 cross join t2 on t1.id = t2.id
+*** 外连接
+select * from t1 left (ouetr) join t2 on t1.id = t2.id
+select * from t1 right (outer) join t2 on t1.id = t2.id
+*** 全连接
+-- mysql不直接支持，但是可以通过机制完成
+select * from t1 left (ouetr) join t2 on t1.id = t2.id
+union
+select * from t1 right (outer) join t2 on t1.id = t2.id
+** 联合查询
+*** union
+-- 要求字段数一致，重复的数据会被合并为一条
+select column_name(s) from table_name1 UNION select column_name(s) from table_name2
+*** unionall
+-- 同union，但是重复的数据不会被合并
+select column_name(s) from table_name1 UNION select column_name(s) from table_name2
+* 查询缓存
+query_cache_type的值可以设置为：ON、OFF、DEMAND，分别表示已启用、已禁用、按需缓存，设置在my.cnf中即可。
+
+have_query_cache的值为yes，表示当前数据库支持缓存功能
+
+query_cache_limit 表示单条查询缓存的最大值，如果查询结果超过此值的大小，即使指定缓存当前结果，结果也不会被缓存，默认值为1M。
+
+query_cache_min_res_unit表示缓存存储于内存的最小单元，默认为4k，也就是说，即使查询结果只有1k，也会占用4k内存，所以，如果此值设置的过大，会造成内存空间的浪费，如果此值设置的过小，则会频繁的分配内存单元或者频繁的回收内存单元。
+
+query_cache_size 表示查询缓存的总大小，也就是说，内存中用于查询缓存的空间大小，如果其值为0，即使开启了查询缓存，也无法缓存，上图中，即为这种情况。
+
+query_cache_wlock_invalidate 表示查询语句所查询的表如果被写锁锁定，是否仍然使用缓存返回结果。什么意思呢？我们来描述一个场景，因为写锁是独占的，是排他的，所以当写锁施加在对应表上的期间，如果对当前表发起查询请求，那么查询操作则需要等到写锁释放后才能进行，这是因为写锁是独占的，可是，如果对应的查询语句正好命中了这张表的缓存呢？查询请求是否就不用继续等待写锁释放而是直接从缓存中获取结果呢？此值就是用于应对这种情况的，默认值为OFF，也就是说，当此值为OFF时，即使表被施加了写锁，查询语句如果命中了对应的缓存，则会从缓存中得到结果，注意，设置为OFF表示可以从缓存返回结果，因为此值的含义为"查询缓存遭遇写锁时是否失效"，设置为OFF表示"不失效"，设置为ON表示"失效"，换句话说，如果此值设置为ON，如果表被施加了写锁，那么当写锁释放时，数据可能发生了改变，所以在表被施加写锁期间，即使此时有查询语句命中了查询缓存，也不能从缓存获取结果。那么我们可以得出结论，此值设置为OFF时，性能更好，并发能力更好，此值设置为ON时，更加安全，保证了数据的一致性。
+
+-- 不一致的sql语句，mysql收到查询请求时，会对查询语句进行hash计算，计算出其对应的hash值，通过这个hash值查找是否存在对应的缓存，所以，即使查询语句的大小写不同，也会被认为是不同的查询语句，如果当前hash码没有命中对应的缓存，mysql则会将对应的hash值存放在对应的hash表中，同时将查询结果存放在对应的缓存中，如果查询语句的hash值命中了对应缓存项，则直接从缓存中返回响应的查询结果，如果缓存对应的表中的数据发生了变化，那么查询缓存中，所有与变化的数据表有关的缓存都将失效，失效缓存对应的内存空间将被释放
+select * from test1;
+SELECT * FROM TEST1;
+
+我们可以在开启缓存的时候（query_cache_type=ON），指定对应的查询语句不使用缓存，示例如下:
+
+-- 缓存黑名单
+select sql_no_cache name from stu;
+
+-- 缓存白名单(推荐)
+select sql_cache name from stu;
+* 存储引擎
+可以具体到每张表的存储引擎不同，所以也称为表类型，常用的有innodb与myisam
+** innodb
+支持表级锁，行级锁，支持事务，支持外检，不支持全文索引，表空间文件相对较大。
+** myisam
+支持表级锁，不支持行级锁，不支持事务，不支持外键约束，支持全文索引，表空间文件相对小。
+** CSV
+将CSV文件（以逗号分隔字段的文本文件）作为MySQL表文件
+** MRG_MYISAM
+此引擎也被称为MERGE存储引擎，如果一些myisam表的表结构完全相同，可以将这些MyISAM表合并成的一张MRG_MYISAM虚拟表
+** BLACKHOLE
+类似于/dev/null，不真正存储数据
+** MEMORY
+内存存储引擎，速度快，但是一旦断电数据将会丢失，支持hash索引，支持表级锁，常用于临时表
+** PERFORMANCE_SCHEMA
+从mysql5.5之后，多出了PERFORMANCE_SCHEMA数据库，PERFORMANCE_SCHEMA数据库中的表的表类型均为PERFORMANCE_SCHEMA，此数据库用于存储与数据库的性能相关的信息，用户无法创建使用这种存储引擎的表，但是dba可以通过PERFORMANCE_SCHEMA数据库中的信息进行性能分析，PERFORMANCE_SCHEMA数据库服务启动后此库中将不断的收集数据，mysql停机后此库中的表将不存在数据，类似于linux中的/proc
+** FEDERATED
+用于访问其它远程MySQL服务器上表的存储引擎接口
+** ARCHIVE
+见名知义，创建此种表类型的表往往用于存储归档信息、安全审计信息、历史信息等，创建数据仓库时，可能会用到此种表类型，使用archive表类型的表只支持select和insert操作，不能更新和删除操作，支持行级锁
+** FEDERATED
+利用federated引擎可将本地数据表映射至远程 MySQL 数据表，从而就可以解决应用程序中繁多的跨机器连接数据库问题，其实federated相当于一个访问其他远程mysql server的代理接口，它通过创建一个到远程mysql server的客户端连接，通过FEDERATED引擎创建的表只是在本地有表定义文件，数据文件则存在于远程数据库中
+-- 设置存储引擎
+create table test11(id int,name varchar(10)) engine=innodb;
+
+-- 改引擎，一般情况等于作死
+alter table test11 engine=myisam;
+* 事务相关
+** 概述
+- A：atomicity    原子性
+- C：consistency   一致性
+- I：isolation    隔离性
+- D：durability   持久性
+
+原子性：整个事务中的所有操作要么全部执行成功，要么全部执行失败后混滚到最初状态。
+一致性：数据库总是从一个一致性状态转为另一个一致性状态。
+隔离性：一个事务在提交之前所做出的的操作是否能为其他事务可见，由于不同的场景需求不同，所以针对隔离性来说，有不同的隔离级别。
+持久性：事务一旦提交，事务所做出的修改将会永久保存，此时即使数据库崩溃，修改的数据也不会丢失。
+** 原理
+redo log和undo log严格来讲是innodb的产物，而binlog则是MySQL的通用特性
+- redolog
+记录事务的操作，保证如果事务停止了一下子之后，可以从该文件读取剩下的sql操作记录，进行继续进行，保证原子性
+- undolog
+如果长时间事务进行一般失败了，undo存放在数据库内部的特殊段中，这个段被称为undo段（undo segment），undo段位于共享表空间中
+- log group
+redo log的逻辑组概念，定义了可以有多少了个redo log file, 依次从第一次redo log file开始写，写满了就第二个，最后一个写满了，则从第一个开始，所以需要保持redo log file的大小和log group的大小控制
+** 相关语句
+start transaction
+
+commit
+
+rollback
+
+savepoint xxx (xxx为保存点名字，类似与存档)
+
+rollback to savepoint
+
+release savepoint xxx 表示删除一个保存点
+
+MySQL默认是自动提交事务，可以设置set @@session.autocommit=0取消自动提交事务
+** 事务隔离级别
+READ-UNCOMMITTED : 此隔离级别翻译为 "读未提交"。导致脏读、幻读、不可重读
+
+READ-COMMITTED : 此隔离级别翻译为 "读已提交" 或者 "读提交"。 只有当其他终端commit之后，才能读到，不可重读(不一定可以重新读到)，当本终端无操作时，其他终端的commit可以影响当前终端
+
+REPEATABLE-READ : 此隔离级别翻译为 "可重复读" 或者 "可重读"。 多个终端根据情景读取undo段作为快照，可能出现幻读
+
+SERIALIZABLE : 此隔离级别翻译为"串行化"。直接加锁，持久化，多个其他终端大概率会超时，完全符合ACID
+* log manage
+** 错误日志
+- mysql执行过程中的错误信息
+- mysql执行过程中的警告信息、
+- event scheduler运行时所产生的信息
+- mysql启动和停止过程中的输出信息，未必是错误信息
+- 主从复制结构中，从服务器IO复制线程的启动信息
+
+log_warnings控制记录级别
+- log_warnings用于标识警告信息是否一并记录到错误日志中。
+- log_warnings的值为0，表示不记录警告信息。
+- log_warnings的值为1，表示警告信息一并记录到错误日志中。
+- log_warnings的值大于1，表示"失败的连接"的信息和创建新连接时"拒绝访问"类的错误信息也会被记录到错误日志中。
+
+my.cnf-->log_warnings=2
+** 查询日志
+记录SQL语句操作
+general_log:表示查询日志是否开启，ON表示开启，OFF表示未开启，默认为OFF
+
+log_output:表示当查询日志开启以后，以哪种方式存放，log_output可以设置为4种值，"FILE"、"TABLE"、"FILE,TABLE"、"NONE"。此值为"FILE"表示存放于指定的文件中，此值为"TABLE"表示存放于mysql库的general_log表中，此值为"FILE,TABLE"表示将查询日志同时存放于指定的文件与general_log表中，一般不会进行这样的设置，因为这样会徒增很多IO压力，如果开启，建议设置为"table",此值为"NONE"时表示不记录查询日志，即使general_log设置为ON，如果log_output设置为NONE，也不会记录查询日志，其实，log_output不止用户控制查询日志的输出，慢查询日志的输出也是由此参数进行控制，也就是说，log_output设置为file，就表示查询日志和慢查询日志都存放到对应的文件中，设置为table，查询日志和慢查询日志就都存放在对应的数据库表中。
+
+general_log_file： 表示当log_output的值设置为"FILE"或者"FILE,TABLE"时，将查询日志存放于哪个日志文件中，换句话说，就是通过此参数指定查询日志的文件，默认情况下，此文件名于主机名相同，而且使用了相对路径，默认位置为datadir变量所对应的目录位置，一般为/var/lib/mysql目录下
+** 慢查询日志
+mysqldumpslow用于分析文件的慢查询记录，如果存储为表，则无法使用
+
+mysqldumpslow -s
+c: 执行计数
+l: 锁定时间
+r: 返回记录
+t: 执行时间
+al:平均锁定时间
+ar:平均返回记录数
+
+at:平均执行时间
+对于过慢的SQL执行，记录到慢查询日志中
+** 二进制日志
+*** 概念
+记录导致数据变更的sql语句/数据变更记录(语句与逐条数据的查别)，用于在全量备份的情况下，倒放该记录文件恢复特定时间点的文件
+**** statement模式
+只记录语句，但是某些情况下不一定生效，如使用了内置的函数，但是函数本身依存于当前的数据情况
+**** row模式
+记录对数据库做出修改的语句所影响到的数据行以及这些行的修改，比如，update A set test='test'，如果使用row模式，那么这条update语句所影响到的行所对应的修改，将会记录到binlog中，比如，A表中有1000条数据，那么当执行这条update语句以后，由于1000条数据都会被修改，所以会有1000行数据被记录到二进制日志中，以及它们是怎样被修改的，使用row模式时，优点是能够完全的还原或者复制日志被记录时的操作，缺点是记录日志量较大，IO压力大，性能消耗较大。
+**** mixed模式
+混合使用上述两种模式，一般的语句使用statment方式进行保存，如果遇到一些特殊的函数，则使用row模式进行记录，这种记录方式被称之为mixed，看上去这种方式似乎比较美好，但是在生产环境中，为了保险起见，一般会使用row模式。
+*** 相关参数
+- log_bin
+- sql_log_bin 当前session的sql操作是否记录
+- binlog_format 此变量的值可以设置为statement、row、mixed
+- max_binlog_size 设置单个二进制日志文件的最大大小，以字节为单位，超过此值大小，则二进制日志文件会自动滚动，比如设置为500M为524288000
+- sync_binlog 是否每次提交都从内存把操作刷出到文件，可能会浪费性能
+
+查看二进制日志文件列表
+show master logs;
+show binary logs;
+
+查看当前正在使用的二进制日志文件
+show master status;
+
+查看二进制日志文件中的事件（查看binlog内容），可以使用如下语句，如果不明白如下语句的含义，可以对照上文中的示例查看，此处只用于总结。
+
+show binlog events
+show binlog events in 'mybinlog.000001'
+show binlog events in 'mybinlog.000001'from 245
+show binlog events in 'mybinlog.000001'limit 3
+show binlog events in 'mybinlog.000001'limit 2,5
+show binlog events in 'mybinlog.000001'from 245 limit 10
+show binlog events in 'mybinlog.000001'from 245 limit 4,20
+
+mysqlbinlog命令
+我们也可以使用如下命令从指定位置开始查看二进制日志。
+mysqlbinlog --start-position 415 mybinlog.000001
+
+或者指定，从哪个位置开始，到那个位置结束，查看这之间的二进制日志文件。
+mysqlbinlog --start-position 317 --stop-position 442 mybinlog.000001
+
+还可以从指定的时间开始查看，比如，查看2017年3月4日10点40以后的日志。
+mysqlbinlog --start-datetime "2017-3-4 10:40:00" mybinlog.000001;
+
+当然，也可以指定结束时间，比如
+mysqlbinlog --start-datetime "2017-3-4 10:40:00" --stop-datetime "2017-3-4 10:55:00" mybinlog.000001;
+** 中继日志
+** innodb存储引擎级别的事务日志
+* backup
+** 概念
+*** 全量备份
+***  差异备份
+*** 增量备份
+*** 时间点恢复
+*** 热备
+热备就是热备份，什么意思呢？就是在数据库正常运行的情况下进行备份，也就是说，在热备期间，数据库的读写操作均可正常进行，所以，热备份不能只依靠简单的拷贝命令，而是需要专门的备份工具，而且技术复杂程度较高，mysql中的myisam存储引擎不支持热备，InnoDB存储引擎支持热备。可以借助诸如lvm，zfs进行热备
+*** 温备
+温备是什么意思呢？温备比热备稍弱一点，如果使用温备的方式对数据库进行备份，在温备期间，数据库只能进行读操作，不能进行写操作，即数据库在可读但不可写的状态下进行备份。
+*** 冷备
+懂了热备与温备，冷备就好理解了，在冷备期间，数据库的读写操作均不可进行，即读写操作均不可进行的状态下所做的备份被称为冷备。冷备虽然会影响数据库的运行，但是备份出的数据的可靠性是最高的，冷备的备份过程往往是最简单的，mysql中，可能会通过复制结构去做冷备。
+*** 物理备份
+物理备份就是直接备份数据库所对应的数据文件，以达到备份的目的，物理备份相对逻辑备份来说，性能更强。
+*** 逻辑备份
+逻辑备份就是将数据从数据库中导出，并且将导出的数据进行存档备份，这种备份方式被称作逻辑备份。
+** 备份工具
+*** mysqldump
+mysqldump是mysql自带的备份工具，它是一种逻辑备份工具，也就是说，它会将数据从数据库中读出，转化为对应的sql语句。
+mysqldump能够实现完全备份或部分备份。
+使用innodb表类型的表能够使用mysqldump进行热备。
+使用myisam表类型的表只能够使用mysqldump进行温备。
+如果数据量较小，使用mysqldump是一种选择。
+
+mysqldump的优点：
+可以直接使用文本处理工具处理对应的备份数据，因为备份数据已经被mysqldump转换为了对应的insert语句，所以，我们可以借助文件系统中的文本处理工具对备份数据进行直接处理。
+mysqldump的缺点：
+当数据为浮点类型时，会出现精度丢失
+mysqldump的备份过程属于逻辑备份，备份速度、恢复速度与物理备份工具相比较慢，而且mysqldump备份的过程是串行化的，不会并行的进行备份，如果想要并行备份，可以使用mydumper，但是此处我们不考虑这些，只考虑mysqldump，当数据量较大时，一般不会使用mysqldump进行备份，因为效率较低。
+mysqldump对innodb存储引擎支持热备，innodb支持事务，我们可以基于事务通过mysqldump对数据库进行热备。
+mysqldump对myisam存储引擎只支持温备，通过mysqldump对使用myisam存储引擎的表进行备份时，最多只能实现温备，因为在备份时会对备份的表请求锁，当备份完成后，锁会被释放。
+
+-- 整个库表备份，不带创建库的SQL语句
+mysqldump -uroot -h 192.168.1.146 zsythink -p
+
+-- 只备份表t1,t2,t3
+mysqldump -uroot -h192.168.1.146 zsythink t1 t2 t3 -p
+
+-- 备份带创建库的SQL语句
+mysqldump -uroot -h192.168.1.146 --databases zsythink t1 t2 t3 -p
+
+-- 全部库
+mysqldump -uroot -h192.168.1.146 --all-databases zsythink t1 t2 t3 -p
+
+-- 只复制表结构
+mysqldump -uroot -h192.168.1.146 -d  zsythink t1 t2 t3 -p
+
+*** xtrabackup
+由Percona提供，Percona是一个NB的组织，Percona对mysql的研究很深入，xtrabackup就是Percona出品的数据库备份工具，而且是开源的免费的。
+xtrabackup支持对Innodb存储引擎进行热备。
+xtrabackup是一种物理备份工具，所以性能强悍。
+xtrabackup支持完全备份，差异备份，增量备份，部分备份等功能。
+
+
+*** 通过select语句进行部分备份
+通过select语句将表中的数据导出到指定文件中，例如导出a表数据到/testdir/a.backup中，在使用select语句备份a表的同时，最好将a表的表结构也备份一份，因为还原的时候很有可能用到。
+select * from a into outfile '/testdir/a.backup';
+如果想要通过a.backup文件恢复a表的内容，可以创建一个新的表，然后使用load data将a.backup中的数据导入到新表中，示例如下。
+create table b(id int);
+load data infile "/testdir/a.backup" into table b;
+*** cp命令或tar命令
+利用上述命令，在linux中直接对数据文件进行备份，这种方式只适用于冷备的方式。
+** 一致性读和快照读
+在可重读的隔离级别下，可以进行热备
+坑: start transaction，不会立刻创建快照，而是在第一条select语句执行时才创建，如果开始之后，对于select语句还没执行之前，原表发生变更，那么状态已经不一致
+解决：START TRANSACTION WITH consistent snapshot -- 事务开始时，立刻创建快照
+* undocument
+** ref
+http://www.zsythink.net/archives/category/%e5%ad%98%e5%82%a8/mysql/
+** 最左匹配
+** 索引原理

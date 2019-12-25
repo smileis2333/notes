@@ -1,0 +1,186 @@
+﻿#+TITLE: HTML5
+#+START: indent
+* html
+  <!DOCTYPE html>声明
+<meta charset="utf-8">
+HTML 文本格式化标签
+标签	描述
+<b>	定义粗体文本
+<em>	定义着重文字
+<i>	定义斜体字
+<small>	定义小号字
+<strong>	定义加重语气
+<sub>	定义下标字
+<sup>	定义上标字
+<ins>	定义插入字
+<del>	定义删除字
+
+HTML "计算机输出" 标签
+<code>	定义计算机代码
+<kbd>	定义键盘码
+<samp>	定义计算机代码样本
+<var>	定义变量
+<pre>	定义预格式文本
+
+HTML 引文, 引用, 及标签定义
+<abbr>	定义缩写
+<address>	定义地址
+<bdo>	定义文字方向
+<blockquote>	定义长的引用
+<q>	定义短的引用语
+<cite>	定义引用、引证
+<dfn>	定义一个定义项目。
+
+在HTML文档中插入ID:
+
+<a id="tips">有用的提示部分</a>
+在HTML文档中创建一个链接到"有用的提示部分(id="tips"）"：
+
+<a href="#tips">访问有用的提示部分</a>
+或者，从另一个页面创建一个链接到"有用的提示部分(id="tips"）"：
+
+<a href="https://www.runoob.com/html/html-links.html#tips">
+访问有用的提示部分</a>
+
+基本的注意事项 - 有用的提示
+注释： 请始终将正斜杠添加到子文件夹。假如这样书写链接：href="https://www.runoob.com/html"，就会向服务器产生两次 HTTP 请求。这是因为服务器会添加正斜杠到这个地址，然后创建一个新的请求，就像这样：href="https://www.runoob.com/html/"。
+
+<base> 标签描述了基本的链接地址/链接目标，该标签作为HTML文档中所有的链接标签的默认链接:
+<head>
+<base href="http://www.runoob.com/images/" target="_blank">
+<link rel="stylesheet" type="text/css" href="mystyle.css">
+<style type="text/css">
+body {background-color:yellow}
+p {color:blue}
+</style>
+
+<meta name="keywords" content="HTML, CSS, XML, XHTML, JavaScript">
+<meta name="description" content="免费 Web & 编程 教程">
+<meta name="author" content="Runoob">
+<meta http-equiv="refresh" content="30">
+
+</head>
+
+<img src="boat.gif" alt="Big Boat">
+
+<ul> 无序列表,子元素为<li>
+<ol> 有序列表
+自定义列表以 <dl>，子元素为<dd>
+
+默认的block元素:<h1>, <p>, <ul>, <table>,<div>
+默认的inline元素:<b>, <td>, <a>, <img>,<span>
+字符实体
+< &lt;
+> &gt;
+&nbsp; 不会被清除的空格实体
+
+* html5
+** <canvas>
+#+BEGIN_SRC html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜鸟教程(runoob.com)</title>
+</head>
+<body>
+
+<canvas id="myCanvas" width="200" height="100" style="border:1px solid #d3d3d3;">
+您的浏览器不支持 HTML5 canvas 标签。</canvas>
+
+<script>
+
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d");
+ctx.moveTo(0,0);
+ctx.lineTo(200,100);
+ctx.stroke();
+
+</script>
+
+</body>
+</html>
+
+#+END_SRC
+** MathML
+** 拖放
+#+BEGIN_SRC html
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜鸟教程(runoob.com)</title>
+<style type="text/css">
+#div1 {width:350px;height:70px;padding:10px;border:1px solid #aaaaaa;}
+</style>
+<script>
+function allowDrop(ev)
+{
+        ev.preventDefault();
+}
+
+function drag(ev)
+{
+        ev.dataTransfer.setData("Text",ev.target.id);
+}
+
+function drop(ev)
+{
+        ev.preventDefault();
+        var data=ev.dataTransfer.getData("Text");
+        ev.target.appendChild(document.getElementById(data));
+}
+</script>
+</head>
+<body>
+
+<p>拖动 RUNOOB.COM 图片到矩形框中:</p>
+
+<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<br>
+<img id="drag1" src="/images/logo.png" draggable="true" ondragstart="drag(event)" width="336" height="69">
+
+</body>
+</html>
+#+END_SRC
+** <input>
+- pattern 属性
+- placeholder 属性
+** 语义元素
+<header>
+<nav>
+<section>
+<article>
+<aside>
+<figcaption>
+<figure>
+<footer>
+** HTML5 Web 存储
+localStorage
+用于长久保存整个网站的数据，保存的数据没有过期时间，直到手动去除。
+#+BEGIN_SRC html
+localStorage.sitename="菜鸟教程";
+document.getElementById("result").innerHTML="网站名：" + localStorage.sitename;
+localStorage.removeItem("sitename");
+#+END_SRC
+sessionStorage - 用于临时保存同一窗口(或标签页)的数据，在关闭窗口或标签页之后将会删除这些数据。
+不管是 localStorage，还是 sessionStorage，可使用的API都相同，常用的有如下几个（以localStorage为例）：
+
+保存数据：localStorage.setItem(key,value);
+读取数据：localStorage.getItem(key);
+删除单个数据：localStorage.removeItem(key);
+删除所有数据：localStorage.clear();
+得到某个索引的key：localStorage.key(index);
+** (Server-Sent Events)
+#+BEGIN_SRC html
+var source=new EventSource("demo_sse.php");
+source.onmessage=function(event)
+{
+    document.getElementById("result").innerHTML+=event.data + "<br>";
+};
+#+END_SRC
+** WebSocket
+   open	Socket.onopen	连接建立时触发
+message	Socket.onmessage	客户端接收服务端数据时触发
+error	Socket.onerror	通信发生错误时触发
+close	Socket.onclose	连接关闭时触发

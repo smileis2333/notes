@@ -1,0 +1,35 @@
+﻿#+TITLE: 文本编辑
+#+STARTUP: indent
+* windows
+** 通用·快捷键
+c-f
+c-h
+c-s-f
+c-s-h
+alt键，菜单提示键位
+** vsc
+c-s-p
+workspace: 逻辑概念，有对应的描述文件，可以包含一个文件夹或者由多个互相隔离的文件组成
+*** view
+**** apperance
+zen mode
+hidden side bar
+c- -
+c- =
+**** editor layout
+slip up/down/left/right
+**** terminal
+c-`
+*** Go
+type defination
+**** layout
+c-1/2/3/4 按列计数窗口
+c-t 切换tab
+** vim
+c-x c-l 根据当前文件匹配当前行的局部代码，进行行补全提示
+g-d 跳转到声明处
+g-f 跳转到import xxx的文件
+\* 当前词直接搜索跳转下一个 
+# 上一个
+* idea
+* emacs

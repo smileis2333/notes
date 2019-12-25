@@ -1,0 +1,43 @@
+#+STARTUP: indent
+* guide
+SqlSessionFactoryBuilder 最佳作用域是方法作用域
+SqlSessionFactory  SqlSessionFactory 的最佳作用域是应用作用域。 有很多方法可以做到，最简单的就是使用单例模式或者静态单例模式。
+SqlSession 实例不是线程安全的，因此是不能被共享的，所以它的最佳的作用域是请求或方法作用域
+* usage
+** xml config
+*** properties
+*** setting
+控制MyBatis的运行行为
+*** typeAliases
+为类型设置别名，存在的意义仅在于用来减少类完全限定名的冗余
+*** typeHandlers
+实现 org.apache.ibatis.type.TypeHandler 接口， 或继承一个很便利的类 org.apache.ibatis.type.BaseTypeHandler， 然后可以选择性地将它映射到一个 JDBC 类型
+#+BEGIN_SRC java
+// ExampleTypeHandler.java
+@MappedJdbcTypes(JdbcType.VARCHAR)
+public class ExampleTypeHandler extends BaseTypeHandler<String> {
+
+  @Override
+  public void setNonNullParameter(PreparedStatement ps, int i, String parameter, JdbcType jdbcType) throws SQLException {
+    ps.setString(i, parameter);
+  }
+
+  @Override
+  public String getNullableResult(ResultSet rs, String columnName) throws SQLException {
+    return rs.getString(columnName);
+  }
+
+  @Override
+  public String getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+    return rs.getString(columnIndex);
+  }
+
+  @Override
+  public String getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+    return cs.getString(columnIndex);
+  }
+}
+#+END_SRC
+* principle
+* refer
+https://mybatis.org/mybatis-3/zh/getting-started.html

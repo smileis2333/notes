@@ -1,0 +1,207 @@
+#+TITLE: FreeBSD
+#+STARTUP: indent
+* Getting Started
+** install and configure
+rufus刻录memstick.img进u盘，整个硬盘作为安装的情况下，需要先用pe之类彻底清除原硬盘分区，否则引导无法正常写入
+** basic
+*** tty
+switch alt+fn(n=1,2,3,4...) 切换到对应tty
+*** single user mode
+拥有最高权限，用于修复引导和改密码，可以通过设置/etc/ttys的安全策略设置是否进入时需要密码
+*** Users and Basic Account Management
+**** system account
+**** user account
+ - username
+ - password
+ - UID
+ - GID
+ - Login class: extension of user group
+ - passworc change time: 强制账户在多久后改密码
+ - account exppired time
+ - user's full name
+ - home directory
+ - user shell
+**** superuser account
+***** su
+switch to root user(can with - to change with root env),用户必须在wheel组
+***** sudo
+可以控制哪些用户可以以root用户运行哪些命令
+
+**** management
+***** adduser	The recommended command-line application for adding new users.
+***** rmuser	The recommended command-line application for removing users.
+***** chpass	A flexible tool for changing user database information.
+***** passwd    The command-line tool to change user passwords.
+***** pw	A powerful and flexible tool for modifying all aspects of user accounts.
+- pw groupadd teamtwo
+- pw groupmod teamtwo -M jru 列表完全替换组
+- pw groupmod teamtwo -m db append当前组的后面
+- pw groupshow teamtwo
+*** Permissions
+**** file flags
+chflags sunlink file1
+chflags nosunlink file1
+**** addition permission
+- suid 普通用户运行时拥有owner的权限
+- sgid 普通用户运行时拥有group的权限
+- sticky 设置在目录上时，即使其他用户拥有对该目录的写权限，也无法删除其他人的文件，只能删除属于自己的
+*** Directory Structure
+Directory	Description
+/	Root directory of the file system.
+/bin/	User utilities fundamental to both single-user and multi-user environments.
+/boot/	Programs and configuration files used during operating system bootstrap.
+/boot/defaults/	Default boot configuration files. Refer to loader.conf(5) for details.
+/dev/	Device nodes. Refer to intro(4) for details.
+/etc/	System configuration files and scripts.
+/etc/defaults/	Default system configuration files. Refer to rc(8) for details.
+/etc/mail/	Configuration files for mail transport agents such as sendmail(8).
+/etc/periodic/	Scripts that run daily, weekly, and monthly, via cron(8). Refer to periodic(8) for details.
+/etc/ppp/	ppp(8) configuration files.
+/mnt/	Empty directory commonly used by system administrators as a temporary mount point.
+/proc/	Process file system. Refer to procfs(5), mount_procfs(8) for details.
+/rescue/	Statically linked programs for emergency recovery as described in rescue(8).
+/root/	Home directory for the root account.
+/sbin/	System programs and administration utilities fundamental to both single-user and multi-user environments.
+/tmp/	Temporary files which are usually not preserved across a system reboot. A memory-based file system is often mounted at /tmp. This can be automated using the tmpmfs-related variables of rc.conf(5) or with an entry in /etc/fstab; refer to mdmfs(8) for details.
+/usr/	The majority of user utilities and applications.
+/usr/bin/	Common utilities, programming tools, and applications.
+/usr/include/	Standard C include files.
+/usr/lib/	Archive libraries.
+/usr/libdata/	Miscellaneous utility data files.
+/usr/libexec/	System daemons and system utilities executed by other programs.
+/usr/local/	Local executables and libraries. Also used as the default destination for the FreeBSD ports framework. Within /usr/local, the general layout sketched out by hier(7) for /usr should be used. Exceptions are the man directory, which is directly under /usr/local rather than under /usr/local/share, and the ports documentation is in share/doc/port.
+/usr/obj/	Architecture-specific target tree produced by building the /usr/src tree.
+/usr/ports/	The FreeBSD Ports Collection (optional).
+/usr/sbin/	System daemons and system utilities executed by users.
+/usr/share/	Architecture-independent files.
+/usr/src/	BSD and/or local source files.
+/var/	Multi-purpose log, temporary, transient, and spool files. A memory-based file system is sometimes mounted at /var. This can be automated using the varmfs-related variables in rc.conf(5) or with an entry in /etc/fstab; refer to mdmfs(8) for details.
+/var/log/	Miscellaneous system log files.
+/var/mail/	User mailbox files.
+/var/spool/	Miscellaneous printer and mail system spooling directories.
+/var/tmp/	Temporary files which are usually preserved across a system reboot, unless /var is a memory-based file system.
+/var/yp/	NIS maps.
+*** Disk Organization
+**** file system
+**** Partition
+**** slices
+Disks in FreeBSD are divided into slices
+“ada1s3e” is the fifth partition in the third slice of the second SATA disk drive.
+*** Mounting and Unmounting File Systems
+**** The fstab File
+/etc/fstab
+
+**** mount
+**** umount
+*** Processes and Daemons
+**** Viewing Processes
+***** ps
+auxww
+- a all user
+- u username and processore usage
+- x daemon
+- origin command rathan truncating it to fix screen
+***** top
+**** Killing Processes
+% pgrep -l inetd
+% su
+Password:
+# /bin/kill -s HUP 198 许多shell内置了kill，但其语法不同，直接使用/bin/kill
+*** Shells
+**** tcsh
+% setenv EDITOR /usr/local/bin/emacs
+**** bash/sh
+% export EDITOR="/usr/local/bin/emacs"
+**** change shell
+% chsh -s /usr/local/bin/bash
+*** Devices and Device Nodes
+/var/run/dmesg.boot
+*** Manual Pages
+
+** Packages and Ports
+*** Finding Software
+pkg search subversion 软件包brief信息
+pkg search -o subversion 可以看到该package是从哪个port编译而来
+
+# whereis lsof, look port info
+lsof: /usr/ports/sysutils/lsof
+
+# echo /usr/ports/*/*lsof*
+/usr/ports/sysutils/lsof
+
+# cd /usr/ports
+# make search name=lsof
+
+# cd /usr/ports
+# make quicksearch name=lsof
+*** Using pkg for Binary Package Management
+# pkg info pkg
+# pkg install packagename
+# pkg info 所有已安装的软件包信息(包含依赖项)
+# pkg delete curl
+# pkg upgrade
+# pkg audit -F 查看漏洞
+# pkg autoremove 去除某个软件卸载后留下的非依赖项
+# pkg prime-list 列出自己主动安装的package(不包含依赖项)
+# pkg prime-origins 列出自己主动安装的port(不包含依赖项)
+# pkg set -A 1 devel/cmake (设置该package为automatic，即非主动安装的package)
+# pkg set -A 0 devel/cmake (提升该package为主动安装，这样pkg autoremove不会包含该包)
+
+# pkg backup -r /path/to/pkg.sql 从备份数据恢复
+# pkg backup -d /path/to/pkg.sql dump数据
+
+# pkg clean 删除存在在PKG_CACHEDIR in pkg.conf指定目录的package的cache，每次升级会下载新的包，该操作可以清理除了当前版本以外的包的cache
+# pkg clean -a 同上，但是全部清掉
+*** Modifying Package Metadata
+port中的软件版本号会更迭，可以通过设置metadata来规避变更
+# pkg set -o lang/php5:lang/php53
+# pkg set -o lang/ruby18:lang/ruby19
+# pkg set -o graphics/libglut:graphics/freeglut
+
+# pkg install -Rf graphics/freeglut 更改来源后重新安装包
+*** Using the Ports Collection
+**** metadata
+# portsnap fetch
+# portsnap extract
+# portsnap update
+# portsnap fetch update
+
+**** more detail controll
+# cd /usr/ports/devel/subversion
+# make install clean
+
+# pkg install subversion
+
+# svn checkout https://svn.FreeBSD.org/ports/head /usr/ports
+# svn update /usr/por
+
+**** uninstall
+# cd /usr/ports/sysutils/lsof
+make deinstall
+**** Portmaster
+# cd /usr/ports/ports-mgmt/portmaster
+# make install clean
+
+# portmaster -L   list all port
+# portmaster -a   updating
+# portmaster -af  If errors are encountered during the upgrade process, add -f to upgrade and rebuild all ports:
+# portmaster shells/bash
+**** Portupgrade
+# cd /usr/ports/ports-mgmt/portupgrade
+# make install clean
+
+# portupgrade -ai
+# portupgrade -R firefox
+# portupgrade -PP gnome3
+
+** X Window System
+*** xorg
+*** wm
+- i3wm
+*** drm-kmod
+pkg install drm-kmod 如果不行，就需要从port编译该
+安装后，kldload /boot/modules/i915kms.ko 如果终端分辨率正常说明正常，如果闪退，甚至重启，需要从port编译，更甚者，降级使用的FreeBSD
+如果kldload可以正常生效，add kld_list="/boot/modules/i915kms.ko" to /etc/rc.conf
+
+* ref
+https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/

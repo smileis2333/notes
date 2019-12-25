@@ -1,0 +1,7 @@
+#+TITLE: idea使用备注
+#+STARTUP: indent
+* idea相关配置
+在开发Spring Boot相关项目时候，设置启动脚本为On frame deactivation时更新update classes and resources 配置devTools可以实现热重载
+* 快捷键
+C-Q 查看类、方法、属性注释
+C-P 查看方法参

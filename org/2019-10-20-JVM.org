@@ -1,0 +1,178 @@
+#+TITLE: JVM
+#+STARTUP: indent
+* 字节码结构
+1. 使用javap -verbose命令分析前一个字节码文件时，将会分析字节码文件的魔数、版本号、常量池、类信息、类的构造方法、类中的方法信息、类变量和成员变量等信息
+2. 魔数：所有的.class字节码文件的前四个字节都是魔数，魔数固定值为：0xCAFEBABE
+3. 魔数之后的四个字节为版本信息、前两个字节表示minor version(次版本号)，后两个字节表示主版本号(主版本号)。这里的版本号为00 00 00 34，换算成十进制，表示次版本号为0，主版本号为52.所以，所文件的版本号为：1.8.0。可以通过java -version验证
+4. 常量池(constant pool)：紧接着主版本号之后的就是常量池入
+* 类的连接、加载与初始化
+** 加载
+*** prepare
+- 类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区中，然后在内存中创建一个java.lang.Class的对象(规范并未说明Class对象位于哪里，HotSpot虚拟机将其放在了方法区中)用来风封装类在方法区的数据结构
+- 加载.class文件的方式
+  - 从本地系统中直接加载
+  - 通过网络下载.class文件
+  - 从zip, jar等归档文件中加载.class文件
+  - 从专有数据库中提取.class文件
+  - 将Java源文件动态编译为.class文件
+- 类的加载的最终结果是位于内存的Class对象
+- Class对象封装了类在方法区的数据结构，并且向Java程序员提供了访问方法区的数据结构的接口
+- 加载时机：类并不需要等到某个类被‘主动使用’时才加载他
+- JVM规范允许类加载器在预料某个类将要使用时就预先加载它，如果在预先加载的过程中遇到了.class文件缺失或者存在错误，类加载器必须在程序首次主动使用该类时，才报告错误(LinkageError错误)
+- 如果这个类一直没有被程序主动使用，那么类加载器就不会报告错误
+*** ClassLoader
+**** prepare
+  - Java虚拟机与程序的生命周期
+  - 在如下几种情况下，Java虚拟机将结束生命周期
+    - 执行了System.exit()方法
+    - 程序正常执行结束
+    - 程序在执行过程中遇到了异常情况而终止
+    - 由于操作系统出现错误而导致Java虚拟机进程终
+**** 获取
+获得当前类的--clazz.getClassLoader()
+获得当前线程的--Thread.currentThread().getContextClassLoader()
+获得系统的--ClassLoader.getSystemClassLoader()
+获得调用者的--DriverManager.getClassLoader(
+**** Java自带的ClassLoader
+- 根类加载器(Bootstrap)
+- 拓展类加载器(Extension)
+- 系统(应用)类加载器(System)
+**** 用户自定类加载器
+通过java.lang.ClassLoader的子类(可以定制类的加载方式)
+** 连接
+- 验证：确保被加载的类的正确性
+  - 类文件的结构检查
+  - 语义检查
+  - 字节码验证
+  - 二进制兼容性的验证
+- 准备：为类的静态变量分配内存，并将其初始化为默认值。但是在到达初始化阶段之前，类变量都没有被初始化为真正的初始值
+- 解析：在类型的常量池中寻找类、接口、字段和方法的引用，把这些符号引用转换为直接引用的过
+** 初始化
+*** prepare
+- Java程序对类的使用方式可分为两种
+- 主动使用(七种)
+  - 创建每个类的实例
+  - 访问某个类或接口的静态变量，或者对该静态变量赋值
+  - 调用类的静态方法
+  - 反射(如Class.forName("xx.xx.xx"))
+  - 初始化一个类的子类
+  - Java虚拟机启动时被标明为启动类的类(java Test)
+  - JDK1.7开始提供的动态语言支持：java.lang.invoke.MehtodHandler实例的解析结果REF_getStatic，REF_putStatic，REF_invokeStatic句柄对应的类没有初始化，则初始化
+- 被动使用
+  - 除了上述列举的其中主动情形，其他不会导致类的初始化
+- 所有的Java虚拟机实现必须在每个类或接口被Java程序“首次主动使用”时才初始化他们
+*** 初始化时机
+- 只有在当程序访问的静态变量或静态方法确实在当前类或接口中定义时，才可以认为是对类或接口的主动使用
+- 调用ClassLoader的loadClass方法加载一个类，并不是对类阿主动使用，不会导致类的初始化
+- 当Java虚拟机初始化一个类时，要求它的父类都已经被初始化，但是这条规则并不适用于接口
+  - 在初始化一个类时，并不会初始化她所实现的接口
+  - 在初始化一个接口时，并不会初始化它的父接口
+因此，一个父接口并不会因为它的子接口或者实现类的初始化而初始化。只有当程序首次主动使用特定接口的静态变量时，才会导致该接口的初始化
+  - 验证手段:
+#+BEGIN_SRC java
+  public class MyTest5 {
+  public static void main(String[] args) {
+      System.out.println(Child5.b);
+    }
+  }
+  interface Parent5{
+    String a = String.valueOf(UUID.randomUUID().getLeastSignificantBits()/0);
+  }
+
+  interface Child5 extends Parent5{
+    String b = String.valueOf(UUID.randomUUID().getLeastSignificantBits();
+  }
+#+END_SRC
+*** 步骤
+- 如果这个类还没有被加载和连接，那就进行加载和连接
+- 假如类存在直接父类，并且这个父类还没有被初始化，那就先初始化直接父类
+- 假如类存在初始化语句，那就依次执行这些初始化语
+* 类的使用与卸载
+- 当MySample类被加载、连接和初始化后，它的生命周期就开始了。当代表MySample类的Class对象不在被引用，即不可触及时，Class对象就会结束生命周i，MySample类在方法区的数据也会被卸载，从而结束MySample的生命周期
+- 一个类何时结束生命周期，取决于它的Class对象何时结束生命周期
+- 由Java虚拟机自带的类加载器所加载的类，在虚拟机的生命周期中，始终不会被卸载。Java自带的加载器包括根类加载器、拓展类加载器和系统类加载器。Java虚拟机本身会始终引用这种类加载器，而这些类加载器会始终引用他们所加载器的类的Class对象，因此这些对象是始终可触及的。
+- 由用户自定义的类加载器所加载的类可以被卸载
+* 类实例化
+- 为新的对象分配内存
+- 为新的变量赋默认值
+- 为新的变量赋正确的初始值
+- Java编译器为它编译的每一个类都至少生成一个实例初始化方法，在Java的class文件中，这个实例方法被称为“\<init>”。针对源代码中的每一个类的构造方法，Java编译器都会产生一个<init>方法
+* 常用概念和操作
+** Binary names
+  - "java.lang.String" 一般类名
+  - "javax.swing.JSpinner$DefaultEditor" 内部类
+  - "java.security.KeyStore$Builder$FileBuilder$1" $1代表第一个匿名内部类
+  - "java.net.URLClassLoader$3$1" 第三个匿名内部类的第一个匿名内部类
+**  数组的ClassLoader
+  - 一般与其element类型的ClassLoader一致
+  - 原生类型的数组没有对应的ClassLoader一说
+** 双亲委托模型的好处
+  - 可以确保Java核心类库的安全：所有的Java应用都至少会引用java.lang.Object类，也就是说在运行期，java.lang.Object这个类会被加载到虚拟机中，如果这个加载过程是由Java应用自己的类加载器完成的，那么很可能就会在JVM中存在多个版本的java.lang.Object类，而且这些类型之间还是不兼容的，相互不可见的(正是命名空间在发挥着作用)。借助于双亲委托机制，Java核心类库中的类的加载工作都是由启动类加载器来统一完成，从而确保了Java应用所使用的都是同一个版本的Java核心类库，他们之间是相互兼容
+  - 可以确保Java核心类库所提供的类不会被自定义的类替代
+  - 可以为相同名称的类(binary name)的类创建额外的命名空间。相同名称的类可以并存在Java虚拟中，只需要用不同的类加载器来加载他们即可。不同类加载器所加载的类之间是不兼容的，这就相当于在Java虚拟机内部创建了一个又一个相互隔离的Java类空间，这类技术在很多框架中都得到了实际应用
+** 类命名空间
+  - 每个类加载器都有自己的命名空间，命名空间由该类以及所有父加载器所加载器的所加载的类组成
+  - 在同一个命名空间中，不会出现类的完整命名(包括类的包名)相同的两个类
+  - 在不同的命名空间中，有可能会出现类的完整名字(包括类的包名)相同的两个类
+  - 子加载器加载的类，可以访问父加载器加载的类，父加载器加载的类无法访问子加载器加载的类(本质原因: 子加载器含有父加载器的引用，而父加载器则不知道子加载器的存在，双方只是单向关联)
+  - 如果两个加载器没有直接或者间接的父子关系，那么他们各自加载的类相互不可见
+    - 例子
+    #+BEGIN_SRC java
+    public class MyPerson {
+      private MyPerson myPerson;
+      public void setMyPerson(Object myPerson) {
+      this.myPerson = (MyPerson) myPerson;
+      }
+    }
+    //MyClassLoader为自定义类加载器，这里设置父加载器为null，使得加载的类必须由loader1、loader2进行加载MyPerson，加载MyPerson所产生的两个Class对象，分别由loader1、loader2进行加载，同存于内存中，但是处于不同的内存空间，因此，在方法，转换时，必然会导致报错
+    //Caused by: java.lang.ClassCastException: com.test.MyPerson cannot be cast to com.test.MyPerson
+    public class MyTest10 {
+    public static void main(String[] args) throws Exception{
+        final MyClassLoader loader1 = new MyClassLoader(null);
+        final MyClassLoader loader2 = new MyClassLoader(null);
+
+        final Class<?> clazz1 = loader1.loadClass("com.test.MyPerson");
+        final Class<?> clazz2 = loader2.loadClass("com.test.MyPerson");
+
+        System.out.println(clazz1==clazz2);
+        final Object o1 = clazz1.newInstance();
+        final Object o2 = clazz2.newInstance();
+
+        final Method method = clazz1.getMethod("setMyPerson", Object.class);
+        method.invoke(o1,o2);
+        }
+    }
+    #+END_SRC
+  - 验证手段
+MC:自定义类加载器，指定磁盘路劲加载,父加载器是AppClassLoader的实例
+A: 一个普通类, 内部调用了B.class获取Class对象进行实例化
+B: 一个普通类，构造函数使用了System.out.print(A.class)
+MT: 主方法测试调用了MC加载A.class进行初始化
+
+编译后，将A.class移动至符合条件的其他磁盘目录，由于当前目录无法寻得A.class，因此A由MC加载实例化，然后A主动使用B导致B被初始化，此时，B在当前目录下可以加载，所以由AppClassLoader的单实例进行加载，此时，A.class和B.class可以确定已经载入JVM，可是会在System.out.print(A.class)处出现NoClassDefFoundError，即B在被实例化时，无法访问到由MC加载的的A的Class对
+** 获取加载器加载的相关路径
+#+BEGIN_SRC java
+    public class MyTest9 {
+    public static void main(String[] args) {
+        System.out.println(System.getProperty("sun.boot.class.path"));
+        System.out.println(System.getProperty("java.ext.dirs"));
+        System.out.println(System.getProperty("java.class.path"));}
+    }
+#+END_SRC
+** 运行时指定相关路径
+#+BEGIN_SRC bash
+  java -Djava.class.path MySample
+#+END_SRC
+** bootsrtap
+Class和Object谁先加载,如果是Object先加载，因为Class没有加载，所以无法形成Class对象，可是如果Class先加载，则由Java规则，则应该先加载Obejct类，JVM的内建的Bootstrap类加载器，本身不是Java代码，它可以直接规避规则所描述的矛盾，直接完成两个对象相互状态(类似于电脑启动的过程)
+** 线程上下文加载器
+每个类都会使用自己的类加载器(即加载自身的类加载器)来去加载其他类(指的是所依赖的类)
+如果ClassX引用了ClassY，那么ClassX的类加载器就会去加载ClassY(前提是ClassY未加载)
+
+Context ClassLoader从JDK1.2开始引入，类Thread中的getContextClassLoader()与  setContextClassLoader(ClassLoader cl)分别用来获取和设置上下文类加载器
+
+如果没有通过setContextClassLoader(ClassLoader cl)进行设置的话，线程将继承其父线程的上下文类加载器。
+Java应用运行时的初始现成的上下文类加载器就是系统类加载器。在线程中运行的代码可以通过该类加载器来加载类与资源。
+
+SPI场景特殊，需要该机制来打破该双亲委托机制(命名空间规则，父加载器加载的类无法加载子加载器加载的类)
+使用约定: 获取-->使用-->还原
