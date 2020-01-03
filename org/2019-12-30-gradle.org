@@ -1,0 +1,148 @@
+#+TITLE:  gradle
+#+STARTUP: indent
+* 基础
+** distribution
+1. src-源码，不可直接运行
+2. bin-相对于all不包含一些东西(sample，文档)
+3. all-多了一些sample和文档
+** wrapper
+-一般不会直接下载distribution，而是通过wrapper
+** GradleUserHome
+- ~/.gradle 默认GradleUserHome
+ - .cache 类似maven的.m2，但是包含了其他缓存，如插件等
+ - .init.d 所有gradle启动时读取的启动脚本，可用于诸如替换仓库
+ - wrapper 运行gradlew后下载的对应的gradle
+** daemon
+为了提高compile效率，节省启动JVM启动的时间，gradle启动时，会启动一个轻量级的JVM实例，用于作为client使用，然后检测是否当前存在兼容的gralde daemon进程，如果不存在，则启动一个，存在，则直接使用client进行连接
+gradle/gradlew --stop 停止对应的daemon
+gralde --no-daemon 与maven完全一致，每次都完全启动JVM
+* groovy基础
+** 动态调用与MOP
+** 闭包
+//List l = [1,2,3]
+//print(l)
+//def closure = {param -> param +1} // 与stream类似
+//def closure1 = {it%2} // 单参数，可以直接用it
+//println(l.findAll({it->it%2==0}))
+//println(l.findAll{it->it%2==0}) // 不引起歧义的情况下，({})的()可被省略
+
+
+def test(int i, Closure c) {
+    return c(i)
+}
+println test(2, { 2 * it })
+println test(2) { 2 * it } // Closure 是最后一个参数，可以丢到外面
+
+
+//Map m = [a:1]
+//print(m.a)
+//print(m['a'])
+
+//class A{
+//    int a;
+//    void printA(){
+//        println(a)
+//    }
+//}
+//// Java: invokedymatic, equal invokeMethod(a,"printA",[])
+//new A(a:1).printA()
+
+* Gradle构建
+** Project
+** Task
+gradle基于task，最小的执行单元是task
+// 多项目可使用
+//project.parent.childProjects
+
+task('helloworld',{
+    println(111)
+    doLast({ // 把Closure加入到方法的执行列表末尾
+        println(222)
+    })
+})
+
+
+// 使用简写，省略一些()
+task('helloworld1'){
+    println(111)
+    doLast{ // 把Closure加入到方法的执行列表末尾
+        println(222)
+    }
+}
+
+//for (int i=0; i<10; ++i){
+//    task('task'+i){
+//        def captureI = i
+//        doLast {
+//            println("exec task ${captureI}")
+//        }
+//    }
+//}
+task first(){
+    doLast {
+        println('depends first')
+    }
+}
+
+afterEvaluate {
+    println('after evaluate')
+}
+
+// (0..<10).each{i->xxxx}
+10.times {i->
+    task('task' + i){
+        if (i%2==0){
+            dependsOn('first')
+        }
+        def captureI = i
+        doLast {
+            println("Exec task ${captureI}")
+        }
+    }
+}
+
+// afterEvaluate,beforeEvaluate,after... 均为钩子函数
+
+** Lifecycle与Hook
+*** initialization
+确定是单项目还是多项目，决定哪些项目参与到构建中，为每个项目创建一个Project实例
+*** configuration
+把build.gradle跑一遍解析
+*** execution
+执行特性的任务
+* 插件编写
+** 构建逻辑的复用
+// 可能需要根据语法进行改正
+class MyPlugin implements Plugin<Project>{
+    @Override
+    void apply(Project project) {
+        (0..<10).each {i->
+            task('task' + i){
+                def captureI = i
+                doLast {
+                    println("Exec task ${captureI}")
+                }
+            }
+        }
+    }
+}
+
+apply plugin: MyPlugin
+
+** 简单插件
+** script插件
+** buildSrc插件
+与src同级的可以有buildSrc目录，用于设置一般通用性的插件
+** 发布的插件
+*** buildScript
+gradle加入自己build所需的依赖，通常自己的插件发布后，需要在依赖中引入插件
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+    }
+}
+apply plugin: MyPlugin

@@ -149,3 +149,10 @@ var vm = new Vue({
 * 动画支持
 * UI配合
 ** Element-ui
+* webstorm配置跳转提示
+- language&frameworks
+  - javascript
+    - Webpack
+webpack configuration file:
+such as
+C:\Users\86158\IdeaProjects\charging-mng\node_modules\@vue\cli-service\webpack.config.js

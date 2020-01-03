@@ -1,0 +1,4 @@
+#+TITLE:  css
+#+STARTUP: indent
+控制按钮内容过长时，过长内容显示为...
+white-space:nowrap; overflow:hidden; text-overflow:ellipsis

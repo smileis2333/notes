@@ -1,0 +1,23 @@
+* form2json
+#+BEGIN_SRC javascript
+ /**
+             * jquery获取到的表单对象转json，包含checkbox转数组
+             * @param $form
+             * @returns {string}
+             */
+            function form2json($form){
+                var o = {};
+                var a = $form.serializeArray();
+                $.each(a, function() {
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return JSON.stringify(o);
+            }
+#+END_SRC

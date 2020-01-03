@@ -1,0 +1,18 @@
+#+TITLE: Search
+#+STARTUP: indent
+* General
+** site
+site: stackoverflow.com
+某站点的资料
+** filetype
+filetype: pdf
+** intitle
+intitle: xxx
+** inurl 搜索网站地址中包含关键词的结果
+** 匹配方式
+1. *--通配符
+2. ""完全匹配, 不会拆分词再去搜索
+3. -, eg: A-B 包含A不包含B
+4. AND
+5. OR
+6. ..，搜索数字区间 eg: 互联网2013..2018
