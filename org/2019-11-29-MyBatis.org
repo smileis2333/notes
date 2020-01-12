@@ -1,17 +1,18 @@
+#+TITLE:  MyBatis
 #+STARTUP: indent
 * guide
-SqlSessionFactoryBuilder ×î¼Ñ×÷ÓÃÓòÊÇ·½·¨×÷ÓÃÓò
-SqlSessionFactory  SqlSessionFactory µÄ×î¼Ñ×÷ÓÃÓòÊÇÓ¦ÓÃ×÷ÓÃÓò¡£ ÓĞºÜ¶à·½·¨¿ÉÒÔ×öµ½£¬×î¼òµ¥µÄ¾ÍÊÇÊ¹ÓÃµ¥ÀıÄ£Ê½»òÕß¾²Ì¬µ¥ÀıÄ£Ê½¡£
-SqlSession ÊµÀı²»ÊÇÏß³Ì°²È«µÄ£¬Òò´ËÊÇ²»ÄÜ±»¹²ÏíµÄ£¬ËùÒÔËüµÄ×î¼ÑµÄ×÷ÓÃÓòÊÇÇëÇó»ò·½·¨×÷ÓÃÓò
+SqlSessionFactoryBuilder æœ€ä½³ä½œç”¨åŸŸæ˜¯æ–¹æ³•ä½œç”¨åŸŸ
+SqlSessionFactory  SqlSessionFactory çš„æœ€ä½³ä½œç”¨åŸŸæ˜¯åº”ç”¨ä½œç”¨åŸŸã€‚ æœ‰å¾ˆå¤šæ–¹æ³•å¯ä»¥åšåˆ°ï¼Œæœ€ç®€å•çš„å°±æ˜¯ä½¿ç”¨å•ä¾‹æ¨¡å¼æˆ–è€…é™æ€å•ä¾‹æ¨¡å¼ã€‚
+SqlSession å®ä¾‹ä¸æ˜¯çº¿ç¨‹å®‰å…¨çš„ï¼Œå› æ­¤æ˜¯ä¸èƒ½è¢«å…±äº«çš„ï¼Œæ‰€ä»¥å®ƒçš„æœ€ä½³çš„ä½œç”¨åŸŸæ˜¯è¯·æ±‚æˆ–æ–¹æ³•ä½œç”¨åŸŸ
 * usage
 ** xml config
 *** properties
 *** setting
-¿ØÖÆMyBatisµÄÔËĞĞĞĞÎª
+æ§åˆ¶MyBatisçš„è¿è¡Œè¡Œä¸º
 *** typeAliases
-ÎªÀàĞÍÉèÖÃ±ğÃû£¬´æÔÚµÄÒâÒå½öÔÚÓÚÓÃÀ´¼õÉÙÀàÍêÈ«ÏŞ¶¨ÃûµÄÈßÓà
+ä¸ºç±»å‹è®¾ç½®åˆ«åï¼Œå­˜åœ¨çš„æ„ä¹‰ä»…åœ¨äºç”¨æ¥å‡å°‘ç±»å®Œå…¨é™å®šåçš„å†—ä½™
 *** typeHandlers
-ÊµÏÖ org.apache.ibatis.type.TypeHandler ½Ó¿Ú£¬ »ò¼Ì³ĞÒ»¸öºÜ±ãÀûµÄÀà org.apache.ibatis.type.BaseTypeHandler£¬ È»ºó¿ÉÒÔÑ¡ÔñĞÔµØ½«ËüÓ³Éäµ½Ò»¸ö JDBC ÀàĞÍ
+å®ç° org.apache.ibatis.type.TypeHandler æ¥å£ï¼Œ æˆ–ç»§æ‰¿ä¸€ä¸ªå¾ˆä¾¿åˆ©çš„ç±» org.apache.ibatis.type.BaseTypeHandlerï¼Œ ç„¶åå¯ä»¥é€‰æ‹©æ€§åœ°å°†å®ƒæ˜ å°„åˆ°ä¸€ä¸ª JDBC ç±»å‹
 #+BEGIN_SRC java
 // ExampleTypeHandler.java
 @MappedJdbcTypes(JdbcType.VARCHAR)
@@ -41,3 +42,114 @@ public class ExampleTypeHandler extends BaseTypeHandler<String> {
 * principle
 * refer
 https://mybatis.org/mybatis-3/zh/getting-started.html
+* springé›†æˆ
+** springboot
+*** ä¸ä½¿ç”¨mybatisçš„é…ç½®æ ¼å¼ï¼Œç›´æ¥ç”¨Spring
+1. é…ç½®ç±»ä¸Šscan *Mapperç±»
+2. application.yml/properties é…ç½®*mapper.xmlçš„è·¯å¾„
+#+BEGIN_SRC java
+@SpringBootApplication
+@MapperScan("cn.hj.qakc.mapper.generate")
+public class QakcApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(QakcApplication.class, args);
+    }
+
+    }
+#+END_SRC
+#+BEGIN_SRC yaml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ks?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+mybatis:
+  type-aliases-package: cn.hj.qakc.model.entity
+  mapper-locations: mybatis/mapper/**/*.xml
+#+END_SRC
+*** è®¾ç½®æ‰“å°æ—¥å¿—
+#+BEGIN_SRC yaml
+logging:
+  level:
+    cn:
+      hj:
+        qakc:
+          mapper: debug
+#+END_SRC
+* generator
+** gradle
+plugins {
+    id "com.thinkimi.gradle.MybatisGenerator" version "2.1.2"
+}
+
+configurations {
+    mybatisGenerator
+}
+
+// macç”¨æˆ·å¯èƒ½éœ€è¦ç”¨å…¨è·¯å¾„
+mybatisGenerator {
+    verbose = true
+    configFile = 'src/main/resources/mybatis/autogen/generatorConfig.xml'
+
+    // optional, here is the override dependencies for the plugin or you can add other database dependencies.
+    dependencies {
+        mybatisGenerator 'org.mybatis.generator:mybatis-generator-core:1.3.7'
+        mybatisGenerator 'mysql:mysql-connector-java:5.1.47'
+        mybatisGenerator 'org.postgresql:postgresql:42.2.6'
+        mybatisGenerator  // Here add your mariadb dependencies or else
+    }
+}
+generatorConfig.xml
+#+BEGIN_SRC xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="my" targetRuntime="MyBatis3">
+
+        <!--è‡ªåŠ¨å®ç°Serializableæ¥å£-->
+<!--        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>-->
+
+        <!-- å»é™¤è‡ªåŠ¨ç”Ÿæˆçš„æ³¨é‡Š -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/ks"
+                        userId="root"
+                        password="123456">
+        </jdbcConnection>
+
+        <!--åŒæ ·Macç”¨æˆ·ï¼štargetProjectéœ€è¦ä¸ºå…¨è·¯å¾„-->
+        <javaModelGenerator targetPackage="cn.hj.qakc.model.entity" targetProject="src/main/java">
+            <!-- enableSubPackages:æ˜¯å¦è®©schemaä½œä¸ºåŒ…çš„åç¼€ -->
+            <property name="enableSubPackages" value="false" />
+            <!-- ä»æ•°æ®åº“è¿”å›çš„å€¼è¢«æ¸…ç†å‰åçš„ç©ºæ ¼ -->
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <!--ç”Ÿæˆæ˜ å°„æ–‡ä»¶å­˜æ”¾ä½ç½®-->
+        <!--åŒæ ·Macç”¨æˆ·ï¼štargetProjectéœ€è¦ä¸ºå…¨è·¯å¾„-->
+        <sqlMapGenerator targetPackage="mapper.generate" targetProject="src/main/resources/mybatis">
+            <!-- enableSubPackages:æ˜¯å¦è®©schemaä½œä¸ºåŒ…çš„åç¼€ -->
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!--åŒæ ·Macç”¨æˆ·ï¼štargetProjectéœ€è¦ä¸ºå…¨è·¯å¾„-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="cn.hj.qakc.mapper.generate" targetProject="src/main/java">
+            <!-- enableSubPackages:æ˜¯å¦è®©schemaä½œä¸ºåŒ…çš„åç¼€ -->
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <!-- é…ç½®è¡¨ä¿¡æ¯ -->
+        <!-- schemaå³ä¸ºæ•°æ®åº“å tableNameä¸ºå¯¹åº”çš„æ•°æ®åº“è¡¨ domainObjectNameæ˜¯è¦ç”Ÿæˆçš„å®ä½“ç±» enable*ByExample
+            æ˜¯å¦ç”Ÿæˆ exampleç±» -->
+        <table schema="ks" tableName="question"></table>
+
+    </context>
+</generatorConfiguration>
+
+#+END_SRC

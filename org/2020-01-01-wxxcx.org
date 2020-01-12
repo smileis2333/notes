@@ -1,0 +1,30 @@
+#+TITLE:  Tecent Related
+* 小程序
+#+STARTUP: indent
+#+BEGIN_SRC js
+激活一次性订阅/长期订阅，必须作为函数注册到可以激活点击事件的元素中，由用户触发后进行授权
+function subscribe(){
+  wx.requestSubscribeMessage({
+    tmplIds: ['3AfajXU2xdUupGcQPJgMpg4hkX-y8Ce_iar_w5Dq6Ew'],
+    success(res) {
+      if (res['3AfajXU2xdUupGcQPJgMpg4hkX-y8Ce_iar_w5Dq6Ew'] === 'accept') {
+        wx.showToast({
+          title: '订阅OK！',
+          duration: 1000,
+          success(data) {
+            console.log('订阅成功')
+            //成功
+            resolve()
+          }
+        })
+      }
+    }
+  })
+}
+
+// 向外暴露接口
+module.exports = {
+  subscribe: subscribe
+}
+#+END_SRC
+* 滚动视图区域(scroll-view)

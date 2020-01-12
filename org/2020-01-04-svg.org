@@ -1,0 +1,22 @@
+#+TITLE:  SVG
+#+STARTUP: indent
+* 概念
+Scalable Vector Graphics
+* tag
+** <defs>
+*** <filter>
+滤镜
+*** <mask>
+蒙版，控制图层显示
+#+BEGIN_SRC html
+<svg width="400" height="300">
+        <defs>
+                <mask id="small-rect">
+                        <rect x="0" y="0" width="400" height="300" fill="white"></rect>
+                        <rect width="100" height="100" fill="black" x="200" y="100"></rect>
+                </mask>
+        </defs>
+        <rect id="back" x="0" y="0" width="400" height="300" fill="#d4fcff"></rect>
+        <rect id="front" x="0" y="0" width="400" height="300" fill="#fcd3db" mask="url(#small-rect)"></rect>
+</svg>
+#+END_SRC

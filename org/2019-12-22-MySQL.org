@@ -370,6 +370,23 @@ ANSI：宽松模式，对插入数据进行校验，如果不符合定义类型�
 STRICT_TRANS_TABLES：只在事务型表中进行严格限制。
 STRICT_ALL_TABLES：对所有表进行严格限制。
 TRADITIONAL ：严格模式，当插入数据时，进行数据的严格校验，错误的数据将不能被插入，报error错误。用于事物时，会进行事物的回滚，官方提醒我们说，如果我们使用的存储引擎是非事务型的存储引擎（比如myisam），当我们使用这种模式时， 如果执行非法的插入或更新数据操作时，可能会出现部分完成的情况。
+
+-- 用select出来的结果进行批量插入
+#+BEGIN_SRC sql
+insert into organization_employee(employee_id,org_id)
+select
+        o.user_id,
+        o.org_id
+from
+        organization o
+left join organization_employee oe on
+        o.org_id = oe.org_id
+        and o.user_id = oe.employee_id
+where
+        oe.employee_id is null and o.user_id is not null;
+#+END_SRC
+
+
 * delete与update常用语句
 ** delete
 -- 清空test1表的数据
