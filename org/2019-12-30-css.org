@@ -1,4 +1,199 @@
 #+TITLE:  css
 #+STARTUP: indent
+* 使用
+** html
+*** style元素
+#+BEGIN_SRC html
+<style type="text/css">
+</style>
+#+END_SRC
+*** 内联,元素指定
+#+BEGIN_SRC html
+<div style="">
+</div>
+#+END_SRC
+** 外部文件引入
+*** import
+常用于通过url引入非本地的css文件
+#+BEGIN_SRC html
+<style type="text/css">
+  @import url("css文件路径");
+</style>
+#+END_SRC
+*** link
+#+BEGIN_SRC html
+<link type="text/css" rel="styleSheet"  href="CSS文件路径" />
+#+END_SRC
+* 样式影响
+** selector
+*** class
+*** tag
+*** id
+** inheritance
+父元素有样式时，如果子元素没有进行覆盖，则会从父元素进行继承，对于任意的内联样式/选择器均成立，允许/不允许继承的样式如下：
+
+(不可继承的：display、margin、border、padding、background、height、min-height、max- height、width、min-width、max-width、overflow、position、left、right、top、 bottom、z-index、float、clear、table-layout、vertical-align、page-break-after、 page-bread-before和unicode-bidi
+所有元素可继承：visibility和cursor
+内联元素可继承：letter-spacing、word-spacing、white-space、line-height、color、font、 font-family、font-size、font-style、font-variant、font-weight、text-decoration、text-transform、direction
+块状元素可继承：text-indent和text-align
+列表元素可继承：list-style、list-style-type、list-style-position、list-style-image
+表格元素可继承：border-collapse)
+* block and inline element
+** block
+标题元素、列表元素、排版标签(p,div,hr,center,pre),table,form
+* controll
+** font
+*** font-family
+每个font-family包含一系列字体集合，该属性设置时，可以设置字体，在最后设置font-family，若是前面指定的字体找不到，会让其客户端浏览器自行决定该font-family的默认字体
+#+BEGIN_SRC css
+/*对于带空格的字体需要进行""括号*/
+body{
+  font-family: Verdana, Geneva, Arial, sans-serif
+}
+#+END_SRC
+*** font-size
+字母的高部分和矮部分以及中间部分组成的高度，单位为pixel
+可以设置keyword(normal, small, ...)，numeric+px,  numeric+em, numeric+%(em和%为同样的表述的不同形式，均为对从父元素继承的font-size的百分比缩放，若是是最上层的body元素，则缩放默认值)
+建议操作是body设置keyword/pixel/numeric+px/numeric+%，然后子元素只设置numeric+%/numeric+em
+*** color
+支持keyword指定默认，有限个
+支持rgb模式，指定占用的百分比或者0-255
+6位16进制表示，每两位表示red, green, blue翻译为0-255
+*** font-weight
+数值支持从100-900，但是是否有效取决于浏览器实现
+keyword支持normal, bold, bolder, light，后两个也取决于浏览器实现
+*** font-style
+normal, italic, oblique(italic是否有效取决于字体本身，第三种是普通的倾斜)
+*** text-decoration
+支持上、下、穿线(overline, undeerline, line-through)
+*** line-height
+设置字高，可增加可读性，建议使用百分比，其缩放为其font-size，对于块状元素来讲，如下:
+#+BEGIN_SRC html
+<!--如果需要title和title2脱离更上层的元素设置的间距，需要设置#elixirs的line-height为数值1(不加任何修饰如px/%，如果加了%，则是将外部继承的font-size进行比例缩放，然后得到固定的行高，最高分发给子元素，而纯数值代表，各个子元素按照数值乘以font-size进行行高设置)-->
+<div id="elixirs">
+  <h1>title</h1>
+  <h2>title2</h2>
+</div>
+#+END_SRC
+*** shortcut
+font: font-style font-variant font-weight font-size/line-height font-family
+eg:
+font: small/1.6em Verdana, Helvetica, Arial, sans-serif;
+** image
+图片塞进背景里
+*** background-image
+background-image:    url(images/background.gif);
+*** background-repeat
+no-repeat, repeat-x, repear-y, inherit
+#+BEGIN_SRC css
+.className{
+  background-repeat:   no-repeat;
+}
+#+END_SRC
+*** background-position
+可以使用keyword, pixel, percent
+#+BEGIN_SRC css
+.className{
+  background-position: top left;
+}
+#+END_SRC
+*** shortcut
+background: white url(images/cocktail.gif) repeat-x;
+** box
+*** border
+**** border-style
+8种， solid, double, groove, outset, dotted, dashed, inset, ridge
+**** border-width
+***** ketword
+thin, medium, thickg
+***** pixel
+**** border-color
+**** border-top/left/bottom/right-color
+controll which side affect
+**** shortcut
+border: thin solid #007e7e(顺序可打乱)
+*** margin
+margin: 0px 20px 30px 10px(从上开始逆时针赋值)
+margin: 20px (all side)
+margin: 20px 30px(top/botton 20px, left/right 30px)
+margin: 10px 20px 30px(right/left 20px)
+margin: 0 auto (水平居中)
+margin: auto 0; (垂直居中)
+*** padding
+同margin
+** text-align
+block元素才允许使用，它对子元素的inline元素/文本进行居中
+#+BEGIN_SRC html
+<!--都是居中成功，但是222是被#div1居中，而222是被#div2进行的居中，因为div2继承了#div2的text-align属性 -->
+<div class="test" id="div1">
+  <div id="div2">111</div>
+  <span id="span1">222</span>
+</div>
+#+END_SRC
+** pseudo-class
+根据状态设置对应的样式，如<a>标签具有的状态包括hover, visited, unvisted...
+** layout and position
+*** liquid layout
+优先： allow scale， 充分利用屏幕空间
+**** float
+any floating element require width been set
+块状元素无视被设置float的元素，但是块状元素内部的inline元素知道float元素的边界，在触碰边界的时候会进行换行,所以最终能够得到图文混排的视觉效果(block元素忽略float元素，inline元素观察float元素)
+允许设置left/right
+如果下层元素要与上层的float元素隔离开来，下层元素必须设置要clear properties为left/right(取决于上层的float元素在哪一侧)
+对于侧边栏与主体的浮动设置时，建议浮动侧边栏，这样可以使得侧边栏是固定的，而主体内容是可伸缩的，反之则是很奇怪
+**** clear
+*** frozen layout
+*** jello layout
+#+BEGIN_SRC css
+#idName{
+  margin-left: auto;
+  margin-right: auto;
+/*margin: 0 auto*/
+}
+#+END_SRC
+*** absolute layout
+depend on top & right /bottom & left, 数值是相对于父元素而言
+z-index决定哪个重叠的绝对布局浮现在上层
+与float不同，all the elements of document flow never know its appearance
+any element could be absolute
+*** fixed
+relative to the browserw window rather than page，doesen't move or change when scrolle the page
+*** relative
+所谓的相对是，相对于不设置offset时的默认位置，依旧处于文档流中，在放置时，浏览器进行偏移量的设置，不使用margin/padding设置的原因是，这两个属性设置后图片始终在容器内，而relative可以实现溢出容器，但是逻辑上还是属于容器(删掉容器dom元素时，该relative元素也会消失)
+** table
+td只可以设置padding
+单元格border之间的间距为属性border-spacing，只能以table级设置，且只能设置horizen/vertical的值
+border-collapse: collapse (border线合并)
+单元格可以设置text-align和vertical-align
+** list
+list-style-type: disc/circle/square/none(unorder list)
+list-style-type: ...(reffer mannual)
+list-style-image: url(images/backpack.gif)
+* concept
+** box-model concept
+*** content-area
+hold the element's contents(like text or image)
+*** padding
+可选，与border的间距，边距是透明的，无法用颜色装饰，可被元素背景色染色
+*** border
+*** margin
+可选，各个element从border算起的间距(边缘子元素指定margin时，相对于父元素的content-area边缘开启计算间距),与padding同样为透明，无法使用颜色或装饰, 可被背景色染色
+** cascade
+先按照author, reader, browser的顺序排序样式，然后在根据specific规则在排序，之后从排序后的集合中一项一项取出css properties(因为浏览器有一切元素的默认样式，所以一定能取得全部的css属性)，如果可继承父元素，同时author和reader的样式没有设置，则从父元素取得属性，最后取得该元素的全部属性，进行render
+* selector
+** class-selector
+** tag-selector
+** id-selector
+** descendant-selector
+*** direct-child
+div > h1 {}
+*** just child (many be child of child)
+div h1 {}
+* 经验总结
+** 太长
 控制按钮内容过长时，过长内容显示为...
 white-space:nowrap; overflow:hidden; text-overflow:ellipsis
+** shortcut drawback
+浏览器调试起来比较麻烦
+** collapse
+垂直的元素之间(block)导致margin取长的那一侧，水平的元素之间(inline)则是直接加起来

@@ -153,3 +153,75 @@ generatorConfig.xml
 </generatorConfiguration>
 
 #+END_SRC
+* principle
+对应版本3.4.6
+** 配置文件解析
+*** <properties>解析
+先解析子节点，在从属性resources/url读取，所以后载入的配置有可能覆盖子节点的内容
+#+BEGIN_SRC xml
+<properties resource="jdbc.properties">
+  <property name="jdbc.username" value="coolblog"/>
+  <property name="hello" value="world"/>
+</properties>
+#+END_SRC
+*** <settings>解析
+1. 解析MyBatis的可配置项
+2. 解析<setting>节点后，用configuration.class获取MetaClass工具类，与节点读取出来的内容做比较，不符合则抛出异常
+3. 涉及到的比较重要的类: MetaClass以及PropertyTokenizer(用于复杂属性的切分比如xxx.xxx，以及数组)
+4. 将处理完毕的properties写入Configuration这个类的实例,同时在settingsElement也设置了对应默认值
+*** <typeAliases>解析
+开始了MyBatis的常规配置模式，可配置包扫描与单个配置
+1. 如果是单个配置,a. 别名与类型都设置了则设置映射 b. 只设置了类型，去类型的类名小写后作为别名
+2. 包扫描，使用包名与相关信息用类加载器进行加载，然后重复1步骤进行处理
+3. Configuration创建时设置了较为全局的部分别名，而TypeAliasRegistry在创建时则配置了一些底层的类型别名，如果int,long...
+*** <plugins>解析
+读取interceptor，与节点内的配置属性，进行创建拦截器
+#+BEGIN_SRC xml
+<plugins>
+  <plugin interceptor="xyz.coolblog.mybatis.ExamplePlugin">
+    <property name="key" value="value"/>
+  </plugin>
+</plugins>
+#+END_SRC
+*** <environments>解析
+environments内的enviroment可以配置多个，切换时用default指定对应的id进行进行激活
+#+BEGIN_SRC xml
+<environments default="development">
+  <environment id="development">
+    <transactionManager type="JDBC"/>
+    <dataSource type="POOLED">
+    <property name="driver" value="${jdbc.driver}"/>
+    <property name="url" value="${jdbc.url}"/>
+    <property name="username" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
+    </dataSource>
+  </environment>
+</environments>
+#+END_SRC
+*** <typeHandlers>解析
+与<typeAliased>类似，支持按包解析，或者单个配置
+#+BEGIN_SRC xml
+<typeHandlers>
+  <package name="xyz.coolblog.handlers"/>
+</typeHandlers>
+
+<!-- 手动配置 -->
+<typeHandlers>
+  <typeHandler jdbcType="TINYINT" javaType="xyz.coolblog.constant.ArticleTypeEnum" handler="xyz.coolblog.mybatis.ArticleTypeHandler"/>
+</typeHandlers>
+#+END_SRC
+1. 对于Java类型，Jdbc类型，解析器都配置了，直接实例化解析器后进入终点方法进行类型的映射关联
+2. 对于Java类型有，解析器有，Jdbc缺的，则进入实例化解析器后，读注解的Jdbc进行映射关联，然后进入终点
+3. 对于啥都没有的，则先解析Java类型，然后进入2步骤，比如解析器是指定了3个Java类型，4个Jdbc类型，处理后是Map<JavaType,Map<JdbcType,TypeHandler>>
+4. 扫描包，与typeAliased类似，类加载器加载后进行3处理
+*** 映射文件解析
+**** <cache>
+**** <cache-ref>
+**** <resultMap>
+对于关联的tag，如<association>和<collection>的内部子元素最终也会被解析为ResultMap的一个实例
+**** <sql>
+**** statement(select|update|insert|delete)
+分为text-node/element-node/include-node, 对include节点进行处理，然后完成节点替换(取出properties和复制对应sql节点，然后进行递归填充，因为sql可以include别的sql节点，填充后得到include节点，然后替换旧的include，将内部得到的文本节点取出放在include之前，最后去掉include节点，完成替换工作)
+关键方法为applyInclude(Node,Properties,included)，核心为source.setNodeValue(PropertyParser.parse(source.getNodeValue(), variablesContext));即当source.getNodeValue与解析出来的properties属性的key对应上时，进行替换
+** SQL执行流程
+DefaultSqlSession获取mapper，内部从configuration获取对应接口的实现工厂进行实例化，然后代理对象在委托MapperMethod进行执行，涉及ParamNameResolver对带注解参数的解析

@@ -1,5 +1,87 @@
-﻿#+TITLE: HTML5
-#+START: indent
+﻿#+TITLE: HTML
+#+STARTUP: indent
+* tags
+** normal element
+*** <q>
+quote，代表短引用，大部分情况是解析为单个双引号"
+*** <blockquote>
+长段文字的引用
+*** <br>
+换行
+*** <hn>
+1<=n<=6
+*** <ol>
+有序列表
+ol块元素，li块元素
+*** <ul>
+无序列表
+*** <em>
+强调内容
+*** <p>
+块元素
+*** <a>
+**** attribute
+- href(用于跳转链接或者anchor)
+- title(hover时提示文本)
+- target(指定是否打开新窗口显示,target=”_blank”)
+**** demo
+#+BEGIN_SRC html
+<!--页面内跳转-->
+<h2>
+  <!--使用id时默认underscore样式和可点击会消失-->
+  <a id=”chai”>Chai Tea, $1.85</a>
+</h2>
+<p>A spicy drink made with black tea, spices, milk and honey.</p>
+<a href=”index.html#chai”>See Chai Tea</a>
+<!--href="#top" 跳回顶部-->
+#+END_SRC
+*** <img>
+主流的图像格式jpeg和gif,png
+当图片过大时，建议裁剪而不是靠css或者宽度高度设置，因为大图片同时也在浪费传输时间
+多张大图片时，建议显示用thumbnail(把图片剪裁小)，然后点击时跳转到完整的图片
+建议使用Logo时，用背景色对图片进行边缘柔化
+#+BEGIN_SRC html
+<a href=”html/applestore.html”>
+  <img src=”thumbnails/applestore.jpg” alt=”An iPod at the Birmingham Apple store”>
+</a>
+#+END_SRC
+**** attribute
+alt 加载时的显示文本
+src url/相对路径，不建议链接到图片上
+width
+height
+*** <table>
+**** <tr>
+**** <th>
+**** <td>
+***** attribute
+rowspan: 多行单元格合并为一个
+colspan: 多列单元格合并为一个
+*** <form>
+**** <input>
+***** type
+****** text
+****** submit
+****** radio
+****** checkbox
+name应该为attributeName[](需要带[])
+****** password
+****** file
+**** <textarea>
+create multi-line text
+10和48都指的是字符,10行高，宽为48字符
+<textarea name=“comments” rows="10" cols="48"></textarea>
+**** <select>
+***** <option>
+***** attribute
+multiple="multiple"
+** empty element
+*** <br>
+*** <img>
+** character entity
+&gt;---> >
+&lt;---> <
+&amp; ---> &
 * html
   <!DOCTYPE html>声明
 <meta charset="utf-8">
