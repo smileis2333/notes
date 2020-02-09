@@ -1,0 +1,9 @@
+#+TITLE: xshell
+#+STARTUP: indent
+* 快捷键
+** 文件传输
+安装lrzsz工具包
+*** sz
+下载对应文件
+*** rz
+ 上传

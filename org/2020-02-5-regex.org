@@ -1,0 +1,40 @@
+#+TITLE: Regex
+#+STARTUP: indent
+* special character
+** .
+single character
+** *
+0...∞ modify previous character or special character
+** +
+1...∞ modify previous character or special character
+** ?
+0...1 modify previous character or special character
+** ^
+eg:
+^car just match it on the line header
+** $
+eg
+car$ just match it on the line end
+** []
+a set of character that represent a character allow
+[a-z] allow character is a,b,c,d...z
+[abc] allow character is a/b/c
+[^abc] no allow character is a/b/c
+** ()
+分组
+** |
+combine expressions
+** {number}
+eg:
+a{2} match a that continuously two occurrences
+** \
+escape special character above or translate normal character to special character such as \n represent linebreak
+*** translate normal character to special character
+**** \w
+match word
+**** \n
+match linebreak
+**** \d
+match number
+**** \s
+match blank character such as tab or single space character

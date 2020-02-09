@@ -1,0 +1,9 @@
+#+TITLE: Chrome usage
+#+STARTUP: indent
+* shortcut
+meta+d 跳到地址栏
+meta+f 打开菜单
+ctrl+n open new window
+ctrl+shift+n open new incognito window
+ctrl+h open history page
+ctrl+j open download page

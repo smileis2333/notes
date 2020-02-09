@@ -34,6 +34,8 @@ compose 对请求编辑后在发出
 ** ref
 https://blog.devtang.com/2015/11/14/charles-introduction/
 https://www.charlesproxy.com/documentation/
+** 激活
+https://www.zzzmode.com/mytools/charles/
 * Java
 ** 远程调试/源代码调试
 启动对应的远程服务器/ 借助idea的调试器连接到对应的host:port

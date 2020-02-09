@@ -1,0 +1,8 @@
+#+TITLE: win10 shortcut
+#+STARTUP: indent
+* keyboard shortcut
+- ctrl + z undo
+- ctrl + y redo
+- ctrl + x cut
+- alt提示菜单打开字符
+* gesture shortcut

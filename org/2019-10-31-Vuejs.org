@@ -2,14 +2,180 @@
 #+STARTUP: indent
 * 模板语法
 与Mustache类似，{{value}}，括号中可以获取组件的数据，支持三元运算
-* 基本指令
-- v-for 遍历循环
-- v-if 渲染效果是根据条件来完全从dom中去除或者加入
-- v-show 渲染效果是display: none
-- v-on 可以简写为@，用于绑定方法
-- v-bind 可以简写为:，用于绑定属性
-- v-model 双向数据绑定，用于表单
-** 自定义指令
+
+#+BEGIN_SRC html
+<!--
+{{ number + 1 }}
+
+{{ ok ? 'YES' : 'NO' }}
+
+{{ message.split('').reverse().join('') }}
+--->
+<div id="app">
+  {{ message }}
+  <span :title="message">单向绑定</span>
+
+  <!--v-if是完全移除元素，v-show是display为none-->
+  <p v-if="seen">现在你看到我了</p>
+  <p v-show="seen">现在你看到我了</p>
+
+  <ol>
+     <li v-for="todo in todos">
+       {{ todo.text }}
+     </li>
+  </ol>
+
+  <button v-on:click="test">反转消息</button>
+
+  <!--表单控制，双向交互v-model，当表单元素的值更改时，会同时修改v-model绑定的值-->
+  <input v-model="message">
+
+  <!---双大括号会将数据解释为普通文本，而非 HTML 代码。为了输出真正的HTML,需要使用v-html--->
+  <p>Using v-html directive: <span v-html="rawHtml"></span></p>
+</div>
+#+END_SRC
+
+#+BEGIN_SRC javascript
+var app2 = new Vue({
+  el: '#app',
+  data: {
+    message: '页面加载于 ' + new Date().toLocaleString()
+    seen: true,
+    todos: [
+      { text: '学习 JavaScript' },
+      { text: '学习 Vue' },
+      { text: '整个牛项目' }
+    ]
+  },
+  methods:{
+    test:function(){
+      alert(111)
+    }
+  },
+
+})
+#+END_SRC
+* 组件化
+** 注册组件
+*** 全局注册
+Vue.component('component-a', { /* ... */ })
+*** 局部注册
+#+BEGIN_SRC javascript
+var ComponentA = { /* ... */ }
+var ComponentB = { /* ... */ }
+var ComponentC = { /* ... */ }
+
+new Vue({
+  el: '#app',
+  components: {
+    'component-a': ComponentA,
+    'component-b': ComponentB
+  }
+})
+#+END_SRC
+** prop
+#+BEGIN_SRC javascript
+props: ['title', 'likes', 'isPublished', 'commentIds', 'author']
+
+props: {
+  title: String,
+  likes: Number,
+  isPublished: Boolean,
+  commentIds: Array,
+  author: Object,
+  callback: Function,
+  contactsPromise: Promise // or any other constructor
+}
+
+post: {
+  id: 1,
+  title: 'My Journey with Vue'
+}
+
+<blog-post v-bind="post"></blog-post>
+
+<blog-post
+  v-bind:id="post.id"
+  v-bind:title="post.title"
+></blog-post>
+
+#+END_SRC
+** 父组件监听子组件事件
+
+#+BEGIN_SRC html
+<div id="blog-posts-events-demo">
+  <div :style="{ fontSize: postFontSize + 'em' }">
+    <blog-post
+      v-for="post in posts"
+      v-bind:key="post.id"
+      v-bind:post="post"
+      v-on:enlarge-text="postFontSize += 0.1"
+    ></blog-post>
+  </div>
+</div>
+
+<!--
+<button v-on:click="$emit('enlarge-text', 0.1)">触发事件并带值返回
+  Enlarge text
+</button>
+-->
+
+<!--
+<blog-post
+  ...
+  v-on:enlarge-text="postFontSize += $event"
+>
+</blog-post>
+-->
+
+#+END_SRC
+#+BEGIN_SRC javascript
+Vue.component('blog-post', {
+  props: ['post'],
+  template: `
+    <div class="blog-post">
+      <h3>{{ post.title }}</h3>
+      <button v-on:click="$emit('enlarge-text')">
+        Enlarge text
+      </button>
+      <div v-html="post.content"></div>
+    </div>
+  `
+})
+
+/*
+对于子组件带值返回的值为方法的参数
+methods: {
+  onEnlargeText: function (enlargeAmount) {
+    this.postFontSize += enlargeAmount
+  }
+}
+*/
+#+END_SRC
+* 数据与方法
+$可以获取vue实例的属性与方法,比如
+#+BEGIN_SRC html
+<div id="app">
+
+</div>
+#+END_SRC
+
+#+BEGIN_SRC javascript
+  var data = {a:1}
+
+  var vm = new Vue({
+    el: '#app',
+    data: data
+  })
+
+  vm.$data === data // ==> true
+  vm.$el === document.getElementById('app') // => true
+
+  vm.$watch('a', function (newValue, oldValue) {
+    // 这个回调将在 `vm.a` 改变后调用
+  })
+#+END_SRC
+
 * 生命周期
  #+BEGIN_SRC javascript
  var vm = new Vue(){
@@ -62,13 +228,554 @@
     }
 }
  #+END_SRC
-* 组件方法
-** compute
-** watch
+* 计算属刑和侦听器
+** 计算属性
+与方法可替换，区别为会进行缓存，只要影响的因子没有变化，那么值是在每次重新渲染时是直接从缓存取，而方法则需要在执行(应用场景为多合一，即多个值影响构成一个值)
+#+BEGIN_SRC html
+<div id="example">
+  <p>Original message: "{{ message }}"</p>
+  <p>Computed reversed message: "{{ reversedMessage }}"</p>
+</div>
+#+END_SRC
+#+BEGIN_SRC javascript
+var vm = new Vue({
+  el: '#example',
+  data: {
+    message: 'Hello'
+  },
+  computed: {
+    // 计算属性的 getter
+    reversedMessage: function () {
+      // `this` 指向 vm 实例
+      return this.message.split('').reverse().join('')
+    }
+  }
+})
+#+END_SRC
+** 侦听器
+常用于一个属性的变化影响多个，与compute相反
+#+BEGIN_SRC html
+<div id="watch-example">
+  <p>
+    Ask a yes/no question:
+    <input v-model="question">
+  </p>
+  <p>{{ answer }}</p>
+</div>
+#+END_SRC
+#+BEGIN_SRC javascript
+var vm = new Vue({
+  el: '#example',
+  data: {
+    question: '',
+  },
+  watch:{
+    question:function(newValue, oldValue){
+      console.log('question change')
+    }
+  }
+})
+#+END_SRC
+* Class与Style绑定
+** class
+#+BEGIN_SRC html
+  <div v-bind:class="{ active: isActive, 'text-danger': hasError }"></div>
+
+  <!--
+  data: {
+    isActive: true,
+    hasError: false
+  }
+
+  渲染结果
+  <div class="static active"></div>
+  -->
+
+
+  <div v-bind:class="classObject"></div>
+
+  <!--
+  data: {
+    classObject: {
+      active: true,
+     'text-danger': false
+    }
+  }
+  -->
+
+  <div v-bind:class="[activeClass, errorClass]"></div>
+
+  <!--
+  data: {
+    activeClass: 'active',
+    errorClass: 'text-danger'
+  }
+  <div class="active text-danger"></div>
+  -->
+#+END_SRC
+** style
+#+BEGIN_SRC html
+  <div v-bind:style="styleObject"></div>
+
+  <!--
+  data: {
+    styleObject: {
+      color: 'red',
+      fontSize: '13px'
+    }
+  } --
+>
+#+END_SRC
+* 条件渲染
+** v-if
+#+BEGIN_SRC html
+<h1 v-if="awesome">Vue is awesome!</h1>
+
+<h1 v-if="awesome">Vue is awesome!</h1>
+<h1 v-else>Oh no</h1>
+
+<!--用template标签包起来可以控制一整块,与div的区别在于template标签不会被渲染出来-->
+<template v-if="ok">
+  <h1>Title</h1>
+  <p>Paragraph 1</p>
+  <p>Paragraph 2</p>
+</template>
+
+<div v-if="type === 'A'">
+  A
+</div>
+<div v-else-if="type === 'B'">
+  B
+</div>
+<div v-else-if="type === 'C'">
+  C
+</div>
+<div v-else>
+  Not A/B/C
+</div>
+
+<!--因为同为input标签，在切换时，会为了高效复用而被优化，导致文本框的值不会变，仅仅只是placeholder变了-->
+<template v-if="loginType === 'username'">
+  <label>Username</label>
+  <input placeholder="Enter your username">
+</template>
+<template v-else>
+  <label>Email</label>
+  <input placeholder="Enter your email address">
+</template>
+
+<!--设置key可以规避上述情况,placeholder仍被优化，但不影响使用-->
+<template v-if="loginType === 'username'">
+  <label>Username</label>
+  <input placeholder="Enter your username" key="username-input">
+</template>
+<template v-else>
+  <label>Email</label>
+  <input placeholder="Enter your email address" key="email-input">
+</template>
+
+
+#+END_SRC
+** v-show
+基于css的display属性控制
+* 列表渲染
+** v-for默认使用
+#+BEGIN_SRC html
+<!--遍历数组, index可省略-->
+<ul id="example-2">
+  <li v-for="(item, index) in items">
+    {{ parentMessage }} - {{ index }} - {{ item.message }}
+  </li>
+</ul>
+
+<!--遍历对象, properties可省略-->
+<ul id="v-for-object" class="demo">
+  <li v-for="(value,properties) in object">
+    {{ value }}
+  </li>
+</ul>
+
+<!--为了给 Vue 一个提示，以便它能跟踪每个节点的身份，从而重用和重新排序现有元素，你需要为每项提供一个唯一 key 属性：-->
+<div v-for="item in items" v-bind:key="item.id">
+  <!-- 内容 -->
+</div>
+
+<!--控制多个的循环渲染-->
+<ul>
+  <template v-for="item in items">
+    <li>{{ item.msg }}</li>
+    <li class="divider" role="presentation"></li>
+  </template>
+</ul>
+
+<!--v-for和v-if一起使用，不建议,v-for的优先级大于v-if，所以每个渲染出来的元素都会进行v-if判断-->
+<li v-for="todo in todos" v-if="!todo.isComplete">
+  {{ todo }}
+</li>
+
+<!--2.2.0+ 的版本里，当在组件上使用 v-for 时，key 现在是必须的。-->
+<my-component
+  v-for="(item, index) in items"
+  v-bind:item="item"
+  v-bind:index="index"
+  v-bind:key="item.id"
+></my-component>
+
+
+#+END_SRC
+#+BEGIN_SRC javascript
+var example2 = new Vue({
+  el: '#example-2',
+  data: {
+    parentMessage: 'Parent',
+    items: [
+      { message: 'Foo' },
+      { message: 'Bar' }
+    ]
+  }
+})
+
+new Vue({
+  el: '#v-for-object',
+  data: {
+    object: {
+      title: 'How to do lists in Vue',
+      author: 'Jane Doe',
+      publishedAt: '2016-04-10'
+    }
+  }
+})
+#+END_SRC
+** 注意事项
+#+BEGIN_SRC javascript
+var vm = new Vue({
+  data: {
+    items: ['a', 'b', 'c']
+  }
+})
+vm.items[1] = 'x' // 不是响应性的
+vm.items.length = 2 // 不是响应性的
+
+// Vue.set
+Vue.set(vm.items, indexOfItem, newValue)
+// Array.prototype.splice
+vm.items.splice(indexOfItem, 1, newValue)
+#+END_SRC
+* 事件渲染
+** 事件绑定
+#+BEGIN_SRC html
+<div id="example-1">
+  <button v-on:click="counter += 1">Add 1</button>
+  <p>The button above has been clicked {{ counter }} times.</p>
+</div>
+
+<div id="example-2">
+  <!-- `greet` 是在下面定义的方法名 -->
+  <button v-on:click="greet">Greet</button>
+</div>
+
+<div id="example-3">
+  <button v-on:click="say('hi')">Say hi</button>
+  <button v-on:click="say('what')">Say what</button>
+</div>
+
+<!--有时也需要在内联语句处理器中访问原始的 DOM 事件。可以用特殊变量 $event 把它传入方法：-->
+<button v-on:click="warn('Form cannot be submitted yet.', $event)">
+  Submit
+</button>
+
+#+END_SRC
+** 事件修饰符
+#+BEGIN_SRC html
+<!-- 阻止单击事件继续传播 -->
+<a v-on:click.stop="doThis"></a>
+
+<!-- 提交事件不再重载页面 -->
+<form v-on:submit.prevent="onSubmit"></form>
+
+<!-- 修饰符可以串联 -->
+<a v-on:click.stop.prevent="doThat"></a>
+
+<!-- 只有修饰符 -->
+<form v-on:submit.prevent></form>
+
+<!-- 添加事件监听器时使用事件捕获模式 -->
+<!-- 即内部元素触发的事件先在此处理，然后才交由内部元素进行处理 -->
+<div v-on:click.capture="doThis">...</div>
+
+<!-- 只当在 event.target 是当前元素自身时触发处理函数 -->
+<!-- 即事件不是从内部元素触发的 -->
+<div v-on:click.self="doThat">...</div>
+
+<!-- 点击事件将只会触发一次 -->
+<a v-on:click.once="doThis"></a>
+
+
+#+END_SRC
+** 按键修饰符
+#+BEGIN_SRC html
+<!-- 只有在 `key` 是 `Enter` 时调用 `vm.submit()` -->
+<input v-on:keyup.enter="submit">
+
+<input v-on:keyup.page-down="onPageDown">
+
+<!--
+.enter
+.tab
+.delete (捕获“删除”和“退格”键)
+.esc
+.space
+.up
+.down
+.left
+.right
+-->
+#+END_SRC
+* 表单交互
+** v-model
+#+BEGIN_SRC html
+<!--单行文本-->
+<input v-model="message" placeholder="edit me">
+<p>Message is: {{ message }}</p>
+
+<!--多行文本-->
+<span>Multiline message is:</span>
+<p style="white-space: pre-line;">{{ message }}</p>
+<br>
+<textarea v-model="message" placeholder="add multiple lines"></textarea>
+
+<!--单个复选框-->
+<input type="checkbox" id="checkbox" v-model="checked">
+<label for="checkbox">{{ checked }}</label>
+
+<!--多个复选框-->
+<div id='example-3'>
+  <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+  <label for="jack">Jack</label>
+  <input type="checkbox" id="john" value="John" v-model="checkedNames">
+  <label for="john">John</label>
+  <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+  <label for="mike">Mike</label>
+  <br>
+  <span>Checked names: {{ checkedNames }}</span>
+</div>
+
+<!--单选按钮-->
+<div id="example-4">
+  <input type="radio" id="one" value="One" v-model="picked">
+  <label for="one">One</label>
+  <br>
+  <input type="radio" id="two" value="Two" v-model="picked">
+  <label for="two">Two</label>
+  <br>
+  <span>Picked: {{ picked }}</span>
+</div>
+
+
+<!--select单选时-->
+<div id="example-5">
+  <select v-model="selected">
+    <option disabled value="">请选择</option>
+    <option>A</option>
+    <option>B</option>
+    <option>C</option>
+  </select>
+  <span>Selected: {{ selected }}</span>
+</div>
+
+<!--select多选时-->
+<div id="example-6">
+  <select v-model="selected" multiple style="width: 50px;">
+    <option>A</option>
+    <option>B</option>
+    <option>C</option>
+  </select>
+  <br>
+  <span>Selected: {{ selected }}</span>
+</div>
+#+END_SRC
+#+BEGIN_SRC javascript
+new Vue({
+  el: '#example-3',
+  data: {
+    checkedNames: []
+  }
+})
+
+new Vue({
+  el: '#example-4',
+  data: {
+    picked: ''
+  }
+})
+
+new Vue({
+  el: '...',
+  data: {
+    selected: ''
+  }
+})
+
+new Vue({
+  el: '#example-6',
+  data: {
+    selected: []
+  }
+})
+#+END_SRC
+** 修饰符
+#+BEGIN_SRC html
+<!-- 在“change”时可以添加 lazy 修饰符，从而转变为使用 change 事件进行同步,而非“input”时更新 -->
+<input v-model.lazy="msg" >
+
+<!--自动将用户的输入值转为数值类型-->
+<input v-model.number="age" type="number">
+
+<!--自动过滤用户输入的首尾空白字符-->
+<input v-model.trim="msg">
+#+END_SRC
 * 插槽
 ** 匿名插槽
 ** 具名插槽
+#+BEGIN_SRC html
+<div class="container">
+  <header>
+    <slot name="header"></slot>
+  </header>
+  <main>
+    <slot></slot>
+  </main>
+  <footer>
+    <slot name="footer"></slot>
+  </footer>
+</div>
+
+<base-layout>
+  <template v-slot:header>
+    <h1>Here might be a page title</h1>
+  </template>
+
+  <p>A paragraph for the main content.</p>
+  <p>And another one.</p>
+
+  <template v-slot:footer>
+    <p>Here's some contact info</p>
+  </template>
+</base-layout>
+#+END_SRC
 ** 作用域插槽
+让父组件可以使用该插槽的数据
+#+BEGIN_SRC html
+<!--错误示例, current-user组件-->
+<span>
+  <slot>{{ user.lastName }}</slot>
+</span>
+
+<!--下述代码不会正常工作，因为只有 <current-user> 组件可以访问到 user-->
+<current-user>
+  {{ user.firstName }}
+</current-user>
+
+<!--正确示例-->
+<span>
+  <slot v-bind:user="user">
+    {{ user.lastName }}
+  </slot>
+</span>
+
+<current-user>
+  <template v-slot:default="slotProps">
+    {{ slotProps.user.firstName }}
+  </template>
+</current-user>
+
+<!--缩写-->
+<current-user v-slot="slotProps">
+  {{ slotProps.user.firstName }}
+</current-user>
+
+
+<!--如果存在多个插槽，则需要明确指定对应的插槽-->
+<current-user>
+  <template v-slot:default="slotProps">
+    {{ slotProps.user.firstName }}
+  </template>
+
+  <template v-slot:other="otherSlotProps">
+    ...
+  </template>
+</current-user>
+#+END_SRC
+* 边界情况
+** 访问根实例
+#+BEGIN_SRC javascript
+// Vue 根实例
+new Vue({
+  data: {
+    foo: 1
+  },
+  computed: {
+    bar: function () { /* ... */ }
+  },
+  methods: {
+    baz: function () { /* ... */ }
+  }
+})
+
+// 获取根组件的数据
+this.$root.foo
+
+// 写入根组件的数据
+this.$root.foo = 2
+
+// 访问根组件的计算属性
+this.$root.bar
+
+// 调用根组件的方法
+this.$root.baz()
+
+
+#+END_SRC
+** 访问父机组件实例
+var map = this.$parent.map || this.$parent.$parent.map
+** 访问子组件实例或子元素
+#+BEGIN_SRC html
+<base-input ref="usernameInput"></base-input>
+#+END_SRC
+#+BEGIN_SRC javascript
+this.$refs.usernameInput
+#+END_SRC
+* 路由
+** 传参
+*** url后的参数
+path: url?[paramName=10]
+获取: this.$route.query.[paramName]
+*** rest类型
+path: url/:paramName
+获取: this.$route.params.[paramName]
+** router-view
+** 单部件
+{path: '/', component: customComponent} // 单个展位符
+#+BEGIN_SRC html
+<router-view/>
+#+END_SRC
+** 命名视图
+{path: '/', components: {
+    default: header,
+    aside: aside,
+    main: main
+  }
+} //用于实现多占位符置放(可实现经典布局如header,aside,main,footer之类)
+#+BEGIN_SRC html
+<!--header-->
+<router-view/>
+
+<!--aside-->
+<router-view name="aside"/>
+
+<!--main-->
+<router-view name="main"/>
+#+END_SRC
 * 数据交互
 ** axios
 用于申请服务器接口的数据

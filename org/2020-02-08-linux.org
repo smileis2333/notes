@@ -1,0 +1,5 @@
+#+TITLE: linux
+#+STARTUP: indent 
+* trick
+** 正在运行的进程挂到后台继续进行
+ctrl + z 挂到后台， bg继续进行

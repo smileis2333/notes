@@ -1,0 +1,7 @@
+#+TITLE: emacs
+#+STARTUP: indent
+* win10下配置 
+** 配置目录
+ win10配置emacs HOME目录，环境变量设置HOME
+** find file default path
+(setq default-directory "/path/")

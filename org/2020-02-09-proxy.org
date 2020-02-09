@@ -1,0 +1,7 @@
+* gradle
+ ./gradlew -DsocksProxyHost=yourHost -DsocksProxyPort=yourHostPort your-command
+* socket5
+** tool
+*** shadowsocks-libev
+    ss-local -s ck-7.forever-over.gq -p 20039 -l 1080 -k apBPAP123 -m chacha20-ietf
+*** proxychains
