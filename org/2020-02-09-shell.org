@@ -1,0 +1,240 @@
+#+TITLE: shell
+#+STARTUP: indent
+* variable
+** format
+${variableName}, the {} sometime can be ignore
+** create/ref/unset
+#+BEGIN_SRC bash
+
+# create variable 
+hj=huangjie
+
+# ref variable
+echo $hj
+
+# it is huangjies
+echo ${hj}s
+
+# unset 
+unset hj
+
+declare abc=123
+declare -i sum=0
+
+# 相当于设置为环境变量
+declare -x hj=huangjie1
+
+# 设置只读
+declare -r hj=huangjie
+#+END_SRC
+** 类型
+*** 本地变量
+只对当前shell有效，对当前shell之外的其他shell进程，包括当前shell的子shell进程均无效
+**** 全局变量
+#+BEGIN_SRC bash
+# 函数执行后hj已经变为huangjiechange
+hj=huangjie
+echo $hj
+
+change(){
+  hj=huangjiechange
+  echo $hj
+}
+echo $hj
+#+END_SRC
+**** 局部变量
+#+BEGIN_SRC bash
+# 最后打印时，hj仍然是huangjie，因为函数声明了local
+hj=huangjie
+echo $hj
+
+change(){
+  local hj=huangjiechange
+  echo $hj
+}
+echo $hj
+#+END_SRC
+**** trick
+对想执行的脚本，想让其继承当前的shell变量，但是又不想使用环境变量，可以使用source xxx.sh来进行脚本的执行，此时，执行的脚本相当于在当前shell执行，所以可以访问当前的本地变量
+*** 环境变量
+对当前shell以及子进程都生效
+**** usage
+1. export hj=huangjie
+2. hj=huangjie
+   export hj
+*** 只读变量
+只在当前shell可用，作用域如本地变量，不可撤销，退出时自动失效
+readonly hj=huangjie
+同上，作用域如环境变量
+export readonly hj=huangjie
+*** 特殊变量
+**** $?
+上一个命令的返回值
+**** $#
+传递给脚本的参数数量
+**** $0
+脚本名
+**** $1/2/3/4/n
+第n个传递的变量
+**** $*/$@
+全部参数
+* 算数运算
+** let
+只支持整数
+#+BEGIN_SRC bash
+let a=1+2
+echo $a #3
+
+let a=1-2
+echo $a #-1
+
+let a=5/2 #2
+#+END_SRC
+** expr
+与let类似，只能整数运算，但是功能更强点
+#+BEGIN_SRC bash
+expr 1 + 2 # 3, 需要空格空开，与ley有差异
+
+expr 1 - 2 # -1
+
+expr 5 / 2 # 2
+
+expr 5 \* 2 # 10，乘法时需要`\*`
+
+# 如果需要保存值，可以使用命令引用
+value=`expr 1 + 1`
+#+END_SRC
+** bc
+#+BEGIN_SRC bash
+# 是否有空格没有影响
+echo "1.3+2.4" | bc # 3.7
+echo "5+7" | bc # 12
+echo "5*7.2" | bc # 36.0
+echo "8/3" | bc # 2
+echo "scale=3; 8/3" | bc #2.666
+#+END_SRC
+** 运算语法
+*** $[算术表达式]
+#+BEGIN_SRC bash
+a=$[1+1] #2
+
+a=3
+b=4
+echo $[$a*$b] # 12
+#+END_SRC
+*** $((算术表达式))
+** 变量声明为整形
+#+BEGIN_SRC bash
+declare -i s
+s=(1+9)/2
+echo $s
+#+END_SRC
+* 逻辑运算
+** &&与||与-a与-o
+*** &&
+#+BEGIN_SRC bash
+# if[[10 -gt 5 && 10 -gt 9]] 与[10 -gt 5 && 10 -gt 9]等价
+if[[10 -gt 5 && 10 -gt 9]];
+then
+  echo 123
+fi
+#+END_SRC
+同时该符号具有逻辑短路的功能
+command1 && command2 只要command1成功了就会去执行command2，失败了就不会，而-a则都会执行
+*** -a
+*** ||
+与-o的特性差异与&&类似
+*** -o
+* 组合命令
+#+BEGIN_SRC bash
+(ls /test1;ls /test2)|wc -l # 子shell中运行
+{ls /test1;ls /test2;}|wc -l #当前shell中运行，块内的命令都必须以;结尾
+
+# 举证，只有第二种才会退出
+(cd;exit)
+{cd;exit;}
+#+END_SRC
+* 符号
+** -gt等符号只能比较数字
+** >/<等符号可以比较ascll码，使用时必须转义, 否则虽然没有报错，但是是无效的
+#+BEGIN_SRC bash
+# 该用法省去了转换后在比较的步骤 
+["2017-07-30" \< "2017-03-29"]
+#+END_SRC
+* []与[[]]的区别
+** 判断变量是否为空
+判断变量是否为空
+#+BEGIN_SRC bash
+a=abc
+[ $a ] # 左右两侧都需要有空格
+$? # 非空则返回0
+#+END_SRC
+*** 与test命令的联系
+用[]并且使用到-n -z的选项时，建议""括起来，而[[]]可以不用管
+** 组合判断条件
+*** [[]]不可以用-a或者-o连接(&&和||可以)
+*** []只能内部使用-a或者-o，只能外部使用&&或者||
+** 某些运算符
+*** 正则
+#+BEGIN_SRC bash
+tel=15815817741
+[[ $tel =~ [0-9]{11} ]]
+#+END_SRC
+* 字符串操作
+#+BEGIN_SRC bash
+# 变量长度
+hj=huangjie
+echo ${hj} # 8
+
+# 截取
+# 正着截取
+echo ${hj:2} #从索引2开始截取后面的angjie
+# 从倒着找开始的截取点截取，结果为jie
+echo ${hj: -3} # :与-3之间必须有空格
+# 部分截取
+echo ${hj:1:2} # 从u开始截取两个，为ua
+# 倒着找同理
+echo ${hj: -3:1}
+
+hj=huangjie.com
+#掐头截取，从左边开头截断到`.`结束
+echo ${hj#*.}
+# #*.代表第一个遇到的字符，##*.代表第最后一个字符
+
+# 去尾
+# %.*从右向左第一个`.`,%%.*从右向左最后一个`.`
+echo ${hj%.*} # huangjie
+
+hj=www.huangjie.www.com
+# 替换操作
+echo ${hj/www/haha} # haha.huangjie.www.com, 只替换第一个
+echo ${hj//www/haha} # haha.huangjie.haha.com, 全都替换
+echo ${hj/#www/haha} # 替换行首的
+echo ${hj/%www/haha} # 替换行尾的
+
+# 删除操作
+echo ${hj/.} # 省去了替换的部分就是删除
+echo ${hj//.} # 删掉全部.
+echo ${hj/#.} # 删除行首
+echo ${hj/%.} # 删除行尾
+
+# 大小写互转
+echo ${hj^^} # ^^转大写
+echo ${hj^^,,} # ,,转小写
+
+# 判空操作
+# 三种等于空时，对原变量进行替换的方式
+if [ -z "$hj" ];then
+hj=hahah
+fi
+
+if [[ $hj ]];then
+hj=haha
+fi
+
+${hj:="haha"} # 为空时进行替换
+${hj:-"haha"} # 不替换，但是为空时返回haha
+${hj:+"haha"} # 不替换，但是不为空时返回haha
+${hj:?"error_info"} # 为空时，显示的错误信息
+
+#+END_SRC
