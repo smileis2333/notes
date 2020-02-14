@@ -1,0 +1,19 @@
+#+TITLE: spring
+springwebstarted自带了hibernate对于java校验api的实现
+
+使用mockmvc进行单元测试
+使用:
+querydto类加上限定的诸如@Notnull @Notblank ...
+启动方式，在controller method处的参数加上@Valid
+
+
+view controller 单纯的转发或者显示模板，完全不与数据产生关联，该情况下，应直接在配置类中直接配置映射，如下
+@Configurationpublic class WebConfig implements WebMvcConfigurer {  @Override  public void addViewControllers(ViewControllerRegistry registry) {    registry.addViewController("/").setViewName("home");  }}
+
+@Autowired使用在方法头上可以强制 以明确成员变量的加载顺序
+ps: Java变量的初始化顺序为：静态变量或静态语句块–>实例变量或初始化语句块–>构造方法–>@Autowired
+不要为了简便使用，而使用属性注入，而应该使用构造器注入，避免对象在进行非正确状态时候被调用
+
+可以多种方式获取到登录的用户：
+controller建议用参数@AuthenticationPrincipal User user获取
+通用获取方法: Authentication authentication =    SecurityContextHolder.getContext().getAuthentication();User user = (User) authentication.getPrincipal(); 这种可以任何层级的代码中都可以使用(不被限制于controller)

@@ -1,3 +1,5 @@
+#+TITLE: proxy
+#+STARTUP: indent
 * gradle
  ./gradlew -DsocksProxyHost=yourHost -DsocksProxyPort=yourHostPort your-command
 * socket5

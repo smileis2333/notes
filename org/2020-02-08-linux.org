@@ -3,3 +3,12 @@
 * trick
 ** 正在运行的进程挂到后台继续进行
 ctrl + z 挂到后台， bg继续进行
+* debian
+dpkg -L package-name
+apt list --installed
+** install latest nodejs
+apt-get install curl software-properties-common
+curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
+apt install nodejs
+* kill with pipeline
+  kill $(ps aux | grep '[p]ython csp_build.py' | awk '{print $2}')

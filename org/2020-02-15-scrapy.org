@@ -1,0 +1,149 @@
+#+TITLE: scrapy
+#+STARTUP: indent
+* install
+** win10
+*** visual c++ 2014
+download visual studio build tool
+https://download.microsoft.com/download/5/f/7/5f7acaeb-8363-451f-9425-68a90f98b238/visualcppbuildtools_full.exe?fixForIE=.exe
+*** openssl
+venv使用
+set LIB=C:\Program Files\OpenSSL-Win64\lib;%LIB%
+set INCLUDE=C:\Program Files\OpenSSL-Win64\include;%INCLUDE%
+https://slproweb.com/download/Win64OpenSSL-1_1_1d.msi
+*** lxml
+set STATICBUILD=true && pip install lxml
+* usage
+** create project
+scrapy startproject projectName
+** spider
+#+BEGIN_SRC python
+import scrapy
+
+
+# default spider(without shortcut)
+class QuotesSpider(scrapy.Spider):
+    name = "quotes" # point spider name
+
+    def start_requests(self):
+        urls = [
+            'http://quotes.toscrape.com/page/1/',
+            'http://quotes.toscrape.com/page/2/',
+        ]
+        for url in urls:
+            yield scrapy.Request(url=url, callback=self.parse)
+
+    def parse(self, response):
+        page = response.url.split("/")[-2]
+        filename = 'quotes-%s.html' % page
+        with open(filename, 'wb') as f:
+            f.write(response.body)
+        self.log('Saved file %s' % filename)
+
+
+
+#+END_SRC
+** run spider
+scrapy run spiderName
+** extract
+scrapy shell "http://quotes.toscrape.com/page/1/"
+#+BEGIN_SRC python
+
+response.css('title')
+# [<Selector xpath='descendant-or-self::title' data='<title>Quotes to Scrape</title>'>]
+
+response.css('title::text').getall()
+# ['Quotes to Scrape'], getall()return a list
+
+ response.css('title').getall()
+# ['<title>Quotes to Scrape</title>']
+
+response.css('title::text').get()
+# 'Quotes to Scrape'
+
+response.css('title::text')[0].get()
+# 'Quotes to Scrape'
+
+
+response.css('title::text').re(r'Quotes.*')
+# ['Quotes to Scrape'], re()match extracting data with regex
+
+response.css('title::text').re(r'Q\w+')
+# ['Quotes']
+
+response.css('title::text').re(r'(\w+) to (\w+)')
+# ['Quotes', 'Scrape']，按照分组来抽取数据
+
+#+END_SRC
+** selector
+*** css
+*** xpath
+#+BEGIN_SRC python
+response.xpath('xpath')
+#+END_SRC
+** shell
+scrapy shell "link"(不能是'')
+** 携带cookie
+*** 通过spider的start_requests
+*** FormRequest
+** download middleware
+*** 用途
+1. 主要用于反爬，如加入随机的ua
+2. 代理
+#+BEGIN_SRC python
+request.meta["proxy"]="http://123.123.123.123:8080"
+#+END_SRC
+*** process_request(self,request,spider)
+*** process_response(self,request,response,spider)
+*** process_exception
+*** 开启
+#+BEGIN_SRC python
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_demo.middlewares.ScrapyDemoDownloaderMiddleware': 543,
+}
+
+#+END_SRC
+* eg
+scrapy startproject projectName
+scrapy genspider [spiderName] [allowDomain]
+scrapy genspider -t [spiderName] [allowDomain] #生成crawlspider
+
+scrapy.Request(url[,callback,method='GET',headers,body,cookies,meta,dont_filter=False])
+
+
+#+BEGIN_SRC python
+
+# setting.py
+# 日志级别
+LOG_LEVEL="WARNING"
+
+# 日志保存位置
+LOG_FILE = './log.log'
+
+# 默认是关闭的，打开pileline, 数值越小，pipelines的优先级越高
+ITEM_PIPELINES = {
+    'scrapy_demo.pipelines.ScrapyDemoPipeline': 300,
+}
+
+
+# logging 模块
+logger = logging.getLogger(__name__)
+logger.basicConfig(format) # 更改输出的格式
+建议在一个模块设置好logger后，其他模块直接使用其模块
+
+
+# 不用导入settings.py文件
+self.settings["propertyName"]
+
+
+# pipeline
+class ScrapyDemoPipeline(object):
+    def process_item(self, item, spider):
+        item['hello'] = 'world'
+        return item
+    
+    def open_spider(self,spider): # 爬虫开启时执行一次
+        self.file = open(xxxxx)
+    
+    def close_spider(self,spider): # 爬虫关闭时执行一次
+        self.file.close()
+#+END_SRC

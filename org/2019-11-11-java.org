@@ -1,5 +1,71 @@
-#+TITLE:  jdk
+#+TITLE:  java
 #+STARTUP: indent
+* basic
+** array
+*** consruct
+**** 动态初始化(指定长度)
+***** 默认值
+int->0
+float/double->0.0
+char->'\u0000'
+boolean->false
+***** usage
+#+BEGIN_SRC java
+int [] arrays = new int[100];
+#+END_SRC
+**** 静态初始化(指定内容)
+#+BEGIN_SRC java
+int [] arrays = {1,3,4,5,2,9}
+#+END_SRC
+** memory
+*** stack
+方法的局部变量(参数和定义的变量)
+*** heap
+*** method area
+1.8其实现为PermGen(永久代)，1.8以后变成Metaspace(元空间x)
+*** Native Method Stack
+本地方法栈，与操作系统相关
+*** pc register
+与CPU相关
+** 字符串
+*** 常量池
+*** trick
+推荐字面量和变量进行比较
+#+BEGIN_SRC java
+"aa".equal(a)
+
+#+END_SRC
+*** frequent method
+**** String concat(String str)
+**** char charAt(int index)
+**** int indexOf(String str)
+str在本字符串首次出现的位置，没有则返回-1
+**** String subtring
+***** (int begin)
+***** (int begin, int end)
+**** 转换
+***** char [] toCharArray()
+***** byte [] getBytes()
+***** String replace(CharSequence oldString, CharSequence newString)
+***** String[]split(String regex)
+** 工具类
+*** Arrays
+**** static String toString(int[]/float[]/...)
+打印出数组，格式默认为[1,2,3...]
+** annotation
+*** custom
+*** meta-annotation
+**** @Target
+**** @Retention
+**** @Inherited
+**** @Documented
+**** @Repeatable
+*** basic
+**** @Override
+**** @Deprecated
+**** @SuppressWarnings
+**** @SafeVarargs
+**** @FunctionInterface
 * jdk8
 ** Lambda表达式
 基本结构：
@@ -166,7 +232,41 @@ Consumer的增强
 - Period.between
 *** Instant
 - now()
-* 常量处理
-1. 接口/类常量，不建议，类型不安全，可读性差，无法限定开发人员用该接口的常量
-2. Enum，适合于可预料的可能具有多个状态关联时
-3.
+* jdk9
+** 允许接口有默认方法
+#+BEGIN_SRC java
+public interface test{
+  default void print1(){
+    print();
+  }
+
+  default void print1(){
+    print();
+  }
+
+  private void print(){
+    System.out.println(111)
+  }
+}
+#+END_SRC
+** 集合增加了of
+* 生态组件
+** lombok
+*** @Data
+@Data 注解会为类的所有属性自动生成setter/getter、equals、canEqual、hashCode、toString方法，如为final属性，则不会为该属性生成setter方法。
+*** @AllArgsConstructor/@NoArgsConstructor
+分别提供全参构造方法和无参构造方法
+*** @Builder
+#+BEGIN_SRC java
+@Builder
+public class Hero {
+    private int id;
+    private String name;
+}
+
+public class Main{
+  public void static main(String[]args){
+    Hero hero = Hero.builder().id(1).name("haha").build();
+  }
+}
+#+END_SRC

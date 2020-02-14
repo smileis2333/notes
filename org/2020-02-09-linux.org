@@ -1,5 +1,0 @@
-* debian
-dpkg -L package-name
-apt list --installed
-* kill with pipeline
-kill $(ps aux | grep '[p]ython csp_build.py' | awk '{print $2}')

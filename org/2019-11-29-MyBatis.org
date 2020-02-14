@@ -225,3 +225,6 @@ environments内的enviroment可以配置多个，切换时用default指定对应
 关键方法为applyInclude(Node,Properties,included)，核心为source.setNodeValue(PropertyParser.parse(source.getNodeValue(), variablesContext));即当source.getNodeValue与解析出来的properties属性的key对应上时，进行替换
 ** SQL执行流程
 DefaultSqlSession获取mapper，内部从configuration获取对应接口的实现工厂进行实例化，然后代理对象在委托MapperMethod进行执行，涉及ParamNameResolver对带注解参数的解析
+** cache 
+*** 一级缓存
+*** 二级缓存
