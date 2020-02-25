@@ -43,7 +43,7 @@ class QuotesSpider(scrapy.Spider):
 
 #+END_SRC
 ** run spider
-scrapy run spiderName
+scrapy crawl spiderName
 ** extract
 scrapy shell "http://quotes.toscrape.com/page/1/"
 #+BEGIN_SRC python
@@ -102,10 +102,13 @@ DOWNLOADER_MIDDLEWARES = {
 }
 
 #+END_SRC
+* debug
+** pycharm
+从scrapy模块复制cmdline.py到scrapy.cfg同目录(venv的位置在venv/Lib/site-packages/scrapy/cmdline.py)，配置对应py脚本的启动脚本为cmdline.py，参数使用crawl [spiderName]
 * eg
 scrapy startproject projectName
 scrapy genspider [spiderName] [allowDomain]
-scrapy genspider -t [spiderName] [allowDomain] #生成crawlspider
+scrapy genspider -t crawl [spiderName] [allowDomain] #生成crawlspider
 
 scrapy.Request(url[,callback,method='GET',headers,body,cookies,meta,dont_filter=False])
 

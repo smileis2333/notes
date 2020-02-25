@@ -24,7 +24,7 @@
 #+BEGIN_SRC html
 <link type="text/css" rel="styleSheet"  href="CSS文件路径" />
 #+END_SRC
-* 样式影响
+* 样式影响规则
 ** selector
 *** class
 *** tag
@@ -41,7 +41,8 @@
 * block and inline element
 ** block
 标题元素、列表元素、排版标签(p,div,hr,center,pre),table,form
-* controll
+** inline
+* controll element
 ** font
 *** font-family
 每个font-family包含一系列字体集合，该属性设置时，可以设置字体，在最后设置font-family，若是前面指定的字体找不到，会让其客户端浏览器自行决定该font-family的默认字体
@@ -132,34 +133,6 @@ block元素才允许使用，它对子元素的inline元素/文本进行居中
 #+END_SRC
 ** pseudo-class
 根据状态设置对应的样式，如<a>标签具有的状态包括hover, visited, unvisted...
-** layout and position
-*** liquid layout
-优先： allow scale， 充分利用屏幕空间
-**** float
-any floating element require width been set
-块状元素无视被设置float的元素，但是块状元素内部的inline元素知道float元素的边界，在触碰边界的时候会进行换行,所以最终能够得到图文混排的视觉效果(block元素忽略float元素，inline元素观察float元素)
-允许设置left/right
-如果下层元素要与上层的float元素隔离开来，下层元素必须设置要clear properties为left/right(取决于上层的float元素在哪一侧)
-对于侧边栏与主体的浮动设置时，建议浮动侧边栏，这样可以使得侧边栏是固定的，而主体内容是可伸缩的，反之则是很奇怪
-**** clear
-*** frozen layout
-*** jello layout
-#+BEGIN_SRC css
-#idName{
-  margin-left: auto;
-  margin-right: auto;
-/*margin: 0 auto*/
-}
-#+END_SRC
-*** absolute layout
-depend on top & right /bottom & left, 数值是相对于父元素而言
-z-index决定哪个重叠的绝对布局浮现在上层
-与float不同，all the elements of document flow never know its appearance
-any element could be absolute
-*** fixed
-relative to the browserw window rather than page，doesen't move or change when scrolle the page
-*** relative
-所谓的相对是，相对于不设置offset时的默认位置，依旧处于文档流中，在放置时，浏览器进行偏移量的设置，不使用margin/padding设置的原因是，这两个属性设置后图片始终在容器内，而relative可以实现溢出容器，但是逻辑上还是属于容器(删掉容器dom元素时，该relative元素也会消失)
 ** table
 td只可以设置padding
 单元格border之间的间距为属性border-spacing，只能以table级设置，且只能设置horizen/vertical的值
@@ -169,6 +142,77 @@ border-collapse: collapse (border线合并)
 list-style-type: disc/circle/square/none(unorder list)
 list-style-type: ...(reffer mannual)
 list-style-image: url(images/backpack.gif)
+* layout and position
+** liquid layout
+优先： allow scale， 充分利用屏幕空间
+*** float
+any floating element require width been set
+块状元素无视被设置float的元素，但是块状元素内部的inline元素知道float元素的边界，在触碰边界的时候会进行换行,所以最终能够得到图文混排的视觉效果(block元素忽略float元素，inline元素观察float元素)
+允许设置left/right
+如果下层元素要与上层的float元素隔离开来，下层元素必须设置要clear properties为left/right(取决于上层的float元素在哪一侧)
+对于侧边栏与主体的浮动设置时，建议浮动侧边栏，这样可以使得侧边栏是固定的，而主体内容是可伸缩的，反之则是很奇怪
+*** clear
+** frozen layout
+** jello layout
+#+BEGIN_SRC css
+#idName{
+  margin-left: auto;
+  margin-right: auto;
+/*margin: 0 auto*/
+}
+#+END_SRC
+** absolute layout
+depend on top & right /bottom & left, 数值是相对于父元素而言
+z-index决定哪个重叠的绝对布局浮现在上层
+与float不同，all the elements of document flow never know its appearance
+any element could be absolute
+** fixed
+relative to the browserw window rather than page，doesen't move or change when scrolle the page
+** relative
+所谓的相对是，相对于不设置offset时的默认位置，依旧处于文档流中，在放置时，浏览器进行偏移量的设置，不使用margin/padding设置的原因是，这两个属性设置后图片始终在容器内，而relative可以实现溢出容器，但是逻辑上还是属于容器(删掉容器dom元素时，该relative元素也会消失)
+** flex
+block/inline都可以成为flex container(指定display: flex), 其中的子元素，称为flex item
+*** flex-direction
+指定主轴的方向，默认主轴方向为水平，所以默认是从左到右排列，可以指定row/column/row-reverse/column-reverse
+*** flex-wrap
+控制单行无法容纳时的处理方式，允许为nowrap(不拆行，默认)/wrap(拆行，与交叉轴多行对齐的设置有关)/wrap-reverse(反向拆行，1-2-3如果3大出了范围，变成3然后底部是1-2)
+*** flex-flox
+简写属性: flex-flow = flex-direction + flex-wrap
+*** flex-shrink/grow
+在nowrap的情况下需要指定
+**** flex-shrink
+元素总长超过时，默认是1，即将全部等比例缩小到总宽度适应容器的宽度然后放入
+**** flex-grow
+默认为0，即不放大
+*** flex-basis
+为指定在flex-shrink/grow生效前的尺寸
+1. flex-basis与width同时设置时，flex-basis的优先级更
+2. 如果设置为auto, 如果width设置了，则由width决定，没有则由内容决定
+3. 改变主轴的方向时，如从上到下，此时，该属性指定的是高度，而非原本的宽度
+*** flex
+简写属性 flex = flex-grow + flex-shrink + flex-basis
+*** justify-content
+**** flex-start(主轴起点开始，默认主轴方向为水平方向，所以默认设置则为左对齐)
+**** flex-end(同上，从主轴终点开始)
+**** flex-center(主轴居中摆放)
+**** flex-between(两端对齐)
+**** space-around(两端为x，其他间隔为2x，按自动计算所得)
+*** align-items(针对单行来说)
+**** stretch
+占满整个flex容器
+**** flex-start
+沿交叉轴起点对齐
+**** flex-end
+沿交叉轴终点对齐
+**** baseline
+沿第一行文字的基线对齐
+*** align-content(多行对齐)
+align-content: stretch | flex-start | flex-end | center | space-between | space-around
+相对align-item多了space-between和space-around
+*** align-self
+指定某个item对于交叉轴的对齐方式
+*** order
+指定item的排列规则，默认按html的出现顺序，这里可以进行指定排列顺序
 * concept
 ** box-model concept
 *** content-area
