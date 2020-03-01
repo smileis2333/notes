@@ -1,0 +1,42 @@
+#+TITLE: axios
+#+STARTUP: indent
+* 配置公共url
+axios.defaults.baseURL = 'http://localhost/'
+* request
+** get
+#+BEGIN_SRC javascript
+// 为给定 ID 的 user 创建请求
+axios.get('/user?ID=12345')
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+// 可选地，上面的请求可以这样做
+axios.get('/user', {
+    params: {
+      ID: 12345
+    }
+  })
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+#+END_SRC
+** post
+#+BEGIN_SRC javascript
+axios.post('/user', {
+    firstName: 'Fred',
+    lastName: 'Flintstone'
+  })
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+#+END_SRC

@@ -421,6 +421,11 @@ var vm = new Vue({
   v-bind:key="item.id"
 ></my-component>
 
+<!--打印出1到5-->
+<div v-for="index in 5">
+{{index}}
+</div>
+
 
 #+END_SRC
 #+BEGIN_SRC javascript
@@ -746,13 +751,6 @@ var map = this.$parent.map || this.$parent.$parent.map
 this.$refs.usernameInput
 #+END_SRC
 * 路由
-** 传参
-*** url后的参数
-path: url?[paramName=10]
-获取: this.$route.query.[paramName]
-*** rest类型
-path: url/:paramName
-获取: this.$route.params.[paramName]
 ** router-view
 ** 单部件
 {path: '/', component: customComponent} // 单个展位符
@@ -776,6 +774,50 @@ path: url/:paramName
 <!--main-->
 <router-view name="main"/>
 #+END_SRC
+** 路由跳转
+*** 传参
+**** url后的参数
+path: url?[paramName=10]
+获取: this.$route.query.[paramName]
+**** rest类型
+path: url/:paramName
+获取: this.$route.params.[paramName]
+*** 跳转方式
+**** 1
+#+BEGIN_SRC javascript
+// 传参
+this.$router.push({
+  path: `/describe/${id}`,
+})
+
+// 取参
+this.$route.params.id
+#+END_SRC
+**** 2
+#+BEGIN_SRC javascript
+this.$router.push({
+   name: 'Describe',
+   params: {
+   id: id
+   }
+})
+
+//取参
+this.$route.params.id
+#+END_SRC
+**** 3
+#+BEGIN_SRC javascript
+this.$router.push({
+  path: '/describe',
+  query: {
+    id: id
+  }
+})
+
+this.$route.query.id
+#+END_SRC
+** 嵌套路由
+https://router.vuejs.org/zh/guide/essentials/nested-routes.html
 * 数据交互
 ** axios
 用于申请服务器接口的数据

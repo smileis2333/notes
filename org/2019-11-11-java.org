@@ -270,3 +270,72 @@ public class Main{
   }
 }
 #+END_SRC
+** spring
+*** mail
+**** build script
+***** gradle
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+***** usage 
+****** MailSender and SimpleMailMessage Usage
+ref https://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/mail.html
+#+BEGIN_SRC java
+public class SimpleOrderManager implements OrderManager {
+
+    private MailSender mailSender;
+    private SimpleMailMessage templateMessage;
+
+    public void setMailSender(MailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    public void setTemplateMessage(SimpleMailMessage templateMessage) {
+        this.templateMessage = templateMessage;
+    }
+
+    public void placeOrder(Order order) {
+
+        // Do the business calculations...
+
+        // Call the collaborators to persist the order...
+
+        // Create a thread safe "copy" of the template message and customize it
+        SimpleMailMessage msg = new SimpleMailMessage(this.templateMessage);
+        msg.setTo(order.getCustomer().getEmailAddress());
+        msg.setText(
+            "Dear " + order.getCustomer().getFirstName()
+                + order.getCustomer().getLastName()
+                + ", thank you for placing order. Your order number is "
+                + order.getOrderNumber());
+        try{
+            this.mailSender.send(msg);
+        }
+        catch(MailException ex) {
+            // simply log it and go on...
+            System.err.println(ex.getMessage());
+        }
+    }
+}
+#+END_SRC
+****** QQ mail config
+#+BEGIN_SRC java
+@Configuration
+public class MailConfig {
+    @Bean
+    public JavaMailSender getJavaMailSender() {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.qq.com");
+        mailSender.setPort(587);
+
+        mailSender.setUsername("980959100@qq.com");
+        mailSender.setPassword("affiapghpreobebb");
+
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.debug", "true");
+
+        return mailSender;
+    }
+}
+#+END_SRC

@@ -1,0 +1,47 @@
+#+TITLE: springmvc
+#+STARTUP: indent
+* 跨域配置
+** springboot
+*** configuration
+#+BEGIN_SRC java
+@Configuration
+public class CORSConfig {
+    private CorsConfiguration buildConfig() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("*"); // 1允许任何域名使用
+        corsConfiguration.addAllowedHeader("*"); // 2允许任何头
+        corsConfiguration.addAllowedMethod("*"); // 3允许任何方法（post、get等）
+        return corsConfiguration;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", buildConfig()); // 4
+        return new CorsFilter(source);
+    }
+}
+#+END_SRC
+* trick
+** 写回图片
+#+BEGIN_SRC java
+    @GetMapping("/avatar_demo")
+    public String execute(HttpServletRequest httpServletRequest,
+                          HttpServletResponse httpServletResponse) throws IOException {
+        // img为图片的二进制流
+//        String templatePath = Thread.currentThread().getContextClassLoader().getResource("").getPath()+"template/";
+        File avatar = new File("C:\\Users\\smile2333\\IdeaProjects\\qa_server\\src\\main\\resources\\static\\avatar.png");
+        FileInputStream inputStream = new FileInputStream(avatar);
+
+        byte [] img = new byte[(int)avatar.length()];
+
+        inputStream.read(img);
+        httpServletResponse.setContentType("image/png");
+        OutputStream os = httpServletResponse.getOutputStream();
+        os.write(img);
+        os.flush();
+        os.close();
+        return "success";
+    }
+
+#+END_SRC

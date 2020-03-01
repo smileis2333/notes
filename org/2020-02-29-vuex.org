@@ -1,0 +1,364 @@
+#+TITLE: vuex
+#+STARTUP: indent
+用于全局管理状态。并限制状态变动只能通过定义的mutation
+一般把其挂在根实例上，然后子组件可以直接通过this.$store.xxxx来访问
+* mapState 辅助函数
+#+BEGIN_SRC javascript
+import { mapState } from 'vuex'
+
+
+export default{
+  computed:{
+    count(){
+      return this.$store.state
+    }
+  }
+}
+
+// 可以简写很多
+export default {
+  // ...
+  computed: mapState({
+    // 箭头函数可使代码更简练
+    count: state => state.count,
+
+    // 传字符串参数 'count' 等同于 `state => state.count`
+    countAlias: 'count',
+
+    // 为了能够使用 `this` 获取局部状态，必须使用常规函数
+    countPlusLocalState (state) {
+      return state.count + this.localCount
+    }
+  })
+}
+//
+//computed: {
+//  localComputed () { /* ... */ },
+//  // 使用对象展开运算符将此对象混入到外部对象中
+//  ...mapState({
+//    // ...
+//  })
+//}
+
+#+END_SRC
+* Getter
+#+BEGIN_SRC javascript
+const store = new Vuex.Store({
+  state: {
+    todos: [
+      { id: 1, text: '...', done: true },
+      { id: 2, text: '...', done: false }
+    ]
+  },
+  getters: {
+    doneTodos: state => {
+      return state.todos.filter(todo => todo.done)
+    }
+  }
+})
+
+// 访问
+store.getters.doneTodos
+#+END_SRC
+** mapGetters
+#+BEGIN_SRC javascript
+import { mapGetters } from 'vuex'
+
+export default {
+  // ...
+  computed: {
+  // 使用对象展开运算符将 getter 混入 computed 对象中
+    ...mapGetters([
+      'doneTodosCount',
+      'anotherGetter',
+      // ...
+    ])
+  }
+}
+
+mapGetters({
+  // 把 `this.doneCount` 映射为 `this.$store.getters.doneTodosCount`
+  doneCount: 'doneTodosCount'
+})
+#+END_SRC
+* Mutation
+** 基本操作
+#+BEGIN_SRC javascript
+const store = new Vuex.Store({
+  state: {
+    count: 1
+  },
+  mutations: {
+    increment (state) {
+      // 变更状态
+      state.count++
+    }
+  }
+})
+
+// 使用
+store.commit('increment')
+
+// 提交Payload,mutation带参数,大部分情况下payload是对象，而非单一数值
+mutations: {
+  increment (state, n) {
+    state.count += n
+  }
+}
+
+store.commit('increment', 10)
+
+// 提交对象风格
+store.commit({
+  type: 'increment',
+  amount: 10
+})
+#+END_SRC
+** 遵守规则
+#+BEGIN_SRC javascript
+// 两者等价
+Vue.set(obj, 'newProp', 123)
+state.obj = { ...state.obj, newProp: 123 }
+#+END_SRC
+** mapMutations 
+同getter，都是用于将vuex的方向映射为本组件可以使用
+#+BEGIN_SRC javascript
+import { mapMutations } from 'vuex'
+
+export default {
+  // ...
+  methods: {
+    ...mapMutations([
+      'increment', // 将 `this.increment()` 映射为 `this.$store.commit('increment')`
+
+      // `mapMutations` 也支持载荷：
+      'incrementBy' // 将 `this.incrementBy(amount)` 映射为 `this.$store.commit('incrementBy', amount)`
+    ]),
+    ...mapMutations({
+      add: 'increment' // 将 `this.add()` 映射为 `this.$store.commit('increment')`
+    })
+  }
+}
+#+END_SRC
+* Action 
+** eg
+#+BEGIN_SRC javascript
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  },
+  actions: {
+    increment (context) {
+      context.commit('increment')
+    }
+  }
+})
+
+// es-2015参数解构
+actions: {
+  increment ({ commit }) {
+    commit('increment')
+  }
+}
+
+// 分发action
+store.dispatch('increment')
+#+END_SRC
+** mapActions 
+** payload
+#+BEGIN_SRC javascript
+actions: {
+  incrementAsync ({ commit }) {
+    setTimeout(() => {
+      commit('increment')
+    }, 1000)
+  }
+}
+
+// 以载荷形式分发
+store.dispatch('incrementAsync', {
+  amount: 10
+})
+
+// 以对象形式分发
+store.dispatch({
+  type: 'incrementAsync',
+  amount: 10
+})
+#+END_SRC
+* Module
+** 切割
+#+BEGIN_SRC javascript
+const moduleA = {
+  state: { ... },
+  mutations: { ... },
+  actions: { ... },
+  getters: { ... }
+}
+
+const moduleB = {
+  state: { ... },
+  mutations: { ... },
+  actions: { ... }
+}
+
+const store = new Vuex.Store({
+  modules: {
+    a: moduleA,
+    b: moduleB
+  }
+})
+
+store.state.a // -> moduleA 的状态
+store.state.b // -> moduleB 的状态
+#+END_SRC
+** 局部状态
+#+BEGIN_SRC javascript
+const moduleA = {
+  state: { count: 0 },
+  mutations: {
+    increment (state) {
+      // 这里的 `state` 对象是模块的局部状态
+      state.count++
+    }
+  },
+
+  getters: {
+    doubleCount (state) {
+      return state.count * 2
+    }
+  }
+}
+
+// 对于模块内部的 action，局部状态通过 context.state 暴露出来，根节点状态则为 context.rootState
+const moduleA = {
+  // ...
+  actions: {
+    incrementIfOddOnRootSum ({ state, commit, rootState }) {
+      if ((state.count + rootState.count) % 2 === 1) {
+        commit('increment')
+      }
+    }
+  }
+}
+
+// 对于模块内部的 getter，根节点状态会作为第三个参数暴露出来：
+const moduleA = {
+  // ...
+  getters: {
+    sumWithRootCount (state, getters, rootState) {
+      return state.count + rootState.count
+    }
+  }
+}
+#+END_SRC
+** 命名空间
+#+BEGIN_SRC javascript
+const store = new Vuex.Store({
+  modules: {
+    account: {
+      namespaced: true,
+
+      // 模块内容（module assets）
+      state: { ... }, // 模块内的状态已经是嵌套的了，使用 `namespaced` 属性不会对其产生影响
+      getters: {
+        isAdmin () { ... } // -> getters['account/isAdmin']
+      },
+      actions: {
+        login () { ... } // -> dispatch('account/login')
+      },
+      mutations: {
+        login () { ... } // -> commit('account/login')
+      },
+
+      // 嵌套模块
+      modules: {
+        // 继承父模块的命名空间
+        myPage: {
+          state: { ... },
+          getters: {
+            profile () { ... } // -> getters['account/profile']
+          }
+        },
+
+        // 进一步嵌套命名空间
+        posts: {
+          namespaced: true,
+
+          state: { ... },
+          getters: {
+            popular () { ... } // -> getters['account/posts/popular']
+          }
+        }
+      }
+    }
+  }
+})
+#+END_SRC
+*** 带命名空间的绑定函数
+#+BEGIN_SRC javascript
+computed: {
+  ...mapState({
+    a: state => state.some.nested.module.a,
+    b: state => state.some.nested.module.b
+  })
+},
+methods: {
+  ...mapActions([
+    'some/nested/module/foo', // -> this['some/nested/module/foo']()
+    'some/nested/module/bar' // -> this['some/nested/module/bar']()
+  ])
+}
+
+computed: {
+  ...mapState('some/nested/module', {
+    a: state => state.a,
+    b: state => state.b
+  })
+},
+methods: {
+  ...mapActions('some/nested/module', [
+    'foo', // -> this.foo()
+    'bar' // -> this.bar()
+  ])
+}
+
+import { createNamespacedHelpers } from 'vuex'
+
+const { mapState, mapActions } = createNamespacedHelpers('some/nested/module')
+
+export default {
+  computed: {
+    // 在 `some/nested/module` 中查找
+    ...mapState({
+      a: state => state.a,
+      b: state => state.b
+    })
+  },
+  methods: {
+    // 在 `some/nested/module` 中查找
+    ...mapActions([
+      'foo',
+      'bar'
+    ])
+  }
+}
+#+END_SRC
+** 模块注册
+#+BEGIN_SRC javascript
+// 注册模块 `myModule`
+store.registerModule('myModule', {
+  // ...
+})
+// 注册嵌套模块 `nested/myModule`
+store.registerModule(['nested', 'myModule'], {
+  // ...
+  })
+
+// 之后就可以通过 store.state.myModule 和 store.state.nested.myModule 访问模块的状态。
+#+END_SRC

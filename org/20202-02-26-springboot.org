@@ -1,0 +1,4 @@
+* 获取resources目录下的template目录的位置
+#+BEGIN_SRC java
+String path = Thread.currentThread().getContextClassLoader().getResource("").getPath()+"template";
+#+END_SRC

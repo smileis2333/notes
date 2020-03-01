@@ -41,7 +41,10 @@ public class ExampleTypeHandler extends BaseTypeHandler<String> {
 #+END_SRC
 * principle
 * refer
-https://mybatis.org/mybatis-3/zh/getting-started.html
+https://mybatis.org/mybatis-3/zh/getting-started.#+BEGIN_HTML
+0
+#+END_HTML
+
 * spring集成
 ** springboot
 *** 不使用mybatis的配置格式，直接用Spring
