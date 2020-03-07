@@ -235,8 +235,17 @@ div > h1 {}
 div h1 {}
 * 经验总结
 ** 太长
+*** 单行
 控制按钮内容过长时，过长内容显示为...
 white-space:nowrap; overflow:hidden; text-overflow:ellipsis
+*** 限制两行
+text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
 ** shortcut drawback
 浏览器调试起来比较麻烦
 ** collapse

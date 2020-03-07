@@ -1,2 +1,4 @@
 npm install packageName
 npm uninstall packageName
+--save 打包的时候需要
+--save-dev 开发时候需要，打包后没有

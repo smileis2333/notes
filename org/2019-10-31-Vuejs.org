@@ -905,3 +905,6 @@ var vm = new Vue({
 webpack configuration file:
 such as
 C:\Users\86158\IdeaProjects\charging-mng\node_modules\@vue\cli-service\webpack.config.js
+* scss
+npm install sass-loader node-sass vue-style-loader -D
+无需配置

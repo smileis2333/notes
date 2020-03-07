@@ -24,6 +24,7 @@ public class CORSConfig {
 #+END_SRC
 * trick
 ** 写回图片
+*** 通过reponse写回
 #+BEGIN_SRC java
     @GetMapping("/avatar_demo")
     public String execute(HttpServletRequest httpServletRequest,
@@ -43,5 +44,44 @@ public class CORSConfig {
         os.close();
         return "success";
     }
+    
+#+END_SRC
+*** 通过返回值返回
+#+BEGIN_SRC java
+@ResponseBody
+@RequestMapping(value = "/somePath", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+public byte[] someMethod() throws Exception {
+    /*
+        用spring获得项目中的资源，此处的applicationContext自己想办法获取(常用的方式是在项目启动时存到static常量里)
+        getResource方法参数的路径格式可以为以下4种之一：
+        1.classpath:com/myapp/config.xml 相对于classes目录的路径
+        2.file:///data/config.xml 相对于系统根目录的路径
+        3.http://myserver/logo.png 网络上的路径
+        4./data/config.xml 不加前缀，相对于项目根路径，例如可以写/WEB-INF/web.xml
+    */
+    Resource resource = applicationContext.getResource("/xx/background.jpg");
 
+    //载入底图
+    BufferedImage image = ImageIO.read(resource.getFile());
+
+    //开始绘画
+    Graphics2D g = image.createGraphics();
+
+    //使用自定义字体
+    File fontFile = applicationContext.getResource("/xx/youyuan.ttf").getFile();
+    Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.BOLD, 30);
+    g.setFont(font);
+
+    //设置文字颜色，写文字（也可以做更多事情）
+    g.setColor(new Color(30, 30, 30));
+    g.drawString("XXX", 100, 100);
+
+    //结束绘画
+    g.dispose();
+
+    //以字节数组的方式输出图像
+    ByteArrayOutputStream array = new ByteArrayOutputStream();
+    ImageIO.write(image, "JPEG", array);
+    return array.toByteArray();
+}
 #+END_SRC

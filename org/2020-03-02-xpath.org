@@ -1,0 +1,5 @@
+#+TITLE: xpath
+#+STARTUP: indent
+°üº¬Ä³¸öclass¾ÍÆ¥Åä,
+eg
+//div[contains(@class,'postcell')]

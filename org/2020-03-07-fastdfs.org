@@ -1,0 +1,51 @@
+#+TITLE: fastdfs
+#+STARTUP: indent
+* install
+#+BEGIN_SRC bash
+
+ss-local -s ck-7.forever-over.gq -p 20039 -l 1080 -k apBPAP123 -m chacha20-ietf
+proxychains git clone https://github.com/happyfish100/libfastcommon.git
+cd libfastcommon; git checkout V1.0.43
+./make.sh clean && ./make.sh && ./make.sh install
+proxychains git clone https://github.com/happyfish100/fastdfs.git
+cd fastdfs; git checkout V6.06
+./make.sh clean && ./make.sh && ./make.sh install
+./setup.sh /etc/fdfs
+
+edit config file via needing(storage不能指定tracker ip为127.0.0.1)
+
+/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf restart
+/usr/bin/fdfs_storaged /etc/fdfs/storage.conf restart
+
+# test upload
+/usr/bin/fdfs_test /etc/fdfs/client.conf upload /usr/include/stdlib.h
+#+END_SRC
+* nginx-module
+cd root
+proxychains git clone https://github.com/happyfish100/fastdfs-nginx-module
+proxychains wget http://nginx.org/download/nginx-1.16.1.tar.gz
+tar -xf nginx-1.16.1.tar.gz
+cd nginx-1.16.1/
+apt install libpcre3-dev
+apt install zlib1g-dev
+./configure --add-module=/root/fastdfs-nginx-module/src
+make; make install
+
+location /M00 {
+  root /home/yuqing/fastdfs/data;
+  ngx_fastdfs_module;
+}
+# 该模块取得配置的location在指定的root下进行拼接查找文件，所以一般需要为root配置的路径配置软链接
+比如上传后的提示路径为如下，但是因为该模块只配置了/M00，同时配置了ln -s /home/yuqing/fastdfs/data  /home/yuqing/fastdfs/data/M00
+http://172.24.55.138/group1/M00/00/00/rBg3il5j2_GAecchAAB_mHYT-FQ18203_big.h
+所以事实上的路径为
+http://172.24.55.138/M00/00/00/rBg3il5j2_GAecchAAB_mHYT-FQ18203_big.h
+
+ln -s /home/yuqing/fastdfs/data  /home/yuqing/fastdfs/data/M00
+cp /root/fastdfs/conf/http.conf /etc/fdfs/
+cp /root/fastdfs-nginx-module/src/mod_fastdfs.conf /etc/fdfs/
+
+edit /etc/fdfs/mod_fastdfs.conf
+
+/usr/local/nginx/sbin/nginx
+

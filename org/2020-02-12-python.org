@@ -209,6 +209,23 @@ print ("相加后的值为 : ", sum( 10, 20 ))
 print ("相加后的值为 : ", sum( 20, 20 ))
 
 #+END_SRC
+** io
+*** 读取
+#+BEGIN_SRC python
+file = open(fileName,"mode")
+file.read([count])
+
+with open(fileName,"mode") as file:
+  #doSomething
+#+END_SRC
+*** json
+#+BEGIN_SRC python
+import json
+
+json.loads(jsonString) # read from json string
+json.dumps(obj) # dump the obj to json string
+
+#+END_SRC
 * package manager
 ** pip
 #+BEGIN_SRC python

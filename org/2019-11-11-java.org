@@ -339,3 +339,5 @@ public class MailConfig {
     }
 }
 #+END_SRC
+** json
+*** jackson

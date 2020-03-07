@@ -1,0 +1,210 @@
+#+TITLE: spring security
+#+STARTUP: indent
+* <security:http>
+** access
+*** isFullyAuthenticated()
+访问对应资源时会弹窗，可以修改默认的认证页面
+*** permitAll()
+允许全部情况的访问
+*** isAnonymous()
+没登录能访问，登录了就访问不了
+* <security:form-login>
+** login-page
+自定义登录页
+** login-processing-url
+自定义登录请求，需要设置CSRF关闭为true
+* <security:authentication-manager>
+** <security:authentication-provider>
+* 自定义权限的动态获取
+实现UserDetailService接口
+#+BEGIN_SRC xml
+<bean id="userDetailServiceImpl1" class="org.example.security.UserDetailServiceImpl1"/>
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="userDetailServiceImpl1"/>
+
+    </security:authentication-manager>
+UserDetail接口是返回值
+#+END_SRC
+* 认证完行为修改
+默认是进行页面的跳转，如果需要返回json数值，需要实现如下接口
+** authenticationsuccesshandler
+成功时行为
+** AuthenticationFailureHandler
+失败时行为
+* remember me
+前端需要配置属性remember-me的字段(字段名固定)，然后服务器会往回写入remember-me的cookie(存着token)，在关闭网页(会话信息丢失后)，重新进入时，会使用remember-me这个cookie进行验证
+** 配置
+#+BEGIN_SRC xml
+<security:http>
+  <security:remember-me token-repository-ref="jdbcTokenRepository" token-validity-seconds="3600"/>
+</security:http>
+
+<bean id="jdbcTokenRepository" class="org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl">
+     <property name="dataSource" ref="dataSource"/>
+    <!-- <property name="createTableOnStartup" value="true"/>-->
+</bean>
+#+END_SRC
+* SecurityContextHolder
+可以获取认证后的信息
+#+BEGIN_SRC java
+Object principal =
+        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+if (principal != null) {
+    if (principal instanceof UserDetails) {
+        UserDetails userDetails = (UserDetails) principal;
+        String username = userDetails.getUsername();
+        model.addAttribute("username", username);
+    }
+}
+#+END_SRC
+* PasswordEncoder
+#+BEGIN_SRC java
+<security:authentication-manager>
+    <security:authentication-provider user-service-ref="userDetailServiceImpl1">
+        <security:password-encoder ref="passwordEncoder"/>
+    </security:authentication-provider>
+</security:authentication-manager>
+#+END_SRC
+* springboot
+** 配置
+#+BEGIN_SRC java
+@Configuration
+@EnableWebSecurity  //启动SpringSecurity过滤器链
+public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    //该方法的作用就是代替之前配置：<security:authentication-manager>
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser("eric").password("123456").authorities("PRODUCT_ADD","PRODUCT_UPDATE");
+    }
+
+    //该方法的作用就是代替之前配置：<security:http>
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/product/add").hasAuthority("PRODUCT_ADD")
+                .antMatchers("/product/update").hasAuthority("PRODUCT_UPDATE")
+                .antMatchers("/product/list").hasAuthority("PRODUCT_LIST")
+                .antMatchers("/product/delete").hasAuthority("PRODUCT_DELETE")
+                .antMatchers("/login").permitAll()
+                .antMatchers("/**")
+                .fullyAuthenticated()
+                .and()
+                .formLogin().loginPage("/login")
+                .and()
+                .csrf().disable();
+    }
+}
+
+@Configuration
+public class ErrorPageConfig {
+
+    @Bean
+    public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(){
+        return new EmbeddedServletContainerCustomizer(){
+
+            //ErrorPage:定义错误页面
+            //参数一：HttpStatus.FORBIDDEN： 该错误接收什么错误状态码
+            //参数二：交给哪个请求处理
+            @Override
+            public void customize(ConfigurableEmbeddedServletContainer container) {
+                container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN,"/403"));
+            }
+        };
+
+    }
+}
+#+END_SRC
+* 自定义Filter
+** OncePerRequestFilter
+验证码过滤器，在UsernamePasswordAuthenticationFilter前生效即可
+#+BEGIN_SRC java
+//实现OncePerRequestFilter, 然后配置文件指定生效的位置
+public class ImageCodeAuthenticationFilter extends OncePerRequestFilter {
+
+    private AuthenticationFailureHandler authenticationFailureHandler;
+
+    public void setAuthenticationFailureHandler(AuthenticationFailureHandler authenticationFailureHandler) {
+        this.authenticationFailureHandler = authenticationFailureHandler;
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+// do something
+        filterChain.doFilter(request,response);
+    }
+}
+
+#+END_SRC
+#+BEGIN_SRC xml
+<!--before/after指定在哪个过滤器之前,FORM_LOGIN_FILTER是UsernamePasswordAuthenticationFilter-->
+<security:http>
+    <security:custom-filter ref="beanId" before="FORM_LOGIN_FILTER"/>
+</security:http>
+#+END_SRC
+* 坑
+** 写死认证信息的情况
+#+BEGIN_SRC xml
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"></bean>
+#+END_SRC
+5.x之后, 如果写死的认证信息密码是明文，则需要配置该bean，以指定不加密，否则会报错，另一种做法则是密码配置使用明文加密后的结果。格式如{bcrypt}$2a$10$rY/0dflGbwW6L1yt4RVA4OH8aocD7tvMHoChyKY/XtS4DXKr.JbTC
+ref https://blog.csdn.net/feinifi/article/details/80959225
+** 配置json登录
+1. 自定义UsernamePasswordAuthenticationFilter进行旧接口替换
+2. 关闭csrf
+#+BEGIN_SRC java
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled=true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final UserDetailsService userDetailsService;
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final AuthenticationFailureHandler authenticationFailureHandler;
+
+    public SecurityConfig(UserDetailsService userDetailsService, AuthenticationSuccessHandler authenticationSuccessHandler, AuthenticationFailureHandler authenticationFailureHandler) {
+        this.userDetailsService = userDetailsService;
+        this.authenticationSuccessHandler = authenticationSuccessHandler;
+        this.authenticationFailureHandler = authenticationFailureHandler;
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.cors().
+                and()
+                .authorizeRequests()
+                .antMatchers("/demo_without_auth").permitAll()
+				.anyRequest().authenticated()
+				.and().
+                addFilterAt(usernamePasswordAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
+                .formLogin().
+                and()
+                .httpBasic()
+                .and()
+                .csrf().disable();
+
+//        http.authorizeRequests().anyRequest().permitAll();
+    }
+
+    @Bean
+    public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter() throws Exception {
+        UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new MyUsernamePasswordAuthenticationFilter();
+        usernamePasswordAuthenticationFilter.setAuthenticationManager(super.authenticationManagerBean());
+        usernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
+        usernamePasswordAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
+        return usernamePasswordAuthenticationFilter;
+    }
+}
+
+#+END_SRC
+* principle

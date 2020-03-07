@@ -1,0 +1,5 @@
+#+TITLE: csrf
+#+STARTUP: indent
+用户访问siteA, 生成对应cookie
+恶意用户诱导用户访问siteB，打开页面的时候加载脚本，用js进行请求(比如转账到具体用户)
+xss主要是影响用户体验，整一些脏数据，让页面的显示出问题，csrf一般配合xss攻击用

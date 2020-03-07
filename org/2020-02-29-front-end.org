@@ -6,5 +6,10 @@
 ** angular
 * ¸»ÎÄ±¾±à¼­Æ÷
 tinymce
-* markdown±à¼­Æ÷
-ref https://juejin.im/post/593121aa0ce4630057f70d35
+* markdown
+** ±à¼­Æ÷
+*** tui editor
+ref https://github.com/nhn/tui.editor
+*** render
+**** showdown
+ref  https://github.com/showdownjs/showdown

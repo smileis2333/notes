@@ -110,8 +110,21 @@ afterEvaluate {
 把build.gradle跑一遍解析
 *** execution
 执行特性的任务
-* 插件编写
-** 构建逻辑的复用
+* plugin
+** list
+*** gretty
+ref https://github.com/akhikhl/gretty
+**** usage
+apply from: 'https://raw.github.com/gretty-gradle-plugin/gretty/master/pluginScripts/gretty.plugin'
+gretty {
+  httpPort = 8080
+  contextPath = '/'
+}
+***** remote debug port
+5005
+task: appRunDebug
+** 插件编写
+*** 构建逻辑的复用
 // 可能需要根据语法进行改正
 class MyPlugin implements Plugin<Project>{
     @Override
@@ -129,12 +142,12 @@ class MyPlugin implements Plugin<Project>{
 
 apply plugin: MyPlugin
 
-** 简单插件
-** script插件
-** buildSrc插件
+*** 简单插件
+*** script插件
+*** buildSrc插件
 与src同级的可以有buildSrc目录，用于设置一般通用性的插件
-** 发布的插件
-*** buildScript
+*** 发布的插件
+**** buildScript
 gradle加入自己build所需的依赖，通常自己的插件发布后，需要在依赖中引入插件
 buildscript {
     repositories {
@@ -146,3 +159,10 @@ buildscript {
     }
 }
 apply plugin: MyPlugin
+* 统一版本
+定义变量
+def VERSION = "5.1.8.RELEASE"
+引用变量
+eg:
+compile group: 'org.springframework.security', name: 'spring-security-config', version: "$VERSION"
+
