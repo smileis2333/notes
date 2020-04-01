@@ -1,4 +1,11 @@
+#+TITLE:springboot
+#+STARTUP: indent
 * 获取resources目录下的template目录的位置
 #+BEGIN_SRC java
 String path = Thread.currentThread().getContextClassLoader().getResource("").getPath()+"template";
 #+END_SRC
+* multi-env
+** 配置文件
+application-dev之类
+** 命令
+ java -jar  xx.jar --spring.profiles.active=prod

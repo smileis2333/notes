@@ -79,3 +79,11 @@ kill $(ps aux|grep java|grep jenkins |awk '{print $2}')
 13.保存
 
 14.构建项目，测试是否成功
+** script
+#+BEGIN_SRC bash
+pid=$(ps aux|grep java|grep jenkins_demo-0.0.1-SNAPSHOT |awk '{print $2}')
+if [ "$pid" ];then
+	kill $pid
+fi
+java -jar build/libs/jenkins_demo-0.0.1-SNAPSHOT.jar &
+#+END_SRC

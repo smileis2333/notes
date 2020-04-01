@@ -1,0 +1,11 @@
+* regex
+var patt = /runoob/i
+var str = "Visit Runoob!"; 
+var n = str.search(/Runoob/i);
+* array
+#+BEGIN_SRC javascript
+// 数组合并
+keywords = keywords.concat(result)
+
+keywords.push(xxx)
+#+END_SRC

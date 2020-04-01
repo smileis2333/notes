@@ -44,6 +44,8 @@ UserDetail接口是返回值
     <!-- <property name="createTableOnStartup" value="true"/>-->
 </bean>
 #+END_SRC
+** springboot
+rememberMe().tokenRepository(persistentTokenRepository()).tokenValiditySeconds(60*60)
 * SecurityContextHolder
 可以获取认证后的信息
 #+BEGIN_SRC java

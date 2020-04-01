@@ -34,12 +34,59 @@
 #+END_SRC
 ** 路由跳转
 *** 传参
-**** url后的参数
-path: url?[paramName=10]
-获取: this.$route.query.[paramName]
+**** 根据指定的name来确定
+***** 配置
+#+BEGIN_SRC javascript
+{
+  name: '[name]'
+  component: [whichComponent] //such as component: xxComponent
+}
+#+END_SRC
+***** 传递
+#+BEGIN_SRC javascript
+this.$router.push({
+  name: 'Describe',
+    params: {
+    id: id
+  }
+})
+#+END_SRC
+***** 获取
+this.$route.params.id
 **** rest类型
-path: url/:paramName
-获取: this.$route.params.[paramName]
+***** 配置
+#+BEGIN_SRC javascript
+{
+  path: '/[url]/[:paramName]', // such as path: '/xx/:id'
+  component: [whichComponent] //such as component: xxComponent
+}
+#+END_SRC
+***** 传递
+#+BEGIN_SRC javascript
+this.$router.push({
+  path: `/xx/${id}`,
+})
+#+END_SRC
+***** 获取
+#+BEGIN_SRC javascript
+this.$route.params.[paramName] // such as this.$route.params.id
+#+END_SRC
+**** path匹配路由
+***** 配置
+{
+  path: '/describe',
+  name: 'Describe',
+  component: Describe
+}
+***** 传递
+this.$router.push({
+  path: '/describe',
+  query: {
+    id: id
+  }
+})
+***** 获取
+this.$route.query.id
 *** 跳转方式
 **** 1
 #+BEGIN_SRC javascript
@@ -75,4 +122,6 @@ this.$router.push({
 this.$route.query.id
 #+END_SRC
 ** 嵌套路由
-https://router.vuejs.org/zh/guide/essentials/nested-routes.html
+https://router.vuejs.org/zh/guide/essentials/nested-routes.#+BEGIN_HTML
+0
+#+END_HTML

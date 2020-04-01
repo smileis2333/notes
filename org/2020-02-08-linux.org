@@ -10,5 +10,4 @@ apt list --installed
 apt-get install curl software-properties-common
 curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
 apt install nodejs
-* kill with pipeline
-  kill $(ps aux | grep '[p]ython csp_build.py' | awk '{print $2}')
+* kill with pipeline  kill $(ps aux | grep '[p]ython csp_build.py' | awk '{print $2}')

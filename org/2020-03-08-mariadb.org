@@ -1,0 +1,12 @@
+#+TITLE: mariadb
+#+STARTUP: indent
+* install
+** debian
+apt install mariadb-server
+mysql_secure_installation
+** allow remote
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123';
+flush privileges;
+
+/etc/mysql/mariadb.conf.d
+bind-address=0.0.0.0

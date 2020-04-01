@@ -1,0 +1,12 @@
+* install
+** debian
+#+BEGIN_SRC bash
+proxychains wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.6.1-amd64.deb
+proxychains wget wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.6.1-amd64.deb.sha512
+shasum -a 512 -c elasticsearch-7.6.1-amd64.deb.sha512
+sudo dpkg -i elasticsearch-7.6.1-amd64.deb
+systemctl start elasticsearch.service
+
+# test
+curl localhost:9200
+#+END_SRC

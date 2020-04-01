@@ -6,12 +6,13 @@ SqlSessionFactory  SqlSessionFactory 的最佳作用域是应用作用域。 有
 SqlSession 实例不是线程安全的，因此是不能被共享的，所以它的最佳的作用域是请求或方法作用域
 * usage
 ** xml config
-*** properties
-*** setting
+*** 主配置文件
+**** properties
+**** setting
 控制MyBatis的运行行为
-*** typeAliases
+**** typeAliases
 为类型设置别名，存在的意义仅在于用来减少类完全限定名的冗余
-*** typeHandlers
+**** typeHandlers
 实现 org.apache.ibatis.type.TypeHandler 接口， 或继承一个很便利的类 org.apache.ibatis.type.BaseTypeHandler， 然后可以选择性地将它映射到一个 JDBC 类型
 #+BEGIN_SRC java
 // ExampleTypeHandler.java
@@ -39,6 +40,8 @@ public class ExampleTypeHandler extends BaseTypeHandler<String> {
   }
 }
 #+END_SRC
+*** mapper
+
 * principle
 * refer
 https://mybatis.org/mybatis-3/zh/getting-started.#+BEGIN_HTML

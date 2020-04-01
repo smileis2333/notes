@@ -1,0 +1,19 @@
+#+TITLE: spring-framework
+* 分析
+至顶向下
+SpringMVC开始
+servlet规范
+web.xml中的加载顺序：context-param -> listener -> filter -> servlet
+ServletContextListener为tomcat对外提供的接口，容器启动时，会对注册在web.xml的该接口的实现类发送ServletContextEvent，而Spring其对应实现则为ContextLoaderListener
+#+BEGIN_SRC xml
+<!--配置ContextLoaderListener的加载，不配也行，配置文件有对应的默认加载路径和默认名(符合就能正确加载)-->
+<listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+<!-- 修改配置文件路径 -->
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:spring/applicationContext.xml</param-value>
+</context-param>
+#+END_SRC
+ContextLoaderListener加载后产生的WebApplicationContext是共有的，而单个servlet所产生的WebApplicationContext可能不是共有的

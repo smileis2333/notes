@@ -386,7 +386,6 @@ where
         oe.employee_id is null and o.user_id is not null;
 #+END_SRC
 
-
 * delete与update常用语句
 ** delete
 -- 清空test1表的数据
@@ -636,7 +635,7 @@ mysqlbinlog --start-datetime "2017-3-4 10:40:00" --stop-datetime "2017-3-4 10:55
 * backup
 ** 概念
 *** 全量备份
-***  差异备份
+*** 差异备份
 *** 增量备份
 *** 时间点恢复
 *** 热备
@@ -699,6 +698,9 @@ load data infile "/testdir/a.backup" into table b;
 在可重读的隔离级别下，可以进行热备
 坑: start transaction，不会立刻创建快照，而是在第一条select语句执行时才创建，如果开始之后，对于select语句还没执行之前，原表发生变更，那么状态已经不一致
 解决：START TRANSACTION WITH consistent snapshot -- 事务开始时，立刻创建快照
+** 恢复
+mysql > use [dbName]
+mysql > source [file]
 * undocument
 ** ref
 http://www.zsythink.net/archives/category/%e5%ad%98%e5%82%a8/mysql/

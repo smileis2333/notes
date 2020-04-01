@@ -1,7 +1,9 @@
 #+TITLE: proxy
 #+STARTUP: indent
 * gradle
- ./gradlew -DsocksProxyHost=yourHost -DsocksProxyPort=yourHostPort your-command
+./gradlew -DsocksProxyHost=yourHost -DsocksProxyPort=yourHostPort your-command
+eg:
+ ./gradlew -DsocksProxyHost=127.0.0.1 -DsocksProxyPort=1080 your-command
 * socket5
 ** tool
 *** shadowsocks-libev
