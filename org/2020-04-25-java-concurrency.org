@@ -1,0 +1,44 @@
+#+TITLE: java concurrency
+#+STARTUP: indent
+* relevant info
+** thread
+*** benifit
+1. exploiting multiple processor
+2. simplicity of modeling(such as servlet spec and RMI)
+3. simpified handling of asynchronous events
+4. more responsive user interface(such as jwt and swing)
+*** risk
+1. safety hazards(corrupted data)
+2. liveness hazards(such as infinite loop)
+3. performance hazards(due to context switch or failure of design)
+** race condtion
+a possibility of that generating incorrect result depending on a bulk opetions(it would be solve by set the buld operation as atomic)
+常用为
+read-and-write
+check-and-write(lazy initialization)
+* thread safety
+** definition
+not only run correctly in single-thread program(generally refer main programe), but also run correctly when access from multiple thread
+** atomicity
+*** single variable(may be primitive type or collect)
+using build-in mechanisms such atomic variable class (AtomicXXXX) and thread-safe collection
+*** multiple varibale
+use lock to protect
+** lock
+*** intrinsic
+every object has intrinsic lock, when enter synchronized code, the exucuting thread acquire lock, other thread that attempt acquire the same object lock must wait util the thread holding lock complete and release lock
+*** reentrancy
+同一线程可以多次申请锁，这是通过将lock关联一个引用计数来实现的，当计算为0时，即idle，可被申请，非0时，只有持有者才可以继续申请，并且计数1，执行完对应代码块，计数-1，为0时，即完全释放
+#+BEGIN_SRC java
+public class Test(){
+  public synchronized void test1(){
+    System.out.println(123);
+  }
+
+
+  public synchronized void test2(){
+    System.out.println(123);
+    this.test1();
+  }
+}
+#+END_SRC

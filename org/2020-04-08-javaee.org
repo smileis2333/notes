@@ -1,0 +1,495 @@
+#+TITLE:javaee
+#+STARTUP:indent
+* servlet
+** deploment descriptor(dd) 
+*** url mapping
+#+BEGIN_SRC xml
+<servlet>
+  <servlet-name>Internal name 1</servlet-name>    
+  <servlet-class>foo.Servlet1</servlet-class>  <!--You put in the fully-qualified name of the class (but you don’t add the “.class” extension-->
+
+  <init-param>
+    <param-name>adminEmail</param-name>
+    <param-value>likewecare@wickedlysmart.com</param-value>    
+  </init-param>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>Internal name 1</servlet-name>    
+  <url-pattern>/Public1</url-pattern>  
+</servlet-mapping>
+#+END_SRC
+** key api
+*** javax.servlet.Servlet(interface)->javax.servlet.GenericServlet(abstract)->javax.servlet.http.HttpServlet
+*** javax.servlet.ServletRequest(interface)->javax.servlet.http.HttpServletRequest(interface)
+*** javax.servlet.ServletResponse(interface)->javax.servlet.http.HttpServletResponse(interface)
+** dispatch
+RequestDispatcher view = request.getRequestDispatcher(“result.jsp”)
+view.forward(request, response);
+** life cycle
+*** construct/init()
+it be invoke after the servlet instance, before it can sevice any client request
+开放接口，创建后，执行(比处理请求前更早)
+*** initialized(the only state)
+*** destroy()
+*** service()
+when the request is come in, the container start new thread from pool, and invoke this method to handle request that decice invoke concrete method deal specific method such as doGet,doPost
+** ServletConfig
+one servletConfig object per servlet
+used to access servletContext
+params are configured in dd
+#+BEGIN_SRC xml
+<servlet>
+  <servlet-name>Internal name 1</servlet-name>    
+  <servlet-class>foo.Servlet1</servlet-class>  <!--You put in the fully-qualified name of the class (but you don’t add the “.class” extension-->
+
+  <init-param>
+    <param-name>adminEmail</param-name>
+    <param-value>likewecare@wickedlysmart.com</param-value>    
+  </init-param>
+</servlet>
+
+
+#+END_SRC
+
+// get init param defined in dd
+out.println(getServletConfig().getInitParameter(“adminEmail”));
+** ServletContext
+one servletContext per webapp
+uses to access webapp params(also configured in dd)
+get relevant info about container
+#+BEGIN_SRC xml
+<context-param>
+  <param-name>adminEmail</param-name>
+  <param-value>clientheaderror@wickedlysmart.com</param-value>
+</context-param>
+#+END_SRC
+
+out.println(getServletContext().getInitParameter(“adminEmail”));
+** eventlistener
+*** ServletContextListener
+#+BEGIN_SRC xml
+<listener>    
+  <listener-class>       
+    com.example.MyServletContextListener    
+  </listener-class>  
+</listener>
+#+END_SRC
+*** ServletContextAttributeListener
+attributeAdded
+attributeRemoved
+attributeReplaced
+*** HttpSessionListener
+sessionCreated
+sessionDestroyed
+*** ServletRequestListener
+requestInitialized
+requestDestroyed
+*** ServletRequestAttributeListener
+attributeAdded
+attributeRemoved
+attributeReplaced
+*** HttpSessionBindingListener
+valueBound
+valueUnbound
+
+#+BEGIN_SRC java
+class Dog implement HttpSessionBindingListener{
+  public void valueBound(HttpSessionBindingEvent event) {     
+  // code to run now that I know I’m in a session   
+  }   
+  public void valueUnbound(HttpSessionBindingEvent event) {    
+ // code to run now that I know I am no longer part of a session  
+ }
+}
+
+
+
+#+END_SRC
+*** HttpSessionAttributeListener
+attributeAdded
+attributeRemoved
+attributeReplaced
+*** HttpSessionActivationListener
+sessionDidActivate
+sessionWillPassivate
+** conversation
+*** session
+**** key-api
+getCreationTime()
+getLastAccessedTime()
+setMaxInactiveInterval()
+getMaxInactiveInterval()
+invalidate()
+**** config in dd
+#+BEGIN_SRC xml
+<web-app ...>
+  <session-config>
+    <session-timeout>15</session-timeout> <!--unit is minute, while api is second-->
+  </session-confi g>
+</webapp>
+#+END_SRC
+**** listener
+HttpSessionListener->HttpSessionEvent(int created or in destroy)
+HttpSessionAttributeListener->HttpSessionBindingEvent(add/remove/replace attibute)
+HttpSessionActivationListener->HttpSessionEvent(migration the session into different VM, its uses like binding attibute )
+HttpSessionBindingListener->(the attibute value of class that implement this interface)
+*** jwt
+*** url rewriting
+** cookies
+getCookies() // in javax.servlet.http.HttpServletRequest
+addCookie() // in javax.servlet.http.HttpServletResponse
+#+BEGIN_SRC java
+Cookie cookie = new Cookie(“username”, name);
+cookie.setMaxAge(30*60);
+response.addCookie(cookie);
+
+Cookie[] cookies = request.getCookies();
+for (int i = 0; i < cookies.length; i++) {    
+  Cookie cookie = cookies[i];    
+  if (cookie.getName().equals(“username”)) {        
+    String userName = cookie.getValue();        
+    out.println(“Hello “ + userName);        
+  break;    
+}}
+#+END_SRC
+** usage
+#+BEGIN_SRC java
+
+// request usage
+request.getParameter(“color”);
+String [] sizes = request.getParameterValues(“sizes”);
+String client = request.getHeader(“User-Agent”);
+Cookie[] cookies = request.getCookies();
+HttpSession session = request.getSession();
+String theMethod = request.getMethod();
+InputStream input = request.getInputStream();
+getRemotePort() // 发起请求一方的端口
+getLocalPort() // 本地接受request的端口
+getServerPort() // 用户希望连到的端口，比方说apache配合tomcat，该属性是80，而localport是8080
+
+
+// response usage
+PrintWriter writer = response.getWriter();
+PrintWriter writer = response.getWriter();
+
+ServletOutputStream out = response.getOutputStream();
+out.write(aByteArray);
+
+response.setHeader(“foo”, “bar”);
+response.addHeader(“foo”, “bar”);
+response.setIntHeader(“foo”, 42);
+response.sendRedirect(“http://www.oreilly.com”); // 支持相对路径
+
+#+END_SRC
+** web container
+*** tomcat
+**** deploment
+***** [tomcat-home]/webapps/[projectName]
+the projectName is the part of path such as http://localhost:8080/[projectName]
+****** WEB-INF
+******* classes
+******* lib
+******* tags
+自定义jsp标签
+******* web.xml
+****** other resources such as form.html and form.jsp
+**** authentication
+***** build in auth(without external connect such as db account)
+****** config in tomcat-users.xml
+#+BEGIN_SRC xml
+<?xml version="1.0" encoding="UTF-8"?>
+<tomcat-users xmlns="http://tomcat.apache.org/xml"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+              version="1.0">
+  <role rolename="admin"/>
+  <role rolename="guest"/>
+  <user username="smile2333" password="1234" roles="admin,guest"/>
+</tomcat-users>
+
+
+#+END_SRC
+****** config in dd
+#+BEGIN_SRC xml
+<!--when time for authentication, the container will map its vendor-specific to the dd role -->
+<security-role>
+  <role-name>admin</role-name>
+  <role-name>guest</role-name>
+</security-role>
+#+END_SRC
+** deploment
+*** directory
+*** war
+封装[projectName]下的所有文件，解析后项目访问根路径根据具体实现而定，tomcat是使用war的名字作为根路径，比旧的目录部署多了一个META-INF(可以写入项目依赖)
+tomcat会解压后使用，目录名为war的名字，其他与原始方式一样(即是说，war包没有意义，有意义的是其被container解压后处理的目录)
+*** access rule
+WEB-INF and META-INF cann't access directly, so they can use for prevent directly access
+http://www.wickedlysmart.com/MyTestApp/register/signUp.jsp //may be right
+http://www.wickedlysmart.com/MyTestApp/WEB-INF/process.jsp // must error
+*** key rules about servlet mapping
+1. find the match pattern(if many exist, the most long match it) that config in dd
+2. if 1 fail, then find directory
+*** welcome page
+每次输入路径时，若是目录，从目录里面找符合配置的welcome page，优先级按配置顺序排列，如果什么都找不到，则取决于vendor's implement，tomcat会展示目录文件列表摘要信息
+#+BEGIN_SRC xml
+<webapp ...>
+  <welcome-file-list>
+     <welcome-file>index.hmtl</welcome-file>
+     <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+</webapp>
+#+END_SRC
+*** error page
+#+BEGIN_SRC xml
+<error-page>
+  <error-code>404</error-code><!--could be replace exception-type tag, not allow use them together-->
+  <exception-type>java.lang.Throwable</exception-type>
+  <location>/errorPage.jsp</location>
+</error-page>
+#+END_SRC
+#+BEGIN_SRC java
+response.sendError(HttpServletResponse.SC_FORBIDDEN);
+response.sendError(403);
+#+END_SRC
+*** load-on-startup
+Any non-negative value for <load-on-startup> tells the Container to initialize the servlet when the app is deployed (or any time the server restarts). 
+#+BEGIN_SRC xml
+<servlet>   
+  <servlet-name>KathyOne</servlet-name>   
+  <servlet-class>foo.DeployTestOne</servlet-class>
+  <load-on-startup>1</load-on-startup>
+</servlet>
+#+END_SRC
+*** mime-mapping
+配置自定义的mime类型
+#+BEGIN_SRC xml
+<mime-mapping>
+  <extension>mpg</extension>
+  <mime-type>video/mpeg</mime-type>
+</mime-mapping>
+#+END_SRC
+** security
+*** big 4
+**** authentication
+**** authorization
+**** confidentiality
+**** data integrity
+*** realm
+the replace where authentication is stored
+*** authentication
+**** enable
+add this in dd
+#+BEGIN_SRC xml
+<login-config>
+  <auth-method>BASIC</auth-method> <!--BASIC may be other such as digest, client-cert, and form -->
+</login-config>
+
+
+<!--only form method can complicated config-->
+<login-config>
+  <auth-method>FORM</auth-method>
+  <form-login-config>
+    <form-login-page>/loginPage.html</form-login-page>    
+    <form-error-page>/loginError.html</form-error-page>
+  </form-login-config>
+</login-config>
+#+END_SRC
+**** add role
+#+BEGIN_SRC xml
+<security-role><role-name>Admin</role-name></security-role>
+<security-role><role-name>Member</role-name></security-role>
+<security-role><role-name>Guest</role-name></security-role>
+#+END_SRC
+**** defind constraints
+***** usage
+#+BEGIN_SRC xml
+<webapp...>
+  <!--allow multi security constraint-->
+  <security-constraint>
+
+    <web-resource-name>UpdateRecipes</web-resource-name>
+   
+    <web-resource-collection>
+      <url-pattern>/Beer/AddRecipe/*</url-pattern>
+      <url-pattern></url-pattern>
+
+      <http-method>GET</http-method>
+      <http-method>POST</http-method>
+    </web-resource-collection>
+
+    <auth-constraint>
+      <role-name>Admin</role-name>
+      <role-name>Member</role-name>
+    </auth-constraint>
+    
+  </security-constraint>
+</webapp>
+#+END_SRC
+***** multi condition
+#+BEGIN_SRC xml
+<!--guest and admin can access-->
+<security-constraint>
+  <auth-constraint>
+    <role-name>Guest</role-name>
+  </auth-constraint>
+</security-constraint>
+
+<security-constraint>
+  <auth-constraint>
+    <role-name>Admin</role-name>
+  </auth-constraint>
+</security-constraint>
+
+
+<!--everybody can access-->
+<security-constraint>
+  <auth-constraint>
+    <role-name>Guest</role-name>
+  </auth-constraint>
+</security-constraint>
+<security-constraint>
+  <auth-constraint>
+    <role-name>*</role-name>
+  </auth-constraint>
+</security-constraint>
+
+<!--nobody access-->
+<security-constraint>
+  <auth-constraint>
+  </auth-constraint>
+</security-constraint>
+<security-constraint>
+  <auth-constraint>
+    <role-name>*</role-name>
+  </auth-constraint>
+</security-constraint>
+
+
+<!--everybody can access-->
+<security-constraint>
+<security-constraint>
+
+<security-constraint>
+  <auth-constraint>
+    <role-name>*</role-name>
+  </auth-constraint>
+</security-constraint>
+
+#+END_SRC
+**** four types
+***** basic
+ encoding scheme (base64)
+***** digest
+the encryption mechanism isn’t widely used, J2EE containers aren’t required to support it.
+***** client-cert
+using Public Key Certificates (PKC)
+***** form
+least security, but it could custom login form
+****** defind login page
+****** defind error page
+*** trick
+**** isUserInRole(String role)
+#+BEGIN_SRC xml
+<!--when you use isUserInRole to test manager,it treat it as admin to check-->
+<servlet>
+  <servlet-role-ref>
+    <role-name>manager</role-name>
+    <role-link>admin</role-link>
+  </servlet-role-ref>
+</servlet>
+
+<security-role>
+  <role-name>admin</role-name>
+</security-role>
+
+#+END_SRC
+*** using ssl
+it's not the spec, but virtually container that implement this to protect data
+#+BEGIN_SRC xml
+<webapp...>
+  <security-constraint>
+    <user-data-constraint>
+    <transport-gurantee>CONFIDENTIAL<transport-gurantee> <!--could be NONE,INTERNAL,CONFIDENTIAL-->
+    </user-data-constraint>
+  </security-constraint>
+</webapp>
+#+END_SRC
+** filter
+*** order
+1. 找出所有url-pattern匹配的，然后按照声明顺序加入filteChain
+2. 在1之后，找出所有匹配servlet-nama, 按声明顺序加入filterChain,即是说，url-pattern匹配的优先级别高
+*** config
+如下四个filter打印其对应的类命，按照优先级顺序，打出"filter1,filter3,filter2, filter4"
+#+BEGIN_SRC xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <servlet>
+        <servlet-name>test</servlet-name>
+        <servlet-class>com.example.TestServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>test</servlet-name>
+        <url-pattern>/test</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>filter1</filter-name>
+        <filter-class>com.example.Filter1</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>filter1</filter-name>
+        <url-pattern>/test</url-pattern>
+    </filter-mapping>
+
+
+    <filter>
+        <filter-name>filter2</filter-name>
+        <filter-class>com.example.Filter2</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>filter2</filter-name>
+        <servlet-name>test</servlet-name>
+    </filter-mapping>
+
+
+
+    <filter>
+        <filter-name>filter3</filter-name>
+        <filter-class>com.example.Filter3</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>filter3</filter-name>
+        <url-pattern>/test</url-pattern>
+    </filter-mapping>
+
+
+    <filter>
+        <filter-name>filter4</filter-name>
+        <filter-class>com.example.Filter4</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>filter4</filter-name>
+        <servlet-name>test</servlet-name>
+    </filter-mapping>
+</web-app>
+
+#+END_SRC
+*** key
+**** 原理
+规范没有定义filter如何实现，但是大部分的容器实现是纯粹的调用栈，
+**** 实现requestFilter/responseFilter(逻辑上)
+***** requestFilter
+基于其实现原理就是单向的调用栈，所以对于requestFilter这种逻辑概念来讲，只要在chain.doFilter(request,response)之前处理就是对应的requestFilter做法
+***** responseFilter
+而如果要做到responseFilter的逻辑概念，受限于规范(即请求过了filter到达servlet时，若不做任何处理，输出流直接是容器本身来管，写出时，也是直接写回客户端，并不会再经过Fliter),所以可行的方式是在chain.doFilter(request,response)时把response换成自定义的HttpServletResponse(可以继承提供的wrapper类，并实现部分方法以实现功能)

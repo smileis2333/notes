@@ -1,0 +1,62 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file c:/Users/smile2333/Desktop/personal/study/org/2019-11-11-java.org
+
+
+* optional
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2020-04-26 Sun 21:00
+  :ARCHIVE_FILE: ~/Desktop/personal/study/org/2019-11-11-java.org
+  :ARCHIVE_OLPATH: advanced
+  :ARCHIVE_CATEGORY: 2019-11-11-java
+  :END:
+** definition
+An Optional<T> object is a wrapper for either an object of type T or no object
+#+BEGIN_SRC java
+String result = optionalString.orElse("");
+String result = optionalString.orElseGet(() -> System.getProperty("myapp.default"));
+String result = optionalString.orElseThrow(IllegalStateException::new);
+optionalValue.ifPresent(v -> results.add(v));
+optionalValue.ifPresent(results::add);
+optionalValue.ifPresentOrElse(
+   v -> System.out.println("Found " + v),
+   () -> logger.warning("No match"));
+
+// transform
+Optional<String> transformed = optionalString.map(String::toUpperCase);
+optionalValue.map(results::add);
+
+// flatmap, there has two methods named Optional<Double> inverse(double x) and  Optioal<Double>squareRoot(Double x)
+Optional<Double> result = inverse(x).flatMap(MyMath::squareRoot);
+
+#+END_SRC
+
+* time operation
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2020-04-27 Mon 16:06
+  :ARCHIVE_FILE: ~/Desktop/personal/study/org/2019-11-11-java.org
+  :ARCHIVE_OLPATH: usage
+  :ARCHIVE_CATEGORY: 2019-11-11-java
+  :END:
+** LocalDate
+- now()
+- of(2017,2,4)
+
+** MonthDay
+** LocalTime
+- now()
+- plusHours(int)
+- plusMinutes(int)
+** Clock
+** ZoneId
+- getAvailableZoneIds()
+- of(String)
+** LocalDateTime
+** ZoneDateTime
+- of()
+** YearMonth
+** Period
+- Period.between
+** Instant
+- now()

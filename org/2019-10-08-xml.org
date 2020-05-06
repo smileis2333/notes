@@ -62,3 +62,37 @@ $wget http://www.w3.org/2001/XMLSchema-instance #下载可得到约束文件的�
 $wget http://127.0.0.1/aop
 #可以模仿这种上述例子，将Spring的aop约束文件丢在本机服务器，这样的话,Namespace的URI可以改写为http://127.0.0.1/aop并且xsi:schemaLocation不必在配置aop的约束文件映射，因为本身这个URI就可以得到约束文件的内容，可以直接被IDE之类的进行索引了(不过一般没人这么干，没什么作用
 #+END_SRC
+* validating
+** dtd
+相较于schema定义侧重于平铺
+*** import in xml
+1. local import --<!DOCTYPE config SYSTEM "config.dtd">
+2. network import--<!DOCTYPE config SYSTEM "http://myserver.com/config.dtd">
+3. definite in xml itself(rarely use)
+<!DOCTYPE config [
+   <!ELEMENT config . . .>
+   more rules
+   . . .
+]>
+*** how to definition
+#+BEGIN_SRC xml
+<!ELEMENT font (name,size)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT para (#PCDATA|em|strong|code)*>
+<!ELEMENT captionedImage (image,#PCDATA)>
+#+END_SRC
+** schema
+更加结构化，可以定义更加复杂的约束，文件名以xsd结尾
+*** import in xml
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="config.xsd">
+   . . .
+</config>
+* xpath
+包含某个class就匹配,
+eg
+//div[contains(@class,'postcell')]
+取得属性
+//div/@href

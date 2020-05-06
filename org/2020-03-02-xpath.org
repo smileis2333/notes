@@ -1,7 +1,0 @@
-#+TITLE: xpath
-#+STARTUP: indent
-包含某个class就匹配,
-eg
-//div[contains(@class,'postcell')]
-取得属性
-//div/@href

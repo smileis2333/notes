@@ -1,0 +1,2155 @@
+#+TITLE:  java se
+#+STARTUP: indent
+* java memory model
+** stack
+方法的局部变量(参数和定义的变量)
+** heap
+** method area
+1.8其实现为PermGen(永久代)，1.8以后变成Metaspace(元空间x)
+** Native Method Stack
+本地方法栈，与操作系统相关
+** pc register
+与CPU相关
+* buzzwords
+- simple
+- object-oriented
+- distributed
+- robust
+- secure
+- architecture-neutral
+- portable
+- interpreted
+- high-performance
+- multithread
+- dynamic
+* usage
+** comment
+1. multiline comment /**/
+2. single line comment //
+*** ducument comment
+modules、packages、public classes and interfaces、public and protected fields、public and protected constructors and methods
+**** insert
+#+BEGIN_SRC java
+/**
+be write html tag content
+*/
+#+END_SRC
+**** class
+**** method
+@param
+@return
+@throws
+**** field 
+**** general
+@author
+@version
+@see
+**** package
+1. supply a java file named pakcage-info.java
+2. supply an html file named package.html, the content in the tags <body>...</body> be extract
+**** javadoc -d docDirectory nameOfPackage
+javadoc -d docDirectory *.java
+
+** Data types
+*** Integer types
+- byte 1bytes
+- short 2bytes
+- int 4bytes
+- long 8bytes
+*** floating-point types
+- float 4bytes
+- double 8bytes
+*** char
+unicode escape sequences are before the code is parsed
+注释里用unicode可能会导致一些奇怪的问题
+开发中尽量少用char类型，java中对于unicode的支持为:
+一个code point是一个对应字符的一个数值，但是他必须占用两个char类型，即两个code unit来表示，所以String本身的一些方法是针对于char类型，是存在事实上的缺陷的，如果影响到了，则必须使用code point的相关方法进行处理
+| escape | sequence name   | unicode value |
+|--------+-----------------+---------------|
+| \b     | backspace       | \u0008        |
+| \t     | tab             | \u0009        |
+| \n     | linefeed        | \u000a        |
+| \r     | carriage return | \u000d        |
+| \"     | double quote    | \u0022        |
+| \'     | single quote    | \u0027        |
+| \\     | backslash       | \u005c        |
+*** boolean
+*** enumerated types
+enum是一种对于单例设计模式的语言级别的内置支持
+#+BEGIN_SRC java
+public enum VoteTargetType {
+    QUESTION(1),
+    ANSWER(2)
+    ;
+    int targetType;
+
+    VoteTargetType(int targetType) {
+        this.targetType = targetType;
+    }
+
+    public int getTargetType() {
+        return targetType;
+    }
+}
+#+END_SRC
+*** Object wrapper
+Integer, Long, Boolean and so on.
+主要解决容器接收对象的矛盾
+**** api
+int intValue()
+static String toString(int i)
+static String toString(int i, int radix)
+static int parseInt(String s)
+static int parseInt(String s, int radix)
+static Integer valueOf(String s)
+static Integer valueOf(String s, int radix)
+Number parse(String s)
+其他类似
+*** Strings
+**** substring(start,end) 
+左开右闭
+**** Concatenation
+#+BEGIN_SRC java
+String expletive = "Expletive";
+String PG13 = "deleted";
+String message = expletive + PG13;
+#+END_SRC
+**** immutable
+**** test equal for equality
+"Hello".equals(greeting) // recommnend
+"Hello".equalsIgnoreCase("hello")
+**** empty and null strings
+if (str.length() == 0)
+if (str.equals(""))
+if (str == null)
+if (str != null && str.length() != 0)
+**** code points and code units
+int cpCount = greeting.codePointCount(0,greeting.length());
+char first = greeting.charAt(0);
+
+int cp = sentence.codePointAt(i);if (Character.isSupplementaryCodePoint(cp)) 
+i = i + 2;
+else i++;
+
+i--;if (Character.isSurrogate(sentence.charAt(i))) i--;int cp = sentence.codePointAt(i);
+
+int[] codePoints = str.codePoints().toArray();
+String str = new String(codePoints, 0, codePoints.length);
+**** api
+char charAt(int index)
+int codePointAt(int index)
+int offsetByCodePoints(int startIndex, intcpCount) // return the index of code point away from code point at startIndex
+int compareTo(String other)
+IntStream codePoints()
+boolean empty()
+boolean blank()
+boolean equal(Object other)
+boolean equalsIgnoreCase(Object other)
+boolean startsWith(String prefix)
+boolean endsWith(String suffix)
+int indexOf(String str)
+int indexOf(String str, int fromIndex)
+int indexOf(int cp)
+int indexOf(int cp, int fromIndex)
+int lastIndexOf(String str)
+int lastIndexOf(String str, int fromIndex)
+int lastindexOf(int cp)
+int lastindexOf(int cp, int fromIndex)
+int codePointCount(int startIndex, int endIndex)
+String replace(CharSequence oldString,CharSequence newString)
+String substring(int beginIndex)
+String substring(int beginIndex, int endIndex)
+String join(CharSequence delimiter,CharSequence... elements)
+String repeat(int count)
+**** building strings
+#+BEGIN_SRC java
+StringBuilder builder = new StringBuilder();
+builder.append(ch); // appends a single character
+builder.append(str); // appends a string
+String completedString = builder.toString();
+
+/*
+StringBuilder appendCodePoint(int cp)
+void setCharAt(int i, char c)
+StringBuilder insert(int offset, String str)
+StringBuilder insert(int offset, char c)
+StringBuilder delete(int startIndex, intendIndex)
+*/
+#+END_SRC
+** operator
+*** arithmetic operators
++  -  /  *
+*** mathematical function and constants
+#+BEGIN_SRC java
+Math.sqrt(x);
+Math.pow(x, a); // x^a
+// so forth
+/*
+Math.sin
+Math.cos
+Math.tan
+Math.atan
+Math.atan2
+Math.exp
+Math.log
+Math.log10
+Math.PI
+Math.E
+*/
+#+END_SRC
+*** conversion between numeric types
+**** be sure no lose precision
+byet->short
+short->int
+char->int
+int->long
+int->double
+float->double
+**** may be lose precison
+int->float
+long->float
+long->double
+*** cast
+*** combining assignment with operator
+x=x+4 equal x+=4
+x= x/4 equal x/=4
+and so forth
+*** increment and decrement operators
+x++; ++x;
+x--; --x;
+*** relational and boolean operators
+**** ==
+**** !=
+**** &&
+**** ||
+*** bitwise operators
+**** & (and)
+**** | (or)
+**** ^ (xor)
+**** ~ (not)
+**** <<
+20 << 2 is 80
+二进制原码: 0001 0100
+向左移动两位后:  0101 0000
+
+-20 << 2 is 80
+二进制原码: 1001 0100
+二进制反码: 1110 1011 原码除符号位，其他取反
+二进制补码: 1110 1100 反码+1
+左移两位后的补码: 1011 0000
+反码:   1010 1111 补码-1
+原码:   1101 0000 除第一位，其他取反
+结果 r = -80
+**** >>
+20>>2 is 5
+0001 0100
+0000 0101
+
+-20>>2
+原码: 1001 0100
+反码: 1110 1011
+补码: 1110 1100
+右移两位: 
+
+**** >>>
+无符号右移，原本的<<或者>>都是带符号移动,
+-2>>>1 is 2147483647
+
+*** parantheses
+** input and output
+*** reading
+**** scanner
+Scanner(InputStream in)
+String nextLine()
+String next()
+int nextInt()
+double nextDouble()
+boolean hasNext()
+boolean hasNextInt()
+boolean hasNextDouble()
+**** console
+static Console console() //java.lang.System
+static char[] readPassword(String prompt,Object... args)
+static char[] readPassword(String prompt,Object... args)
+*** format output
+| conversion type character | type                       | example |
+|---------------------------+----------------------------+---------|
+| d                         | deciamal integer           | 159     |
+| x                         | hexadecimal integer        | 9f      |
+| o                         | octal integer              | 237     |
+| f                         | fixed-point floating-point | 15.9    |
+| s                         | String                     | hello   |
+| c                         | character                  | H       |
+| b                         | boolean                    | true    |
+| %                         | The percent symbol         | %       |
+| n                         | line separator             |         |
+
+| flag | purpose                                |   example |
+|------+----------------------------------------+-----------|
+| +    | print sign of value                    | +33333.33 |
+| 0    | adds leading zeros                     |    003333 |
+| -    | left-justified field                   |           |
+| (    | enclose negative number in parentheses |           |
+| ,    | add group separators                   |  3,333.33 |
+
+// "%,(.2f" is add flag
+System.out.printf("%,.2f", 10000.0 / 3.0);
+3,333.33
+
+String message = String.format("Hello, %s. Next year,you'll be %d", name, age);
+
+*** file input and output
+**** read from file
+Scanner in = new Scanner(Path.of("myfile.txt"),StandardCharsets.UTF_8)
+**** file output 
+PrintWriter out = new PrintWriter("myfile.txt",StandardCharsets.UTF_8);
+*** api
+Scanner(Path p, String encoding)
+Scanner(String data)
+PrintWriter(String fileName)
+static Path of(String pathname)
+** control flow
+*** block scope
+*** condition statement
+if(expresstion){
+
+}else if（expression2）{
+
+}else{
+
+}
+
+if(newexpression){
+}
+*** loops
+**** while
+while(expression){
+}
+**** do-while
+do{
+}while(expression)
+*** determinate loops
+for(statement;expression;statment){
+}
+*** multi selection
+switch(expression){
+case value1: doSomething(); break;
+case value2: doSomething(); break;
+}
+case value could be primitive type or String or enum
+*** break control flow
+**** break
+skip all the rest of loop
+**** continue
+skip this loop to next
+** Big Numbers
+BigInteger add(BigInteger other)
+BigInteger add(BigInteger other)
+...multiply...
+...divide...
+...mod...
+BigInteger sqrt()
+int compareTo(BigInteger other)
+static BigInteger valueOf(long x)
+
+BigDecimal'api like the BigInteger
+** array
+*** declaring
+int[] a = new int[100];
+int[] smallPrimes = { 2, 3, 5, 7, 11, 13 };
+*** access
+a[index]
+*** iterate
+for (int i = 0; i < a.length; i++)  
+ System.out.println(a[i]);
+
+// 被编译器优化为第一种类型
+for (TypeName item : collection) 
+ statement
+*** copy
+int[] copiedLuckyNumbers = Arrays.copyOf(luckyNumbers,luckyNumbers.length);
+luckyNumbers = Arrays.copyOf(luckyNumbers, 2 *luckyNumbers.length); // 多余的部位填充为0
+*** sort
+#+BEGIN_SRC java
+int[] a = new int[10000];
+/*
+do something set it be disorder
+*/
+Arrays.sort(a)
+#+END_SRC
+*** Arrays
+Arrays is util class about array
+static String toString(xxx[] a)
+staticxxx[] copyOf(xxx[] a, int end)
+staticxxx[] copyOfRange(xxx[] a, int start, intend)
+static void sort(xxx[] a)
+static int binarySearch(xxx[] a,xxxv)
+static int binarySearch(xxx[] a, int start, intend,xxxv)
+static void fill(xxx[] a,xxxv)
+static boolean equals(xxx[] a,xxx[] b)
+*** multidimensional arrays
+Java只有一维数组，多维数组实际为数组中的元素为其他数组
+double[][] balances = new double[NYEARS][NRATES];
+int[][] magicSquare =   {      {16, 3, 2, 13},      {5, 10, 11, 8},      {9, 6, 7, 12},      {4, 15, 14, 1}   };
+** access privilege
+|           | subclass                                                                | package | external package |
+|-----------+-------------------------------------------------------------------------+---------+------------------|
+| public    | yes                                                                     | yes     | yes              |
+| protected | yes                                                                     | yes     | no               |
+| default   | no(point out that the subclass of external package no access privilege) | yes     | no               |
+| private   | no                                                                      | no      | no               |
+** classpath
+jvm启动加载classpath指定的字节码文件
+jdk9之后可以直接命令行指定，不建议全局指定classpath
+java -classpath/home/user/classdir:.:/home/user/archives/archive.jarMyProg
+java -classpath c:\classdir;.;c:\archives\archive.jarMyProg
+** jar files
+使用zip格式来对字节码文件进行封装，节省空间，提升效率
+jar cvf jarFileName file1file2 . . .
+jar cvf jarFileName file1file2 . . .
+*** manifest
+打成jar包指定相关运行信息的指定文件
+- 运行入口
+- runtime version
+jar cfm jarFileName manifestFileName . . .
+jar cfm MyArchive.jar manifest.mfcom/mycompany/mypkg/*.class
+jar ufm MyArchive.jar manifest-additions.mf
+*** Executable JAR Files
+jar cvfe MyProgram.jar com.mycompany.mypkg.MainAppClass
+*** Multi-Release JAR Files
+javac --release 9 java9/com/runoob/Tester.java
+javac --release 7 java7/com/runoob/Tester.java
+jar -c -f test.jar -C java7 . --release 9 -C java9.
+*** A Note about Command-Line Options
+javac --class-path /home/user/classdir
+javac -p moduledir ...
+jar --create --verbose --file jarFileName file1file2 等于 jar -cvf ...
+** methods with a variable number of parameters
+#+BEGIN_SRC java
+public class PrintStream{   
+  public PrintStream printf(String fmt, Object... args){ 
+    return format(fmt, args); 
+  }
+}
+
+public static double max(double... values){  
+  double largest = Double.NEGATIVE_INFINITY;   
+  for (double v : values) 
+    if (v > largest) largest = v;   
+  return largest;
+}
+#+END_SRC
+** reflection
+*** Class
+static Class forName(String className)
+Constructor getConstructor(Class...parameterTypes)
+URL getResource(String name)
+InputStream getResourceAsStream(String name)
+
+Field[] getFields() // public field
+Field[] getDeclaredFields() // all field
+Method[] getMethods()
+Method[] getDeclaredMethods()
+Constructor[] getConstructors()
+Constructor[] getDeclaredConstructors()
+String getPackageName()
+**** Constructor
+Object newInstance(Object... params)
+*** Field/Method/Constructor
+Class getDeclaringClass() //the type of class that defind them
+Class[] getExceptionTypes() (in Constructor andMethod classes)
+int getModifiers()
+String getName()
+Class[] getParameterTypes() (in Constructor andMethod classes)
+Class getReturnType() (in Method class)
+**** field
+Object get(Object obj) // get the value of field in this obj
+void set(Object obj, Object newValue)
+Class getType()
+**** method
+public Object invoke(Object implicitParameter,Object[] explicitParameters)
+*** Modifier
+static String toString(int modifiers)
+static boolean isAbstract(int modifiers)
+static boolean isFinal(int modifiers)
+static boolean isInterface(int modifiers)
+static boolean isNative(int modifiers)
+static boolean isPrivate(int modifiers)
+static boolean isProtected(int modifiers)
+static boolean isPublic(int modifiers)
+static boolean isStatic(int modifiers)
+static boolean isStrict(int modifiers)
+static boolean isSynchronized(int modifiers)
+static boolean isVolatile(int modifiers)
+tests the bit in the modifiers value that corresponds to the modifierin the method name
+*** AccessibleObject
+void setAccessible(boolean flag) // sets or clears the accessibility flag for this accessible object, or throwsan IllegalAccessException if the access is denied.
+boolean trySetAccessible()
+boolean isAccessible()
+static void setAccessible(AccessibleObject[]array, boolean flag)
+** inner class
+好处是紧密关联与状态分享
+*** inner class access outer variable
+outerclass.this.variableName
+*** type
+**** normal
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args) {
+        AA aa = new AA();
+        AA.BB bb = aa.new BB();
+        
+    }
+}
+
+class AA{
+    class BB{
+
+    }
+}
+#+END_SRC
+**** local inner class
+简单来讲就是类在方法里
+#+BEGIN_SRC java
+class TalkingClock
+{
+   /**
+    * Starts the clock.
+    * @param interval the interval between messages (in milliseconds)
+    * @param beep true if the clock should beep
+    */
+   public void start(int interval, boolean beep)
+   {
+      class TimePrinter implements ActionListener
+      {
+         public void actionPerformed(ActionEvent event)
+         {
+            System.out.println("At the tone, the time is " + new Date());
+            if (beep) Toolkit.getDefaultToolkit().beep();
+         }
+      }
+      ActionListener listener = new TimePrinter();
+      Timer t = new Timer(interval, listener);
+      t.start();
+   }
+}
+#+END_SRC
+**** Anonymous Inner Classes
+同local inner class，但是没有类型，旧的用法是用于事件驱动,基本不用了，被lambda取代
+#+BEGIN_SRC java
+class TalkingClock
+{
+   /**
+    * Starts the clock.
+    * @param interval the interval between messages (in milliseconds)
+    * @param beep true if the clock should beep
+    */
+   public void start(int interval, boolean beep)
+   {
+      ActionListener listener = new ActionListener()
+         {
+            public void actionPerformed(ActionEvent event)
+            {
+               System.out.println("At the tone, the time is " + new Date());
+               if (beep) Toolkit.getDefaultToolkit().beep();
+            }
+         };
+      Timer t = new Timer(interval, listener);
+      t.start();
+   }
+}
+
+#+END_SRC
+**** Static Inner Classes
+#+BEGIN_SRC java
+// 多用于需要隐藏类，同时类不需要访问外部状态
+public class Main {
+    public static void main(String[] args) {
+        AA.BB bb = new AA.BB();
+    }
+}
+
+class AA{
+    static class BB{
+
+    }
+}
+#+END_SRC
+*** usage
+#+BEGIN_SRC java
+public class InnerClassTest
+{
+   public static void main(String[] args)
+   {
+      TalkingClock clock = new TalkingClock(1000, true);
+      clock.start();
+
+      // keep program running until user selects "Ok"
+      JOptionPane.showMessageDialog(null, "Quit program?");
+      System.exit(0);
+   }
+}
+
+/**
+ * A clock that prints the time in regular intervals.
+ */
+class TalkingClock
+{
+   private int interval;
+   private boolean beep;
+
+   /**
+    * Constructs a talking clock
+    * @param interval the interval between messages (in milliseconds)
+    * @param beep true if the clock should beep
+    */
+   public TalkingClock(int interval, boolean beep)
+   {
+      this.interval = interval;
+      this.beep = beep;
+   }
+
+   /**
+    * Starts the clock.
+    */
+   public void start()
+   {
+      ActionListener listener = new TimePrinter();
+      Timer t = new Timer(interval, listener);
+      t.start();
+   }
+
+   public class TimePrinter implements ActionListener
+   {
+      public void actionPerformed(ActionEvent event)
+      {
+         System.out.println("At the tone, the time is " + new Date());
+         if (beep) Toolkit.getDefaultToolkit().beep();
+      }
+   }
+}
+#+END_SRC
+** compare
+*** Comparator<T>
+比两个
+该接口同时提供了诸多默认方法，使用functional interface作为参数，提供针对多种情况下的比较，以及组合嵌套排序
+*** Comparable
+比一个
+** lambda expression
+*** usage
+**** basic
+#+BEGIN_SRC java
+Comparator<String> comp   = (first, second) // same as (String first, String second)      -> first.length() - second.length(); 类型可被自动推导时，参数类型可以不指定，交由编译器自己处理
+
+ActionListener listener = event ->   System.out.println("The time is "       + Instant.ofEpochMilli(event.getWhen())); // 单参数可以忽略()
+#+END_SRC
+**** method reference
+1. object::instanceMethod 
+2. Class::instanceMethod 方法参数总数得+1，为自身即this
+3. Class::staticMethod 多少个方法参数就是多少个
+
+某个方法的参数是一个functional interface， 并且已经存在可用的符合该functional interface方法签名的方法，此时，可以使用method reference， 类似于行为委托
+#+BEGIN_SRC java
+var timer = new Timer(1000, System.out::println);
+Arrays.sort(strings, String::compareToIgnoreCase)
+#+END_SRC
+**** constructor reference
+#+BEGIN_SRC java
+Stream<Person> stream = names.stream().map(Person::new);
+List<Person> people = stream.collect(Collectors.toList());
+
+
+#+END_SRC
+*** Functional Interfaces
+1. 如果一个接口有一个抽象方法(与Object的重合方法不符合条件，因为所有可实例化的具体实现的类对于Object的方法都必须可用)，那么该就接口就是一个函数式接口
+2. 如果我们在某个接口上声明了FunctionalInterface注解，那么编译器就会按照函数式接口的定义来要求该接口
+3. 如果某个接口只有一个抽象方法，但我们并没有声明FunctionalInterface注解，那么编译器依旧会将该接口看作是函数式接口
+包含一个抽象方法(与Object的重合方法不符合条件，因为所有可实例化的具体实现的类对于Object的方法都必须可用)
+#+BEGIN_SRC java
+// 该接口符合要求
+interface Person{
+    void test();
+    String toString();
+}
+#+END_SRC
+**** some important built-in function interfaces
+- Consumer
+- Function----apply----compose----andThen
+- BiFunction----apply----andThen
+- Predicate----test----and----or
+- Runnable
+- Supplier
+*** 作用
+传递行为，而不仅仅是值
+- 提高抽象层次
+- API重用性更好
+- 更加灵活
+
+*** variable scope
+*** processing
+尽量使用预定义的接口作为方法参数，因为基本满足使用
+*** cautious
+Java编译器对同lambda产生的不同Functional接口，调用instanceof被认为是true
+#+BEGIN_SRC java
+Consume<Integer>consume = ele->System.out.println(ele)
+IntConsume intConsume = ele->System.out.println(ele)
+
+System.out.println(intConsume instanceof consume)  //true
+System.out.println(consume instanceof intConsume)  //true
+#+END_SRC
+** proxy
+*** purpose
+**** Routing method calls to remote servers
+**** Associating user interface events with actions in a running program
+**** Tracing method calls for debugging purposes
+*** api
+static Class<?> getProxyClass(ClassLoader loader,Class<?>...intefaces)
+static Object newProxyInstance(ClassLoaderloader, Class<?>[] interfaces, InvocationHandlerhandler)
+static boolean isProxyClass(Class<?> cl)
+*** InvocationHandler interface
+代理对象将方法执行委派给invocationhandler执行，包括(Object继承下来的toString, equals, and hashCode)
+** exception
+*** Throwable
+**** Error
+**** Exception
+***** IOException
+***** RuntimeException
+
+*** throws
+方法定义时指定可能抛出的异常
+*** throw
+代码执行条件异常时，代码中抛出异常
+*** api
+Throwable()
+Throwable(String message)
+String getMessage()
+*** try-catch-finally
+**** normal catch
+#+BEGIN_SRC java
+
+// single catch
+try{
+ //do somthing
+}catch(ExceptionType e){
+ // handler for this type
+}
+
+
+// multi catch
+try{
+
+}catch(ExceptionType1 e){
+
+}catch(ExceptionType2 e){
+}
+
+
+// rethrow exception
+try{
+  // access the database
+}
+catch (SQLException e){   
+  throw new ServletException("database error: " + e.getMessage());
+}
+
+// rethrow exception with cause of exception
+// can retrieved by use:  Throwable original = caughtException.getCause();
+try{
+  // access the database
+}
+catch (SQLException origin){   
+  var e = new ServletException("database error: " + e.getMessage());
+  e.initCause(origin)
+  throw e;
+}
+
+try{
+
+}catch(Exception e){
+
+}finally{
+in.close();
+}
+
+#+END_SRC
+**** try with resources
+the class that implement AutoCloseable
+#+BEGIN_SRC java
+try(/*resources statement*/){
+
+}catch(ExceptionType ex){
+// close()过程中抛出的异常，被添加到suppressed中
+//            e.getSuppressed();
+
+}
+#+END_SRC
+** asserttions
+assert condition;
+assert condition : expression;
+
+java -enableassertions MyApp (-ea)
+** logging
+*** basic logging
+Logger.getGlobal().info("File->Open menu item selected");
+Logger.getGlobal().setLevel(Level.OFF);
+*** advance logging
+private static final Logger myLogger =Logger.getLogger("com.mycompany.myapp");
+logger.warning(message);
+logger.fine(message);
+logger.log(Level.FINE, message);
+*** logging level
+- server
+- warning
+- info
+- config
+- fine
+- finer
+- finest
+*** handler
+默认有一个ConsoleHandler，可以增加别的，同时handler也有log level的概念
+
+// config
+java.util.logging.ConsoleHandler.level=INFO
+
+#+BEGIN_SRC java
+Logger logger = Logger.getLogger("com.mycompany.myapp");
+logger.setLevel(Level.FINE);
+logger.setUseParentHandlers(false);
+var handler = new ConsoleHandler();
+handler.setLevel(Level.FINE);
+logger.addHandler(handler);
+
+
+// handler的可配置项大部分可参考其源代码
+
+#+END_SRC
+*** filter
+增加额外的过滤特性
+boolean isLoggable(LogRecord record)
+*** formatter
+String format(LogRecord record)
+setFormatter(Formatter formatter)
+*** config
+java -Djava.util.logging.config.file=configFile MainClass
+
+// config file
+com.mycompany.myapp.level=FINE
+java.util.logging.ConsoleHandler.level=FINE
+
+// point the path of config file
+System.setProperty("java.util.logging.config.file", file)
+** collections
+*** Collection
+#+BEGIN_SRC java
+public interface Collection<E> extends Iterable<E>{  
+  boolean add(E element);   
+  Iterator<E> iterator();   
+  //. . .
+}
+#+END_SRC
+*** Iterator
+#+BEGIN_SRC java
+public interface Iterator<E>{   
+  E next();   
+  boolean hasNext();   
+  void remove();   
+  default void forEachRemaining(Consumer<? super E> action);
+}
+#+END_SRC
+*** hierarchy
+- Iterable
+  - Collection
+    - List
+    - Set
+      - SortedSet
+      - NavigableSet
+    - Queue
+      - Deque
+- Map
+  - SortedMap
+  - NavigableMap
+- Iterator
+  - ListIterator
+- RandomAccess
+*** concrete collection
+**** Linked Lists
+**** Array Lists
+**** Hash Sets
+**** Tree Sets
+**** Queues and Deques
+**** Priority Queues
+*** Maps
+**** Map views
+出于Jav本身数据结构设计的影响，Map本身不隶属于Collection接口，但是获得其对象的key的collectin或者值的colletion，或者，或者的Entry的集合
+Set<K>keySet()
+Collection<V>values()
+Set<Map.Entry<K,V>> entrySet()
+**** WeakHashMap
+该类的保存是弱引用，若其他在其他地方的引用已取消，该类的元素可以被垃圾收集器回收
+*** views and wrapper
+借助view的概念，使用将对于抽取出来的子集合影响到父集合身上(清除父集合创建出来的子view，父集合跟着清掉)，以及Map映射为Collection的操作
+**** small collections
+#+BEGIN_SRC java
+List<String> names = List.of("Peter", "Paul", "Mary");
+Set<Integer> numbers = Set.of(2, 3, 5);
+#+END_SRC
+**** subranges
+**** Unmodifiable Views
+改了就抛异常
+**** Synchronized Views
+创建出线程安全的可用集合view
+**** Checked Views
+#+BEGIN_SRC java
+var strings = new ArrayList<String>();
+ArrayList rawList = strings; 
+rawList.add(new Date()) // 能通过编译
+
+List<String> safeStrings =Collections.checkedList(strings, String.class);
+ArrayList rawList = safeStrings;rawList.add(new Date()); // checked list throws aClassCastException
+rawList.add(new Date()); // checked list throws a ClassCastException
+#+END_SRC
+*** algorithms
+java.util.Collections
+**** sort and shuffle
+static <T extends Comparable<? super T>> voidsort(List<T> elements)
+static void shuffle(List<?> elements)
+static void shuffle(List<?> elements, Random r)
+**** binarySearch
+static <T extends Comparable<? super T>> intbinarySearch(List<T> elements, T key)
+static <T> int binarySearch(List<T> elements, T key,Comprator<? super T>c)
+**** simple algorithms
+static <T extends Comparable<? super T>> Tmin(Collection<T> elements)
+static <T extends Comparable<? super T>> Tmax(Collection<T> elements)
+static <T> min(Collection<T> elements,Comparator<? super T> c)
+static <T> void copy(List<? super T> to, List<T>from)
+static <T> void fill(List<? super T> l, T value)
+static <T> boolean addAll(Collection<? super T>c, T... values)
+static <T> boolean replaceAll(List<T> l, ToldValue, T newValue)
+static int indexOfSubList(List<?> l, List<?> s)
+static int lastIndexOfSubList(List<?> l, List<?>s)
+static void swap(List<?> l, int i, int j)
+static void reverse(List<?> l)
+static void rotate(List<?> l, int d)
+static int frequency(Collection<?> c, Object o) // 统计数目
+boolean disjoint(Collection<?> c1, Collection<?>c2) // 没有交集
+default boolean removeIf(Predicate<? super E>filter)
+*** bulk operation
+coll1.removeAll(coll2);
+
+var result = new HashSet<String>(firstSet);
+result.retainAll(secondSet);
+taffMap.keySet().removeAll(terminatedIDs);
+relocated.addAll(staff.subList(0, 10));
+*** converting between collections and array
+#+BEGIN_SRC java
+String[] values = . . .;
+var staff = new HashSet<>(List.of(values));
+Object[] values = staff.toArray();
+
+String[] values = (String[]) staff.toArray(); // ERROR
+staff.toArray(new String[staff.size()]); // OK
+#+END_SRC
+** concurrency
+*** create
+**** Runnable
+Runnable r = () -> { task code };
+var t = new Thread(r);
+t.start();
+**** extend Thread
+*** Thread state
+**** New
+when use code such as new Thread(t)
+**** Runnable
+when invoke start method. A runnable thread my or may not actually be running
+**** Blocked
+需要获得锁未释放
+**** Waiting
+等待其他进程唤醒
+Object.wait
+Thread.join
+waiting for a Lock or Condition in the java.util.concurrent
+**** Timed waiting
+when call method that have a timeout parameter, such as Thread.sleep, Object.wait
+**** Terminated
+exit run normally
+*** properties
+**** Interrupting Threads
+请求终止，具体行为是由程序实现决定
+**** Daemon threads
+void setDaemon(boolean isDaemon)
+**** Thread Names
+**** Handlers for Uncaught Exceptions
+implement Thread.UncaughtExceptionHandler
+void uncaughtException(Thread t, Throwable e)
+
+setUncaughtExceptionHandler //for all thread to deal unchecked exception
+setDefaultUncaughtExceptionHandler //for single thread
+
+If you don’t install a default handler, the default handler is null. However,if you don’t install a handler for an individual thread, the handler is thethread’s ThreadGroup object
+**** Thread Priorities
+默认情况下是继承下来的，
+any value between MIN_PRIORITY (defined as 1 inthe Thread class) and MAX_PRIORITY (defined as 10)
+void setPriority(int newPriority)
+*** Synchronization
+**** Lock
+java.util.concurrent.locks.Lock
+void lock()
+void unlock()
+ReentrantLock()
+ReentrantLock()
+**** condition objects
+与锁住对象不同(是持续申请锁，仍然算是Runnable状态)，该情况下，进入了一个wait set并取消了runnable状态，只有通过signalAll/sinal唤醒
+Condition newCondition()
+void await()
+void signalAll() //全部唤醒
+void signal() //唤醒一个，不建议使用，因为如果唤醒的一个锁住了，很可能导致死锁
+**** synchronized Keyword
+It is best to use neither Lock/Condition nor the synchronizedkeyword. In many situations, you can use one of the mechanisms of thejava.util.concurrent package that do all the locking for you
+java.lang.Object
+void notifyAll()
+void notify()
+void wait()
+void wait(long millis)
+void wait(long millis, int nanos)
+***** modify method
+***** code of method
+synchronized (obj){
+
+}
+***** The Monitor Concept
+A monitor is a class with only private fields
+Each object of that class has an associated lock
+All methods are locked by that lock. In other words, if a client callsobj.method(), then the lock for obj is automatically acquired at thebeginning of the method call and relinquished when the method returns.Since all fields are private, this arrangement ensures that no thread canaccess the fields while another thread manipulates them.
+The lock can have any number of associated conditions
+
+The Java designers loosely adapted the monitor concept. Every object in Javahas an intrinsic lock and an intrinsic condition. If a method is declared withthe synchronized keyword, it acts like a monitor method. The conditionvariable is accessed by calling wait/notifyAll/notify
+****** compromising
+Fields are not required to be private
+Methods are not required to be synchronized
+The intrinsic lock is available to clients
+***** Volatile Fields
+****** volatile keyword
+ If you declare a field as volatile, then thecompiler and the virtual machine take into account that the field may be concurrently updated by another thread.
+#+BEGIN_SRC java
+// if no use volatile, Perhaps it is not a good idea to use the intrinsic object lock. The isDone andsetDone methods can block if another thread has locked the object
+private boolean done;
+public synchronized boolean isDone() { return done; }
+public synchronized void setDone() { done = true; }
+
+// The compiler will insert the appropriate code to ensure that a change to thedone variable in one thread is visible from any other thread that reads thevariable
+private volatile boolean done;
+public boolean isDone() { return done; }
+public void setDone() { done = true; }
+#+END_SRC
+***** Atomics
+#+BEGIN_SRC java
+public static AtomicLong nextNumber = new AtomicLong();
+// in some thread. . .
+long id = nextNumber.incrementAndGet();
+
+// That is, the operations of getting the value, adding 1, setting it, and producing the new value cannot be interrupted
+#+END_SRC
+*** Deadlocks
+#+BEGIN_SRC java
+public class Main {
+
+    public static void main(String[] args) {
+        Object o1 = new Object();
+        Object o2 = new Object();
+
+        new Thread(()->{
+           synchronized (o1){
+               try {
+                   Thread.sleep(1000);
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
+               synchronized (o2){
+                   System.out.println("thread 1");
+               }
+           }
+
+        }).start();
+
+
+        new Thread(()->{
+            synchronized (o2){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (o1){
+                    System.out.println("thread 2");
+                }
+            }
+
+        }).start();
+    }
+}
+
+#+END_SRC
+*** Thread-Local Variables
+java.lang.ThreadLocal<T>
+T get()
+void set(T t)
+void remove()
+static <S> ThreadLocal<S> withInitial(Supplier<?extends S> supplier)
+static ThreadLocalRandom current()
+*** Why the stop and suspend Methods AreDeprecated
+**** stop
+直接释放所有锁，可能导致对象状态破损，并且线程本身无法知道什么时候能够停止
+**** suspend
+进入block，极有可能导致死锁
+*** Thread-Safe Collections
+线程安全的集合保证的是容器内部的数据结构不被多线程访问而破坏，不保证外部对于该容器的操作是否线程安全，如果某个特定操作需要线程安全，可以使用atomic update
+**** BlockingQueue
+void put(E element)
+boolean offer(E element, long time, TimeUnitunit)
+and so on.
+***** ArrayBlockingQueue
+***** LinkedBlockingQueue & LinkedBlockingDeque
+***** DelayQueue
+***** PriorityBlockingQueue
+***** TransferQueue
+**** Efficient Maps, Sets, and Queues
+***** ConcurrentHashMap
+***** ConcurrentSkipListMap
+***** ConcurrentSkipListSet
+***** ConcurrentLinkedQueue
+**** Atomic Update of Map Entries
+#+BEGIN_SRC java
+
+// wrong operation
+Long oldValue = map.get(word);
+Long newValue = oldValue == null ? 1 : oldValue + 1;
+map.put(word, newValue); // ERROR--might not replace oldvalue
+
+// old but right operation for multithread, it complete it by retry util it success update
+do {   oldValue = map.get(word);   newValue = oldValue == null ? 1 : oldValue + 1;    }
+while (!map.replace(word, oldValue, newValue));
+
+// alternative old version operation, it use ConcurrentHashMap<String,AtomicLong>
+map.putIfAbsent(word, new AtomicLong());
+map.get(word).incrementAndGet();
+
+
+//current right operation, 通过lambda把操作丢给容器自身处理
+map.compute(word, (k, v) -> v == null ? 1 : v + 1);
+
+#+END_SRC
+**** Bulk Operations on Concurrent Hash Maps
+**** Concurrent Set Views
+**** Copy on Write Arrays
+***** CopyOnWriteArrayList
+***** CopyOnWriteArraySet
+**** Parallel Array Algorithms
+Arrays.parallelSort(words,Comparator.comparing(String::length));
+Arrays.parallelSetAll(values, i -> i % 10);
+
+// [1, 2, 3, 4, . . .] then become [1,1x2,1x2x3,...]
+Arrays.parallelPrefix(values, (x, y) -> x * y)
+***** api
+static <E> Collection<E>synchronizedCollection(Collection<E> c)
+static <E> List synchronizedList(List<E> c)
+and so on
+*** task and thread pool
+**** Callables and Futures
+#+BEGIN_SRC java
+@FunctionalInterface
+public interface Callable<V> {
+    V call() throws Exception;
+}
+
+public interface Future<V> {
+
+    boolean cancel(boolean mayInterruptIfRunning);
+    boolean isCancelled();
+    boolean isDone();
+    V get() throws InterruptedException, ExecutionException;
+    V get(long timeout, TimeUnit unit)
+        throws InterruptedException, ExecutionException, TimeoutException;
+}
+
+// FutureTask class implment Future and Runnable
+
+
+
+#+END_SRC
+**** Executors
+The Executors class has a number of static factory methods forconstructing thread pools
+
+the first three return the object of ThreadPoolExecutor class that implements the *ExecutorService* interface
+***** newCachedThreadPool
+ New threads are created asneeded, idle threads are keptfor 60 seconds
+***** newFixedThreadPool
+idle threads arekept indefinitely
+***** newWorkStealingPool
+work for fork-join task
+***** newSingleThreadExecutor
+A “pool” with a single threadthat executes the submittedtasks sequentially, *useful for performance analysis*
+***** newScheduledThreadPool
+***** newSingleThreadScheduledExecutor
+***** ExecutorService
+Future<T> submit(Callable<T> task)
+Future<?> submit(Runnable task)
+Future<T> submit(Runnable task, T result)
+
+When you call submit, you get back a *Future* object that you can use to *get the result or cancel the task*
+the second return null
+The third version of submit yields a Future whose get method returns the given result object upon completion
+***** Controlling Groups of Tasks
+#+BEGIN_SRC java
+// blocked util them complete
+List<Callable<T>> tasks = . . .;
+List<Future<T>> results = executor.invokeAll(tasks);
+for (Future<T> result : results)
+   processFurther(result.get());
+
+
+// it is better
+var service = new ExecutorCompletionService<T>(executor);
+for (Callable<T> task : tasks) service.submit(task);
+for (int i = 0; i < tasks.size(); i++)
+   processFurther(service.take().get());
+#+END_SRC
+***** fork-join
+*** Asynchronous Computations
+**** Completable Futures
+it like js *promise* 
+CompletableFuture<String> f = . . .;
+f.thenAccept(s -> Process the result string s);
+***** api
+| method            | parameter            |
+|-------------------+----------------------|
+| thenApply         | T->U                 |
+| thenAccept        | T->void              |
+| thenComose        | T->CompleteFuture<U> |
+| handle            | (T,Throwable)->U     |
+| whenComplete      | (T,Throwable)->void  |
+| exceptionally     | Throwable->T         |
+| completeOnTimeout | T,long,TimeUnit      |
+| orTimeout         | long,Timeunit        |
+| thenRun           | Runnable             |
+***** Long-Running Tasks in User Interface Callbacks
+对于UI来讲，所有的更新操作都是通过UI Thread进行，因为Swing/JavaFx均是线程不安全的
+*** process
+**** build
+#+BEGIN_SRC java
+var builder = new ProcessBuilder("gcc", "myapp.c");
+
+// 默认拉起来的程序用的是JVM的路径，可以改
+builder = builder.directory(path.toFile());
+
+// 该类是典型的builder默认，可以一直串下去
+Process p = new ProcessBuilder(command).directory(file).…start();
+
+OutputStream processIn = p.getOutputStream();
+InputStream processOut = p.getInputStream();
+InputStream processErr = p.getErrorStream();
+#+END_SRC
+**** running
+#+BEGIN_SRC java
+Process process = new ProcessBuilder("/bin/ls", "-l")
+   .directory(Path.of("/tmp").toFile())
+   .start();
+try (var in = new Scanner(process.getInputStream())) {
+   while (in.hasNextLine())
+      System.out.println(in.nextLine());
+}
+#+END_SRC
+**** process handler
+1. Given a Process object p, p.toHandle() yields its ProcessHandle.
+2. Given a long operating system process ID, ProcessHandle.of(id) yields the handle of that process.
+3. Process.current() is the handle of the process that runs this Java virtual machine.
+4. ProcessHandle.allProcesses() yields a Stream<ProcessHandle> of all operating system processes that are visible to the current process
+
+#+BEGIN_SRC java
+long pid = handle.pid();
+Optional<ProcessHandle> parent = handle.parent();
+Stream<ProcessHandle> children = handle.children();
+Stream<ProcessHandle> descendants = handle.descendants();
+#+END_SRC
+*** api
+Thread(Runnable target)
+void start()
+void run()
+static void sleep(long millis)
+static void yield() // causes the currently executing thread to yield to another thread. Notethat this is a static method
+void join()
+void join(long millis)
+Thread.State getState()
+** generic programming
+*** type erase
+*** wildcard type
+**** lower
+<? super ClassType>
+**** Unbounded
+<?>
+**** upper
+<? extends ClassType>
+**** purpose
+upper used to read data, while lower is for writing
+*** why
+#+BEGIN_SRC java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
+
+public class Main2 {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        ArrayList<Dog> dogs = new ArrayList<>();
+        accept(dogs);
+
+        // compile error
+        acceptWithoutWildCard(dogs);
+    }
+
+    public static void acceptWithoutWildCard(List<Animal>animals){
+
+    }
+
+    public static void accept(List<? extends Animal> animals){
+
+    }
+}
+class Animal{
+
+}
+
+class Dog extends Animal{
+
+}
+
+#+END_SRC
+** concept
+*** polymorphism
+In the Java programming language, object variables are polymorphic. Avariable of type Employee can refer to an object of type Employee or toan object of any subclass of the Employee class (such as Manager,Executive, Secretary, and so on)
+*** method calls
+1. 对于可执行方法找出参数个数一致的方法
+2. 找出可执行的方法，根据类型兼容(多个符合的情况下，根据转换次数计算，如果多个转换次数相同，代表歧义)
+3. 如果是static, final, private修饰的方法，直接执行，如果否，根据具体是否动态绑定决定是否往子类找具体的执行方法
+4. 找出该类对应的子类的方法，其中可能会出现3的修饰符，此时停止
+JVM使用的method table维护每个类的方法签名，在动态绑定，检索时，进行签名检测，节省时间
+*** abstract classes
+可以有变量, 方法，构造方法，但是只能引用到子类的对象而不能直接实例化。如果有抽象方法，一定是抽象类，反正不成立
+*** Object
+因为无继承父类的类也默认为该类的子类，所以Object为全部类的最根源父类
+**** equal
+**** hashCode
+**** toString
+**** getClass
+**** getName
+**** getSuperclass
+*** interface
+**** static and private Methods
+**** default methods
+**** conflicts
+1. 父类优先
+2. 接口方法名冲突需要手动解决
+#+BEGIN_SRC java
+interface Person{
+    default String getName(){
+        return "";
+    }
+}
+
+interface Named{
+    default String getName() {
+        return getClass().getName();
+    }
+}
+
+class Student implements Person,Named{
+    @Override
+    public String getName() {
+        return Person.super.getName();
+    }
+}
+#+END_SRC
+*** Object Cloning 
+深复制需要手动处理
+** streams
+*** create
+#+BEGIN_SRC java
+Stream<String> words = Stream.of(contents.split("\\PL+"));
+Stream<String> song = Stream.of("gently", "down", "the", "stream");
+Stream<String> silence = Stream.empty();
+Stream<Double> randoms = Stream.generate(Math::random);
+#+END_SRC
+*** transform
+#+BEGIN_SRC java
+Stream<String> longWords = words.stream().filter(w -> w.length() > 12);
+Stream<String> lowercaseWords = words.stream().map(String::toLowerCase);
+Stream<String> firstLetters = words.stream().map(s -> s.substring(0, 1));
+Stream<Stream<String>> result = words.stream().map(w -> codePoints(w));
+Stream<String> flatResult = words.stream().flatMap(w -> codePoints(w));
+Stream<Double> randoms = Stream.generate(Math::random).limit(100);
+
+
+// 12, 4, 3, 6, 8, 9 -> 12, 4
+Stream<String> initialDigits = codePoints(str).takeWhile(s -> "0123456789".contains(s));
+// like takewhile
+Stream<String> withoutInitialWhiteSpace = codePoints(str).dropWhile(s -> s.trim().length() == 0);
+
+Optional<String> largest = words.max(String::compareToIgnoreCase);
+Optional<String> startsWithQ = words.filter(s -> s.startsWith("Q")).findFirst();
+boolean aWordStartsWithQ = words.parallel().anyMatch(s -> s.startsWith("Q"));
+
+#+END_SRC
+*** collective
+#+BEGIN_SRC java
+// basic collect
+String[] result = stream.toArray(String[]::new);
+List<String> result = stream.collect(Collectors.toList());
+Set<String> result = stream.collect(Collectors.toSet());
+TreeSet<String> result = stream.collect(Collectors.toCollection(TreeSet::new));
+String result = stream.collect(Collectors.joining());
+String result = stream.collect(Collectors.joining(", "));
+
+// 汇总的统计数据
+IntSummaryStatistics summary = stream.collect(
+   Collectors.summarizingInt(String::length));
+double averageWordLength = summary.getAverage();
+double maxWordLength = summary.getMax();
+
+// collect to map, 键相同会抛出IllegalStateException
+Map<Integer, String> idToName = people.collect(Collectors.toMap(Person::getId, Person::getName));
+Map<Integer, Person> idToPerson = people.collect(Collectors.toMap(Person::getId, Function.identity()));
+
+// 解决键相同
+Map<String, String> languageNames = locales.collect(
+   Collectors.toMap(
+      Locale::getDisplayLanguage,
+      loc -> loc.getDisplayLanguage(loc),
+      (existingValue, newValue) -> existingValue));
+#+END_SRC
+*** group and partioning
+#+BEGIN_SRC java
+Map<String, List<Locale>> countryToLocales = locales.collect(Collectors.groupingBy(Locale::getCountry));
+Map<Boolean, List<Locale>> englishAndOtherLocales = locales.collect(Collectors.partitioningBy(l -> l.getLanguage().equals("en")));
+
+#+END_SRC
+*** downstream
+#+BEGIN_SRC java
+Map<String, Set<Locale>> countryToLocaleSet = locales.collect(groupingBy(Locale::getCountry, toSet()));
+Map<String, Long> countryToLocaleCounts = locales.collect(groupingBy(Locale::getCountry, counting()));
+Map<String, Integer> stateToCityPopulation = cities.collect(groupingBy(City::getState, summingInt(City::getPopulation)));
+#+END_SRC
+*** reduction
+#+BEGIN_SRC java
+Optional<Integer> sum = values.stream().reduce((x, y) -> x + y);
+
+// compute 0+v1+v2+v3
+Integer sum = values.stream().reduce(0, (x, y) -> x + y);
+
+// the third param for parallelized usage
+int result = words.reduce(0,
+   (total, word) -> total + word.length(),
+   (total1, total2) -> total1 + total2);
+#+END_SRC
+*** primitive type stream
+IntStream stream = IntStream.of(1, 1, 2, 3, 5);
+IntStream zeroToNinetyNine = IntStream.range(0, 100);
+
+Stream<Integer> integers = IntStream.range(0, 100).boxed();
+*** PARALLEL STREAMS
+#+BEGIN_SRC java
+Stream<String> parallelWords = words.parallelStream();
+Stream<String> parallelWords = Stream.of(wordArray).parallel();
+
+// 表示不在意运行的order
+Stream<String> sample = words.parallelStream().unordered().limit(n);
+// uses a shared concurrent map, because merge of map is expensive
+Map<Integer, List<String>> result = words.parallelStream().collect(Collectors.groupingByConcurrent(String::length));
+#+END_SRC
+** optional
+*** definition
+An Optional<T> object is a wrapper for either an object of type T or no object
+#+BEGIN_SRC java
+String result = optionalString.orElse("");
+String result = optionalString.orElseGet(() -> System.getProperty("myapp.default"));
+String result = optionalString.orElseThrow(IllegalStateException::new);
+optionalValue.ifPresent(v -> results.add(v));
+optionalValue.ifPresent(results::add);
+optionalValue.ifPresentOrElse(
+   v -> System.out.println("Found " + v),
+   () -> logger.warning("No match"));
+
+// transform
+Optional<String> transformed = optionalString.map(String::toUpperCase);
+optionalValue.map(results::add);
+
+// flatmap, there has two methods named Optional<Double> inverse(double x) and  Optioal<Double>squareRoot(Double x)
+Optional<Double> result = inverse(x).flatMap(MyMath::squareRoot);
+
+#+END_SRC
+** input and output
+*** write
+**** write text output
+#+BEGIN_SRC java
+var out = new PrintWriter(fileName,StandardCharsets.UTF_8);
+out.println("hello world") // by default, autoflush is disable, so it is flush when close
+#+END_SRC
+*** read
+**** read text input
+#+BEGIN_SRC java
+var scan = new Scanner(System.in);
+List<String> lines = Fils.readAllLines(path,cahrset);
+
+// they both have method that return Stream
+Stream<String> lines = Files.lines(path, charset)
+Stream<String> words = scan.tokens();
+Stream<String> lines = new BufferedReader(new InputStreamReader(inputStream, charset)).lines();
+#+END_SRC
+*** Random-Access Files
+#+BEGIN_SRC java
+
+//RandomAccessFile implement DataInput and DataOutput, and use pointer to hold the position that read or write, it's usage like DataXXXXSteam
+var in = new RandomAccessFile("employee.dat", "r");
+var inOut = new RandomAccessFile("employee.dat", "rw");
+
+
+#+END_SRC
+*** ZIP Archives
+**** unzip
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args) throws Exception {
+        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream("C:/Users/smile2333/Desktop/Desktop.zip"))) {
+
+            ZipEntry zipEntry = null;
+            while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+
+                File file = new File("C:/Users/smile2333/Desktop/" + zipEntry.getName());
+                file.createNewFile();
+
+                unzip(zipInputStream, file);
+                zipInputStream.closeEntry();
+            }
+
+        }
+    }
+
+    static void unzip(ZipInputStream zipInputStream, File outputFile) throws Exception {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile)) {
+            byte b[] = new byte[1024];
+            while (zipInputStream.read(b) > 0) {
+                fileOutputStream.write(b);
+            }
+        }
+
+    }
+}
+
+#+END_SRC
+**** compress
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args) throws Exception {
+        try(ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream("C:/Users/smile2333/Desktop/test.zip"))) {
+
+            final ZipEntry zipEntry = new ZipEntry("3.txt");
+            zipOutputStream.putNextEntry(zipEntry);
+            new FileInputStream(new File("C:/Users/smile2333/Desktop/3.txt")).transferTo(zipOutputStream);
+            zipOutputStream.closeEntry();
+        }
+    }
+}
+#+END_SRC
+*** serializable
+**** algorithm
+**** format
+***** class object demo
+  Offset: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 	
+00000000: AC ED 00 05 73 72 00 01 41 8D 91 83 01 18 90 4D
+00000010: F0 02 00 02 49 00 01 61 49 00 01 62 78 70 00 00
+00000020: 00 02 00 00 00 03
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args)  throws Exception{
+        final A a = new A(2, 3);
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("1.txt"))){
+            objectOutputStream.writeObject(a);
+        }
+    }
+}
+
+class A implements Serializable {
+    int a;
+    int b;
+
+    public A(int a, int b) {
+        this.a = a;
+        this.b = b;
+    }
+}
+#+END_SRC
+- class identifier 
+AC ED---magic number
+03--represent that it is an object
+72--fixed number
+00 01--length of class name
+41--A's ascii's hexadecimal 
+8D 91 83 01 18 90 4D F0--fingerprint of class, contains 8 bytes
+02--flag
+00 02--count of field
+- data field descriptor
+49--type code 'I', represent int
+00 01--length of field
+61--'a'
+49--...
+00 01--...
+62--'b'
+(if type is object,after name, have class name, and nesting struct same like above)
+78--end marker
+70--(because no extend other class)
+00 00 00 02--a'value is 2
+00 00 00 03--b'value is 3
+***** array object demo
+#+BEGIN_SRC java
+public class Main3 {
+    public static void main(String[] args)  throws Exception{
+
+        int[]a={1,6,7};
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("1.txt"))){
+            objectOutputStream.writeObject(a);
+        }
+    }
+}
+#+END_SRC
+  Offset: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 	
+00000000: AC ED 00 05 75 72 00 02 5B 49 4D BA 60 26 76 EA
+00000010: B2 A5 02 00 00 78 70 00 00 00 03 00 00 00 01 00
+00000020: 00 00 06 00 00 00 07
+
+75-show it is array
+72 00 02--array type contains 2 byte
+5B 49--[I
+4D BA 60 26 76 EA B2 A5--fingerprint
+02--flag
+00 00
+78--end marker
+70--no superclass
+00 00 00 01--1
+00 00 00 06--6
+00 00 00 07--7
+
+***** type code list
+B-byte C-char D-double F-float I-int J-long L-object S-short Z-boolean [-array
+
+**** modify mechanism
+***** transient
+the field tag with this keyword would no serializable
+***** supply readObject and writeObject method
+use in whenever the field need to serialize but its class not support serializable
+#+BEGIN_SRC java
+public class Main4 {
+    public static void main(String[] args)throws Exception {
+        LabeledPoint labeledPoint = new LabeledPoint("hello world", new Point2D.Double(4, 6));
+
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("1.txt"))){
+            objectOutputStream.writeObject(labeledPoint);
+        }
+    }
+}
+
+class LabeledPoint implements Serializable {
+    private String label;
+    private transient Point2D.Double point;
+
+    public LabeledPoint(String label, Point2D.Double point) {
+        this.label = label;
+        this.point = point;
+    }
+
+    private void writeObject(ObjectOutputStream out)
+            throws IOException {
+        out.defaultWriteObject();
+        out.writeDouble(point.getX());
+        out.writeDouble(point.getY());
+    }
+
+    private void readObject(ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        double x = in.readDouble();
+        double y = in.readDouble();
+        point = new Point2D.Double(x, y);
+    }
+}
+
+#+END_SRC
+***** Externalizable 
+提供readObject and writeObject是在原本的数据格式上加入尾部数据，而Externalizable是完全定义存储的数据方法(class identifier仍然由机制本身确定)
+#+BEGIN_SRC java
+public void readExternal(ObjectInput s)
+      throws IOException
+{
+   name = s.readUTF();
+   salary = s.readDouble();
+   hireDay = LocalDate.ofEpochDay(s.readLong());
+}
+
+
+public void writeExternal(ObjectOutput s)
+      throws IOException
+{
+   s.writeUTF(name);
+   s.writeDouble(salary);
+   s.writeLong(hireDay.toEpochDay());
+}
+#+END_SRC
+**** Versioning
+***** get fingerprint
+serialver Employee
+***** set variable
+When a class has a static data member named serialVersionUID, it will not compute the fingerprint manually but will use that value instead.
+当对应fingerprint的类，旧有的属性变动(名字改了/被删了)，都会导致无法正常运行，因此，在向下兼容时，对应设置该变量的类，完全废弃部分属性时，需要更新该属性
+#+BEGIN_SRC java
+class Employee implements Serializable // version 1.1
+{
+   public static final long serialVersionUID = -1814239825517340645L;
+}
+#+END_SRC
+*** hierarchy
+**** root class
+- InputStream
+  - DataInputStream
+- OutputStream
+  - DataOutputStream
+- Reader
+- Writer 
+**** interface
+- Closeable 
+- Flushable
+- Readable
+- Appendable
+*** StandardCharsets
+character encodings that every Java virtual machine must support
+*** work with file
+**** Paths
+static Path get(String first, String. . . more)
+***** path
+#+BEGIN_SRC java
+
+// return full path，不同引用，虽然属性相同
+partPath.resolve(fullPath)
+
+// return path join them
+partPath.resolve(partPath2);
+
+// workpath /opt/myapp/work, generate /opt/myapp/temp
+Path tempPath = workPath.resolveSibling("temp");
+
+#+END_SRC
+**** Files
+***** read and write
+#+BEGIN_SRC java
+byte[] bytes = Files.readAllBytes(path);
+var content = new String(bytes, charset);
+List<String> lines = Files.readAllLines(path, charset);
+Files.write(path, content.getBytes(charset));
+iles.write(path, content.getBytes(charset), StandardOpenOption.APPEND);
+Files.write(path, lines);
+#+END_SRC
+***** directory and file
+#+BEGIN_SRC java
+// 只能建一层
+Files.createDirectory(path);
+
+// 父级的也建立出，这个更常用
+Files.createDirectories(path);
+
+Path newPath = Files.createTempFile(dir, prefix, suffix);
+Path newPath = Files.createTempFile(prefix, suffix);
+Path newPath = Files.createTempDirectory(dir, prefix);
+Path newPath = Files.createTempDirectory(prefix);
+#+END_SRC
+***** Copying, Moving, and Deleting Files
+#+BEGIN_SRC java
+Files.copy(fromPath, toPath);
+Files.move(fromPath, toPath);
+Files.copy(fromPath, toPath, StandardCopyOption.REPLACE_EXISTING,
+   StandardCopyOption.COPY_ATTRIBUTES);
+Files.move(fromPath, toPath, StandardCopyOption.ATOMIC_MOVE);
+Files.copy(inputStream, toPath);
+Files.copy(fromPath, outputStream);
+Files.delete(path);
+boolean deleted = Files.deleteIfExists(path);
+#+END_SRC
+**** file info
+***** basic info
+- exists
+- isHidden
+- isReadable, isWritable, isExecutable
+- isRegularFile, isDirectory, isSymbolicLink
+***** directories
+#+BEGIN_SRC java
+// 一层子目录
+Stream<Path> entries = Files.list(pathToDirectory)
+
+// 全部递归子目录
+Stream<Path> entries = Files.walk(pathToRoot)
+
+
+try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir))
+{
+   for (Path entry : entries)
+//      Process entries       
+}
+
+try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir, "*.java"))
+
+
+// static Path walkFileTree(Path start, FileVisitor<? super Path> visitor)
+Files.walkFileTree(root, new SimpleFileVisitor<Path>()
+   {
+      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+            throws IOException
+      {
+         Files.delete(file);
+         return FileVisitResult.CONTINUE;
+      }
+
+
+      public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException
+      {
+         if (e != null) throw e;
+         Files.delete(dir);
+         return FileVisitResult.CONTINUE;
+      }
+   });
+#+END_SRC
+**** zip file system
+#+BEGIN_SRC java
+FileSystem fs = FileSystems.newFileSystem(Paths.get(zipname), null);
+Files.copy(fs.getPath(sourceName), targetPath);
+
+FileSystem fs = FileSystems.newFileSystem(Paths.get(zipname), null);
+Files.walkFileTree(fs.getPath("/"), new SimpleFileVisitor<Path>()
+   {
+      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+            throws IOException
+      {               
+         System.out.println(file);
+         return FileVisitResult.CONTINUE;
+      }
+   });
+#+END_SRC
+**** MEMORY-MAPPED FILES
+***** mapping mode
+FileChannel.MapMode.READ_ONLY 只读，尝试写时会抛出ReadOnlyBufferException
+FileChannel.MapMode.READ_WRITE 可读写，并且会写回源文件，但是是否可见依赖于操作系统
+FileChannel.MapMode.PRIVATE 可读写，但是不写回
+***** usage
+#+BEGIN_SRC java
+FileChannel channel = FileChannel.open(filename)
+int length = (int) channel.size();
+MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, length);
+#+END_SRC
+**** Buffer
+#+BEGIN_SRC java
+// FileLock lock() block util it can access
+// FileLock tryLock() return while it cann't access
+try (FileLock lock = channel.lock()){
+   // access the locked file or segment
+}
+#+END_SRC
+*** trick
+1. 文件名读取，默认情况下都是读相对路径，获取参考的相对路径可以使用System.getProperty("user.dir")
+2. DataOutputStream和DataInputStream使用平台独立的方法写入数据(非文本类型，所以只有写入与读取匹配时，使用才具有意义)
+3. 序列化拿来做clone
+** regular express
+*** Pattern
+Pattern pattern = Pattern.compile(patternString[,flag]);
+**** flag
+point out which properties such as ignore letter case, or line-break, or char represention such as . represent all character
+*** Matcher
+*** PatternSyntaxException
+*** usage
+#+BEGIN_SRC java
+// pattern as predicate
+Stream<String> strings = . . .;
+Stream<String> result = strings.filter(pattern.asPredicate());
+
+boolean isMatch = Pattern.matches(pattern, content);
+
+// split
+Pattern commas = Pattern.compile("\\s*,\\s*");
+String[] tokens = commas.split(input);
+// "1, 2, 3" turns into ["1", "2", "3"]
+
+Stream<String> tokens = commas.splitAsStream(input);
+
+var in = new Scanner(path, StandardCharsets.UTF_8);
+in.useDelimiter("\\s*,\\s*");
+Stream<String> tokens = in.tokens();
+
+// group and iterate
+
+String content = "I am noob from I runoob.com.";
+
+final Pattern compile = Pattern.compile("\\bI\\b");
+compile.matcher(content).results().map(MatchResult::group).forEach(s -> System.out.println(s));
+
+final Matcher matcher = compile.matcher(content);
+while (matcher.find()){
+    System.out.println(matcher.group());
+}
+
+String str = "(a)";
+String pattern = "[(a)]{3}";
+boolean matches = Pattern.matches(pattern, str);
+System.out.println(matches);
+
+String str = "(a)";
+String pattern = "\\(a\\)";
+// []内部的符号自动被转义，相当于原本需要\\(现在不需要\\
+String pattern2 = "[(a)]{3}";
+Pattern compile = Pattern.compile(pattern);
+Matcher matcher = compile.matcher(str);
+if (matcher.find()){
+    System.out.println(matcher.group(0));
+}
+
+#+END_SRC
+** annotation
+*** custom
+*** meta-annotation
+**** @Target
+**** @Retention
+**** @Inherited
+**** @Documented
+**** @Repeatable
+*** basic
+**** @Override
+**** @Deprecated
+**** @SuppressWarnings
+**** @SafeVarargs
+**** @FunctionInterface
+** method referrence
+当某个方法与该Function签名一致时，编译器在编译时，会将该方法引用作为其实现的方法体的执行内容，并将参数传递给该方法引用对应的方法
+四类
+1. 类名::静态方法名
+2. 引用名(对象名)::实例方法名
+3. 类名::实例方法名(String::toUpperCase)
+   原理：所有的实例方法名，本身在被编译后都存在this,即对当前对象的引用也是参数
+4. 构造方法引用：类名::new
+** xml processing
+*** usage
+#+BEGIN_SRC java
+DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+DocumentBuilder builder = factory.newDocumentBuilder();
+
+// allow File, URL, or input stream
+Document doc = builder.parse(f);
+
+
+XPathFactory xpfactory = XPathFactory.newInstance();
+path = xpfactory.newXPath();
+String username = path.evaluate("/html/head/title/text()", doc);
+XPathNodes result = path.evaluateExpression("/html/body/form", doc, XPathNodes.class);
+#+END_SRC
+*** stream parser
+**** sax parser
+解析时触发事件，由handler处理具体处理,documentbuilder便是建立在sax parser的基础上
+***** usage
+#+BEGIN_SRC java
+SAXParserFactory factory = SAXParserFactory.newInstance();
+SAXParser parser = factory.newSAXParser();
+
+final File file = new File("1.xml");
+saxParser.parse(file,new DefaultHandler(){
+    @Override
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        System.out.println(attributes.getValue("href"));
+    }
+});
+
+#+END_SRC
+***** handler
+****** ContentHandler 
+- startElement 读到元素时被触发
+- characters  读到内部的非标签数据时
+- endElement
+- startDocument
+- endDocument
+****** DTDHandler
+****** EntityResolver
+****** ErrorHandler 
+**** stax
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args) throws Exception {
+
+        final File file = new File("2.xml");
+        final FileInputStream in = new FileInputStream(file);
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        XMLStreamReader parser = factory.createXMLStreamReader(in);
+        while (parser.hasNext()) {
+            int event = parser.next();
+            if (event == XMLStreamConstants.START_ELEMENT) {
+                String href = parser.getAttributeValue(null, "href");
+                System.out.println(href);
+            }
+        }
+    }
+
+}
+
+#+END_SRC
+*** generate
+** network
+*** Socker
+*** ServerSocket
+#+BEGIN_SRC java
+var s = new ServerSocket(8189);
+Socket incoming = s.accept();
+InputStream inStream = incoming.getInputStream();
+OutputStream outStream = incoming.getOutputStream();
+#+END_SRC
+*** InetAddress
+#+BEGIN_SRC java
+InetAddress address = InetAddress.getByName("time-a.nist.gov");
+byte[] addressBytes = address.getAddress();
+InetAddress[] addresses = InetAddress.getAllByName(host);
+InetAddress address = InetAddress.getLocalHost();
+#+END_SRC
+*** SocketChannel
+allow interrupt(because it isn't to be block while read data)
+*** web data
+**** URL
+**** URLConnection 
+#+BEGIN_SRC java
+/*
+setDoInput
+setDoOutput
+setIfModifiedSince
+setUseCaches
+setAllowUserInteraction
+setRequestProperty
+setConnectTimeout
+setReadTimeout
+*/
+URLConnection connection = url.openConnection();
+connection.connect();
+/*
+getContentType
+getContentLength
+getContentEncoding
+getDate
+getExpiration
+getLastModified
+*/
+#+END_SRC
+**** post form data
+*** HttpClient 
+#+BEGIN_SRC java
+HttpClient client = HttpClient.newHttpClient()
+
+HttpClient client = HttpClient.newBuilder()
+   .followRedirects(HttpClient.Redirect.ALWAYS)
+   .build();
+#+END_SRC
+*** half-close
+socket.shutdownOutput();
+socket.shutdownInput();
+
+*** trick
+1. Socket(String host, int port)创建时，有可能导致无期限block,可以先var s = new Socket();在连接s.connect(new InetSocketAddress(host, port), timeout);
+* reserved words
+- static
+- final
+- strictfp
+* component
+** lombok
+*** @Data
+@Data 注解会为类的所有属性自动生成setter/getter、equals、canEqual、hashCode、toString方法，如为final属性，则不会为该属性生成setter方法。
+*** @AllArgsConstructor/@NoArgsConstructor
+分别提供全参构造方法和无参构造方法
+*** @Builder
+#+BEGIN_SRC java
+@Builder
+public class Hero {
+    private int id;
+    private String name;
+}
+
+public class Main{
+  public void static main(String[]args){
+    Hero hero = Hero.builder().id(1).name("haha").build();
+  }
+}
+#+END_SRC
+** spring
+*** mail
+**** build script
+***** gradle
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+***** usage 
+****** MailSender and SimpleMailMessage Usage
+ref https://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/mail.html
+#+BEGIN_SRC java
+public class SimpleOrderManager implements OrderManager {
+
+    private MailSender mailSender;
+    private SimpleMailMessage templateMessage;
+
+    public void setMailSender(MailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    public void setTemplateMessage(SimpleMailMessage templateMessage) {
+        this.templateMessage = templateMessage;
+    }
+
+    public void placeOrder(Order order) {
+
+        // Do the business calculations...
+
+        // Call the collaborators to persist the order...
+
+        // Create a thread safe "copy" of the template message and customize it
+        SimpleMailMessage msg = new SimpleMailMessage(this.templateMessage);
+        msg.setTo(order.getCustomer().getEmailAddress());
+        msg.setText(
+            "Dear " + order.getCustomer().getFirstName()
+                + order.getCustomer().getLastName()
+                + ", thank you for placing order. Your order number is "
+                + order.getOrderNumber());
+        try{
+            this.mailSender.send(msg);
+        }
+        catch(MailException ex) {
+            // simply log it and go on...
+            System.err.println(ex.getMessage());
+        }
+    }
+}
+#+END_SRC
+****** QQ mail config
+#+BEGIN_SRC java
+@Configuration
+public class MailConfig {
+    @Bean
+    public JavaMailSender getJavaMailSender() {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.qq.com");
+        mailSender.setPort(587);
+
+        mailSender.setUsername("980959100@qq.com");
+        mailSender.setPassword("affiapghpreobebb");
+
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.debug", "true");
+
+        return mailSender;
+    }
+}
+#+END_SRC
+** json
+*** jackson

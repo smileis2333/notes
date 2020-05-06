@@ -29,6 +29,7 @@ git push localBranchName和remoteBranchName同名时，可以直接简写
 git push -u orgin localBranchName[:remoteBranchName] 本地新建推送到远程分支，同时将远程分支设置当前分支的上游分支，当remoteBranchName不写时，代表同名
 git remote add origin repoName[such as git@github.com:smile-2333/qa_client.git]
 git remote -v
+git remote rm [repoName]
 *** 跟踪分支
 将远程分支的信息保存在本地的分支概念
 git branch -avv

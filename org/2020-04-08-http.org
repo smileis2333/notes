@@ -1,0 +1,35 @@
+#+TITLE: http
+#+STARTUP:indent
+* structure
+** request
+*** request line
+**** http method
+***** get
+idempotent幂等性的，根据http规范，get方法必须没有side effects
+***** post
+http规范不限定一定幂等(处理过程失败，结果没返回，但是扣钱等情况)，但是实现的时候大多数使用事务进行确保
+***** put
+***** delete
+***** patch
+***** head
+***** trace
+***** options
+***** connect
+**** path of resources
+**** protocol version
+*** request header
+**** content-type
+text/html
+application/pdf
+video/quicktime
+application/java
+image/jpeg
+application/jar
+application/octet-stream
+application/x-zip
+*** payload(depent on http method)
+** response
+*** response headers
+the first line is HTTP/[version] [statusCode] [A text version of the status code], such as (HTTP/1.2 200 OK)
+*** body hold the content
+* cookies

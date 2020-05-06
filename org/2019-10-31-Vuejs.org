@@ -911,3 +911,33 @@ npm install sass-loader node-sass vue-style-loader -D
 * trick
 ** 解析传递数据时造出的undefined
 父组件传递的prop的在子组件初始化时，需要用到，由于传递延迟，可以导致undefined，可以对子组件必须的prop属性同时以v-if控制
+* deploy
+** root path
+vue.config.js，项目根路径
+#+BEGIN_SRC javascript
+module.exports = {
+    publicPath: '/qa_client', //project root path
+
+    assetsDir: "assets",
+    filenameHashing: false,
+
+    lintOnSave: true,
+    productionSourceMap: false,
+
+}
+
+#+END_SRC
+** 多环境打包配置
+.env.development
+.env.xxx
+
+package.json配置
+#+BEGIN_SRC javascript
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build [--mode xxx]",
+    "lint": "vue-cli-service lint"
+  },
+
+#+END_SRC
