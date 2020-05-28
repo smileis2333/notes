@@ -2058,6 +2058,25 @@ socket.shutdownInput();
 
 *** trick
 1. Socket(String host, int port)创建时，有可能导致无期限block,可以先var s = new Socket();在连接s.connect(new InetSocketAddress(host, port), timeout);
+** jmx
+*** MBean
+**** standard MBean
+**** dynamic MBean
+**** open MBean	
+**** model MBean	
+*** MBeanServer
+*** 接入层
+**** jconsole
+直接接入，根据是否设置安全策略设置参数后连接
+**** web(jdmk)
+**** client code
+**** Notification
+负责MBean通讯的机制
+***** Notification
+封装信息
+***** broadcaster
+***** listener 
+***** filiter 
 * reserved words
 - static
 - final

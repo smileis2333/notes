@@ -2,3 +2,28 @@
 #+STARTUP: indent
 * template
 ** vue-element-admin
+* layout
+** full aside height
+#+BEGIN_SRC css
+/*App.vue*/
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: #1a2236;
+}
+/*layout.vue*/
+.header {
+    background-color: #44c4b8;
+    height: 60px;
+}
+
+.aside {
+    position: absolute;
+    top: 60px;
+    bottom: 0;
+    background-color: #2e364a;
+    width: 385px !important;
+}
+#+END_SRC

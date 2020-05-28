@@ -1,0 +1,116 @@
+#+TITLE: mq
+#+STARTUP: indent
+* rabbitmq
+** install
+*** debian
+#+BEGIN_SRC shell
+apt-get install erlang-nox
+apt-get install rabbitmq-server
+systemctl enable rabbitmq-server
+#+END_SRC
+** concept
+*** Work queues
+多个消费端处理一个队列，传递消息是rabbitmq使用默认交换机
+*** Publish/subscribe
+两条队列接到一个交换机上面，两个消费端分别接队列，场景：转账消息提醒可以是邮件和短信
+*** Routing
+交换机根据不同的routingkey决定把消息送到哪个队列上，比如aa就送到A,是bb/cc/dd就送到B
+*** Topics
+某种意义上讲，就是routingkey通配符匹配
+*** Header
+不用routingkey做交换机分发规则，而是使用header中的 key/value（键值对）匹配队列
+*** RPC
+RPC即客户端远程调用服务端的方法 ，使用MQ可以实现RPC的异步调用，基于Direct交换机实现，流程如下：
+1、客户端即是生产者就是消费者，向RPC请求队列发送RPC调用消息，同时监听RPC响应队列。
+2、服务端监听RPC请求队列的消息，收到消息后执行服务端的方法，得到方法返回的结果
+3、服务端将RPC方法 的结果发送到RPC响应队列
+4、客户端（RPC调用方）监听RPC响应队列，接收到RPC调用结果
+** usage
+*** java
+**** official(simple client)
+***** dependency
+compile 'com.rabbitmq:amqp-client:5.8.0'
+***** usage
+****** hello world
+#+BEGIN_SRC java
+public class Send {
+    private final static String QUEUE_NAME = "hello";
+
+    public static void main(String[] argv) throws Exception {
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setUsername("admin");
+        factory.setHost("47.93.53.45");
+        factory.setPassword("password");
+        factory.setPort(5672);
+        factory.setVirtualHost("/");
+        try (Connection connection = factory.newConnection();Channel channel  = connection.createChannel();) {
+            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+            String message = "Hello World!";
+            channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
+            System.out.println(" [x] Sent '" + message + "'");
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+}
+
+
+// 开启后是常驻的，关闭需要手动
+public class Recv {
+
+    private final static String QUEUE_NAME = "hello";
+
+    public static void main(String[] args) throws Exception {
+
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setUsername("admin");
+        factory.setHost("47.93.53.45");
+        factory.setPassword("password");
+        factory.setPort(5672);
+        factory.setVirtualHost("/");
+
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
+
+        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+            String message = new String(delivery.getBody(), "UTF-8");
+            System.out.println(" [x] Received '" + message + "'");
+        };
+        channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
+        });
+
+
+    }
+
+}
+#+END_SRC
+****** publish/subscribe
+#+BEGIN_SRC java
+// Publish/subscribe
+
+// 交换机与队列绑定
+#+END_SRC
+****** routing
+#+BEGIN_SRC java
+//Routing, 最后一个参数是routingkey
+// 可以同个队列绑定多次，根据不同的routingkey
+
+
+// 第二个参数指定routingkey
+#+END_SRC
+****** topic
+#+BEGIN_SRC java
+//Email通知
+//sms通知
+//两种都通知
+
+
+// 符号#可以匹配多个词，符号*可以匹配一个词语
+
+#+END_SRC
+****** header
+#+BEGIN_SRC java
+#+END_SRC

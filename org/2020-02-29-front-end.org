@@ -10,6 +10,9 @@ tinymce
 ** ±à¼­Æ÷
 *** tui editor
 ref https://github.com/nhn/tui.editor
-*** render
-**** showdown
+** render
+*** showdown
 ref  https://github.com/showdownjs/showdown
+* icon
+** iconfont
+*** usage in vuejs

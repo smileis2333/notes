@@ -1,4 +1,4 @@
-#+TITLE:  MySQL
+#+TITLE:  SQL
 #+STARTUP: indent
 * Start Service
 ** 包管理器安装
@@ -706,3 +706,19 @@ mysql > source [file]
 http://www.zsythink.net/archives/category/%e5%ad%98%e5%82%a8/mysql/
 ** 最左匹配
 ** 索引原理
+* trick
+** 确定分组后，每个分组是否存在特定的值
+// 例子为一个question对应多个tag，给定一个tag_id,提示提问是否包含或者不包含(多个同理，应用对应的拼串技术即可)
+select * from question q inner join question_tag qt on q.question_id = qt.question group by q.question_id having max(case qt.tag_id when xx then 1 else 0)=0
+* 优化手段
+1. 加索引，目的是划分区间，where或者group by的字段
+2. 少用*，限定字段选择，提高返回速度
+3. 尽量少对主键使用in, not in, or，会导致全表扫描，效率低下，在主键列表可预测且少的情况下，可以改用各种动态SQL的技术生成单一SQL在union拼起来
+4. like和null值判断，尽量在通过索引减少区间范围后再用
+5. where表达式不要左侧运算
+6. 不要用where 1=1，动态SQL判断有条件自动加where...和and
+
+
+
+
+
