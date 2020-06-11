@@ -1,3 +1,5 @@
+#+TITLE: javascript
+#+STARTUP: indent
 * regex
 var patt = /runoob/i
 var str = "Visit Runoob!"; 
@@ -9,3 +11,8 @@ keywords = keywords.concat(result)
 
 keywords.push(xxx)
 #+END_SRC
+* convert
+** num to ascill
+String.fromCharCode(num)
+** ascill to num
+'A'.charCodeAt();

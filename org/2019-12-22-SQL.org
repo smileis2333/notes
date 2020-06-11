@@ -710,6 +710,23 @@ http://www.zsythink.net/archives/category/%e5%ad%98%e5%82%a8/mysql/
 ** 确定分组后，每个分组是否存在特定的值
 // 例子为一个question对应多个tag，给定一个tag_id,提示提问是否包含或者不包含(多个同理，应用对应的拼串技术即可)
 select * from question q inner join question_tag qt on q.question_id = qt.question group by q.question_id having max(case qt.tag_id when xx then 1 else 0)=0
+** 打印用于数据表描述的三线表
+select
+IFNULL(NULL, '')
+	'名称',
+	column_name '代码',
+	IF(COLUMN_KEY = 'PRI',
+	'是',
+	'否') '外键',
+	IF(1 = 1,
+	'否',
+	'是')'主键',
+	COLUMN_TYPE '数据类型'
+from
+	information_schema.columns
+where
+	table_schema = 'chatroom'
+	and table_name = 'private_chat' ;
 * 优化手段
 1. 加索引，目的是划分区间，where或者group by的字段
 2. 少用*，限定字段选择，提高返回速度

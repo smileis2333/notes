@@ -11,3 +11,8 @@
 * cmd
 ** env
 echo %JAVA_HOME%
+* im
+** 日文
+ctrl-cap 平假名
+alt-cap  片假名
+shift-cap 切换为英文
