@@ -1,50 +1,5 @@
 #+TITLE: to do list
 #+STARTUP: indent
-* TODO 新标准日语初级上[10/24]
-** DONE 第1章
-CLOSED: [2020-05-28 Thu 22:01]
-- State "DONE"       from "TODO"       [2020-05-28 Thu 22:01]
-** DONE 第2章
-CLOSED: [2020-05-29 Fri 15:02]
-- State "DONE"       from "TODO"       [2020-05-29 Fri 15:02]
-** DONE 第3章
-CLOSED: [2020-05-30 Sat 15:54]
-- State "DONE"       from "TODO"       [2020-05-30 Sat 15:54]
-** DONE 第4章
-CLOSED: [2020-06-02 Tue 00:58]
-- State "DONE"       from "TODO"       [2020-06-02 Tue 00:58]
-** DONE 第5章
-CLOSED: [2020-06-02 Tue 00:59]
-- State "DONE"       from "TODO"       [2020-06-02 Tue 00:59]
-** DONE 第6章
-CLOSED: [2020-06-02 Tue 15:17]
-- State "DONE"       from "TODO"       [2020-06-02 Tue 15:17]
-** DONE 第7章
-CLOSED: [2020-06-07 Sun 22:38]
-- State "DONE"       from "TODO"       [2020-06-07 Sun 22:38]
-** DONE 第8章
-CLOSED: [2020-06-07 Sun 22:38]
-- State "DONE"       from "TODO"       [2020-06-07 Sun 22:38]
-** DONE 第9章
-CLOSED: [2020-06-09 Tue 16:27]
-- State "DONE"       from "TODO"       [2020-06-09 Tue 16:27]
-** DONE 第10章
-CLOSED: [2020-06-10 Wed 14:01]
-- State "DONE"       from "TODO"       [2020-06-10 Wed 14:01]
-** TODO 第11章
-** TODO 第12章
-** TODO 第13章
-** TODO 第14章
-** TODO 第15章
-** TODO 第16章
-** TODO 第17章
-** TODO 第18章
-** TODO 第19章
-** TODO 第20章
-** TODO 第21章
-** TODO 第22章
-** TODO 第23章
-** TODO 第24章
 * TODO Java学习[0/9]
 ** TODO Stream原理
 ** TODO Spring原理

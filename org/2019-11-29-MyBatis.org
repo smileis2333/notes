@@ -41,13 +41,8 @@ public class ExampleTypeHandler extends BaseTypeHandler<String> {
 }
 #+END_SRC
 *** mapper
-
-* principle
 * refer
 https://mybatis.org/mybatis-3/zh/getting-started.#+BEGIN_HTML
-0
-#+END_HTML
-
 * spring集成
 ** springboot
 *** 不使用mybatis的配置格式，直接用Spring
@@ -161,26 +156,19 @@ generatorConfig.xml
 #+END_SRC
 * principle
 对应版本3.4.6
-** 配置文件解析
-*** <properties>解析
-先解析子节点，在从属性resources/url读取，所以后载入的配置有可能覆盖子节点的内容
-#+BEGIN_SRC xml
-<properties resource="jdbc.properties">
-  <property name="jdbc.username" value="coolblog"/>
-  <property name="hello" value="world"/>
-</properties>
-#+END_SRC
-*** <settings>解析
-1. 解析MyBatis的可配置项
-2. 解析<setting>节点后，用configuration.class获取MetaClass工具类，与节点读取出来的内容做比较，不符合则抛出异常
-3. 涉及到的比较重要的类: MetaClass以及PropertyTokenizer(用于复杂属性的切分比如xxx.xxx，以及数组)
-4. 将处理完毕的properties写入Configuration这个类的实例,同时在settingsElement也设置了对应默认值
-*** <typeAliases>解析
-开始了MyBatis的常规配置模式，可配置包扫描与单个配置
-1. 如果是单个配置,a. 别名与类型都设置了则设置映射 b. 只设置了类型，去类型的类名小写后作为别名
-2. 包扫描，使用包名与相关信息用类加载器进行加载，然后重复1步骤进行处理
-3. Configuration创建时设置了较为全局的部分别名，而TypeAliasRegistry在创建时则配置了一些底层的类型别名，如果int,long...
-*** <plugins>解析
+** 主配置文件解析
+*** <properties>
+1. 解析全部子节点<property/>，作为Properties
+2. 解析<properties>的resources/url内容，进行文件加载，所以文件载入的内容可能覆盖子节点的设置
+*** <settings>
+1. 子节点载入为Properties
+2. 使用MetaClass进行Configuration的可配置项检测
+3. 将Properties设置进Configuration中，如果为空则使用默认值
+*** <typeAliases>
+1. 如果先配置了包扫描，按2，3处理扫描到的每个类
+2. 如果配置文件写了alias，读配置文件的，没有则尝试读注解@Alias的，如果在没有，则取类名作为alias
+3. alias小写存入缓存
+*** <plugins>
 读取interceptor，与节点内的配置属性，进行创建拦截器
 #+BEGIN_SRC xml
 <plugins>
@@ -189,8 +177,9 @@ generatorConfig.xml
   </plugin>
 </plugins>
 #+END_SRC
-*** <environments>解析
-environments内的enviroment可以配置多个，切换时用default指定对应的id进行进行激活
+*** <environments>
+1. environments内的enviroment可以配置多个，切换时用default指定对应的id进行进行激活
+2. 依次根据配置创建对象
 #+BEGIN_SRC xml
 <environments default="development">
   <environment id="development">
@@ -204,33 +193,191 @@ environments内的enviroment可以配置多个，切换时用default指定对应
   </environment>
 </environments>
 #+END_SRC
-*** <typeHandlers>解析
-与<typeAliased>类似，支持按包解析，或者单个配置
-#+BEGIN_SRC xml
-<typeHandlers>
-  <package name="xyz.coolblog.handlers"/>
-</typeHandlers>
-
-<!-- 手动配置 -->
-<typeHandlers>
-  <typeHandler jdbcType="TINYINT" javaType="xyz.coolblog.constant.ArticleTypeEnum" handler="xyz.coolblog.mybatis.ArticleTypeHandler"/>
-</typeHandlers>
-#+END_SRC
-1. 对于Java类型，Jdbc类型，解析器都配置了，直接实例化解析器后进入终点方法进行类型的映射关联
-2. 对于Java类型有，解析器有，Jdbc缺的，则进入实例化解析器后，读注解的Jdbc进行映射关联，然后进入终点
-3. 对于啥都没有的，则先解析Java类型，然后进入2步骤，比如解析器是指定了3个Java类型，4个Jdbc类型，处理后是Map<JavaType,Map<JdbcType,TypeHandler>>
-4. 扫描包，与typeAliased类似，类加载器加载后进行3处理
+*** <typeHandlers>
+注意，注册了typehandler与实际是否使用，取决于映射文件是否对指定的字段进行配置该typehandler
+1. register(Class, JdbcType, Class) 代表三个字段都有配置/处理完毕
+2. register(Class, Class) 从@MappedJdbcTypes读配置的JdbcType
+3. register(Class) 从注解读@MappedTypes读取JavaType，在调用3
+4. register(String) 扫描包, 与Typehanlder类似，读一波之后调用3，JavaType和JdbcType都是读的注解配置
 *** 映射文件解析
-**** <cache>
-**** <cache-ref>
-**** <resultMap>
-对于关联的tag，如<association>和<collection>的内部子元素最终也会被解析为ResultMap的一个实例
-**** <sql>
-**** statement(select|update|insert|delete)
-分为text-node/element-node/include-node, 对include节点进行处理，然后完成节点替换(取出properties和复制对应sql节点，然后进行递归填充，因为sql可以include别的sql节点，填充后得到include节点，然后替换旧的include，将内部得到的文本节点取出放在include之前，最后去掉include节点，完成替换工作)
+1. 载入需加载映射文件，可能为扫包，url/resource地址，或者配置的class，进行读取注解配置
+2. 依次加载每一个配置文件，如果有些配置存在先后顺序，无法加载时，先抛出异常，加入未处理列表，最后处理三种带顺序的残存的列表
+** 映射文件解析
+databaseId指定数据库产商，因此解析所得的Sql片段和Sql语句都是类似必须只具备一份
+*** <cache>
+1. 读取<cache>节点配置，如果没接入别的缓存，则用默认的
+2. 使用builder模式进行Cache创建，并用MetaObject进行属性检测，符合的就转换类型后设置进去，最终的路径用了MetaClass的检测机制
+3. 如果Cache实现了InitializingObject接口，则用initialize()进行初始化
+4. 根据选项情况开启其他的装饰器，重复2, 3进行属性设置和初始化，直接嵌套完毕
+5. 加入Configuration
+*** <cache-ref>
+1. 读取<cache-ref>的namespace属性，作键查找已存在的缓存(如果不存在或者没创建，则抛异常)
+2. 最后在处理没处理完的<cache-ref>节点，如果还找不到，表明指定的命名空间有问题
+*** <resultMap>
+1. 中间的引用的resultMap或者内嵌的部分可能导致递归产生，但是同映射文件一般不会导致不完整异常，异常一般由extends引入外部映射文件时才可能导致该情形
+2. ResultMap的配置最终转为ResultMapping对象存在ResultMap对象中，而外部引用则作为字段存在ResultMapping中
+3. extends设置的会进行融合
+**** 得到ResultMapping集合
+***** 解析<constructor>
+***** 解析引用的resultMap
+***** 解析内嵌的resultMap
+***** 为对应的字段设置typehandler
+***** 为对应的本命名空间的resultMap引用进行解析存储
+***** 构造ResultMap对象，包含
+****** mappedColumns
+****** mappedProperties
+****** idResultMappings
+****** propertyResultMappings
+****** constructorResultMappings
+**** 将该集合转换为ResultMap，存入Configuration
+*** <sql>
+存的只是单纯的id，Xnode的Map
+1. 如果配置了databaseId的情况下，存的时候只存对的上的databaseId的Sql片段
+2. 如果没配的情况下，配了databaseId的Sql片段就不存
+3. 其他情况都存
+*** (select|update|insert|delete)
+**** 读取配置在节点上的各种信息
+**** 消除内部的<include>引用的各种sql片段，如果配置了占位符，且引用处设置了对应的属性，则进行属性的替换融合，原理为一直递归处理，检测节点类型，所以支持多级嵌套
+**** 消除<selectKey>节点，作为MappedStatement存入configuration中
+**** 进行SQL语句的解析，主要为动态SQL的处理
+***** #{}视为静态节点，因为被转义后只可能表示一个参数，因此不具备动态的概念
+***** ${}视为动态节点
+***** 其他动态节点标签也视为动态节点，用各种节点hanlder来处理节点的创建
+**** 绑定接口与配置文件，主要表现为生成代理类
+
+
+关键分为text-node/element-node/include-node
+
+对include节点进行处理，然后完成节点替换(取出properties和复制对应sql节点，然后进行递归填充，因为sql可以include别的sql节点，填充后得到include节点，然后替换旧的include，将内部得到的文本节点取出放在include之前，最后去掉include节点，完成替换工作)
 关键方法为applyInclude(Node,Properties,included)，核心为source.setNodeValue(PropertyParser.parse(source.getNodeValue(), variablesContext));即当source.getNodeValue与解析出来的properties属性的key对应上时，进行替换
 ** SQL执行流程
-DefaultSqlSession获取mapper，内部从configuration获取对应接口的实现工厂进行实例化，然后代理对象在委托MapperMethod进行执行，涉及ParamNameResolver对带注解参数的解析
-** cache 
+*** 查询过程
+1. DefaultSqlSession获取mapper，内部从configuration获取对应接口的实现工厂进行实例化
+2. 然后代理对象在委托MapperMethod进行执行，MapperMethod包含其执行方法的命名空间+方法名，用于从configuration拿出对应的MapperStatement
+3. sqlSource处理，把动态SQL各类节点解析后退化为静态SQL，然后将预编译得属性换为？，对应的参数变为ParameterMapping存起来，返回BoundSql对象
+4. 根据Boundsql和参数列表，以及其他属性创建key，根据key查询sqlSession一级缓存，查得到就直接返回结果
+5. 根据语句类型创建StatementHandler，负责处理连接获取、参数注入、执行语句
+**** 6. 处理结果映射(DefaultMapResultHandler和DefaultResultHandler处理都比较类似)
+- 使用rowbound进行内存分页读取，如果有开启延迟加载，则使用javasist创建代理对象(因为实体类一般都不是接口)
+- 分拣配置的字段和未配置的字段，然后进行自动映射和已配置字段的映射
+*** 更新过程
+**** 刷新一级缓存和二级缓存
+**** KeyGenerator
+获取结果集的主键，设置到对应的列表
+**** 处理方法签名的返回值，根据需要做转换或者抛异常
+** 内置数据源
+*** UnpooledDataSource
+**** initializeDriver
+初始化驱动，但是一般在jdk1.8之后基本不会执行，因为静态代码块已经读了DriverManager的驱动列表
+**** getConnection
+常规操作，读username和password，获取链接
+*** PooledDataSource
+**** PoolState
+***** 获取链接
+PooledConnection存在两个集合，用于存储空闲连接和活跃连接
+如果存在空闲连接，直接拿来用，如果不存在空闲连接，进行创建，如果最大连接数满了，读最后的连接，查看是否超时，如果都没超时，则进行阻塞
+***** 回收链接
+因为生成的Connect为代理对象，因此在执行方法时，会被拦截，如果检测到关闭的行为，则会收回连接，具体为
+检测poolState空闲连接集合，有空则存，没空则删，并进行事务回滚
+*** JndiDataSource
+** 缓存机制
+*** PerpetualCache
+内置map，缓存基类
+*** LruCache
+实现了LRU的修饰器
+*** BlockingCache
+提供了阻塞
+*** CacheKey
+作键
 *** 一级缓存
+基于sqlSession
 *** 二级缓存
+基于命名空间，存在于MapperStatement中，存在并发问题，先进CacheExecutor，找不到在调BaseExecutor的查找方法
+**** TransactionalCacheManager
+解决冲突的机理为分两份缓存，一份为代理缓存，一份为临时缓存
+查数据时从代理缓存即MapperStatement存的里面拿
+当改动的时候，存到临时缓存里面，提交时间，在flush进代理缓存
+从而解决脏读的问题
+*** 插件机制
+可插拔位置包括Executor，ParameterHandler ，ResultSetHandler，StatementHandler 
+做法为存一波插件列表(一个插件可以管一个插拔位置的多个方法)，然后层层生成代理对象，最后调用的时候，从最外向内调用，只要符合插件支持方法列表的就走插件的拦截方法，否则放行
+** 工具类
+*** MetaClass
+**** ReflectorFactory
+缓存Reflector
+**** Reflector
+进行getter和setter检测
+***** 属性的getter映射获取
+1. 把所有可读的属性的getter抽取出来
+2. 解决方法名冲突的规则
+- 返回类型越子类，越具体越对
+- 同boolean类型is开头的越对
+- 非boolean类型报歧义
+- 返回类型完全不兼容直接报错
+***** 属性的setter映射获取
+setter的冲突可能性为重载
+1. 把所有可写的属性的setter抽取出来
+2. 解决冲突的规则
+- 与getter直接对上的越对
+- 参数越子类的越对
+- 参数完全无关的报错 
+**** PropertyTokenizer
+属性分段器
+1. 对象的属性一直访问下去如，如xx.xx.xx，原理为将第一段与后端的截取开，然后获取第一段的的属性的MetaClass在递归判断剩下的部分是否存在
+2. 数组以及map类型的index处理
+#+BEGIN_SRC java
+// 如果属性为author.id.aa
+PropertyTokenizer prop = new PropertyTokenizer(name);
+    if (prop.hasNext()) {
+      if (reflector.hasSetter(prop.getName())) {
+        MetaClass metaProp = metaClassForProperty(prop.getName());
+        // 该处如果却是存在对应的部分，则会产生两次递归
+        return metaProp.hasSetter(prop.getChildren());
+      } else {
+        return false;
+      }
+    } else {
+      return reflector.hasSetter(prop.getName());
+    }
+#+END_SRC
+* component
+** typehandler
+处理枚举转换
+*** EnumOrdinalTypeHandler
+直接转声明顺序作为值
+*** EnumTypeHandler
+转字面值
+*** 自定义场景
+#+BEGIN_SRC java
+public class ArticleTypeHandler extends BaseTypeHandler<ArticleTypeEnum> {
+
+    @Override
+    public void setNonNullParameter(PreparedStatement ps, int i, ArticleTypeEnum parameter, JdbcType jdbcType)
+        throws SQLException {
+        // 获取枚举的 code 值，并设置到 PreparedStatement 中
+        ps.setInt(i, parameter.code());
+    }
+
+    @Override
+    public ArticleTypeEnum getNullableResult(ResultSet rs, String columnName) throws SQLException {
+        // 从 ResultSet 中获取 code
+        int code = rs.getInt(columnName);
+        // 解析 code 对应的枚举，并返回
+        return ArticleTypeEnum.find(code);
+    }
+
+    @Override
+    public ArticleTypeEnum getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+        int code = rs.getInt(columnIndex);
+        return ArticleTypeEnum.find(code);
+    }
+
+    @Override
+    public ArticleTypeEnum getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+        int code = cs.getInt(columnIndex);
+        return ArticleTypeEnum.find(code);
+    }
+}
+#+END_SRC
+* trick
+一级缓存为Sqlsession，默认开启，二级缓存配置在映射文件中，需要开启才有效
