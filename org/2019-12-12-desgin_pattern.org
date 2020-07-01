@@ -30,9 +30,41 @@ defines an interface for creating an object, but lets subclasses decide which cl
 provides an interface for creating families of related or dependent objects without specifying their concrete classes
 ** The Singleton Pattern
 ensures a class has only one instance, and provides a global point of access to it
-- double check locking 符合延迟加载与线程安全的特性
-- eager instantiation 早初始化，线程安全，无法延迟加载
-- Synchronize 线程安全，懒加载，效率低,实现起来最简单
+*** double check locking
+符合延迟加载与线程安全的特性
+#+BEGIN_SRC java
+public class Singleton{
+  private volatile static Singleton instance;
+
+  public static Singleton(){
+    if(instance==null){
+      synchronized(Singleton.class){
+        if(instance==null){
+          instance = new Singleton();
+        }
+      }
+    }
+    return singleton;
+  }
+}
+
+#+END_SRC
+*** eager instantiation
+早初始化，线程安全，无法延迟加载
+*** Synchronize 
+线程安全，懒加载，效率低,实现起来最简单
+#+BEGIN_SRC java
+public class Singleton{
+  private static Singleton instance;
+
+  public static synchronized Singleton(){
+    if(instance==null){
+      instance = new Singleton();
+    }
+    return singleton;
+  }
+}
+#+END_SRC
 ** The Command Pattern
 encapsulates a request as an object, thereby letting you parameterize other objects with different requests, queue or log requests, and support undoable operations.
 特点: 将一个对象的一个或者多个操作封装为一个动作，重复操作多个对象封装，使得一个逻辑命令可以完成物理意义上的多个操作

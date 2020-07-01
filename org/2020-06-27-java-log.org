@@ -1,0 +1,8 @@
+#+TITLE:java log
+#+STARTUP: indent
+* facade 
+** SLF4J
+** Commons Logging
+* internal
+** log4j
+** Logback

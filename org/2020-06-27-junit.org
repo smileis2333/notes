@@ -1,0 +1,26 @@
+#+TITLE:junit
+#+STARTUP: indent
+* junit4
+** assert
+assertEquals(boolean expected, boolean actual)
+assertFalse(boolean condition)
+assertNotNull(Object object)
+assertNotNull(Object object)
+assertTrue(boolean condition)
+fail()
+** annotation
+*** @Test
+timeout
+expected
+*** @Before
+*** @After
+*** @BeforeClass
+*** @AfterClass
+*** @Ignore
+*** @RunWith
+** 参数化测试
+@RunWith(Parameterized.class)
+@Parameters 注释的公共的静态方法，它返回一个对象参数数组
+创建一个公共的构造函数，它接受和一行测试数据相等同的东西
+根据需要从测试用例里面拿属性
+

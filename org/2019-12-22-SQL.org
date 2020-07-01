@@ -1,11 +1,12 @@
 #+TITLE:  SQL
 #+STARTUP: indent
-* Start Service
-** 包管理器安装
-*** redhat系(npm)
+* console
+** Start Service
+*** 包管理器安装
+**** redhat系(npm)
 service mysqld start
 service mysqld stop
-** 直接装
+*** 直接装
 - 启动
 /usr/bin/mysqld_safe &
 - 关闭
@@ -13,7 +14,7 @@ service mysqld stop
 mysqladmin -uroot shutdown
 如果root用户已经设置了密码
 mysqladmin -uroot shutdown -p
-* Connect Server
+** Connect Server
 mysql -u root -p (打开buffer，接收密码(非回显))
 mysql -u root -p123 (root是账户，123就是密码)
 mysql -u root -D test -p123 (-D指定指定数据库)
@@ -31,14 +32,15 @@ mysql -uroot -p123123 -e 'create database if not exists testdb;show databases;'
 --execute=statement, -e statement：非交互模式执行SQL语句；
 --vertical, -E：查询结果纵向显示；
 --protocol={TCP|SOCKET|PIPE|MEMORY}：
-* Help
+** Help
 help获取帮助信息
 help content 获取分类的信息
 help command(command代表具体指令，如create)
-* Variable
-** System Variable
+* sql command
+** Variable
+*** System Variable
 所有变量设置再重启后会失效，如果需要持久保持，需要配置文件配置
-*** Global
+**** Global
 - read
 show global variables;
 show global variables like '%version%';
@@ -48,62 +50,62 @@ show global variables where variable_name like '%log%' and value='off';
 - write, just affect after newly session
 SET GLOBAL var_name = value;
 SET @@GLOBAL.var_name = value;
-*** Session
+**** Session
 - read
 show session variables; -- show variables; 不指定则从session拿
 
 - write(affect current session)
 SET SESSION var_name = value;
 SET @@SESSION.var_name = value;
-*** concrete
+**** concrete
 select @@global.back_log;
 select @@session.basedir; -- 存储过程如果需要使用，也是适用@@xxx.xxx
-** State Variable(Read-only)
-*** Global
+*** State Variable(Read-only)
+**** Global
 show global status;
-*** Session
+**** Session
 show status;
-* 用户管理语句
-** prepare
+** 用户管理语句
+*** prepare
 MySQL账户格式: username@host
 root@'10.1.%.%'
-** query
+*** query
 select * from mysql.`user`;
-** craete
+*** craete
 create user 'hj1'@127.0.0.1;
 create user 'hj2'@'127.0.0.1' identified by '111111';
 
 -- 授权的时候如果没有，会被创建
 grant all on test.* to hj3@127.0.0.1 identified by '111111';
-** delete
+*** delete
 -- 权限没有回收，在再次创建用户时，可能会出问题，可以flush privileges刷新
 delete from mysql.user where user like '%xxx%'
 
 -- 完全删除全部相关
 drop user hj2@127.0.0.1;
-** rename
+*** rename
 rename user hj1@127.0.0.1 to hj5@127.0.0.1;
-** password
-*** terminal
+*** password
+**** terminal
 -- 记得密码才改密码的情况
 mysqladmin -uroot -p123123 password 123456
 
 -- 刚初始化，还没有密码，直接指定密码
 mysqladmin -uroot password 123456
-*** after login
+**** after login
 set password for hj3@127.0.0.1 = password('88888');
 -- 直接改表(需要确定版本)
 update mysql.`user` set password = password('11111') where user = 'hj3'; -- before 5.7
 update mysql.`user` set authentication_string = password('22222') where user = 'hj3'; -- 5.7 and after
-*** reset
+**** reset
 1. 停止服务
 2. mysqld_safe --skip-grant-tables &
 3. mysql -uroot
 4. 用通过语法或者改表的方法改密码
 5. flush privilege
 6. restart
-** 授权相关
-*** grant
+*** 授权相关
+**** grant
 -- identified by 会更改对应账号的密码
 grant all privileges on test.* to hj3@127.0.0.1 (identified by '123123')
 flush privileges
@@ -138,25 +140,25 @@ grant select on *.* to zsy@'192.168.%.%' identified by '123456' with max_queries
 grant select on *.* to zsy@'192.168.%.%' identified by '123456' with max_updates_per_hour 10;
 grant select on *.* to zsy@'192.168.%.%' identified by '123456' with max_connections_per_hour 15;
 grant select on *.* to zsy@'192.168.%.%' identified by '123456' with max_user_connections 2;
-*** query
+**** query
 -- 看用户对哪些库有哪些权限
 show grant for hj@127.0.0.1;
 
 -- 看某个库授权了哪些权限给了哪些用户
 select * from mysql.db where `Db` = 'test';
-*** 收回
+**** 收回
 -- 全收回
 revoke all on test.* from hj2@127.0.0.1;
 
 -- 收回一部分
 revoke select,update on test.* from hj3@127.0.0.1;
-* 库管理语句
+** 库管理语句
 选了字符集可以在从多个排序规则中选一个，但是选了一个排序规则直接决定了是什么字符集，因为排序规则是字符集为基准的
-** create
+*** create
 create database testdb;
 create database if not exists testdb;
 create database if not exists testdb default character set utf16;
-** query
+*** query
 show databases;
 
 -- 查看建立库的语句
@@ -170,13 +172,13 @@ show collation;
 
 -- 查看当前连接的概要信息
 status;
-** update
+*** update
 alter database testdb character set utf8;
 
 -- 该库下的所有表默认使用该字符集
 alter database testdb default character set utf8;
-* 表管理语句
-** query
+** 表管理语句
+*** query
 show tables;
 -- 查看的表信息包括每张表的名称，所使用的存储引擎，版本，字符集，描述信息，创建时间等信息
 show table status;
@@ -186,7 +188,7 @@ desc student;
 
 -- 查看建表语句
 show create table student;
-** create
+*** create
 CREATE TABLE [IF NOT EXISTS] tbl_name (create_definition,...)
 
 我们可以把上述语法分为两个部分查看：
@@ -240,9 +242,9 @@ create table test6 select * from test1;
 
 -- 复制表结构
 create table test7 like test5;
-** delete
+*** delete
 drop table test7;
-** update
+*** update
 -- 改表名
 alter table test2 rename as test8;
 
@@ -261,25 +263,25 @@ alter table test8 change name3 name char(5);
 
 -- 字段类型更改
 alter table test8 modify name int;
-* 约束管理、索引管理、键管理语句
+** 约束管理、索引管理、键管理语句
 - primary key
 - unique key
 - foreign key
-** 非空约束
+*** 非空约束
 alter table testdb modify name varchar(100) not null;
 alter table testdb modify name varchar(100) null;
-** 自动增长
+*** 自动增长
 alter table testdb modify id int auto_increment;
 alter table testdb change id int auto_increment;
-** 删除自动增长
+*** 删除自动增长
 alter table testdb modify id int;
 alter table testdb change id int;
-** 主键约束
+*** 主键约束
 alter table testdb add primary key(id)
 
 -- 如果存在自动增长，需要先取消自动增长，才可以取消主键
 alter table testdb drop primary key
-** 唯一键约束
+*** 唯一键约束
 -- 索引名以uid_，开始后跟数字，可以重复对某个字段进行创建unique key(不建议)
 alter table testdb add unique key(uid);
 
@@ -288,7 +290,7 @@ alter table testdb add unique key uni_test(uid);
 
 -- 取消索引
 alter table drop index uni_test;
-** 查看约束
+*** 查看约束
 select * from information_schema.`KEY_COLUMN_USAGE` where `TABLE_NAME` = 'test1';
 
 desc test1
@@ -298,13 +300,13 @@ select `TABLE_NAME`,`COLUMN_NAME`,`CONSTRAINT_NAME`,`REFERENCED_TABLE_NAME`,`REF
 
 -- 看自己被哪些表的外键所引用
 select `TABLE_NAME`,`COLUMN_NAME`,`CONSTRAINT_NAME`,`REFERENCED_TABLE_NAME`,`REFERENCED_COLUMN_NAME` from information_schema.`KEY_COLUMN_USAGE` where `REFERENCED_TABLE_NAME`='test1'
-** 外键约束
+*** 外键约束
 alter table test1 add column tid int default 0 not null;
 alter table test1 add constraint test1_tid_fk foreign key(tid) references test2(id)
 
 -- 去除约束
 alter table test4 drop foreign key test1_tid_fk;
-** 索引管理
+*** 索引管理
 alter table test1 add index ind_name(name)
 
 -- 创建索引
@@ -326,25 +328,25 @@ alter table test2 drop index ind_name;
 -- 查看索引
 show index from test1;
 show index from test1 where key_name like '%xxx%';
-* 视图管理
+** 视图管理
 视图是一个虚表的概念，不存在实际存储的数据格式(每次访问视图时，通过执行视图对应的SQL语句来进行展示，目的，更灵活的将复杂SQL封装起来，方便以SQL语句为粒度进行授权)
-** create
+*** create
 create view test1View as select id from test1;
 select * from test1view;
 
 -- 指定视图的字段名
 create or replace view testvi(a,b) as select * from classes where classid<=4;
-** 支持的算法
+*** 支持的算法
 - merge 将视图的sql语句与我们对视图的sql语句合并在执行，可以增删改查，效率低
 - temptable 先查询后置放结果在临时表，在调用我们的sql语句去执行，只能查
 - undefinded 系统自动设置，更倾向于merge
 
-** delete
+*** delete
 drop view test1view;
 drop view test1view if exists testview;
-** update
+*** update
 alter view test1view as select * from test2
-** 不可更新关联表的情况
+*** 不可更新关联表的情况
 - 当视图设定了 ALGORITHM = TEMPTABLE。
 - 聚合函数（SUM(), MIN(), MAX(), COUNT()等）。
 - 位于选择列表中的子查询。
@@ -357,7 +359,7 @@ alter view test1view as select * from test2
 - HAVING
 - UNION 或 UNION ALL
 - Join
-* insert语句
+** insert语句
 -- 值与指定的字段必须匹配
 insert into tablename(字段1名称,字段2名称,...) values(字段1值,字段2值,...)
 
@@ -386,8 +388,8 @@ where
         oe.employee_id is null and o.user_id is not null;
 #+END_SRC
 
-* delete与update常用语句
-** delete
+** delete与update常用语句
+*** delete
 -- 清空test1表的数据
 delete from test1
 
@@ -396,7 +398,7 @@ delete from test1 where id=1 or name = 2
 
 -- 从tb1表中找出age>30的数据行，然后将这些行按照age进行降序排列，排列后删除第一个。
 delete from test1 where age >30 order by age desc limit 1
-** update
+*** update
 
 -- 设置test1表数据name的字段全部改为2
 update test1 set name = '2'
@@ -409,20 +411,20 @@ update test1 set name = 2, age=100 where id=4
 
 -- 连表信息更新
 update test1,tes2 set test1.age=test.age where test1.id=test.id
-* select语句
-** 通配符like
+** select语句
+*** 通配符like
 - % 任意长的字符串
 - _ 同%，但是代表单个字符
 -
-** 正则rlike
+*** 正则rlike
 select * from student where name rlike '^t.*'
-** 排序(不指定默认从小到大，小大的概念依据选中的排序规则或者字符集)
+*** 排序(不指定默认从小到大，小大的概念依据选中的排序规则或者字符集)
 select * from test1 order by name desc
 
 select * from test1 order by name desc,age desc
-** 去重
+*** 去重
 select distinct name from test1
-** 分组
+*** 分组
 min(col)返回指定列的最小值
 max(col)返回指定列的最大值
 avg（col）返回指定列的平均值
@@ -432,30 +434,30 @@ group_concat(col)返回指定列拼串值
 
 -- having关键字
 select classId,avg(age) as ageavg from students group by classId having ageavg >25
-** 多表查询
-*** 内连接
-**** cross join
+*** 多表查询
+**** 内连接
+***** cross join
 select * from t1,t2
 
 -- 正式写法
 select * from t1 cross join t2
-**** inner join(the cross join with condition)
+***** inner join(the cross join with condition)
 
 -- 正式写法
 select * from t1 cross join t2 on t1.id = t2.id
-*** 外连接
+**** 外连接
 select * from t1 left (ouetr) join t2 on t1.id = t2.id
 select * from t1 right (outer) join t2 on t1.id = t2.id
-*** 全连接
+**** 全连接
 -- mysql不直接支持，但是可以通过机制完成
 select * from t1 left (ouetr) join t2 on t1.id = t2.id
 union
 select * from t1 right (outer) join t2 on t1.id = t2.id
-** 联合查询
-*** union
+*** 联合查询
+**** union
 -- 要求字段数一致，重复的数据会被合并为一条
 select column_name(s) from table_name1 UNION select column_name(s) from table_name2
-*** unionall
+**** unionall
 -- 同union，但是重复的数据不会被合并
 select column_name(s) from table_name1 UNION select column_name(s) from table_name2
 * 查询缓存
@@ -684,8 +686,6 @@ mysqldump -uroot -h192.168.1.146 -d  zsythink t1 t2 t3 -p
 xtrabackup支持对Innodb存储引擎进行热备。
 xtrabackup是一种物理备份工具，所以性能强悍。
 xtrabackup支持完全备份，差异备份，增量备份，部分备份等功能。
-
-
 *** 通过select语句进行部分备份
 通过select语句将表中的数据导出到指定文件中，例如导出a表数据到/testdir/a.backup中，在使用select语句备份a表的同时，最好将a表的表结构也备份一份，因为还原的时候很有可能用到。
 select * from a into outfile '/testdir/a.backup';
@@ -701,11 +701,6 @@ load data infile "/testdir/a.backup" into table b;
 ** 恢复
 mysql > use [dbName]
 mysql > source [file]
-* undocument
-** ref
-http://www.zsythink.net/archives/category/%e5%ad%98%e5%82%a8/mysql/
-** 最左匹配
-** 索引原理
 * trick
 ** 确定分组后，每个分组是否存在特定的值
 // 例子为一个question对应多个tag，给定一个tag_id,提示提问是否包含或者不包含(多个同理，应用对应的拼串技术即可)
@@ -727,15 +722,37 @@ from
 where
 	table_schema = 'chatroom'
 	and table_name = 'private_chat' ;
-* 优化手段
+* index
+** clustered index
+一个表一个，一个键对一个数据行的指针
+** secondary index
+根据条件，存的是主键的位置，所以根据这种查，如果需要额外的字段，会回表查询(先拿到主键，在查一波)
+** 触发条件
+1. 最左条件匹配
+** covering index
+在联合索引的情况下，如果不取出额外联合索引额外的字段，不会触发回表
+* 杂项
+** 三范式
+范式提供了表拆分的一种指导
+*** 1NF
+列不可分
+eg. 比如手机和座机号应该不是一个字段
+*** 2NF
+属性由主键决定，而不是依赖主键部分内容，主要为组合主键时的影响
+eg. 比如如果不整个自增Id，那么学生ID+课程Id作为一个考试成绩，是可以满足的，但是如果，学生姓名是依赖于学生ID，因此不满足2NF，需要切分
+*** 3NF
+不要传递依赖
+eg. 比如一个订单和一个用户的信息，可以直接塞到一起，但是用户的信息依赖于用户主键，用户主键依赖于订单主键，因此，让其满足第三范式，做法为直接砍掉除用户主键外的字段，该字段作为外键
+** 优化手段
 1. 加索引，目的是划分区间，where或者group by的字段
 2. 少用*，限定字段选择，提高返回速度
-3. 尽量少对主键使用in, not in, or，会导致全表扫描，效率低下，在主键列表可预测且少的情况下，可以改用各种动态SQL的技术生成单一SQL在union拼起来
-4. like和null值判断，尽量在通过索引减少区间范围后再用
-5. where表达式不要左侧运算
-6. 不要用where 1=1，动态SQL判断有条件自动加where...和and
-
-
-
-
-
+3. 先用索引缩小范围在用其他的指令，如like，null判断，和or，等
+4. 动态SQL，如in列表进行拼
+6. where表达式不要左侧运算
+7. 不要用where 1=1，动态SQL判断有条件自动加where...和and
+8. covering index
+** undocument
+*** ref
+http://www.zsythink.net/archives/category/%e5%ad%98%e5%82%a8/mysql/
+*** 最左匹配
+*** 索引原理

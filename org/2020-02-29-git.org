@@ -91,7 +91,7 @@ git diff branchName1 branchName2 比较两个分支的差异
 * 撤销
 git reset (--mixed) HEAD 取消暂存区的所有文件变更，让其跟上一次最新提交保持一致(工作区和暂存区一定不一致)
 git reset HEAD -- fileName 同上，但是只撤销单一文件
-git reset --hard HEAR 工作区和暂存区一起丢掉所有变更(工作区和暂存区一定一致)
+git reset --hard HEAD 工作区和暂存区一起丢掉所有变更(工作区和暂存区一定一致)
 git reset --mixed/hard commitId 当前分支的最新提交变为指定的commitId
 git reset --mixed/hard commitId -- fileName 不会导致上述情况，但是文件会切换过去
 git reset --soft commitId 只改当前的最新提交，暂存区和工作区不动

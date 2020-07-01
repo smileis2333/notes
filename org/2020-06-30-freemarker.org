@@ -1,0 +1,114 @@
+#+TITLE: freemarker
+#+STARTUP: indent
+* 模板开发
+** 模板语法
+${}
+** 指令
+*** 条件
+<#if user == "Big Joe">, our beloved leader</#if>!
+
+<#if animals.python.price < animals.elephant.price>
+  Pythons are cheaper than elephants today.
+<#else>
+  Pythons are not cheaper than elephants today.
+</#if>
+
+<#if animals.python.price < animals.elephant.price>
+  Pythons are cheaper than elephants today.
+<#elseif animals.elephant.price < animals.python.price>
+  Elephants are cheaper than pythons today.
+<#else>
+  Elephants and pythons cost the same today.
+</#if>
+*** 列表
+<#list animals as animal>
+    <tr><td>${animal.name}<td>${animal.price} Euros
+</#list>
+
+避免外层空ul
+<#list misc.fruits>
+  <ul>
+    <#items as fruit>
+      <li>${fruit}
+    </#items>
+  </ul>
+</#list>
+
+分隔符.
+<p>Fruits: <#list misc.fruits as fruit>${fruit}<#sep>,</#sep> </#list>
+<p>Fruits: orange, banan
+*** 组合
+**** include
+#+BEGIN_SRC html
+<hr>
+<i>
+Copyright (c) 2000 <a href="http://www.acmee.com">Acmee Inc</a>,
+<br>
+All Rights Reserved.
+</i>
+#+END_SRC
+#+BEGIN_SRC html
+<html>
+<head>
+  <title>Test page</title>
+</head>
+<body>
+  <h1>Test page</h1>
+  <p>Blah blah...
+  <#include "/copyright_footer.html">
+</body>
+</html>
+#+END_SRC
+*** 内建函数
+是FreeMarker基于数值上添加的特性，需要?进行访问，有些可能需要额外参数设置，支持一直连接下去的处理，如user?upper_case?html
+**** html
+转义
+**** upper_case
+**** cap_first
+首字母大写
+**** length
+**** size
+**** string("Y", "N")
+animal.protected?string("Y", "N") 基于 animal.protected 的布尔值来返回字符串 "Y" 或 "N
+**** fruits?join(", ")
+**** user?starts_with("J")
+*** 处理空值
+**** 默认值
+<h1>Welcome ${user!"visitor"}!</h1>
+**** 判断对象是否为空
+<#if user??><h1>Welcome ${user}!</h1></#if>
+**** 多级访问的设置
+(animals.python.price)!0
+(animals.python.price)??
+*** assign
+
+** 注释
+<#-- and -->
+* 程序开发
+** 创建Configuration实例
+Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);
+//读取目录，相当于设置了快捷方式
+cfg.setDirectoryForTemplateLoading(new File("/where/you/store/templates"));
+cfg.setDefaultEncoding("UTF-8");
+cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+** 准备数据模型
+#+BEGIN_SRC java
+Map<String, Object> root = new HashMap<>();
+root.put("user", "Big Joe");
+// Create the hash for ``latestProduct''
+Map<String, Object> latest = new HashMap<>();
+// and put it into the root
+root.put("latestProduct", latest);
+// put ``url'' and ``name'' into latest
+latest.put("url", "products/greenmouse.html");
+latest.put("name", "green mouse");
+#+END_SRC
+** 获取模板
+Template temp = cfg.getTemplate("test.ftl");
+** 合并数据与模板
+Writer out = new OutputStreamWriter(System.out);
+temp.process(root, out);
+* principle
+每种类型对应的一个对应的包装类，包括基本类型，对象，方法，指令等
+* ref
+http://freemarker.foofun.cn/dgui_quickstart_basics.html
