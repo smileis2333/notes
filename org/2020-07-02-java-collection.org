@@ -1,0 +1,36 @@
+#+TITLE:  java collection
+#+STARTUP: indent
+分析版本openjdk11.0.6
+* LinkedList
+** 查找
+检查index边界，>0 <size
+从first开始迭代，直接迭代次数满足index
+** 遍历
+用first开始迭代
+** 插入
+是结尾->插入尾部
+插入中间
+** 删除
+获取前驱，后继，前驱指向后继
+* ArrayList
+** modCount
+modCount如字面意思，是修改次数，因为该容器是线程不安全的，所以modCount可以在remove或者其他情况下，检车modCount是否与迭代器Itr开始时，不一致，则说明，有其他的在动，直接抛ConcurrentModificationException
+** 扩容机制为一般
+** 插入
+*** append
+modCount++
+确保是否需要扩容，是就扩容，然后复制，最后在加元素
+*** 指定位置插入，其他部分往后挪
+** 删除
+** 遍历
+* HashMap
+1.8之后不只是数组加链表，可以是链表或者红黑树
+初始容量16，负载因子0.75
+** hash处理
+拿到hashcode后，经过移位和异或运算，生成hash值
+** 插入
+** 扩容机制
+每次扩两倍，然后进行重排
+** 序列化
+* LinkedHashMap
+* TreeMap

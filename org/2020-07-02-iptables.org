@@ -1,0 +1,157 @@
+#+TITLE:  iptables
+#+STARTUP: indent
+* 链
+PREROUTING      的规则可以存在于：raw表，mangle表，nat表。
+
+INPUT          的规则可以存在于：mangle表，filter表，（centos7中还有nat表，centos6中没有）。
+
+FORWARD         的规则可以存在于：mangle表，filter表。
+
+OUTPUT         的规则可以存在于：raw表mangle表，nat表，filter表。
+
+POSTROUTING      的规则可以存在于：mangle表，nat表。
+** 自定义链
+目的主要为规则分组，之后被五链，设置规则，匹配对应的自定义链
+*** 创建 
+iptables -t filter -N IN_WEB
+*** 引用
+iptables -t filter -I INPUT -p tcp --dport 80 -j IN_WEB
+*** 修改
+iptables -E IN_WEB WEB 改名
+添加规则与五链类似
+*** 删除
+1. 先从五链把引用到该链的规则删掉
+2. iptables -X WEB
+* 表
+raw     表中的规则可以被哪些链使用：PREROUTING，OUTPUT
+
+mangle  表中的规则可以被哪些链使用：PREROUTING，INPUT，FORWARD，OUTPUT，POSTROUTING
+
+nat     表中的规则可以被哪些链使用：PREROUTING，OUTPUT，POSTROUTING（centos7中还有INPUT，centos6中没有）
+
+filter  表中的规则可以被哪些链使用：INPUT，FORWARD，OUTPUT
+* command
+** 查看规则
+iptables -t [tableName,不写默认为filter表] -L [chainName，不写默认为全部]  
+-v可以看到更多信息
+-n表示不对ip地址反解为域名，而是直接显示ip
+--line-number
+** 添加规则
+iptables -t [tableName] -I/A [chainName] -s [matchCondition] -j [action]
+eg
+iptables -t filter -I INPUT -s 192.168.92.129 -j DROP 来自该ip的包直接丢掉
+-I 加到头部
+-A 加到尾部
+** 删除规则
+两种都是只会一次删除一条
+1. iptables -t [tableName] -D [chainName] [ruleNumber] 
+2. iptables -t [tableName] -D [chainName] -s 192.168.92.129 -j DROP
+
+iptables -t [tableName] -F [chainName]
+** 修改规则
+iptables -t [filterName] -R [chainName] [ruleNumber] [oldMatchCondition such as -s xxx] -j [action]
+** 保存与恢复
+iptables-save > /etc/sysconfig/iptables
+iptables-store < /etc/sysconfig/iptables
+* matchCondition
+** 基本匹配条件
+*** source
+-s
+**** single ip
+192.168.92.129
+**** multi ip
+192.168.92.129,192.168.92.130
+**** segment
+10.6.0.0/16
+*** destination
+-d
+与source类似
+*** !取反条件
+可以作用于source/destination，或者拓展匹配条件的诸如端口，但是当为source/destination多个ip时，不允许使用
+*** protocol
+-p
+tcp, udp, udplite, icmp, icmpv6,esp, ah, sctp, mh
+iptable -t filter -I INPUT -s 192.168.92.129 -p tcp 关闭tcp连接的packet
+*** interface
+**** -i
+流入时的网卡
+-i选项只能用于PREROUTING链、INPUT链、FORWARD链
+**** -o
+流出时网卡指定
+-o选项只能用于FORWARD链、OUTPUT链、POSTROUTING链
+** 拓展匹配条件
+需要指定模块后才可以使用
+*** tcp
+iptables -t filter -I INPUT -s 192.168.92.129 -p tcp [-m tcp，由于没填的情况下，会自动根据协议进行模块选择，所以可以不填] --dport 22 -j REJECT
+--dport
+--sport
+tcp模块的port可以指定范围，如:22表示22及以下端口，80:表示80及以上端口,22:80，但是无法指定离散的端口
+--tcp-flags SYN,ACK,FIN,RST,URG,PSH SYN
+--syn 链接的报文
+-m multiport可以弥补上述不足
+*** udp
+基本与tcp，类似，可以指定端口
+*** icmp
+iptables -t filter -I INPUT -p icmp -j REJECT 匹配全部icmp报文，别人的报文发不进来，我们的能发出去，但是收不到回来的报文，所以表现为别人ping不到我们，我们也ping不到别人
+iptables -t filter -I INPUT -p icmp -m icmp --icmp-type 8/0 -j REJECT 丢掉别人发来的查询包，我们能正常收到响应包，所以能ping出去
+*** ip range
+-m iprange
+--src-range 192.168.1.127-192.168.1.146
+*** string
+-m string
+--algo bm --string "ooxx" 使用bm算法去匹配字符串ooxx
+*** time
+-m time
+--timestart 09:00:00 --timestop 18:00:00
+--weekdays 6,7
+--monthdays 22,23,25
+--datastart 2017-12-24 --datastop 2017-12-28
+
+--monthdays与--weekdays可以使用"!"取反，其他选项不能取反
+*** connlimit
+限制每个ip链接的数量
+-m connlimit
+--connlimit-above 2 -j REJECT 可链接数量为两个
+--connlimit-mask 指定每个网段中每个客户端，配合--connlimit-above
+*** limit
+控制报文链接速率
+-m limit
+--limit 10/minute
+eg.
+iptables -t filter -I INPUT -p icmp -m limit --limit 10/minute -j ACCEPT 
+每分钟放10个包，相当于从第6秒后，开始，每6秒放一个包，所以六秒前的ping，全都是通，如果需要不通，需要改默认policy，或者加一条规则拦截全部
+limit模块使用了令牌桶算法，limit的实质为生成令牌，但是默认的令牌有5个，所以配置之后，前五个包也是可以直接穿过的，需要设置limit-burst
+*** state
+可以将一些协议视为有状态的模块，用来对一些端口的开放机制做限制，比如对80，不允许主动来发送，只接收响应报文等类似情况
+"连接"其中的报文可以分为5种状态，报文状态可以为NEW、ESTABLISHED、RELATED、INVALID、UNTRACKED
+* action
+** DROP
+** REJECT
+** LOG
+** SNAT
+iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT --to-source 公网IP
+** DNAT
+通过一个公共ip暴露服务，然后一般根据端口号确定对应的服务，比如3389可以认定为对应的win10远程桌面，转发到对应的内部主机中，一般还需要配置回程的ip，进行snat，否则客户端收到的源ip是来自于内部主机的ip，不会进行解析，甚至可以进行报错断开
+iptables -t nat -I PREROUTING -d 公网IP -p tcp --dport 公网端口 -j DNAT --to-destination 私网IP:端口号
+iptables -t nat -I PREROUTING -d 公网IP -p tcp --dport 8080 -j DNAT --to-destination 10.1.0.1:80
+iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT --to-source 公网IP
+mark: 以前裴讯路由器网上使用udp2raw，就是没配置回程，导致电脑断开链接，而电脑，直接linux转发，回程时，可以正常则是因为内部只是单纯使用了端口转发，ip都是一致
+** MASQUERADE
+可以认为是动态SNAt，由于IP的动态变化，偶尔需要这种配置
+iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -o eth0 -j MASQUERADE 改为eth0可用的ip地址
+** REDIRECT
+报文重定向
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
+* 防火墙概念
+** 主机防火墙
+经过prerouting->input->ouput->postrouting
+所以主机防火墙包过滤都在input和ouput链进行配置
+** 网络防火墙
+prerouting->forward->postrouting
+过滤只能在forward链配
+该链必须配置核心转发
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+http://www.zsythink.net/archives/1663
+* reference
+http://www.zsythink.net/archives/category/%e8%bf%90%e7%bb%b4%e7%9b%b8%e5%85%b3/iptables/

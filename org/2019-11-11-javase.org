@@ -392,12 +392,12 @@ Java只有一维数组，多维数组实际为数组中的元素为其他数组
 double[][] balances = new double[NYEARS][NRATES];
 int[][] magicSquare =   {      {16, 3, 2, 13},      {5, 10, 11, 8},      {9, 6, 7, 12},      {4, 15, 14, 1}   };
 ** access privilege
-|           | subclass                                                                | package | external package |
-|-----------+-------------------------------------------------------------------------+---------+------------------|
-| public    | yes                                                                     | yes     | yes              |
-| protected | yes                                                                     | yes     | no               |
-| default   | no(point out that the subclass of external package no access privilege) | yes     | no               |
-| private   | no                                                                      | no      | no               |
+|           | package | subclass                                                                | external package |
+|-----------+---------+-------------------------------------------------------------------------+------------------|
+| public    | yes     | yes                                                                     | yes              |
+| protected | yes     | yes                                                                     | no               |
+| default   | yes     | no(point out that the subclass of external package no access privilege) | no               |
+| private   | no      | no                                                                      | no               |
 ** classpath
 jvm启动加载classpath指定的字节码文件
 jdk9之后可以直接命令行指定，不建议全局指定classpath
