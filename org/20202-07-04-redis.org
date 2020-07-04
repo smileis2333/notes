@@ -1,0 +1,90 @@
+#+TITLE:  redis
+#+STARTUP: indent
+* install
+** windows
+https://github.com/tporadowski/redis/releases
+* command
+** config
+*** get
+config get [settingName]
+config get *
+*** set
+config set [settingName]
+config set *
+** command 
+*** 数据类型
+**** string
+***** set [keyName] [ketValue]
+SET myKey "test"
+***** get [keyName]
+***** GETRANGE [keyName] start end
+***** GETSET [keyName] value
+***** mget [key1] [key2]...
+***** SETNX key value
+不存在时才设置
+**** hash
+hash是一个键值对集合，相对于存一个map
+***** hsset [keyName] [fieldName] [value] [fieldName] [value2]
+hget [keyName]
+eg.
+HMSET runoob field1 "Hello" field2 "World" 相当于初始化
+***** hget [keyName] [fieldName]
+HGET runoob field1
+HGET runoob field2
+***** hset [keyName] [fieldName] [value]
+HSET runoob f1 1 只能一个一个
+***** hlen [keyName]
+***** hdel [keyName] [fieldName]
+**** list
+***** lpush [keyName] value1 value2 ...
+推到列表头部
+***** lrange [keyName] [start] [stop] [start,stop]是闭区间
+***** llen [keyName]
+***** lpop [keyName]
+***** lindex [keyName] [index]
+**** set
+***** sadd [keyName] [member1] [member2] ...
+***** smembers [keyName]
+***** scard [keyName]
+看数目
+**** zset
+***** zadd [keyName] [score] [member]
+***** zcard [keyName]
+***** zrem [keyName] [member]
+***** zrange [keyName] [start] [stop] [withscores]
+*** connect
+**** redis-cli
+ redis-cli -h 127.0.0.1 -p 6379
+**** ping
+正常返回pong
+**** quit
+断开连接
+**** select [index]
+切换数据库
+**** auth [password]
+切换密码是否正确
+**** CONFIG set requirepass "runoob"
+改密码
+**** CONFIG get requirepass
+查看密码
+*** key op
+**** del [keyName]
+**** exists [keyName]
+**** expire [keyName] [second]
+**** EXPIREAT [keyName] [timestamp]
+**** PEXPIRE [keyName] [milliseconds]
+**** MOVE [keyName] [dbName]
+**** PERSIST [keyName]
+使其不会过期
+**** RENAME [keyName] [newkeyName]
+**** RENAMENX [keyName] [newkeyName]
+如果newkeyName不存在，在改名
+**** TYPE [keyName]
+*** 事务
+redis的事务不支持回滚，其本质是命令打包
+MULTI
+命令序列... 
+EXEC
+* program
+** java
+jedis

@@ -1,3 +1,263 @@
+#+TITLE:  jquery
+#+STARTUP: indent
+* 安装
+** 下载后本地引入
+https://jquery.com/
+** CDN
+#+BEGIN_SRC html
+<!--百度CDN-->
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<!--新浪CDN-->
+<script src="https://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.2.min.js"></script>
+<!--Google CDN-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<!--ms CDN-->
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
+#+END_SRC
+* usage
+基础语法 $(selector).action()
+** 加载设置
+防止Dom没搞定时就加载jquery代码
+$(document).ready(function(){
+ 
+   // 开始写 jQuery 代码...
+ 
+});
+
+$(function(){
+ 
+   // 开始写 jQuery 代码...
+ 
+});
+** selector
+基本与CSS支持的一致，选择器支持嵌套
+*** element selector
+$("p").hide()
+*** id selector
+$("#test").hide();
+*** class selector
+$(".test").hide();
+*** attribute selector
+$("[href='#']") 
+** action
+*** event map
+**** click
+click(function(){})
+**** dblclick
+dblclick(function(){})
+**** mouseenter
+**** mouseleave
+**** mousedown
+**** mouseup
+**** hover
+**** focus
+**** blur
+*** 效果
+speed 或 duration 参数可以设置许多不同的值，比如 "slow", "fast", "normal" 或毫秒
+**** 显示
+***** hide(speed,callback)
+***** show(speed,callback)
+***** toggle(speed,callback)
+hide和show来回切换
+**** 动画
+***** 滑动
+需要设置被滑动的对象初始样式为display:none
+****** slideDown(speed,callback)
+****** slideUp(speed,callback)
+****** slideToggle(speed,callback)
+***** 淡入淡出
+****** fadeIn(speed,callback)
+****** fadeOut(speed,callback)
+****** fadeToggle(speed,callback)
+****** fadeTo(speed,opacity,callback)
+设置渐变的透明度
+***** 自定义
+****** 设置
+animate({params},speed,callback);
+******* 特性
+1. 几乎支持全部的css属性，要求为使用Camel标记法书写属性名，如使用 paddingLeft 而不是 padding-left
+2. 支持相对值
+3. 支持队列顺序执行
+4. 支持预定义的值比如height: 'togger'表示来回点之后效果变现为来回显示
+******* demo
+#+BEGIN_SRC javascript
+
+// 多个属性
+$("button").click(function(){
+  $("div").animate({
+    left:'250px',
+    opacity:'0.5',
+    height:'150px',
+    width:'150px'
+  });
+});
+
+// 相对值
+$("button").click(function(){
+  $("div").animate({
+    left:'250px',
+    height:'+=150px',
+    width:'+=150px'
+  });
+});
+
+// 四段动画依次运行
+$("button").click(function(){
+  var div=$("div");
+  div.animate({height:'300px',opacity:'0.4'},"slow");
+  div.animate({width:'300px',opacity:'0.8'},"slow");
+  div.animate({height:'100px',opacity:'0.4'},"slow");
+  div.animate({width:'100px',opacity:'0.8'},"slow");
+});
+#+END_SRC
+******* 注意事项
+设计到位置变动的部分，需要设置position为relative, fixed, 或 absolute
+***** 停止
+stop(stopAll,goToEnd)
+stopAll表示是否清除后续队列动画，如果不清，会接着往下走
+goToEnd是否跳到当前动画的末尾
+**** callback
+#+BEGIN_SRC javascript
+// 隐藏了才alert
+$("button").click(function(){
+  $("p").hide("slow",function(){
+    alert("段落现在被隐藏了");
+  });
+});
+
+// alert之后才隐藏
+$("button").click(function(){
+  $("p").hide(1000);
+  alert("段落现在被隐藏了");
+});
+#+END_SRC
+**** chain
+$("#p1").css("color","red").slideUp(2000).slideDown(2000);
+** html
+*** getVal
+**** text()
+获取纯文本，标签被剃掉
+**** html()
+原始文本
+**** val()
+**** attr()
+获取属性
+*** setVal
+index的参数当选出来是列表时就有效，否则单元素基本都是0
+**** text(value)/text(index,callback)
+**** html(value)/html(index,callback)
+**** val(value)/html(index,callback)
+**** atrr([attrName],[attrValue/callback]) / attr({[attrName],[attrValue],[attrName],[attrValue]})
+#+BEGIN_SRC javascript
+$("button").click(function(){
+  $("#runoob").attr("href","http://www.runoob.com/jquery");
+});
+
+$("button").click(function(){
+    $("#runoob").attr({
+        "href" : "http://www.runoob.com/jquery",
+        "title" : "jQuery 教程"
+    });
+});
+
+$("button").click(function(){
+  $("#runoob").attr("href", function(i,origValue){
+    return origValue + "/jquery"; 
+  });
+});
+#+END_SRC
+*** dom operate
+**** add
+1. append和prepend仍然在元素内部，指的为内部的最前面和最后面
+2. after和before只是当初在该元素同级的前后
+***** append()
+***** prepend()
+***** after() 
+***** before()
+**** delete
+***** remove()
+把自己也杀了
+***** empty()
+只杀光自己内部的元素
+***** remove(selector)
+**** css
+***** addClass(className)
+***** removeClass(className)
+***** toggerClass(className)
+***** css
+****** css(propertyName)
+读取
+****** css(propertyname,value)
+#+BEGIN_SRC javascript
+$("p").css("background-color","yellow");
+
+$("p").css({"background-color":"yellow","font-size":"200%"});
+#+END_SRC
+***** constant
+****** width()
+****** height()
+****** innerWidth()
+****** innerHeight()
+****** outerWidth()
+****** outerHeight()
+**** travel
+***** parent
+****** parent()
+直接父节点
+****** parents()
+全部父父节，最上为html节点
+****** parentsUntil(selector)
+***** children
+****** children(selector)
+直接子元素，只有一级
+****** find(selector)
+全部子元素
+***** siblings
+****** siblings(selector)
+被选元素的同胞节点
+****** next()
+****** nextAll()
+****** nextUtil(selector)
+****** prev(), prevAll(selector) & prevUntil(selector) 
+***** filter
+****** first()
+****** last()
+****** eq(index)
+****** filter(selector)
+****** not(selector)
+** ajax
+*** load
+$(selector).load(URL,data,callback);
+URL支持空格后带selector，data为查询参数
+*** $.ajax
+https://www.w3school.com.cn/jquery/ajax_ajax.asp
+#+BEGIN_SRC javascript
+$.ajax(
+  { 
+    url: "test.html", 
+    context: document.body, 
+    success: function(){
+      $(this).addClass("done");
+    }
+  }
+);
+#+END_SRC
+*** $.get(URL,callback);
+*** $.post(URL,data,callback);
+*** jsonp
+#+BEGIN_SRC javascript
+$.getJSON("https://www.runoob.com/try/ajax/jsonp.php?jsoncallback=?", function(data) {
+    
+    var html = '<ul>';
+    for(var i = 0; i < data.length; i++)
+    {
+        html += '<li>' + data[i] + '</li>';
+    }
+    html += '</ul>';
+    
+    $('#divCustomers').html(html); 
+});
+#+END_SRC
 * form2json
 #+BEGIN_SRC javascript
  /**
@@ -21,3 +281,4 @@
                 return JSON.stringify(o);
             }
 #+END_SRC
+

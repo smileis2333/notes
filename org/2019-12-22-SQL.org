@@ -722,6 +722,10 @@ from
 where
 	table_schema = 'chatroom'
 	and table_name = 'private_chat' ;
+** 单一列进行合并
+SET SESSION group_concat_max_len = 102400; 设置当前session的group by大小，因为可能拼床后溢出，数据丢失
+SELECT GROUP_CONCAT(CONCAT('\'', question_id , '\'')) question_id from question ; 把主键列表进行合并
+SELECT GROUP_CONCAT(CONCAT('select * from question where question_id =', question_id , '') SEPARATOR ' union\r\n') question_id from question ; 拼出select * from xx where 主键=xx union xxx
 * index
 ** clustered index
 一个表一个，一个键对一个数据行的指针
