@@ -1,0 +1,23 @@
+#+TITLE:  Violent monkey
+#+STARTUP: indent
+* meta 
+** @required
+导入js
+** @resource
+相当于全局变量而已，只是作为公共变量
+** @run-at
+指定加载时机
+** @grant
+开启存储之类的方法
+** @match
+匹配脚本的网址
+** @exclude-match
+* GM api
+** GM_getValue
+** GM_setValue
+** GM_deleteValue
+** GM_addStyle
+* develop
+$ npx -p https://github.com/violentmonkey/generator-userscript.git -p yo yo @violentmonkey/userscript
+创建模块目录
+可以启动build:js任务进行打包，打包后为index.user.js

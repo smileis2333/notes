@@ -1,0 +1,83 @@
+#+TITLE:  nginx
+#+STARTUP: indent
+* install
+** 包管理器
+** 下载源码编译
+http://nginx.org/en/download.html
+nginx包括开源版，商业版，以及各类第三方魔改
+编译的目的是去除可选模块，或者增加第三方模块
+./configure --prefix=/xxx/xxx --with-xx_modules
+make
+make install
+*** 编译选项
+**** modules
+***** 可选模块
+可以选择装/不装，配置之后的其他软件依赖需要用户自己进行安装
+--with-XXX_module
+--without-XXX_module
+***** 标准模块
+不可指定，一定会被安装
+**** 安装目录
+--prefix=/xx/xx
+* command
+** start
+$nginx/sbin/nginx
+** signal
+nginx -s [signal]
+*** stop
+直接停
+*** quit
+处理完进行中的再停
+*** reload
+重新加载配置
+*** reopen
+重新打开日志文件
+** test
+nginx -t/T
+都可以检测错误，但是当正确时-T会打印文件，可以拿来重定向做配置文件备份
+* config
+公有部分可以抽取出来，如果外部与内部都配置了一样的选项，内部优先
+** comment -> #
+** http
+*** n * server
+**** listen
+**** server_name
+**** index
+**** root
+**** error_page
+**** n * location
+***** root
+产生的路径为root配置的路径+url路径
+***** alias
+直接就是alias配置的路径，只能在location里面用
+***** index
+** proxy
+*** proxy_pass
+eg.
+反代google
+location / {
+  proxy_pass          https://www.google.com/;  #需要反代的域名
+  proxy_redirect      off;
+}
+**** upstream
+upstream imgserver {
+  server 111.231.51.81:81 weight=1 max_fails=2 fail_timeout=3;
+  server 111.231.51.81:82 weight=1 max_fails=2 fail_timeout=3;
+}
+
+location / {
+  proxy_pass http://imgserver;
+}
+* directory
+** conf
+** conf.d
+对于使用包管理器安装的nginx，nginx.conf可能使用的是 inclue /etc/nginx/*.conf指令或者其他目录的文件，具体的配置则是被切分多块
+** #+BEGIN_HTML
+0
+#+END_HTML
+
+web server root directory
+** logs
+** modules
+模块库
+** sbin

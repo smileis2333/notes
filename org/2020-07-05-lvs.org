@@ -1,0 +1,22 @@
+#+TITLE:  lvs
+#+STARTUP: indent
+* 概述
+实现负载均衡的软件方案，场景的三个角色分别为客户端，LVS服务器，以及RealServer，LVS服务是通过NAT以及对应的调度算法来进行报文的转发，iptables支持DNAT，可以一个端口配置一套转发，但是没办法做到一个端口每次随机转发到对应的内网主机，LVS由两部分组成，ipvs，和ipvsam，ipvsadm作为netfilter的模块存在
+* command
+** 创建集群
+ipvsadm -A -t [VIP]:[port] -s [loadblanceAlgorithm]
+** 添加规则
+ipvsadm -a -t [VIP]:[port] -r [RIP] -m
+-m代表使用lvs-nat模式
+** 查看规则
+ipvsadm -L
+-n 不对端口和ip进行逆解析
+** 保存/读取规则
+ipvsadm -S > /xxx/xxx
+ipvsadm -R < /xxx/xxx
+** 开启核心转发
+echo 1 > /proc/sys/net/ipv4/ip_forward
+* trick
+负载均衡需要考虑状态形应用如采用session等的处理方案
+* reference
+http://www.zsythink.net/archives/2185
