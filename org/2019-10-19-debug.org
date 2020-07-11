@@ -1,0 +1,31 @@
+#+TITLE: debugger
+#+STARTUP: indent
+* Java
+** 原理
+1. 启动对应的程序，让其在对应的端口上hold on
+2. 打断点，借助IDE的调试器连接到对应的host:port
+** 原生命令
+-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044
+** 各类软件distro
+一般的software distribution都有提供对应debug脚本，在原有启动脚本的基础上设置了debug param，比如mvnDebug, gradleDebug
+** debug annotation processor in idea
+*** 使用JavaCompile API指定和source和processor
+#+BEGIN_SRC java
+// main
+public class Main {
+    public static void main(String[] args) {
+        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        final StandardJavaFileManager standardFileManager = compiler.getStandardFileManager(null, null, null);
+        final Iterable<? extends JavaFileObject> objects = standardFileManager.getJavaFileObjectsFromStrings(List.of("C:\\Users\\smile2333\\Desktop\\prtesst\\untitled\\src\\sourceAnnotations\\Rectangle.java"));
+
+        List<String>options = List.of("-processor","sourceAnnotations.ToStringAnnotationProcessor");
+        final JavaCompiler.CompilationTask task = compiler.getTask(null, null, null, options, null, objects);
+        final Boolean call = task.call();
+        System.out.println(call);
+    }
+}
+
+
+
+#+END_SRC
+*** 借助构建工具的Debug脚本实现

@@ -49,7 +49,6 @@ be write html tag content
 2. supply an html file named package.html, the content in the tags <body>...</body> be extract
 **** javadoc -d docDirectory nameOfPackage
 javadoc -d docDirectory *.java
-
 ** Data types
 *** Integer types
 - byte 1bytes
@@ -176,6 +175,17 @@ StringBuilder insert(int offset, char c)
 StringBuilder delete(int startIndex, intendIndex)
 */
 #+END_SRC
+*** Big Numbers
+BigInteger add(BigInteger other)
+BigInteger add(BigInteger other)
+...multiply...
+...divide...
+...mod...
+BigInteger sqrt()
+int compareTo(BigInteger other)
+static BigInteger valueOf(long x)
+
+BigDecimal'api like the BigInteger
 ** operator
 *** arithmetic operators
 +  -  /  *
@@ -256,58 +266,6 @@ x--; --x;
 -2>>>1 is 2147483647
 
 *** parantheses
-** input and output
-*** reading
-**** scanner
-Scanner(InputStream in)
-String nextLine()
-String next()
-int nextInt()
-double nextDouble()
-boolean hasNext()
-boolean hasNextInt()
-boolean hasNextDouble()
-**** console
-static Console console() //java.lang.System
-static char[] readPassword(String prompt,Object... args)
-static char[] readPassword(String prompt,Object... args)
-*** format output
-| conversion type character | type                       | example |
-|---------------------------+----------------------------+---------|
-| d                         | deciamal integer           | 159     |
-| x                         | hexadecimal integer        | 9f      |
-| o                         | octal integer              | 237     |
-| f                         | fixed-point floating-point | 15.9    |
-| s                         | String                     | hello   |
-| c                         | character                  | H       |
-| b                         | boolean                    | true    |
-| %                         | The percent symbol         | %       |
-| n                         | line separator             |         |
-
-| flag | purpose                                |   example |
-|------+----------------------------------------+-----------|
-| +    | print sign of value                    | +33333.33 |
-| 0    | adds leading zeros                     |    003333 |
-| -    | left-justified field                   |           |
-| (    | enclose negative number in parentheses |           |
-| ,    | add group separators                   |  3,333.33 |
-
-// "%,(.2f" is add flag
-System.out.printf("%,.2f", 10000.0 / 3.0);
-3,333.33
-
-String message = String.format("Hello, %s. Next year,you'll be %d", name, age);
-
-*** file input and output
-**** read from file
-Scanner in = new Scanner(Path.of("myfile.txt"),StandardCharsets.UTF_8)
-**** file output 
-PrintWriter out = new PrintWriter("myfile.txt",StandardCharsets.UTF_8);
-*** api
-Scanner(Path p, String encoding)
-Scanner(String data)
-PrintWriter(String fileName)
-static Path of(String pathname)
 ** control flow
 *** block scope
 *** condition statement
@@ -342,17 +300,6 @@ case value could be primitive type or String or enum
 skip all the rest of loop
 **** continue
 skip this loop to next
-** Big Numbers
-BigInteger add(BigInteger other)
-BigInteger add(BigInteger other)
-...multiply...
-...divide...
-...mod...
-BigInteger sqrt()
-int compareTo(BigInteger other)
-static BigInteger valueOf(long x)
-
-BigDecimal'api like the BigInteger
 ** array
 *** declaring
 int[] a = new int[100];
@@ -391,39 +338,6 @@ static boolean equals(xxx[] a,xxx[] b)
 Java只有一维数组，多维数组实际为数组中的元素为其他数组
 double[][] balances = new double[NYEARS][NRATES];
 int[][] magicSquare =   {      {16, 3, 2, 13},      {5, 10, 11, 8},      {9, 6, 7, 12},      {4, 15, 14, 1}   };
-** access privilege
-|           | package | subclass                                                                | external package |
-|-----------+---------+-------------------------------------------------------------------------+------------------|
-| public    | yes     | yes                                                                     | yes              |
-| protected | yes     | yes                                                                     | no               |
-| default   | yes     | no(point out that the subclass of external package no access privilege) | no               |
-| private   | no      | no                                                                      | no               |
-** classpath
-jvm启动加载classpath指定的字节码文件
-jdk9之后可以直接命令行指定，不建议全局指定classpath
-java -classpath/home/user/classdir:.:/home/user/archives/archive.jarMyProg
-java -classpath c:\classdir;.;c:\archives\archive.jarMyProg
-** jar files
-使用zip格式来对字节码文件进行封装，节省空间，提升效率
-jar cvf jarFileName file1file2 . . .
-jar cvf jarFileName file1file2 . . .
-*** manifest
-打成jar包指定相关运行信息的指定文件
-- 运行入口
-- runtime version
-jar cfm jarFileName manifestFileName . . .
-jar cfm MyArchive.jar manifest.mfcom/mycompany/mypkg/*.class
-jar ufm MyArchive.jar manifest-additions.mf
-*** Executable JAR Files
-jar cvfe MyProgram.jar com.mycompany.mypkg.MainAppClass
-*** Multi-Release JAR Files
-javac --release 9 java9/com/runoob/Tester.java
-javac --release 7 java7/com/runoob/Tester.java
-jar -c -f test.jar -C java7 . --release 9 -C java9.
-*** A Note about Command-Line Options
-javac --class-path /home/user/classdir
-javac -p moduledir ...
-jar --create --verbose --file jarFileName file1file2 等于 jar -cvf ...
 ** methods with a variable number of parameters
 #+BEGIN_SRC java
 public class PrintStream{   
@@ -697,6 +611,14 @@ IntConsume intConsume = ele->System.out.println(ele)
 System.out.println(intConsume instanceof consume)  //true
 System.out.println(consume instanceof intConsume)  //true
 #+END_SRC
+*** method referrence
+当某个方法与该Function签名一致时，编译器在编译时，会将该方法引用作为其实现的方法体的执行内容，并将参数传递给该方法引用对应的方法
+四类
+1. 类名::静态方法名
+2. 引用名(对象名)::实例方法名
+3. 类名::实例方法名(String::toUpperCase)
+   原理：所有的实例方法名，本身在被编译后都存在this,即对当前对象的引用也是参数
+4. 构造方法引用：类名::new
 ** proxy
 *** purpose
 **** Routing method calls to remote servers
@@ -1322,53 +1244,6 @@ class Dog extends Animal{
 }
 
 #+END_SRC
-** concept
-*** polymorphism
-In the Java programming language, object variables are polymorphic. Avariable of type Employee can refer to an object of type Employee or toan object of any subclass of the Employee class (such as Manager,Executive, Secretary, and so on)
-*** method calls
-1. 对于可执行方法找出参数个数一致的方法
-2. 找出可执行的方法，根据类型兼容(多个符合的情况下，根据转换次数计算，如果多个转换次数相同，代表歧义)
-3. 如果是static, final, private修饰的方法，直接执行，如果否，根据具体是否动态绑定决定是否往子类找具体的执行方法
-4. 找出该类对应的子类的方法，其中可能会出现3的修饰符，此时停止
-JVM使用的method table维护每个类的方法签名，在动态绑定，检索时，进行签名检测，节省时间
-*** abstract classes
-可以有变量, 方法，构造方法，但是只能引用到子类的对象而不能直接实例化。如果有抽象方法，一定是抽象类，反正不成立
-*** Object
-因为无继承父类的类也默认为该类的子类，所以Object为全部类的最根源父类
-**** equal
-**** hashCode
-**** toString
-**** getClass
-**** getName
-**** getSuperclass
-*** interface
-**** static and private Methods
-**** default methods
-**** conflicts
-1. 父类优先
-2. 接口方法名冲突需要手动解决
-#+BEGIN_SRC java
-interface Person{
-    default String getName(){
-        return "";
-    }
-}
-
-interface Named{
-    default String getName() {
-        return getClass().getName();
-    }
-}
-
-class Student implements Person,Named{
-    @Override
-    public String getName() {
-        return Person.super.getName();
-    }
-}
-#+END_SRC
-*** Object Cloning 
-深复制需要手动处理
 ** streams
 *** create
 #+BEGIN_SRC java
@@ -1504,12 +1379,9 @@ Stream<String> lines = new BufferedReader(new InputStreamReader(inputStream, cha
 #+END_SRC
 *** Random-Access Files
 #+BEGIN_SRC java
-
 //RandomAccessFile implement DataInput and DataOutput, and use pointer to hold the position that read or write, it's usage like DataXXXXSteam
 var in = new RandomAccessFile("employee.dat", "r");
 var inOut = new RandomAccessFile("employee.dat", "rw");
-
-
 #+END_SRC
 *** ZIP Archives
 **** unzip
@@ -1712,19 +1584,6 @@ class Employee implements Serializable // version 1.1
    public static final long serialVersionUID = -1814239825517340645L;
 }
 #+END_SRC
-*** hierarchy
-**** root class
-- InputStream
-  - DataInputStream
-- OutputStream
-  - DataOutputStream
-- Reader
-- Writer 
-**** interface
-- Closeable 
-- Flushable
-- Readable
-- Appendable
 *** StandardCharsets
 character encodings that every Java virtual machine must support
 *** work with file
@@ -1856,6 +1715,45 @@ try (FileLock lock = channel.lock()){
    // access the locked file or segment
 }
 #+END_SRC
+*** format output
+| conversion type character | type                       | example |
+|---------------------------+----------------------------+---------|
+| d                         | deciamal integer           | 159     |
+| x                         | hexadecimal integer        | 9f      |
+| o                         | octal integer              | 237     |
+| f                         | fixed-point floating-point | 15.9    |
+| s                         | String                     | hello   |
+| c                         | character                  | H       |
+| b                         | boolean                    | true    |
+| %                         | The percent symbol         | %       |
+| n                         | line separator             |         |
+
+| flag | purpose                                |   example |
+|------+----------------------------------------+-----------|
+| +    | print sign of value                    | +33333.33 |
+| 0    | adds leading zeros                     |    003333 |
+| -    | left-justified field                   |           |
+| (    | enclose negative number in parentheses |           |
+| ,    | add group separators                   |  3,333.33 |
+
+// "%,(.2f" is add flag
+System.out.printf("%,.2f", 10000.0 / 3.0);
+3,333.33
+
+String message = String.format("Hello, %s. Next year,you'll be %d", name, age);
+*** hierarchy
+**** root class
+- InputStream
+  - DataInputStream
+- OutputStream
+  - DataOutputStream
+- Reader
+- Writer 
+**** interface
+- Closeable 
+- Flushable
+- Readable
+- Appendable
 *** trick
 1. 文件名读取，默认情况下都是读相对路径，获取参考的相对路径可以使用System.getProperty("user.dir")
 2. DataOutputStream和DataInputStream使用平台独立的方法写入数据(非文本类型，所以只有写入与读取匹配时，使用才具有意义)
@@ -1915,27 +1813,93 @@ if (matcher.find()){
 
 #+END_SRC
 ** annotation
-*** custom
-*** meta-annotation
-**** @Target
-**** @Retention
-**** @Inherited
-**** @Documented
-**** @Repeatable
-*** basic
-**** @Override
-**** @Deprecated
-**** @SuppressWarnings
-**** @SafeVarargs
-**** @FunctionInterface
-** method referrence
-当某个方法与该Function签名一致时，编译器在编译时，会将该方法引用作为其实现的方法体的执行内容，并将参数传递给该方法引用对应的方法
-四类
-1. 类名::静态方法名
-2. 引用名(对象名)::实例方法名
-3. 类名::实例方法名(String::toUpperCase)
-   原理：所有的实例方法名，本身在被编译后都存在this,即对当前对象的引用也是参数
-4. 构造方法引用：类名::new
+*** embedded
+**** meta-annotation
+***** @Target
+***** @Retention
+***** @Inherited
+***** @Documented
+***** @Repeatable
+**** basic
+***** @Override
+***** @Deprecated
+***** @SuppressWarnings
+***** @SafeVarargs
+***** @FunctionInterface
+*** type of annotion element
+- primitive type
+- String
+- Class
+- enum type
+- annotion type
+- array
+*** annotation place
+@Target({ElementType.TYPE, ElementType.METHOD}) // declare place position
+**** package
+**** class
+**** interface
+**** method
+**** constructor
+**** field
+**** local variable
+**** param variable
+**** type parameter
+*** retenstion
+**** source
+只存在到源码
+**** class
+存在到class
+**** runtime
+VM加载时也能读的到
+*** process
+**** source
+只能产生新文件，全部处理器完毕之后，开始编译，而无法改已经存在的源文件，因此lombok之流操作的不是source，而是class
+***** cmd
+javac -processor ProcessorClassName1,ProcessorClassName2,. . . sourceFiles
+***** processor
+****** hierarchy
+- Processor 
+  - AbstractProcessor
+    - [CustomProcessor]
+****** concept
+******* target
+@SupportedAnnotationTypes("com.horstmann.annotations.ToString") //参数为wildcard
+******* sourceversion
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
+******* java model api
+******** javax.lang.model.element.Element
+********* TypeElement
+****** process
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args) {
+        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        final StandardJavaFileManager standardFileManager = compiler.getStandardFileManager(null, null, null);
+        final Iterable<? extends JavaFileObject> objects = standardFileManager.getJavaFileObjectsFromStrings(List.of("C:\\Users\\smile2333\\Desktop\\prtesst\\untitled\\src\\sourceAnnotations\\Rectangle.java"));
+
+        List<String>options = List.of("-processor","sourceAnnotations.ToStringAnnotationProcessor");
+        final JavaCompiler.CompilationTask task = compiler.getTask(null, null, null, options, null, objects);
+        final Boolean call = task.call();
+        System.out.println(call);
+    }
+}
+
+
+@SupportedAnnotationTypes("sourceAnnotations.ToString")
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
+public class ToStringAnnotationProcessor extends AbstractProcessor {
+   public boolean process(Set<? extends TypeElement> annotations,RoundEnvironment currentRound){
+     //annotations是supportAnnotation支持的列表，currentRound代表符合支持列表注解的解析环境，可以获取带支持注解列表的class
+     
+     ...
+   }
+}
+#+END_SRC
+**** class
+**** runtime
+***** bytecode engine
+****** asm
+需要依赖各类插件，或者由第三方处理接入后使用构建工具API
 ** xml processing
 *** usage
 #+BEGIN_SRC java
@@ -2077,7 +2041,722 @@ socket.shutdownInput();
 ***** broadcaster
 ***** listener 
 ***** filiter 
+** jdbc
+*** Driver
+**** type1
+借助odbc，使用bridge，配置麻烦，已被淘汰
+**** type2
+借助DB提供的客户端本地代码，需要安装额外的本地代码库，被淘汰
+**** type3
+直接发请求到服务器，服务器在根据本地代码库，在转换，pure java library
+**** type4
+直接传协议特定的请求给服务器,pure java library
+**** auto register
+when the jar have META-INF/services/java.sql.Driver
+**** mannual register
+Class.forName(driverName)
+java -Djdbc.drivers=org.postgresql.Driver ProgramName
+System.setProperty("jdbc.drivers", "org.postgresql.Driver");
+
+//多驱动
+org.postgresql.Driver:org.apache.derby.jdbc.ClientDriver
+*** config
+jdbc:subprotocol:other stuff
+jdbc://derby://localhost:1527/[dbName];create=true
+*** connect
+#+BEGIN_SRC java
+String url = "jdbc:postgresql:COREJAVA";
+String username = "dbuser";
+String password = "secret";
+Connection conn = DriverManager.getConnection(url, username, password);
+#+END_SRC
+*** core api
+close()的关闭，上级可以影响下级，下级不影响上级
+**** Connection
+createStatement()
+**** Statament
+ResultSet executeQuery(String sqlQuery)
+int executeUpdate(String sqlStatement)
+long executeLargeUpdate(String sqlStatement)
+boolean execute(String sqlStatement)
+ResultSet getResultSet()
+void closeOnCompletion() // resultset关了，这个才会自动关掉
+SQLWarning getWarning()
+**** PrepareStatement
+**** ResultSet
+boolean next()
+Xxx getXxx(int colunmIndex)
+Xxx getXxx(String colunmName)
+<T>T getObject(int colunmIndex,Class<T>type)
+<T>T getObject(String colunmName,Class<T>type)
+***** RowSet
+RowSetFactory factory = RowSetProvider.newFactory();
+****** CachedRowSet
+关了还能用
+CachedRowSet crs = factory.createCachedRowSet();
+crs.populate(result);
+conn.close();
+// 改了之后返回
+crs.acceptChanges();
+******* connect
+crs.setURL("jdbc:derby://localhost:1527/COREJAVA");
+crs.setUsername("dbuser");
+crs.setPassword("secret");
+crs.setCommand("SELECT * FROM Books WHERE Publisher_ID = ?");
+crs.setString(1, publisherId);
+crs.execute(); //拿到数据后自动断开
+******* pagable
+crs.setCommand(command);
+crs.setPageSize(20);
+...
+crs.execute();
+crs.nextPage(); // 跟next()类似，但是这个方法迭代的是行数
+**** SQLException
+SQLException getNextException()
+Iterator<Throwable> iterator()
+String getSQLState()
+int getErrorCode() //vendor specific
+**** MetaData
+***** DatabaseMetaData
+***** ResultSetMetaData
+*** LOB
+**** Blob
+#+BEGIN_SRC java
+resultSet.getBlob().getBinaryInputStream();
+Blob blob = connection.createBlob();
+OutputStream out = blob.setBinaryStream(offset);
+ImageIO.write(image,"png",out)
+
+#+END_SRC
+**** Clob
+result.getClob().getCharacterStream()
+*** escape
+WHERE ? LIKE %!_% {escape ‘!’} 转义_
+select * from {} 连表需要类似的格式，因此各个vendor的语法不一定一致
+*** scrollable and upadtable
+具体是否有效看vendor的实现是否支持
+Statement stat = conn.createStatement(resultSetType, concurrency);
+PreparedStatement stat = conn.prepareStatement(command, resultSetType, concurrency);
+
+rs.previous();
+rs.relative(n); //正数往后走，负数往前走
+int currentRow = rs.getRow();
+// first, last, beforeFirst
+**** resultSetType
+TYPE_FORWARD_ONLY // 只能滚一次
+TYPE_SCROLL_INSENSITIVE // 可以改位置，但是数据库改了，该部分不敏感
+TYPE_SCROLL_SENSITIVE // 可以改位置，且敏感
+**** concurrency
+TYPE_SCROLL_SENSITIVE
+CONCUR_UPDATABLE
+*** transaction
+conn.setAutoCommit(false);
+...
+conn.commit();//conn.rollback();
+
+Savepoint svpt = conn.setSavepoint();
+// conn.releaseSavepoint(svpt);
+rollback(svpt) goes here
+*** batch
+#+BEGIN_SRC java
+while (. . .)
+{
+   command = "INSERT INTO . . . VALUES (" + . . . + ")";
+   stat.addBatch(command);
+}
+int[] counts = stat.executeBatch();
+#+END_SRC
+*** type map
+| db type                                      | java type          |
+|----------------------------------------------+--------------------|
+| INTEGER/INT                                  | int                |
+| SMALLINT                                     | short              |
+| NUMERIC(m,n),DECIMAL(m,n) or DEC(m,n)        | BigDecimal         |
+| FLOAT(n)                                     | double             |
+| REAL                                         | float              |
+| DOUBLE                                       | double             |
+| CHARACTER(n)/CHAR(n)/VARCHAR(n)/LONG VARCHAR | String             |
+| BOOLEAN                                      | boolean            |
+| DATE                                         | java.sql.Date      |
+| TIME                                         | java.sql.Time      |
+| TIMESTAMP                                    | java.sql.TimeStamp |
+|                                              |                    |
+** Time
+*** Instant
+static Instant now()
+Instant plus(TemporalAmount amountToAdd)
+*** Duration
+//calculate two time instant
+static Duration of(Nanos|Millis|Seconds|Minutes|Hours|Days)(long number)
+static Duration between(Temporal startInclusive, Temporal endExclusive)
+long toXXUnit()
+*** LocalDate
+// lack of Zone info
+static LocalDate now()
+static LocalDate of(int year, int month, int dayOfMonth)
+LocalDate plusXXX(long num)
+LocalDate plus(TemporalAmount amountToAdd) //主要是Period
+Period until(ChronoLocalDate endDateExclusive)
+Stream<LocalDate> datesUntil(LocalDate endExclusive, Period step)
+*** Period
+将时间进行周期组合，比如组合365天，组合1个月5天，然后在给LocalDate使用，与duration类似，但是特化与LocalDate
+static Period of(int years, int months, int days)
+Period plus(TemporalAmount amountToAdd)
+*** DATE ADJUSTERS
+#+BEGIN_SRC java
+LocalDate firstTuesday = LocalDate.of(year, month, 1).with(TemporalAdjusters.nextOrSame(DayOfWeek.TUESDAY));
+
+static TemporalAdjuster firstDayOfMonth()
+static TemporalAdjuster firstDayOfNextMonth()
+#+END_SRC
+*** LocalTime
+// lack of zone info
+static LocalTime now()
+static LocalTime of(int hour, int minute)
+static LocalTime of(int hour, int minute, int second)
+*** ZoneDateTime
+static ZonedDateTime now()
+static ZonedDateTime of(int year, int month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond, ZoneId zone)
+*** Format amd parsing
+**** formatter
+***** predefined
+String formatted = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(apollo11launch);
+   // 1969-07-16T09:32:00-04:00"
+***** locale specific
+#+BEGIN_SRC java
+// Class FormatStyle
+DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG);
+String formatted = formatter.format(apollo11launch);
+   // July 16, 1969 9:32:00 AM EDT
+formatted = formatter.withLocale(Locale.FRENCH).format(apollo11launch);
+#+END_SRC
+***** custom
+#+BEGIN_SRC java
+formatter = DateTimeFormatter.ofPattern("E yyyy-MM-dd HH:mm");
+#+END_SRC
+**** parsing
+#+BEGIN_SRC java
+// formatter 是两用的
+LocalDate churchsBirthday = LocalDate.parse("1903-06-14");
+ZonedDateTime apollo11launch =
+   ZonedDateTime.parse("1969-07-16 03:32:00-0400",
+      DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxx"));
+#+END_SRC
+*** backward
+| translate                                     |                                       |                             |
+|-----------------------------------------------+---------------------------------------+-----------------------------|
+| Instant<->java.util.Date                      | Date.from(instant)                    | date.toInstant()            |
+| ZonedDateTime <-> java.util.GregorianCalendar | GregorianCalendar.from(zonedDateTime) | cal.toZonedDateTime()       |
+| Instant <-> java.sql.Timestamp                | Timestamp.from(instant)               | timestamp.toInstant()       |
+| LocalDateTime <-> java.sql.Timestamp          | Timestamp.valueOf(localDateTime)      | timestamp.toLocalDateTime() |
+| LocalDate <-> java.sql.Date                   | Date.valueOf(localDate)               | date.toLocalDate()          |
+| LocalTime <-> java.sql.Time                   | Time.valueOf(localTime)               | time.toLocalTime()          |
+| DateTimeFormatter <-> java.text.DateFormat    | formatter.toFormat())                 | none                        |
+| java.util.TimeZone <-> ZoneId                 | TimeZone.getTimeZone(id)              | timeZone.toZoneId()         |
+| java.nio.file.attribute.FileTime <-> Instant  | FileTime.from(instant)                | fileTime.toInstant()        |
+** compile
+*** JavaCompiler
+**** basic
+#+BEGIN_SRC java
+final JavaCompiler systemJavaCompiler = ToolProvider.getSystemJavaCompiler();
+final int src = systemJavaCompiler.run(null, null, null, "-sourcepath", "src", "C:\\Users\\smile2333\\Desktop\\prtesst\\Test.java");
+#+END_SRC
+**** CompilationTask
+it is a Class that implement Callable<Boolean>， so it can be pass to ExecutorService to run or invoke call() of its methods
+***** usage
+#+BEGIN_SRC java
+JavaCompiler.CompilationTask task = compiler.getTask(
+   errorWriter, // Uses System.err if null
+   fileManager, // Uses the standard file manager if null
+   diagnostics, // Uses System.err if null
+   options, // null if no options
+   classes, // For annotation processing; null if none
+   sources); // Java file obbject
+#+END_SRC
+***** JavaFileObject
+****** read from disk
+#+BEGIN_SRC java
+StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+Iterable<JavaFileObject> sources
+   = fileManager.getJavaFileObjectsFromStrings(List.of("File1.java", "File2.java"));
+#+END_SRC
+****** read from memory
+#+BEGIN_SRC java
+public class StringSource extends SimpleJavaFileObject
+{
+   private String code;
+
+
+   StringSource(String name, String code)
+   {
+      super(URI.create("string:///" + name.replace(’.’,’/’) + ".java"), Kind.SOURCE);
+      this.code = code;
+    }
+   public CharSequence getCharContent(boolean ignoreEncodingErrors)
+   {
+      return code;
+   }
+}
+
+List<StringSource> sources = List.of(
+   new StringSource(className1, class1CodeString), . . .);
+task = compiler.getTask(null, fileManager, diagnostics, null, null, sources);
+#+END_SRC
+****** write out to memory
+#+BEGIN_SRC java
+public class ByteArrayClass extends SimpleJavaFileObject
+{
+   private ByteArrayOutputStream out;
+
+
+   ByteArrayClass(String name)
+   {
+      super(URI.create("bytes:///" + name.replace(’.’,’/’) + ".class"), Kind.CLASS);
+   }
+    
+   public byte[] getCode()
+   {
+      return out.toByteArray();
+   }
+    
+   public OutputStream openOutputStream() throws IOException
+   {
+      out = new ByteArrayOutputStream();
+      return out;
+   }        
+}
+
+List<ByteArrayClass> classes = new ArrayList<>();
+StandardJavaFileManager stdFileManager
+   = compiler.getStandardFileManager(null, null, null);
+JavaFileManager fileManager
+   = new ForwardingJavaFileManager<JavaFileManager>(stdFileManager)
+      {
+         public JavaFileObject getJavaFileForOutput(Location location,
+               String className, Kind kind, FileObject sibling)
+               throws IOException
+         {
+            if (kind == Kind.CLASS)
+            {
+               ByteArrayClass outfile = new ByteArrayClass(className);
+               classes.add(outfile);
+               return outfile;
+            }
+            else
+               return super.getJavaFileForOutput(location, className, kind, sibling);
+         }
+      };
+
+public class ByteArrayClassLoader extends ClassLoader
+{
+   private Iterable<ByteArrayClass> classes;
+    
+   public ByteArrayClassLoader(Iterable<ByteArrayClass> classes)
+   {
+      this.classes = classes;
+   }
+    
+   public Class<?> findClass(String name) throws ClassNotFoundException
+   {
+      for (ByteArrayClass cl : classes)
+      {
+         if (cl.getName().equals("/" + name.replace(’.’,’/’) + ".class"))
+         {
+            byte[] bytes = cl.getCode();
+            return defineClass(name, bytes, 0, bytes.length);
+         }
+      }
+      throw new ClassNotFoundException(name);        
+   }
+}
+
+#+END_SRC
+***** DiagnosticCollector
+catch message from compilation task or StandardJavaFileManager
+#+BEGIN_SRC java
+// install to 
+StandardJavaFileManager fileManager
+   = compiler.getStandardFileManager(diagnostics, null, null);
+
+
+#+END_SRC
+* concept
+** polymorphism
+In the Java programming language, object variables are polymorphic. Avariable of type Employee can refer to an object of type Employee or toan object of any subclass of the Employee class (such as Manager,Executive, Secretary, and so on)
+** method calls
+1. 对于可执行方法找出参数个数一致的方法
+2. 找出可执行的方法，根据类型兼容(多个符合的情况下，根据转换次数计算，如果多个转换次数相同，代表歧义)
+3. 如果是static, final, private修饰的方法，直接执行，如果否，根据具体是否动态绑定决定是否往子类找具体的执行方法
+4. 找出该类对应的子类的方法，其中可能会出现3的修饰符，此时停止
+JVM使用的method table维护每个类的方法签名，在动态绑定，检索时，进行签名检测，节省时间
+** abstract classes
+可以有变量, 方法，构造方法，但是只能引用到子类的对象而不能直接实例化。如果有抽象方法，一定是抽象类，反正不成立
+** Object
+因为无继承父类的类也默认为该类的子类，所以Object为全部类的最根源父类
+*** equal
+*** hashCode
+*** toString
+*** getClass
+*** getName
+*** getSuperclass
+** interface
+*** static and private Methods
+*** default methods
+*** conflicts
+1. 父类优先
+2. 接口方法名冲突需要手动解决
+#+BEGIN_SRC java
+interface Person{
+    default String getName(){
+        return "";
+    }
+}
+
+interface Named{
+    default String getName() {
+        return getClass().getName();
+    }
+}
+
+class Student implements Person,Named{
+    @Override
+    public String getName() {
+        return Person.super.getName();
+    }
+}
+#+END_SRC
+** Object Cloning 
+深复制需要手动处理
+* access privilege
+|           | package | subclass                                                                | external package |
+|-----------+---------+-------------------------------------------------------------------------+------------------|
+| public    | yes     | yes                                                                     | yes              |
+| protected | yes     | yes                                                                     | no               |
+| default   | yes     | no(point out that the subclass of external package no access privilege) | no               |
+| private   | no      | no                                                                      | no               |
+* classpath
+jvm启动加载classpath指定的字节码文件
+jdk9之后可以直接命令行指定，不建议全局指定classpath
+java -classpath/home/user/classdir:.:/home/user/archives/archive.jarMyProg
+java -classpath c:\classdir;.;c:\archives\archive.jarMyProg
+* jar
+使用zip格式来对字节码文件进行封装，节省空间，提升效率
+jar cvf jarFileName file1file2 . . .
+jar cvf jarFileName file1file2 . . .
+** manifest
+打成jar包指定相关运行信息的指定文件
+- 运行入口
+- runtime version
+jar cfm jarFileName manifestFileName . . .
+jar cfm MyArchive.jar manifest.mfcom/mycompany/mypkg/*.class
+jar ufm MyArchive.jar manifest-additions.mf
+** Executable JAR Files
+jar cvfe MyProgram.jar com.mycompany.mypkg.MainAppClass
+** Multi-Release JAR Files
+javac --release 9 java9/com/runoob/Tester.java
+javac --release 7 java7/com/runoob/Tester.java
+jar -c -f test.jar -C java7 . --release 9 -C java9.
+** A Note about Command-Line Options
+javac --class-path /home/user/classdir
+javac -p moduledir ...
+jar --create --verbose --file jarFileName file1file2 等于 jar -cvf ...
+* module
+** acess level
+*** exports
+使某个包对外部可见，主要重要还是对于public和protectd的向外暴露，但使用该包的模块，需要先依赖该包所在module才可使用该包
+*** requires
+依赖某个module
+*** open
+兼容反射，如果反射模块A，不依赖于任何模块，而模块B使用A，由于A不依赖于B，所以当编译时会报错，因此，兼容方式为open某个包，或者整个module进行open，表示该包完全可见
+*** qualified
+**** exports
+exports com.sun.javafx.collections to
+   javafx.controls, javafx.graphics, javafx.fxml, javafx.swing;
+// 只有to后面列表的模块可以引用export的package
+**** open
+// 与exports类似
+module v2ch09.openpkg
+{
+   requires com.horstmann.util;
+   opens com.horstmann.places to com.horstmann.util;
+}
+** compilation
+javac xxx/module-info.java xxxx/xxxx.java
+java --module-path [modulePath] --module [moduleName]/[javaPath]
+** automatic module
+javac -p v2ch09.automod:commons-csv-1.5.jar \
+   v2ch09.automod/com/horstmann/places/CSVDemo.java \
+   v2ch09.automod/module-info.java
+java -p v2ch09.automod:commons-csv-1.5.jar \
+   -m v2ch09.automod/com.horstmann.places.CSVDemo
+*** 目的
+高版本兼容低版本的依赖的第三方类库
+*** 规则
+1. 默认requires其他模块
+2. 所有包都是对外可见，相当于废除了模块访问，进行向下兼容
+3. 如果META-INF/MANIFEST.MF有Automatic-Module-Name，则读取该属性作为模块名
+4. 3不满足的情况下，读取jar包名字(去除版本)作为模块名
+** transitive
+默认情况下，依赖包的依赖，不能直接使用，如果需要可使用，需要依赖包的依赖项设置transitive
+// 依赖该模块的module可以自动获得javafx.base的依赖
+module javafx.controls
+{
+   requires transitive javafx.base;
+   . . .
+}
+
+** unnamed module
+不再模块内的类库或者其他类，可以访问其他任意的module，但是反过来不成立
+java --module-path v2ch09.automod \
+   --class-path commons-csv-1.5.jar \
+   -m v2ch09.automod/com.horstmann.places.CSVDemo
+// 此处，csv处理库不作为module选项，因此视为unnamed module，编译时直接报错
+** spi
+META-INF/services的内容可以存到module-info.java里面
+
+module jdk.security.auth
+{
+   . . .
+   provides javax.security.auth.spi.LoginModule with
+      com.sun.security.auth.module.Krb5LoginModule,
+      com.sun.security.auth.module.UnixLoginModule,
+      com.sun.security.auth.module.JndiLoginModule,
+      com.sun.security.auth.module.KeyStoreLoginModule,
+      com.sun.security.auth.module.LdapLoginModule,
+      com.sun.security.auth.module.NTLoginModule;
+}
+
+module java.base
+{
+   . . .
+   uses javax.security.auth.spi.LoginModule;
+}
+** analyze tool
+*** jdeps
+jdeps -s junit-4.12.jar hamcrest-core-1.3.jar //查看依赖关系列表
+jdeps --generate-module-info /tmp/junit junit-4.12.jar hamcrest-core-1.3.jar //生成module-info.java
+jdeps -s -dotoutput /tmp/junit junit-4.12.jar hamcrest-core-1.3.jar dot -Tpng /tmp/junit/summary.dot > /tmp/junit/summary.png //生成依赖图
+*** jlink
+jlink --module-path com.horstmann.greet.jar:v2ch09.exportedpkg.jar:$JAVA_HOME/jmods --add-modules v2ch09.exportedpkg --output /tmp/hello
+*** jmod
+* security
+** class loader
+*** class loading process
+1. 加载对应的类，比如从命令行指定，或者从网络获取bytecode
+2. 如果该类的属性字段是其他类，有父类，先把依赖性载入
+3. 执行main方法
+4. 如果main方法，还用到了别的，把别的类的字节码也载入虚拟机
+*** default
+**** bootstrap class loader
+无法在语言机制获取对应的实例，是虚拟机与语言规范的边界
+loads the platform classes contained in the modules
+java.base
+java.datatransfer
+java.desktop
+java.instrument
+java.logging
+java.management
+java.management.rmi
+java.naming
+java.prefs
+java.rmi
+java.security.sasl
+java.xml
+as well as a number of JDK-internal modules.
+**** platform class loader
+bootstrap未加载的属性jdk类库的由该类进行加载
+**** platform class loader
+load applications classes from module path and classpath
+*** custom
+1. extend ClassLoader
+2. override findClass，负责获取对象的准确(可能被加密或者其他，所以可能需要解密或者重排)字节码文件，然后转换为bytes数组
+3. 调用defineClass(name,bytes,off,len)获取Class<T>
+*** bytecode verification
+1. 编译时经过一次校验
+2. 载入VM时也进行校验
+
+** security manager
+*** security policy
+**** ProtectionDomain 
+**** policy
+***** path
+****** default
+- java.policy in jdk home/conf diretory
+- .java.policy in user home directory
+****** change
+******* conf file
+can edit java.security change default directory
+policy.url.1=file:${java.home}/conf/security/java.policy
+policy.url.2=file:${user.home}/.java.policy
+******* code
+System.setProperty("java.security.policy", "MyApp.policy");
+******* command param
+java -Djava.security.policy=MyApp.policy MyApp //combine with other policy file
+java -Djava.security.policy==MyApp.policy MyApp //just use this file without other policy file
+***** format
+****** general
+grant codesource
+{
+   permission1;
+   permission2;
+   . . .
+};
+****** codesource
+******* code base
+- 对于applet来讲，是所属的下载远程HTTP的URL
+- 对于Jar来讲，则是文件路径
+******* cetificate
+****** permission
+targetName and actionList is optional or depend on permission class
+permission className [targetName, actionList];
+******* common permission class
+| Type                   | Target                              | Action                    |
+|------------------------+-------------------------------------+---------------------------|
+| java.io.FilePermission | File target(see text)               | read,write,execute,delete |
+| SocketPermission       | socket                              | accept,connect,...        |
+| PropertyPermisson      | ...                                 | ..                        |
+| RuntimePermission      | createClassLoader,getClassLoader,.. | ...                       |
+******* custom
+extend Permission
+******** constuctor(target, actionList)
+******** String getActions()
+******** boolean equal(Object other)
+******** int hashCode()
+******** boolean implies(Permission other)
+最重要的方法，用于检测条件是否满足：
+1. JVM启动时读取policy file，创建指定的权限列表
+2. 当用户需要在方法中使用到权限时，会先创建对的权限，通过SecurityManager进行权限判断，返回true说明通过，false则抛异常
+**** install
+System.setSecurityManager(new SecurityManager());
+java -Djava.security.manager -Djava.security.policy=MyApp.policy MyApp
+** JAAS
+JVM的认证框架
+*** Subject
+**** principals * n 
+*** policy
+**** required
+必须成功才能认证成功。但是失败了也会接着走配置的其他模块
+**** requisite
+同required。但是失败了就不走其他模块校验
+**** sufficent
+不要求成功。失败了不走..
+**** optional
+不要求成功。失败了走。。。
+*** jaas file
+grant principalClass "principalName"
+grant com.sun.security.auth.UnixPrincipal "harry"
+** digital signatures
+*** MessageDigest
+#+BEGIN_SRC java
+MessageDigest alg = MessageDigest.getInstance("SHA-1");
+InputStream in = . . .;
+int ch;
+while ((ch = in.read()) != -1)
+   alg.update((byte) ch);
+
+byte[] bytes = . . .;
+alg.update(bytes);
+
+byte[] hash = alg.digest();
+#+END_SRC
+*** message sign
+*** verify signature
+**** keystore
+存密钥对+证书（公钥）
+***** generate
+keytool -genkeypair -keystore alice.certs -alias alice
+***** export cert
+keytool -exportcert -keystore alice.certs -alias alice -file alice.cer
+***** import
+keytool -importcert -keystore bob.certs -alias alice -file alice.cer
+***** interact
+jar cvf document.jar document.txt // 把文档封到jar包里面
+jarsigner -keystore alice.certs document.jar alice // 签名
+jarsigner -verify -keystore bob.certs document.jar //校验签名
+**** code sign
+** ENCRYPTION
+*** Symmetric Ciphers
+#+BEGIN_SRC java
+Cipher cipher = Cipher.getInstance(algorithmName);
+Cipher cipher = Cipher.getInstance(algorithmName, providerName); // 默认的provider为SunJCE
+
+int mode = . . .;
+Key key = . . .;
+cipher.init(mode, key);
+
+int blockSize = cipher.getBlockSize();
+var inBytes = new byte[blockSize];
+. . . // read inBytes
+int outputSize= cipher.getOutputSize(blockSize);
+var outBytes = new byte[outputSize];
+int outLength = cipher.update(inBytes, 0, outputSize, outBytes);
+. . . // write outBytes
+
+outBytes = cipher.doFinal(inBytes, 0, inLength);
+outBytes = cipher.doFinal();
+#+END_SRC
+*** key generation
+#+BEGIN_SRC java
+KeyGenerator keygen = KeyGenerator.getInstance("AES");
+var random = new SecureRandom(); // see below
+keygen.init(random);
+Key key = keygen.generateKey();
+
+byte[] keyData = . . .; // 16 bytes for AES
+var key = new SecretKeySpec(keyData, "AES");
+
+// 比random更随机
+var secrand = new SecureRandom();
+var b = new byte[20];
+// fill with truly random bits
+secrand.setSeed(b);
+#+END_SRC
+*** io
+**** output
+#+BEGIN_SRC java
+Cipher cipher = . . .;
+cipher.init(Cipher.ENCRYPT_MODE, key);
+var out = new CipherOutputStream(new FileOutputStream(outputFileName), cipher);
+var bytes = new byte[BLOCKSIZE];
+int inLength = getData(bytes); // get data from data source
+while (inLength != -1)
+{
+   out.write(bytes, 0, inLength);
+   inLength = getData(bytes); // get more data from data source
+}
+out.flush();
+#+END_SRC
+**** input
+#+BEGIN_SRC java
+Cipher cipher = . . .;
+cipher.init(Cipher.DECRYPT_MODE, key);
+var in = new CipherInputStream(new FileInputStream(inputFileName), cipher);
+var bytes = new byte[BLOCKSIZE];
+int inLength = in.read(bytes);
+while (inLength != -1)
+{
+   putData(bytes, inLength); // put data to destination
+   inLength = in.read(bytes);
+}
+#+END_SRC
+*** public key ciphers
+#+BEGIN_SRC java
+KeyPairGenerator pairgen = KeyPairGenerator.getInstance("RSA");
+var random = new SecureRandom();
+pairgen.initialize(KEYSIZE, random);
+KeyPair keyPair = pairgen.generateKeyPair();
+Key publicKey = keyPair.getPublic();
+Key privateKey = keyPair.getPrivate();
+
+Key key = . . .; // an AES key
+Key publicKey = . . .; // a public RSA key
+Cipher cipher = Cipher.getInstance("RSA");
+cipher.init(Cipher.WRAP_MODE, publicKey);
+byte[] wrappedKey = cipher.wrap(key);
+#+END_SRC
 * reserved words
 - static
 - final
 - strictfp
+- synchronized
+

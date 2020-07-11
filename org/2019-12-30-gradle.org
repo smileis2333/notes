@@ -168,6 +168,6 @@ def VERSION = "5.1.8.RELEASE"
 引用变量
 eg:
 compile group: 'org.springframework.security', name: 'spring-security-config', version: "$VERSION"
-* other
-** idea创建gradle web不带web.xml
+* trick
+** idea创建gradle web不带web.xml，创建web.xml
 File -> Project Structure -> facets -> Deployment Descriptors -> + -> web.xml(设置好路径就会自动创建)

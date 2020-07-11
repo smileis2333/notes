@@ -16,6 +16,14 @@ ipvsadm -S > /xxx/xxx
 ipvsadm -R < /xxx/xxx
 ** 开启核心转发
 echo 1 > /proc/sys/net/ipv4/ip_forward
+* 集群模式
+Tun和DR都需要不走VS出口，所以回程需要配置lo为VIP并抑制ARP
+** nat模式
+出入都需要经过，大量请求时有瓶颈
+** Tun模式
+不改写ip，加一层IP tunel，之后传给RS，RS解析后，通过自己的出网线路直接出去，并改写ip为VIP
+** DR模式
+直接改MAC地址完成转发，只能局域网玩，由于只改地址，因此VS和RS端口需要一致
 * trick
 负载均衡需要考虑状态形应用如采用session等的处理方案
 * reference

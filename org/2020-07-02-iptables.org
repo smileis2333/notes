@@ -135,7 +135,7 @@ iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT --to-source 公网IP
 iptables -t nat -I PREROUTING -d 公网IP -p tcp --dport 公网端口 -j DNAT --to-destination 私网IP:端口号
 iptables -t nat -I PREROUTING -d 公网IP -p tcp --dport 8080 -j DNAT --to-destination 10.1.0.1:80
 iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT --to-source 公网IP
-mark: 以前裴讯路由器网上使用udp2raw，就是没配置回程，导致电脑断开链接，而电脑，直接linux转发，回程时，可以正常则是因为内部只是单纯使用了端口转发，ip都是一致
+mark: 以前裴讯路由器网上使用udp2raw，就是没配置回程，有些版本的linux，dnat之后会自动配置回程，导致电脑断开链接，而电脑，直接linux转发，回程时，可以正常则是因为内部只是单纯使用了端口转发，ip都是一致
 ** MASQUERADE
 可以认为是动态SNAt，由于IP的动态变化，偶尔需要这种配置
 iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -o eth0 -j MASQUERADE 改为eth0可用的ip地址
