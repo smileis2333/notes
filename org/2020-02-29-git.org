@@ -35,6 +35,15 @@ git remote rm [repoName]
 git branch -avv
 *** 普通分支
 实际工作的分支，如果存在remote repo，则可以将其对应到一个跟踪分支上，然后通过git push/fetch进行操作
+*** 自建远程仓库
+// create
+mkdir  project.git
+cd  project.git
+git  --bare inti
+
+// 本地项目
+git remote add origin [username]@[host]:[path]/project.git
+git push origin master
 * command
 git log --oneline
 git cat-file -t hashCodeSeg 查看hashCode对应的git对象类型

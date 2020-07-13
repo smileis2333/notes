@@ -1,0 +1,140 @@
+#+TITLE: linux
+#+STARTUP: indent
+* Image
+** check
+docker images
+** obtain
+docker pull [imageName:[tag]]
+** search
+docker search [name]
+** delete
+docker rmi [imageId]
+** create
+*** from container
+docker commit -m "commit message" -a "author Name" [containerId] [imageName[:tag]]
+*** from Dockerfile
+**** format
+runoob@runoob:~$ cat Dockerfile 
+FROM    centos:6.7
+MAINTAINER      Fisher "fisher@sudops.com"
+
+RUN     /bin/echo 'root:123456' |chpasswd
+RUN     useradd runoob
+RUN     /bin/echo 'runoob:123456' |chpasswd
+RUN     /bin/echo -e "LANG=\"en_US.UTF-8\"" >/etc/default/local
+EXPOSE  22
+EXPOSE  80
+CMD     /usr/sbin/sshd -D
+**** build
+docker build -t [imageName[:tag]] [path of Dockerfile]
+** tag
+docker tag [containerId] [imageName[:tag]]
+* Container
+** start
+docker run -it ubuntu /bin/sh
+docker start [containerId]
+*** option
+**** -i
+交互
+**** -t
+进入终端
+**** -d
+daemon
+docker attach [containerId]
+docker exec -it [containerId] /bin/bash //不会退出时导致容器停止
+**** -P
+auto port map
+**** -p
+mannual setting
+**** --name
+不指定时，docker会自动生成，各类命令除了指定containerId也可以指定name
+specify name of container
+**** --network
+**** --hostname
+**** --dns
+**** -v
+目录映射
+-v ~/nginx/www:/www
+** stop
+docker stop [containerId]
+** check
+*** docker ps
+-a 看全部，默认看运行中的
+*** docker logs -f [containerId]
+-f与tail类似，看deamon内的输出情况
+*** docker port [containerId]
+*** docker top [containerId]
+*** docket inspect [containerId]
+返回描述container整体的JSON文件
+** delete
+docker rm -f [containerId]
+** export and import
+docker export [containerId] > ubuntu.tar
+ cat docker/ubuntu.tar | docker import - test/ubuntu:v1 // 导入成image
+** network
+docker network create -d bridge test-net
+docker network ls
+* Repository
+** service provider
+https://hub.docker.com official repo, free account can only have one private repo
+** account
+docker login
+docker logout
+** push
+// 如果镜像是魔改已经存在的，必须重新打tag，否则由于namespace不一致，无法上传
+docker tag [imageId] [username]/[iamgeName:[tag]]
+// 是否私有，得上网站进行设定，整体操作与GitHub类似
+docker push [username]/[imageName:[tag]]
+* Docker Registry
+Docker Registry contains many Repository
+* Dockerfile
+** FROM
+FROM [imageName]
+** RUN
+RUN [shell] //run this command in build procesure, allow multi RUN
+** COPY
+COPY [--chown=<user>:<group>] <源路径1>...  <目标路径>
+COPY [--chown=<user>:<group>] ["<源路径1>",...  "<目标路径>"]
+COPY hom* /mydir/
+COPY hom?.txt /mydir/
+** ADD
+复制压缩包会自动解压, tar 压缩文件的话，压缩格式为 gzip, bzip2 以及 xz 的情况下
+** CMD
+docker run时执行
+// 只有一个生效，可被执行时指定进行覆盖
+CMD <shell 命令> 
+CMD ["<可执行文件或命令>","<param1>","<param2>",...] 
+CMD ["<param1>","<param2>",...]  # 该写法是为 ENTRYPOINT 指令指定的程序提供默认参数
+** ENTRYPOINT
+类似于 CMD 指令，不可被覆盖， --entrypoint传参
+** ENV
+ENV <key> <value>
+ENV <key1>=<value1> <key2>=<value2>...
+** ARG
+与ENV作用域不一样，ARG 设置的环境变量仅对 Dockerfile 内有效
+** VOLUME
+定义匿名数据卷。在启动容器时忘记挂载数据卷，会自动挂载到匿名卷。
+** EXPOSE
+声明端口。docker run -P 时，会自动随机映射 EXPOSE 的端口
+** WORKDIR
+每一个 RUN 命令都是新建的一层。只有通过 WORKDIR 创建的目录才会一直存在
+** USER
+用于指定执行后续命令的用户和用户组，这边只是切换后续命令执行的用户（用户和用户组必须提前已经存在）。
+** HEALTHCHECK
+HEALTHCHECK [选项] CMD <命令>：设置检查容器健康状况的命令
+HEALTHCHECK NONE：如果基础镜像有健康检查指令，使用这行可以屏蔽掉其健康检查指令
+HEALTHCHECK [选项] CMD <命令> : 这边 CMD 后面跟随的命令使用，可以参考 CMD 的用法。
+** ONBUILD
+下个引用该iamge的Dockerfile会调用
+ONBUILD <其它指令>
+* install
+curl -fsSL https://get.docker.com | bash
+* tool
+** Docker Compose
+管理多个container的启动设置
+*** install
+curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+** Docker Machine
+** Docker Swarm

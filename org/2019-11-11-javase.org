@@ -2754,6 +2754,19 @@ Cipher cipher = Cipher.getInstance("RSA");
 cipher.init(Cipher.WRAP_MODE, publicKey);
 byte[] wrappedKey = cipher.wrap(key);
 #+END_SRC
+* native method
+** native method
+*** create native method
+1. generate correspondent C header fileManager such as javac -h . HelloNative.java
+2. implement C function
+3. compile C code into a dynamically loader library 
+4. Java load library, general put the System.loadLibrary("HelloNative"); into static block
+*** invoke native method
+**** static
+**** instance
+*** native method invoke java method
+** Integration of other languages with Java
+use invocation API to construct VM, the rest is like invoke java method of native method
 * reserved words
 - static
 - final

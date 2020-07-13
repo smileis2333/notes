@@ -1,0 +1,79 @@
+#+TITLE: vscode
+#+STARTUP: indent
+* visual studio code
+ctrl+shift+p list all executable commands
+** command name list
+*** file
+**** new untitled file
+新建文件
+**** new window
+打开新的vscode
+**** open file
+**** open recent
+**** add folder to workspace
+vscode支持多个目录作为workspace
+**** open setting(JSON/UI)
+*** edit
+**** general win10 keyboard shortcut
+undo/redo/find/replace/find in files/replace in files/copy/paste/cut
+ref win10shortcut.org
+***** find in files
+****** include
+****** exclude
+**** region opearation
+**** comment
+ctrl + /
+*** selection
+**** select all
+**** move select
+***** shift + ->/<-
+按方向增加区域, 每次按照字符
+***** ctrl + shift + ->/<-
+同上，每次按照单词
+***** alt + shift + ->/<-
+按智能单词(按照封闭区域)增加区域
+**** copy donw/up
+**** multi cursor
+*** view
+**** zen mode
+**** editor layout
+***** split up
+***** split left
+***** single
+**** terminal
+ctrl + `
+**** togger wrap
+是否支持长句自动换行显示
+**** show mini map
+**** show breadcrumbs
+面包屑导航
+**** render whitespace
+显示空白字符
+*** Go
+**** go to symbol in file
+列出所有符号以供跳转
+**** go to definition/type definition/implement(根据语言特性选择)
+**** go to file
+根据文件名模糊搜索搜索文件
+**** back/forward/last edit location
+代码位置跳转
+**** swicth editor
+ctrl + tab
+**** switch group
+多窗口跳转
+ctrl + number
+**** peek definition/...
+**** go to line/column
+**** go to bracket
+**** next/previous program
+**** next/previous change
+观察未提交的文件变化
+** default keyboard shortcuts
+设置所有默认的全局按键，可以查阅完整的内部命令名
+** vim emulator
+*** gf
+find file
+*** 解决正则与其他vim模拟器差别的解决方法
+集成neovim在设置中加入
+"vim.neovimPath": "C:/tools/neovim/Neovim/bin/nvim.exe",
+"vim.enableNeovim": true,

@@ -1,0 +1,89 @@
+#+TITLE: svn
+#+STARTUP: indent
+* install
+apt install subversion
+* command
+** create repo
+mkdir /opt/svn
+svnadmin create /opt/svn/runoob
+*** 单库
+svnserve -d -r /opt/svn/runoob //配最底的目录
+
+// authz文件配置方式
+[groups]
+admin=user1
+dev=user2
+[/]
+@admin=rw
+user2=r
+*** 多库
+svnserve -d -r /opt/svn //配上层目录
+
+将svnadmin创建的版本库的passwd和authz删掉，在根目录配置这两项，然后每个子库，配置authz和passwd指向根路径的两个配置文件
+
+// authz配置
+[groups]
+admin=user1
+dev=user2
+[runoob:/]
+@admin=rw
+user2=r
+
+[runoob01:/]
+@admin=rw
+user2=r
+*** config
+**** $repo/conf/svnserve.conf
+1. 配置anon-access，非鉴权用户读写权限
+2. 配置auth-access，鉴权用户读写权限
+3. authz-db路径
+4. realm登录时提供的认证域名称
+5. password-db路径
+**** $repo/conf/passwd
+[users]
+admin = admin
+thinker = 123456
+**** $repo/conf/authz-db
+该配置文件由一个[groups]配置段和若干个版本库路径权限段组成。
+
+[groups]
+g_admin = admin,thinker
+
+# @表示组引用，普通用户直接写
+[admintools:/]
+@g_admin = rw
+** checkout
+svn checkout svn://[host]/[repoName]
+** check
+*** svn status
+*** svn log
+指定文件可以只看文件
+显示全部信息
+-r [revisionStart]:[revisionEnd]
+*** svn diff
+**** default
+默认看本地与缓存
+**** 缓存与版本库
+svn diff -r [revisionVesion] [glob] 本地缓存比对版本3
+**** 版本与版本
+svn diff -r [revisionStart]:[revisionEnd] [glob]
+*** svn cat
+svn cat -r [revisionVesion] [glob]
+*** svn list
+svn list svn://[host]/[repoName]/[path]/[directory] 
+** track
+svn add [glob]
+** commit
+svn commit -m 'commit message'
+** update
+svn update
+当出现冲突时，会出现对应的选项，供操作
+** revert
+svn revert [glob]
+svn revert -R [directory]
+** branch
+svn copy trunk branches/[branchName]
+
+svn merge ../branches/my_branch/ //in trunk path
+** tag
+svn copy trunk/ tags/v1.0

@@ -5,3 +5,6 @@
  win10配置emacs HOME目录，环境变量设置HOME
 ** find file default path
 (setq default-directory "/path/")
+* package
+** magit
+*** magit-status

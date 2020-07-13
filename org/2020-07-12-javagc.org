@@ -1,0 +1,11 @@
+#+TITLE:  java gc
+#+STARTUP: indent
+* evolve history
+** serial
+serial
+serial old
+** parallel
+parallel scavenge
+parallel old
+** cms
+** g1
