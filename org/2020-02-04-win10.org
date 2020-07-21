@@ -16,3 +16,5 @@ echo %JAVA_HOME%
 ctrl-cap 平假名
 alt-cap  片假名
 shift-cap 切换为英文
+* host
+C:\WINDOWS\system32\drivers\etc

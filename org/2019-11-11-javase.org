@@ -1,15 +1,5 @@
 #+TITLE:  java se
 #+STARTUP: indent
-* java memory model
-** stack
-方法的局部变量(参数和定义的变量)
-** heap
-** method area
-1.8其实现为PermGen(永久代)，1.8以后变成Metaspace(元空间x)
-** Native Method Stack
-本地方法栈，与操作系统相关
-** pc register
-与CPU相关
 * buzzwords
 - simple
 - object-oriented
@@ -476,7 +466,7 @@ class TalkingClock
 #+END_SRC
 **** Static Inner Classes
 #+BEGIN_SRC java
-// 多用于需要隐藏类，同时类不需要访问外部状态
+// 多用于需要对外部隐藏类，同时该类在该类中又是独立的逻辑单元，在集合中被多次使用
 public class Main {
     public static void main(String[] args) {
         AA.BB bb = new AA.BB();

@@ -1,4 +1,6 @@
 #+TITLE: spring
+#+STARTUP: indent
+* unducument
 springwebstarted自带了hibernate对于java校验api的实现
 
 使用mockmvc进行单元测试
@@ -17,3 +19,4 @@ ps: Java变量的初始化顺序为：静态变量或静态语句块–>实例变量或初始化语句块–>构造
 可以多种方式获取到登录的用户：
 controller建议用参数@AuthenticationPrincipal User user获取
 通用获取方法: Authentication authentication =    SecurityContextHolder.getContext().getAuthentication();User user = (User) authentication.getPrincipal(); 这种可以任何层级的代码中都可以使用(不被限制于controller)
+* principle

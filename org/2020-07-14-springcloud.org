@@ -1,0 +1,422 @@
+#+TITLE:  spring cloud
+#+STARTUP: indent
+* 注册中心
+** Eureka
+** Zookeeper
+docker run -d -p 2181:2181 zookeeper
+docker exec -it 73 /bin/bash
+*** command
+zhCli.sh
+ls /
+*** trick
+微服务注册的临时节点
+*** config
+#+BEGIN_SRC yaml
+spring:
+  application:
+    name: cloud-consumer-order
+  cloud:
+    #注册到zookeeper地址
+    zookeeper:
+      connect-string: 192.168.2.165:2181
+#+END_SRC
+** Consul
+consul.exe --version
+consul.exe agent -dev
+*** config
+#+BEGIN_SRC yaml
+spring:
+  application:
+    name: consul-provider-peyment
+  ###consul注册中心地址
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        #hostname: 127.0.0.1
+        service-name: ${spring.application.name}
+#+END_SRC
+** Nacos
+* 服务调用
+** Ribbon
+*** IRule
+定义了各种负载均衡的规则
+*** config
+1. 全局配置可以直接再@ComponentScan下
+2. 为单个服务设置则需要在扫描范围外，否则会被配置为全局，然后在配置类设置@RibbonClient(name = "CLOUD-PAYMENT-SERVICE", configuration = MySelfRule.class)
+***** format
+#+BEGIN_SRC java
+@Configuration
+public class MySelfRule {
+    @Bean
+    public IRule myRule(){
+        return new RandomRule();    //负载均衡机制改为随机
+    }
+}
+#+END_SRC
+
+** LoadBalancer
+* 服务调用2
+** Feign
+** OpenFeign
+对ribbon和restTemplate做了二次整合，实现了以声明式接口配合注解的形式省去了旧有的模板化的申请数据方法
+*** config
+**** 超时控制
+#+BEGIN_SRC yaml
+ribbon:
+  #指的是建立连接使用的时间，适用于网络状况正常的情况下，两端连接所用的时间
+  ReadTimeout: 5000
+  #指的是建立连接后从服务器读取到可用资源所用的时间
+  ConnectTimeout: 5000
+#+END_SRC
+**** log
+#+BEGIN_SRC java
+import feign.Logger;	//不要导错包
+
+@Configuration
+public class FeignConfig {
+
+    @Bean
+    Logger.Level feignLoggerLevel(){
+        //打印最详细的日志
+        return Logger.Level.FULL;
+    }
+
+}
+
+#+END_SRC
+* 服务降级
+** Hystrix
+*** 降级
+1. 配置均是一致的操作，但是一般配置在消费端的上面，如果配置在provider一侧，当链路很长时，上游无法快速进行响应
+2. 可以配置在任意方法上，但是一般是在对消费侧的远程调用(配置在feign上面)进行fallback处理，因为本地方法是可以进行耗时估算，而远程由于链路长度、网络等因素，才是制约消费侧的处理时间因素
+**** config
+***** activate
+@EnableHystrix // 激活
+***** 降级
+****** single fallback
+#+BEGIN_SRC java
+@HystrixCommand(fallbackMethod = "paymentTimeOutFallbackMethod", commandProperties = {
+        @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1500")
+})
+@GetMapping("/consumer/payment/hystrix/timeout/{id}")
+public String paymentInfo_TimeOut(@PathVariable("id") Integer id){
+    String result = paymentHystrixService.paymentInfo_TimeOut(id);
+    return result;
+}
+public String paymentTimeOutFallbackMethod(@PathVariable("id") Integer id){
+    return "消费者80，支付系统繁忙";
+}
+#+END_SRC
+****** global fallback
+#+BEGIN_SRC java
+// 不能带参数，因为被全局调用，不一定能确保都能得到属性
+
+// 类的上面加入声明
+@DefaultProperties(defaultFallback = "payment_Global_FallbackMethod")
+
+// 需要激活fallback的方法设置
+@HystrixCommand
+#+END_SRC
+****** feign setting(general)
+feign.hystrix.enabled=true
+#+BEGIN_SRC java
+@Component
+@FeignClient(value = "CLOUD-PROVIDER-HYSTRIX-PAYMENT",fallback = PaymentFallbackService.class)
+public interface PaymentHystrixService {
+    @GetMapping("/payment/hystrix/ok/{id}")
+    public String paymentInfo_OK(@PathVariable("id") Integer id);
+    @GetMapping("/payment/hystrix/timeout/{id}")
+    public String paymentInfo_TimeOut(@PathVariable("id") Integer id);
+}
+
+@Component
+public class PaymentFallbackService implements PaymentHystrixService {
+    @Override
+    public String paymentInfo_OK(Integer id) {
+        return "----PaymentFallbackService\t fallback-paymentInfo_OK----";
+    }
+
+    @Override
+    public String paymentInfo_TimeOut(Integer id) {
+        return "----PaymentFallbackService\t fallback-paymentInfo_TimeOut----";
+    }
+}
+#+END_SRC
+***** 熔断
+#+BEGIN_SRC java
+	@HystrixCommand(fallbackMethod = "paymentCircuitBreaker_fallback",commandProperties = {
+        @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),                      //开启断路器
+        @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),         //请求总数阈值（默认20）
+        @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "10000"),   //熔断后，进行半开尝试的时间窗口期
+        @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60"),       //请求次数的错误率达到多少跳闸(百分率%，默认50%)
+})
+#+END_SRC
+***** HystrixDashboard
+监控hystrix2.2.1时需要在被监控一侧加入
+#+BEGIN_SRC java
+/**
+ * 此配置是为了服务监控而配置，与服务容错本身无关，springcloud升级后的坑
+ * ServletRegistrationBean因为SpringBoot的默认路径不是 “/hystrix.stream"
+ * 只要在自己的项目里配置上下的servlet就可以了
+ */
+@Bean
+public ServletRegistrationBean getServlet() {
+    HystrixMetricsStreamServlet streamServlet = new HystrixMetricsStreamServlet() ;
+    ServletRegistrationBean registrationBean = new ServletRegistrationBean(streamServlet);
+    registrationBean.setLoadOnStartup(1);
+    registrationBean.addUrlMappings("/hystrix.stream");
+    registrationBean.setName("HystrixMetricsStreamServlet");
+    return  registrationBean;
+}
+#+END_SRC
+*** 熔断
+*** 限流
+** resilience4j
+** sentinel
+* 服务网关
+** Zuul
+** Gateway
+*** config
+**** yaml
+#+BEGIN_SRC yaml
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: payment_route # 路由的id,没有规定规则但要求唯一,建议配合服务名
+          #匹配后提供服务的路由地址
+          uri: http://localhost:8001
+          predicates:
+            - Path=/payment/get/** # 断言，路径相匹配的进行路由
+
+        - id: payment_route2
+          uri: http://localhost:8001
+          predicates:
+            - Path=/payment/lb/** #断言,路径相匹配的进行路由
+#+END_SRC
+**** source
+#+BEGIN_SRC java
+@Configuration
+public class GatewayConfig {
+
+    @Bean
+    public RouteLocator customRouteLocator(RouteLocatorBuilder routeLocatorBuilder){
+        RouteLocatorBuilder.Builder routes = routeLocatorBuilder.routes();
+
+        routes.route("path_route_angenin",  //id
+                r -> r.path("/guonei")  //访问 http://localhost:9527/guonei
+                        .uri("http://news.baidu.com/guonei"));  //就会转发到 http://news.baidu.com/guonei
+
+        routes.route("path_route_angenin2",  //id
+                r -> r.path("/guoji")  //访问 http://localhost:9527/guoji
+                        .uri("http://news.baidu.com/guoji"));  //就会转发到 http://news.baidu.com/guonji
+
+        return routes.build();
+    }
+}
+#+END_SRC
+**** 开启负载均衡
+#+BEGIN_SRC yaml
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+#+END_SRC
+**** predicate options
+***** after
+- After=2020-06-17T12:53:40.325+08:00[Asia/Shanghai]
+***** before
+***** between
+***** cookie
+- Cookie=username,angenin 
+***** header
+- Header=X-Request-Id, \d+ 
+***** host
+***** method
+***** path
+***** query
+**** filter
+***** custom
+#+BEGIN_SRC java
+@Component
+@Slf4j
+public class MyLogGateWayFilter implements GlobalFilter, Ordered {
+
+
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        log.info("**************come in MyLogGateWayFilter：" + new Date());
+        //获取request中的uname参数
+        String uname = exchange.getRequest().getQueryParams().getFirst("uname");
+
+        if(uname == null){
+            log.info("*******用户名为null，非法用户！！");
+            //设置响应，不被接受
+            exchange.getResponse().setStatusCode(HttpStatus.NOT_ACCEPTABLE);
+
+            return exchange.getResponse().setComplete();
+        }
+
+        //返回chain.filter(exchange)，放行
+        return chain.filter(exchange);
+    }
+
+    @Override
+    public int getOrder() {
+        //返回值是过滤器的优先级，越小优先级越高（最小-2147483648，最大2147483648）
+        return 0;
+    }
+}
+
+#+END_SRC
+* 服务配置
+** Config
+抽取微服务配置作为中心化处理
+*** /{label}/{application}-{profile}.yml
+**** server
+#+BEGIN_SRC yaml
+spring:
+  application:
+    name: cloud-config-center #注册进Eureka服务器的微服务名
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/smile-2333/springcloud-config.git  #git的仓库地址
+          search-paths:   #搜索目录
+            - springcloud-config
+      label: master   #读取的分支
+#+END_SRC
+**** client
+application.yml改为bootstrap.yml
+*** /{application}-{profile}.yml
+*** {application}/{profile}/{label}
+*** 设置某个服务支持refresh
+@RefreshScope //标准后的bean所读取的配置，在被actuator refresh之后，@Value读取的数值，会自动刷新为最新值，其他没标的，都不会变
+** Nacos
+* 服务总线
+** Bus
+配合Config实现快速的配置更新
+*** config
+**** server
+#+BEGIN_SRC yaml
+spring:
+  application:
+    name: cloud-config-center #注册进Eureka服务器的微服务名
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/smile-2333/springcloud-config.git  #git的仓库地址
+          search-paths:   #搜索目录
+            - springcloud-config
+      label: master   #读取的分支
+  rabbitmq:
+    host: 192.168.2.165  #本机写localhost，服务器的写服务器地址
+    port: 5672   #客户端和RabbitMQ进行通信的端口
+    username: guest #默认也是guest
+    password: guest #默认也是guest
+
+#RabbitMQ相关配置
+management:
+  endpoints:  #暴露bus刷新配置的端点
+    web:
+      exposure:
+        include: 'bus-refresh'
+
+#+END_SRC
+**** client
+#+BEGIN_SRC yaml
+spring:
+  application:
+    name: config-client
+  cloud:
+    config: #config客户端配置
+      label: master   #分支名称
+      name: config    #配置文件名称       这三个综合：master分支上的config-dev.yml的配置文件
+      profile: dev    #读取后缀名称       被读取到http://config-3344.com:3344/master/config/dev
+      uri: http://localhost:3344  #配置中心地址
+  rabbitmq:
+    host: 192.168.2.165  #本机写localhost，服务器的写服务器地址
+    port: 5672   #客户端和RabbitMQ进行通信的端口
+    username: guest #默认也是guest
+    password: guest #默认也是guest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#+END_SRC
+*** 特定
+curl -X POST "http://localhost:3344/actuator/bus-refresh/config-client:3355"
+*** 广播
+curl -X POST "http://localhost:3344/actuator/bus-refresh"
+** Nacos
+* spring cloud stream
+提供各类MQ之间的桥接，目前支持RabbitMQ和Kafka
+** producer
+#+BEGIN_SRC java
+@EnableBinding(Source.class)    //定义消息的推送管道（Source是spring的）
+public class IMessageProviderImpl implements IMessageProvider {
+
+    @Resource
+    private MessageChannel output;  //消息发送管道
+
+    @Override
+    public String send() {
+        String serial = UUID.randomUUID().toString();
+        output.send(MessageBuilder.withPayload(serial).build());     //MessageBuilder是spring的integration.support.MessageBuilder
+        System.out.println("*******serial: " + serial);
+        return null;
+    }
+}
+#+END_SRC
+** consumer
+#+BEGIN_SRC java
+@EnableBinding(Sink.class)
+@Controller
+public class ReceiveMessageListenerController {
+
+    @Value("${server.port}")
+    private String serverPort;
+
+    @StreamListener(Sink.INPUT) //监听
+    public void input(Message<String> message){
+        System.out.println("消费者1号------>收到的消息：" + message.getPayload() + "\t port：" + serverPort);
+    }
+
+}
+#+END_SRC
+** group
+1. 提供了广播的隔离，同组的属于对消息进行竞争，不同组重复消费
+2. 提供了一种消息持久化的手段，默认情况不配置group，每次启动，应用自身会生成对应的MQ group，其标识都是变化的，如果全部宕机，下次启动消息会导致丢失，如果配置group则可以重新读回
+* trick
+** 服务发现
+#+BEGIN_SRC java
+@EnableDiscoveryClient // in configutation class
+...
+
+private DiscoveryClient discoveryClient;
+@GetMapping(value = "/payment/discovery")
+public Object discovery(){
+    List<String> services = discoveryClient.getServices();  //得到所有的微服务
+    for (String element : services) {
+        log.info("*****element:"+element);
+    }
+    List<ServiceInstance> instances = discoveryClient.getInstances("CLOUD-PROVIDER-SERVICE"); //得到一个具体微服务的所有实例
+    for (ServiceInstance instance : instances){
+        log.info(instance.getServiceId()+"\t"+instance.getHost()+"\t"+instance.getPort()+"\t"+instance.getUri());
+    }
+    return this.discoveryClient;
+}
+
+#+END_SRC

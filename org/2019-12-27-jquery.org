@@ -34,6 +34,7 @@ $(function(){
 *** element selector
 $("p").hide()
 *** id selector
+选出一个，多个id也只能选出第一个
 $("#test").hide();
 *** class selector
 $(".test").hide();
@@ -242,6 +243,8 @@ $.ajax(
   }
 );
 #+END_SRC
+**** option
+type
 *** $.get(URL,callback);
 *** $.post(URL,data,callback);
 *** jsonp
@@ -258,7 +261,8 @@ $.getJSON("https://www.runoob.com/try/ajax/jsonp.php?jsoncallback=?", function(d
     $('#divCustomers').html(html); 
 });
 #+END_SRC
-* form2json
+* trick
+** form2json
 #+BEGIN_SRC javascript
  /**
              * jquery获取到的表单对象转json，包含checkbox转数组

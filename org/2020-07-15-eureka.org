@@ -1,0 +1,59 @@
+#+TITLE:  euraka
+#+STARTUP: indent
+* server
+** dependency
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+</dependency>
+** config
+#+BEGIN_SRC yaml
+server:
+  port: 7001
+
+eureka:
+  instance:
+    hostname: localhost #eureka服务端的实例名称
+  client:
+    #false表示不向注册中心注册自己
+    register-with-eureka: false
+    #false表示自己端就是注册中心，我的职责就是维护服务实例，并不需要去检索服务
+    fetch-registry: false
+    service-url:
+      #设置与Eureka Server交互的地址查询服务和注册服务都需要依赖这个地址
+      defaultZ4 one: http://${eureka.instance.hostname}:${server.port}/eureka/
+#+END_SRC
+** enable
+@EnableEurekaServer
+* client
+** dependency
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+</dependency>
+** config
+#+BEGIN_SRC yaml
+server:
+  port: 80
+  application:
+    name: cloud-order-server
+
+eureka:
+  client:
+    #表示是否将自己注册进EurekaServer默认为true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka #支持数组
+
+#+END_SRC
+** enable
+@EnableEurekaClient
+** instance
+*** instance-id
+用指定的内容取代host:/port显示
+*** prefer-ip-address(boolean)
+hover时显示ip地址
+* trick
+** ban slef protection
+eureka.server.enable-self-preservation // server side

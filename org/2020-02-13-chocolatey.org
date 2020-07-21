@@ -1,3 +1,10 @@
 #+TITLE: chocolatey
-#+STARUP: indent
+#+STARTUP: indent
 * command
+** install
+choco install [packageName]
+** uninstall
+choco uninstall [packageName]
+*** options
+**** -X
+remove dependency
