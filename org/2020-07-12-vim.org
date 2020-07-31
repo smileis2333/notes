@@ -1,11 +1,12 @@
 #+TITLE: vim
 #+STARTUP: indent
 * vim
-** cursor move
-*** basic move
-hjkl left/bottom/top/right
-*** last edit location
-ctrl + o then ctrl + i
+** move
+*** hjkl
+*** G/gg
+*** [num]G/gg
+*** w/e/b
+*** 0/^/$
 ** command/normal mode
 *** to insert mode
 **** i
@@ -49,13 +50,6 @@ delete to end
 **** cw
 **** c$
 **** c[number]motion
-*** 定位及文件命令
-**** gg
-当前文件第一行
-**** G
-当前文件最后一行
-**** number gg/G
-跳到指定行
 *** 文件状态信息
 ctrl + G
 *** 补全
@@ -68,7 +62,6 @@ ctrl + G
 当前光标所在的单词进行搜索(往下走开始搜索)
 **** #
 当前光标所在的单词进行搜索(往上)
-** insert mode
 ** Last line mode
 *** 替换命令
 **** :s/oldword/newword
@@ -97,12 +90,6 @@ ctrl + G
 另存文件
 **** 提取和合并文件
 :r [path/]fileName
-** 可视模式
-*** vit
-选中完整的tag内容
-** 计数指定动作
 ** vim text object
 *** vit
 *** vat
-** 子窗口跳转
-ctrl + w + 窗口光标移动方向

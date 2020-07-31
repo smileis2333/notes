@@ -1,0 +1,39 @@
+#+TITLE: ssh
+#+STARTUP: indent
+* auth
+** ssh-keygen
+生成密钥对
+** ssh-copy-id -i [.pub path] host@ip
+等价于写入~/.ssh/authorized_keys
+* ssh-agent
+可以管理多私钥和私钥加密的情景
+** start
+ssh-agent $SHELL # 默认直接开子shell
+eval `ssh-agent` # deamon
+** add key
+ssh-add [path]
+** clean
+ssh-add -d [path]
+ssh-add -D # full clean
+** look
+ssh-add -l #看私钥
+ssh-add -L #看对应的公钥
+** lock
+ssh-add -x #暂时锁定, 管理功能暂时失效
+ssh-add -X #解锁
+* ssh
+ssh host@ip # 如果带私钥，默认读~/.ssh/id_rsa
+** forward
+*** local forward
+ssh -Nf -L [localport]:[targetHost]:[targetPort] root@[jumpHostIP]
+ssh -p 1993 root@localhost
+*** remote forward
+/etc/ssh/sshd_config
+将#GatewayPorts no改为GatewayPorts yes
+ssh -Nf -R *:1993:localhost:22 root@[middleHost] #与跳板机不一样，一般中间机对本机不可达(比如云主机不可达学校内网主机)，但是反过来建立连接之后，就可达，但是不稳定
+ssh -p 1993 root@[middleHost]
+*** dynamic forward
+ssh -Nf -D 1080 root@[host]
+走sock5
+* ref
+https://www.yanxurui.cc/posts/tool/2017-07-14-ssh-port-forward/

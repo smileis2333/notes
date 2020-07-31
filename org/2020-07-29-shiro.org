@@ -1,0 +1,198 @@
+#+TITLE: shiro
+#+STARTUP: indent
+* Subject
+* SecurityManager
+* Realms
+** demo
+#+BEGIN_SRC java
+
+#+END_SRC
+** 多realm配置
+#+BEGIN_SRC xml
+<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="realms">
+            <list>
+                <ref bean="jdbcRealm"/>
+                <ref bean="secondRealm"/>
+            </list>
+        </property>
+    </bean>
+    <!--省略其他配置 -->
+    <bean id="jdbcRealm" class="com.progor.realms.MyRealm">
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <property name="hashAlgorithmName" value="MD5"></property>
+                <property name="hashIterations" value="1024"></property>
+            </bean>
+        </property>
+    </bean>
+    <bean id="secondRealm" class="com.progor.realms.SecondRealm"></bean>
+#+END_SRC
+* Authenticator
+** 认证策略
+realm支持多个，一般情况下一个通了就算认证完毕了，可以改
+FirstSuccessfulStrategy：只要有一个 Realm 验证成功即可，只返回第一个 Realm 身份验证成功的认证信息，其他的忽略；
+AtLeastOneSuccessfulStrategy：只要有一个 Realm 验证成功即可，和 FirstSuccessfulStrategy不同，返回所有 Realm 身份验证成功的认证信息；
+AllSuccessfulStrategy：所有 Realm 验证成功才算成功，且返回所有 Realm 身份验证成功的认证信息，如果有一个失败就失败了。
+#+BEGIN_SRC xml
+ <bean id="authenticator"
+          class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+        <property name="authenticationStrategy">
+            <bean class="org.apache.shiro.authc.pam.AllSuccessfulStrategy"></bean>
+        </property>
+    </bean>
+#+END_SRC
+* Authorizer
+* CacheManager
+* Cryptography
+** config
+#+BEGIN_SRC xml
+<bean id="jdbcRealm" class="com.progor.realms.MyRealm">
+    <property name="credentialsMatcher">
+        <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+            <!--定义加密的算法-->
+            <property name="hashAlgorithmName" value="MD5"></property>
+            <!--多次加密-->
+            <property name="hashIterations" value="1024"></property>
+        </bean>
+    </property>
+</bean>
+#+END_SRC
+** realm中加盐
+#+BEGIN_SRC java
+String salt = "lilei";//假设这个盐值是从数据库中查出的
+ByteSource credentialsSalt = ByteSource.Util.bytes(salt);
+SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(upToken.getUsername(),password,credentialsSalt,this.getName());
+#+END_SRC
+* 集成spring mvc
+** 配置拦截器
+#+BEGIN_SRC xml
+  <filter>
+    <filter-name>shiroFilter</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    <init-param>
+      <param-name>targetFilterLifecycle</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>shiroFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+#+END_SRC
+** 拦截/*
+#+BEGIN_SRC xml
+  <servlet>
+    <servlet-name>spring</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:springmvc.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>spring</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+#+END_SRC
+** 配置spring context
+#+BEGIN_SRC xml
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+  
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+#+END_SRC
+** spring context配置shiro
+#+BEGIN_SRC xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!--1. 配置 SecurityManager!-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!--缓存管理器-->
+        <property name="cacheManager" ref="cacheManager"/>
+		<!--realms-->
+        <property name="realms">
+            <list>
+                <ref bean="jdbcRealm"/>
+            </list>
+        </property>
+    </bean>
+
+	<!--2. 配置 CacheManager缓存管理器.-->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<!--缓存配置文件（这里暂不涉及，可以随便拷贝一个）-->
+        <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
+    </bean>
+
+	<!--3. 配置 Realm-->
+    <bean id="jdbcRealm" class="com.progor.realms.MyRealm">
+    </bean>
+
+	<!--4. 配置 LifecycleBeanPostProcessor，用来管理shiro一些bean的生命周期-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+	<!--5. 启用shiro 的注解。但必须在配置了 LifecycleBeanPostProcessor 之后才可以使用-->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor"/>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+	<!--6. 配置 ShiroFilter.-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login.jsp"/>
+        <property name="successUrl" value="/list.jsp"/>
+        <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
+        <property name="filterChainDefinitions">
+            <value>
+                /login.jsp = anon
+                /shiro/login = anon
+                /shiro/logout = logout
+                /** = authc
+            </value>
+        </property>
+    </bean>
+</beans>
+#+END_SRC
+* 过滤
+** 声明式
+#+BEGIN_SRC xml
+<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login.jsp"/>
+        <property name="successUrl" value="/list.jsp"/>
+        <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
+        <property name="filterChainDefinitions">
+            <value>
+                /login.jsp = anon
+                /shiro/login = anon
+                /shiro/logout = logout
+                /** = authc
+            </value>
+        </property>
+    </bean>
+#+END_SRC
+** 编程式
+代码里直接掉方法自己检查
+** 注解式
+*** @RequiresRoles
+@RequiresRoles(value={“admin”, “user”}, logical= Logical.AND)
+*** @RequiresPermissions
+@RequiresPermissions (value={“user:a”, “user:b”}, logical= Logical.OR)
+*** @RequiresUser
+*** @RequiresGuest

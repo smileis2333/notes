@@ -391,6 +391,30 @@ void setAccessible(boolean flag) // sets or clears the accessibility flag for th
 boolean trySetAccessible()
 boolean isAccessible()
 static void setAccessible(AccessibleObject[]array, boolean flag)
+*** trick
+**** 取泛型类型
+条件: 父类是泛型且只有一个，且子类设置了对应的类型
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args) {
+        final Children children = new Children();
+        Object genericType = children.getGeneric();
+        System.out.println();
+    }
+}
+
+class Parent<T> {
+    public Class<T>getGeneric(){
+        final Class<? extends Parent> clazz = this.getClass();
+        final ParameterizedType type = (ParameterizedType) (clazz.getGenericSuperclass());
+        final Type[] types = type.getActualTypeArguments();
+        return (Class<T>)(types[0]);
+    }
+}
+
+class Children extends Parent<String> {
+}
+#+END_SRC
 ** inner class
 好处是紧密关联与状态分享
 *** inner class access outer variable
@@ -1349,405 +1373,6 @@ optionalValue.map(results::add);
 Optional<Double> result = inverse(x).flatMap(MyMath::squareRoot);
 
 #+END_SRC
-** input and output
-*** write
-**** write text output
-#+BEGIN_SRC java
-var out = new PrintWriter(fileName,StandardCharsets.UTF_8);
-out.println("hello world") // by default, autoflush is disable, so it is flush when close
-#+END_SRC
-*** read
-**** read text input
-#+BEGIN_SRC java
-var scan = new Scanner(System.in);
-List<String> lines = Fils.readAllLines(path,cahrset);
-
-// they both have method that return Stream
-Stream<String> lines = Files.lines(path, charset)
-Stream<String> words = scan.tokens();
-Stream<String> lines = new BufferedReader(new InputStreamReader(inputStream, charset)).lines();
-#+END_SRC
-*** Random-Access Files
-#+BEGIN_SRC java
-//RandomAccessFile implement DataInput and DataOutput, and use pointer to hold the position that read or write, it's usage like DataXXXXSteam
-var in = new RandomAccessFile("employee.dat", "r");
-var inOut = new RandomAccessFile("employee.dat", "rw");
-#+END_SRC
-*** ZIP Archives
-**** unzip
-#+BEGIN_SRC java
-public class Main {
-    public static void main(String[] args) throws Exception {
-        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream("C:/Users/smile2333/Desktop/Desktop.zip"))) {
-
-            ZipEntry zipEntry = null;
-            while ((zipEntry = zipInputStream.getNextEntry()) != null) {
-
-                File file = new File("C:/Users/smile2333/Desktop/" + zipEntry.getName());
-                file.createNewFile();
-
-                unzip(zipInputStream, file);
-                zipInputStream.closeEntry();
-            }
-
-        }
-    }
-
-    static void unzip(ZipInputStream zipInputStream, File outputFile) throws Exception {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile)) {
-            byte b[] = new byte[1024];
-            while (zipInputStream.read(b) > 0) {
-                fileOutputStream.write(b);
-            }
-        }
-
-    }
-}
-
-#+END_SRC
-**** compress
-#+BEGIN_SRC java
-public class Main {
-    public static void main(String[] args) throws Exception {
-        try(ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream("C:/Users/smile2333/Desktop/test.zip"))) {
-
-            final ZipEntry zipEntry = new ZipEntry("3.txt");
-            zipOutputStream.putNextEntry(zipEntry);
-            new FileInputStream(new File("C:/Users/smile2333/Desktop/3.txt")).transferTo(zipOutputStream);
-            zipOutputStream.closeEntry();
-        }
-    }
-}
-#+END_SRC
-*** serializable
-**** algorithm
-**** format
-***** class object demo
-  Offset: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 	
-00000000: AC ED 00 05 73 72 00 01 41 8D 91 83 01 18 90 4D
-00000010: F0 02 00 02 49 00 01 61 49 00 01 62 78 70 00 00
-00000020: 00 02 00 00 00 03
-#+BEGIN_SRC java
-public class Main {
-    public static void main(String[] args)  throws Exception{
-        final A a = new A(2, 3);
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("1.txt"))){
-            objectOutputStream.writeObject(a);
-        }
-    }
-}
-
-class A implements Serializable {
-    int a;
-    int b;
-
-    public A(int a, int b) {
-        this.a = a;
-        this.b = b;
-    }
-}
-#+END_SRC
-- class identifier 
-AC ED---magic number
-03--represent that it is an object
-72--fixed number
-00 01--length of class name
-41--A's ascii's hexadecimal 
-8D 91 83 01 18 90 4D F0--fingerprint of class, contains 8 bytes
-02--flag
-00 02--count of field
-- data field descriptor
-49--type code 'I', represent int
-00 01--length of field
-61--'a'
-49--...
-00 01--...
-62--'b'
-(if type is object,after name, have class name, and nesting struct same like above)
-78--end marker
-70--(because no extend other class)
-00 00 00 02--a'value is 2
-00 00 00 03--b'value is 3
-***** array object demo
-#+BEGIN_SRC java
-public class Main3 {
-    public static void main(String[] args)  throws Exception{
-
-        int[]a={1,6,7};
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("1.txt"))){
-            objectOutputStream.writeObject(a);
-        }
-    }
-}
-#+END_SRC
-  Offset: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 	
-00000000: AC ED 00 05 75 72 00 02 5B 49 4D BA 60 26 76 EA
-00000010: B2 A5 02 00 00 78 70 00 00 00 03 00 00 00 01 00
-00000020: 00 00 06 00 00 00 07
-
-75-show it is array
-72 00 02--array type contains 2 byte
-5B 49--[I
-4D BA 60 26 76 EA B2 A5--fingerprint
-02--flag
-00 00
-78--end marker
-70--no superclass
-00 00 00 01--1
-00 00 00 06--6
-00 00 00 07--7
-
-***** type code list
-B-byte C-char D-double F-float I-int J-long L-object S-short Z-boolean [-array
-
-**** modify mechanism
-***** transient
-the field tag with this keyword would no serializable
-***** supply readObject and writeObject method
-use in whenever the field need to serialize but its class not support serializable
-#+BEGIN_SRC java
-public class Main4 {
-    public static void main(String[] args)throws Exception {
-        LabeledPoint labeledPoint = new LabeledPoint("hello world", new Point2D.Double(4, 6));
-
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("1.txt"))){
-            objectOutputStream.writeObject(labeledPoint);
-        }
-    }
-}
-
-class LabeledPoint implements Serializable {
-    private String label;
-    private transient Point2D.Double point;
-
-    public LabeledPoint(String label, Point2D.Double point) {
-        this.label = label;
-        this.point = point;
-    }
-
-    private void writeObject(ObjectOutputStream out)
-            throws IOException {
-        out.defaultWriteObject();
-        out.writeDouble(point.getX());
-        out.writeDouble(point.getY());
-    }
-
-    private void readObject(ObjectInputStream in)
-            throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        double x = in.readDouble();
-        double y = in.readDouble();
-        point = new Point2D.Double(x, y);
-    }
-}
-
-#+END_SRC
-***** Externalizable 
-提供readObject and writeObject是在原本的数据格式上加入尾部数据，而Externalizable是完全定义存储的数据方法(class identifier仍然由机制本身确定)
-#+BEGIN_SRC java
-public void readExternal(ObjectInput s)
-      throws IOException
-{
-   name = s.readUTF();
-   salary = s.readDouble();
-   hireDay = LocalDate.ofEpochDay(s.readLong());
-}
-
-
-public void writeExternal(ObjectOutput s)
-      throws IOException
-{
-   s.writeUTF(name);
-   s.writeDouble(salary);
-   s.writeLong(hireDay.toEpochDay());
-}
-#+END_SRC
-**** Versioning
-***** get fingerprint
-serialver Employee
-***** set variable
-When a class has a static data member named serialVersionUID, it will not compute the fingerprint manually but will use that value instead.
-当对应fingerprint的类，旧有的属性变动(名字改了/被删了)，都会导致无法正常运行，因此，在向下兼容时，对应设置该变量的类，完全废弃部分属性时，需要更新该属性
-#+BEGIN_SRC java
-class Employee implements Serializable // version 1.1
-{
-   public static final long serialVersionUID = -1814239825517340645L;
-}
-#+END_SRC
-*** StandardCharsets
-character encodings that every Java virtual machine must support
-*** work with file
-**** Paths
-static Path get(String first, String. . . more)
-***** path
-#+BEGIN_SRC java
-
-// return full path，不同引用，虽然属性相同
-partPath.resolve(fullPath)
-
-// return path join them
-partPath.resolve(partPath2);
-
-// workpath /opt/myapp/work, generate /opt/myapp/temp
-Path tempPath = workPath.resolveSibling("temp");
-
-#+END_SRC
-**** Files
-***** read and write
-#+BEGIN_SRC java
-byte[] bytes = Files.readAllBytes(path);
-var content = new String(bytes, charset);
-List<String> lines = Files.readAllLines(path, charset);
-Files.write(path, content.getBytes(charset));
-iles.write(path, content.getBytes(charset), StandardOpenOption.APPEND);
-Files.write(path, lines);
-#+END_SRC
-***** directory and file
-#+BEGIN_SRC java
-// 只能建一层
-Files.createDirectory(path);
-
-// 父级的也建立出，这个更常用
-Files.createDirectories(path);
-
-Path newPath = Files.createTempFile(dir, prefix, suffix);
-Path newPath = Files.createTempFile(prefix, suffix);
-Path newPath = Files.createTempDirectory(dir, prefix);
-Path newPath = Files.createTempDirectory(prefix);
-#+END_SRC
-***** Copying, Moving, and Deleting Files
-#+BEGIN_SRC java
-Files.copy(fromPath, toPath);
-Files.move(fromPath, toPath);
-Files.copy(fromPath, toPath, StandardCopyOption.REPLACE_EXISTING,
-   StandardCopyOption.COPY_ATTRIBUTES);
-Files.move(fromPath, toPath, StandardCopyOption.ATOMIC_MOVE);
-Files.copy(inputStream, toPath);
-Files.copy(fromPath, outputStream);
-Files.delete(path);
-boolean deleted = Files.deleteIfExists(path);
-#+END_SRC
-**** file info
-***** basic info
-- exists
-- isHidden
-- isReadable, isWritable, isExecutable
-- isRegularFile, isDirectory, isSymbolicLink
-***** directories
-#+BEGIN_SRC java
-// 一层子目录
-Stream<Path> entries = Files.list(pathToDirectory)
-
-// 全部递归子目录
-Stream<Path> entries = Files.walk(pathToRoot)
-
-
-try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir))
-{
-   for (Path entry : entries)
-//      Process entries       
-}
-
-try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir, "*.java"))
-
-
-// static Path walkFileTree(Path start, FileVisitor<? super Path> visitor)
-Files.walkFileTree(root, new SimpleFileVisitor<Path>()
-   {
-      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-            throws IOException
-      {
-         Files.delete(file);
-         return FileVisitResult.CONTINUE;
-      }
-
-
-      public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException
-      {
-         if (e != null) throw e;
-         Files.delete(dir);
-         return FileVisitResult.CONTINUE;
-      }
-   });
-#+END_SRC
-**** zip file system
-#+BEGIN_SRC java
-FileSystem fs = FileSystems.newFileSystem(Paths.get(zipname), null);
-Files.copy(fs.getPath(sourceName), targetPath);
-
-FileSystem fs = FileSystems.newFileSystem(Paths.get(zipname), null);
-Files.walkFileTree(fs.getPath("/"), new SimpleFileVisitor<Path>()
-   {
-      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-            throws IOException
-      {               
-         System.out.println(file);
-         return FileVisitResult.CONTINUE;
-      }
-   });
-#+END_SRC
-**** MEMORY-MAPPED FILES
-***** mapping mode
-FileChannel.MapMode.READ_ONLY 只读，尝试写时会抛出ReadOnlyBufferException
-FileChannel.MapMode.READ_WRITE 可读写，并且会写回源文件，但是是否可见依赖于操作系统
-FileChannel.MapMode.PRIVATE 可读写，但是不写回
-***** usage
-#+BEGIN_SRC java
-FileChannel channel = FileChannel.open(filename)
-int length = (int) channel.size();
-MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, length);
-#+END_SRC
-**** Buffer
-#+BEGIN_SRC java
-// FileLock lock() block util it can access
-// FileLock tryLock() return while it cann't access
-try (FileLock lock = channel.lock()){
-   // access the locked file or segment
-}
-#+END_SRC
-*** format output
-| conversion type character | type                       | example |
-|---------------------------+----------------------------+---------|
-| d                         | deciamal integer           | 159     |
-| x                         | hexadecimal integer        | 9f      |
-| o                         | octal integer              | 237     |
-| f                         | fixed-point floating-point | 15.9    |
-| s                         | String                     | hello   |
-| c                         | character                  | H       |
-| b                         | boolean                    | true    |
-| %                         | The percent symbol         | %       |
-| n                         | line separator             |         |
-
-| flag | purpose                                |   example |
-|------+----------------------------------------+-----------|
-| +    | print sign of value                    | +33333.33 |
-| 0    | adds leading zeros                     |    003333 |
-| -    | left-justified field                   |           |
-| (    | enclose negative number in parentheses |           |
-| ,    | add group separators                   |  3,333.33 |
-
-// "%,(.2f" is add flag
-System.out.printf("%,.2f", 10000.0 / 3.0);
-3,333.33
-
-String message = String.format("Hello, %s. Next year,you'll be %d", name, age);
-*** hierarchy
-**** root class
-- InputStream
-  - DataInputStream
-- OutputStream
-  - DataOutputStream
-- Reader
-- Writer 
-**** interface
-- Closeable 
-- Flushable
-- Readable
-- Appendable
-*** trick
-1. 文件名读取，默认情况下都是读相对路径，获取参考的相对路径可以使用System.getProperty("user.dir")
-2. DataOutputStream和DataInputStream使用平台独立的方法写入数据(非文本类型，所以只有写入与读取匹配时，使用才具有意义)
-3. 序列化拿来做clone
 ** regular express
 *** Pattern
 Pattern pattern = Pattern.compile(patternString[,flag]);
@@ -2762,4 +2387,10 @@ use invocation API to construct VM, the rest is like invoke java method of nativ
 - final
 - strictfp
 - synchronized
-
+* system properties
+** java.io.tmpdir
+临时目录
+** user.dir
+JVM run path
+** java.class.path
+** file.encoding

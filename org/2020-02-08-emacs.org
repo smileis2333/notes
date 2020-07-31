@@ -8,3 +8,9 @@
 * package
 ** magit
 *** magit-status
+*** tab
+查看unstaged changes的变更
+*** s
+stage
+*** u
+unstage

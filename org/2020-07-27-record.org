@@ -1,6 +1,6 @@
-#+TITLE: ANIME
+#+TITLE: 全部相关记录汇总
 #+STARTUP: indent
-* 已看
+* 认可的已看动画/漫画
 - ×××Holic
 - 约定的梦幻岛
 - 翼年代记
@@ -81,7 +81,35 @@
 - 一拳超人
 - 有顶天家族
 - 博多豚骨拉面团
-* 待看
+- 氰化秀
+* 待看动画/漫画
 - 伊克西翁传说
 - 灵能百分百
 - 恶魔人
+* 认可的已看日剧
+假面骑士555
+假面骑士龙骑
+求婚大作战
+逃避可耻却有用
+* 待看日剧
+东京爱情故事
+* 认可的已看书
+Head First Design Patterns
+Head First Servlets and JSP
+Core Java(TM), Volume两卷
+Head First HTML with CSS & XHTML
+CCNA教材
+Spring in Action
+Java I/O, NIO and NIO.2
+Java Concurrency in Practice
+* 待看
+Effective Java
+hibernate in action
+hibernate in action2
+TCPIP Illustrated三卷
+head first C
+C Primer Plus
+grail in action
+groovy in action
+新编日语四本
+head first SQL

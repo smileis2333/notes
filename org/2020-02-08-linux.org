@@ -11,3 +11,18 @@ apt-get install curl software-properties-common
 curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
 apt install nodejs
 * kill with pipeline  kill $(ps aux | grep '[p]ython csp_build.py' | awk '{print $2}')
+* grep
+--color=auto 或者 --color：表示对匹配到的文本着色显示
+-i：在搜索的时候忽略大小写
+-n：显示结果所在行号
+-c：统计匹配到的行数，注意，是匹配到的总行数，不是匹配到的次数
+-o：只显示符合条件的字符串，但是不整行显示，每个符合条件的字符串单独显示一行
+-v：输出不带关键字的行（反向查询，反向匹配）
+-w：匹配整个单词，如果是字符串中包含这个单词，则不作匹配
+-Ax：在输出的时候包含结果所在行之后的指定行数，这里指之后的x行，A：after
+-Bx：在输出的时候包含结果所在行之前的指定行数，这里指之前的x行，B：before
+-Cx：在输出的时候包含结果所在行之前和之后的指定行数，这里指之前和之后的x行，C：context
+-e：实现多个选项的匹配，逻辑or关系
+-q：静默模式，不输出任何信息，当我们只关心有没有匹配到，却不关心匹配到什么内容时，我们可以使用此命令，然后，使用"echo $?"查看是否匹配到，0表示匹配到，1表示没有匹配到。
+-P：表示使用兼容perl的正则引擎。
+-E：使用扩展正则表达式，而不是基本正则表达式，在使用"-E"选项时，相当于使用egrep。

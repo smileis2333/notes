@@ -418,7 +418,7 @@ it's not the spec, but virtually container that implement this to protect data
 ** filter
 *** order
 1. 找出所有url-pattern匹配的，然后按照声明顺序加入filteChain
-2. 在1之后，找出所有匹配servlet-nama, 按声明顺序加入filterChain,即是说，url-pattern匹配的优先级别高
+2. 在1之后，找出所有匹配servlet-name, 按声明顺序加入filterChain,即是说，url-pattern匹配的优先级别高
 *** config
 如下四个filter打印其对应的类命，按照优先级顺序，打出"filter1,filter3,filter2, filter4"
 #+BEGIN_SRC xml

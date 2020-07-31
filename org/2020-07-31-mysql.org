@@ -1,0 +1,8 @@
+#+TITLE:  MySQL
+#+STARTUP: indent
+* B+ tree
+* structure
+** page
+*** page directory
+**** slot
+*** user records

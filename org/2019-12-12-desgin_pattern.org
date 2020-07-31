@@ -15,18 +15,16 @@
 defines a family of algorithms, encapsulates each one, and makes them interchangeable.  Strategy lets the algorithm vary independently from clients that use it.
 ** the Observer Pattern
 defines a one-to-many dependency between objects so that when one object changes state, all of its dependents are notified and updated automatically.
-#+BEGIN_SRC java
-java.util.Observable
-java.util.Observer
-#+END_SRC
 做法: 被观察对象持有观察者的引用列表，在状态发生变更时，由被观察者主动调用每个观察者的状态变更方法
 ** The Decorator Pattern
 attaches additional responsibilities to an object dynamically.  Decorators provide a fl exible alternative to subclassing for extending functionality
 范本: java io
 缺点：过度使用导致可读性差，产生大量小类
 ** The Factory Method Pattern
+管单一产品的创建，创建流程简单，可以直接作为具体类抽离代码块出去
 defines an interface for creating an object, but lets subclasses decide which class to instantiate.  Factory Method lets a class defer instantiation to subclasses.
 ** The Abstract Factory Pattern
+管多个产品的创建，创建流程复杂，典型的比如JDBC规范，需要各类组件，并且实现具体关联到对应的db vendor，普通工厂可以归类为抽象工厂的一种特例
 provides an interface for creating families of related or dependent objects without specifying their concrete classes
 ** The Singleton Pattern
 ensures a class has only one instance, and provides a global point of access to it

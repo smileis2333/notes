@@ -18,3 +18,6 @@ alt-cap  片假名
 shift-cap 切换为英文
 * host
 C:\WINDOWS\system32\drivers\etc
+* 目录
+** tmp
+~/AppData/Local/Temp

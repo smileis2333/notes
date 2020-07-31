@@ -42,3 +42,34 @@ public class Test(){
   }
 }
 #+END_SRC
+
+* motivation
+** resources utilization
+** fairness
+** convenience
+* risk of threads
+** safety hazards
+error result, such as race condition, [[file:../img/race-condition.png]]
+#+BEGIN_SRC java
+// when two thread invoke this method, in may be trigger race condition depend on runtime interleaving
+public class UnsafeThread{
+  private int value;
+
+  public int getNext(){
+    return value++;
+  }
+}
+#+END_SRC
+** liveness hazards
+code inactive, such as deadlock, starvation, livelock
+** performance hazards
+such as context swicth, synchronized code block
+* term
+** invarient
+mean some condition that must been true at running for proving the state of application is valid
+** postcondition
+在某个操作，或者一系列操作后，该条件必须为true，用于证明先前的代码执行成功了
+** Thread safe class
+when a class behavess correctly
+** Reentrancy
+lock held by thread no invocation, the thread held lock can access other code block that required the same lock

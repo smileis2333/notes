@@ -1,0 +1,1091 @@
+#+TITLE:  java io
+#+STARTUP: indent
+* classic io
+** File
+*** absolutePath
+1. 如果已经是绝对路由，则直接返回
+2. 否则，返回构造后的绝对路径，但是返回的是最长子串
+*** canonicalPath
+1. 与绝对路径类似，但是会自动清理各种../..
+2. 通常比较两个文件路径是否一致，不可以用绝对路径，只能用该路径
+*** method
+**** constructor
+File(String parent,string child)
+File(File parent,string child)
+**** property
+boolean isExists()
+boolean isDirectory()
+boolean isFile()
+boolean isHidden()
+long lastModified()
+long length() // 如果文件存在，返回内容长度，如果不存在，返回0
+**** travel
+static ListRoots()
+String [] list()
+String [] list(FilenameFilter filter)
+File [] listFiles()
+File [] listFiles(FileFilter filter)
+File [] listFiles(FileNameFilter filter)
+**** partition info
+long getFreeSpace()
+long getTotalSpace()
+long getUsableSpace() // 相比freeSpace，会去检查所需权限，能否被JVM使用，所以得到的结果更为精确一点
+**** create/modify
+boolean createNewFile()
+static File createTempFile(String prefix, String suffix) // 会用prefix+[随机字符串]+suffix，在临时目录生成文件，依赖于OS
+static File createTempFile(String prefix, String suffix, File directory) // 可以指定临时目录
+boolean delete()
+void deleteOnExit() // 常用于临时文件的删除
+boolean mkdir()
+boolean mkdirs()
+boolean renameTo(File dest)
+boolean setLastModified(long time)
+**** permission
+读写执行权限
+*** relevant
+#+BEGIN_SRC java
+@FunctionalInterface
+public interface FilenameFilter {
+    boolean accept(File dir, String name);
+}
+
+@FunctionalInterface
+public interface FileFilter {
+    boolean accept(File pathname);
+}
+#+END_SRC
+** RandomAccessFile
+*** mode
+**** r
+只读，如果找不到直接抛异常
+**** rw
+读写，有就读，没有就建，如果文件只读，就抛异常
+**** rwd
+每次操作content，会直接刷入文件内容
+**** rws
+在rwd的基础上，文件信息也会被刷进去(修改时间，权限...)
+*** method
+void close()
+FileDescriptor getFD()
+long getFilePointer()
+long length()
+int read()
+int read(byte[]b)
+char readChar()
+int readInt()
+void seek(long pos) //移动指针位置
+void setLength(long newLength) //如果比文本的length小，则会被截断
+int skipBytes(int n)
+void write(byte[] b) //写操作均是从指针开始算，如果指针后面有内容，会被刷掉
+void write(int b)
+void writeChars(String s)
+void writeInt(int i)
+** stream
+*** inputStream
+**** method
+int available() // 估计byte数目数值
+void close()
+void mark(int readlimit)
+boolean markSupported()
+int read()
+int read(byte[] b)
+int read(byte[] b, int off, int len)
+void reset()
+long skip(long n)
+**** subClass
+***** ByteArrayInputStream
+***** FileInputStream
+***** PipedInputStream
+useful for thread communicated
+****** method
+PipedInputStream() // 未被任何piped output strean连接
+PipedInputStream(int pipeSize) //调整buffer
+PipedInputStream(PipedOutputStream src)
+PipedInputStream(PipedOutputStream src, int pipeSize)
+****** demo
+#+BEGIN_SRC java
+public class PipedStreamsDemo {
+    final static int LIMIT = 10;
+
+    public static void main(String[] args) throws IOException {
+        final PipedOutputStream pos = new PipedOutputStream();
+        final PipedInputStream pis = new PipedInputStream(pos);
+        Runnable senderTask = () -> {
+            try {
+                for (int i = 0; i < LIMIT; i++)
+                    pos.write((byte)
+                            (Math.random() * 256));
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            } finally {
+                try {
+                    pos.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+        };
+        Runnable receiverTask = () -> {
+            try {
+                int b;
+                while ((b = pis.read()) != -1)
+                    System.out.println(b);
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            } finally {
+                try {
+                    pis.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+        };
+        Thread sender = new Thread(senderTask);
+        Thread receiver = new Thread(receiverTask);
+        sender.start();
+        receiver.start();
+    }
+}
+#+END_SRC
+***** FilterInputStream
+****** subclass
+******* BufferedInputStream
+******** method
+BufferedInputStream(InputStream in)
+BufferedInputStream(InputStream in, int size)
+******* DataInputStream
+static final long serialVersionUID = long integer value; //只要旧的属性没被移除(如果移除会导致格式不一致)，增加新字段时，旧的保存文件仍可序列化
+serialver Employee //JDK自带的生成UID工具
+***** ObjectInputStream
+*** outputStream
+**** method
+void close() // 取消资源关联，并flush
+void flush() // 只是通知OS进行写入，能否写入JVM不能保证
+void write(byte[] b)
+void write(byte[] b, int off, int len)
+void write(int b)
+**** subClass
+***** ByteArrayOutputStream
+****** method
+ByteArrayOutputStream()
+ByteArrayOutputStream(int size)
+***** FileOutputStream
+***** PipedOutputStream
+Thread communicated
+****** method
+PipedOutputStream(PipedInputStream dest)
+***** FilterOutputStream
+****** subclass
+******* BufferedOutputStream
+******* DataOutputStream
+******* PrintStream
+******** ferture
+1. 不抛异常，合理，因为接收标准输入，如果因为输错，导致整个程序停了，才是反常
+2. print/println/printf自动flush
+3. 支持printf进行格式化
+***** ObjectOutputStream
+****** method
+writeObject(Object obj) //static不序列化，transient不序列化，未实现Serializable接口的属性的不序列化
+*** reader
+**** subclass
+***** InputStreamReader 
+****** method
+InputStreamReader(InputStream in)
+InputStreamReader(InputStream in, String charsetName)
+****** subclass
+******* FileReader
+***** BufferedReader
+****** method
+BufferedReader(Reader in)
+BufferedReader(Reader in, int size)
+*** writer
+**** subclass
+***** OutputStreamWriter
+****** method
+OutputStreamWriter(OutputStream out)
+OutputStreamWriter(OutputStream out, String charsetName)
+****** subclass
+******* FileWriter
+***** BufferedWriter 
+****** method
+BufferedWriter(Writer out) // buffer size default is 8192 bytes
+BufferedWriter(Writer out, int size)
+** serializable
+*** format
+**** class object demo
+  Offset: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 	
+00000000: AC ED 00 05 73 72 00 01 41 8D 91 83 01 18 90 4D
+00000010: F0 02 00 02 49 00 01 61 49 00 01 62 78 70 00 00
+00000020: 00 02 00 00 00 03
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args)  throws Exception{
+        final A a = new A(2, 3);
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("1.txt"))){
+            objectOutputStream.writeObject(a);
+        }
+    }
+}
+
+class A implements Serializable {
+    int a;
+    int b;
+
+    public A(int a, int b) {
+        this.a = a;
+        this.b = b;
+    }
+}
+#+END_SRC
+- class identifier 
+AC ED---magic number
+03--represent that it is an object
+72--fixed number
+00 01--length of class name
+41--A's ascii's hexadecimal 
+8D 91 83 01 18 90 4D F0--fingerprint of class, contains 8 bytes
+02--flag
+00 02--count of field
+- data field descriptor
+49--type code 'I', represent int
+00 01--length of field
+61--'a'
+49--...
+00 01--...
+62--'b'
+(if type is object,after name, have class name, and nesting struct same like above)
+78--end marker
+70--(because no extend other class)
+00 00 00 02--a'value is 2
+00 00 00 03--b'value is 3
+**** array object demo
+#+BEGIN_SRC java
+public class Main3 {
+    public static void main(String[] args)  throws Exception{
+
+        int[]a={1,6,7};
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("1.txt"))){
+            objectOutputStream.writeObject(a);
+        }
+    }
+}
+#+END_SRC
+  Offset: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 	
+00000000: AC ED 00 05 75 72 00 02 5B 49 4D BA 60 26 76 EA
+00000010: B2 A5 02 00 00 78 70 00 00 00 03 00 00 00 01 00
+00000020: 00 00 06 00 00 00 07
+
+75-show it is array
+72 00 02--array type contains 2 byte
+5B 49--[I
+4D BA 60 26 76 EA B2 A5--fingerprint
+02--flag
+00 00
+78--end marker
+70--no superclass
+00 00 00 01--1
+00 00 00 06--6
+00 00 00 07--7
+
+**** type code list
+B-byte C-char D-double F-float I-int J-long L-object S-short Z-boolean [-array
+
+*** modify mechanism
+**** transient
+the field tag with this keyword would no serializable
+**** custom
+use in whenever the field need to serialize but its class not support serializable
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args)throws Exception {
+        LabeledPoint labeledPoint = new LabeledPoint("hello world", new Point2D.Double(4, 6));
+
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("1.txt"))){
+            objectOutputStream.writeObject(labeledPoint);
+        }
+
+        try(ObjectInputStream in = new ObjectInputStream(new FileInputStream("1.txt"))) {
+            in.readObject();
+        }
+    }
+}
+
+class LabeledPoint implements Serializable {
+    private String label;
+    private transient Point2D.Double point;
+
+    public LabeledPoint(String label, Point2D.Double point) {
+        this.label = label;
+        this.point = point;
+    }
+
+    private void writeObject(ObjectOutputStream out)
+            throws IOException {
+        out.defaultWriteObject();
+        out.writeDouble(point.getX());
+        out.writeDouble(point.getY());
+    }
+
+    private void readObject(ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        double x = in.readDouble();
+        double y = in.readDouble();
+        point = new Point2D.Double(x, y);
+    }
+}
+#+END_SRC
+**** Externalizable
+https://stackoverflow.com/a/16605838/10827862
+1. 实现了Serializable可能会改格式，或者不改(一般情况是out.defaultWriteObject()先进行数据写入，然后把需要自定义的部分append到后面)
+2. 但是实现Externalizable一定会改格式(实际上上强转ObjectOutput，在整成根serializbale也可行，主要区别就是一个语义性的问题)，class identifier不变，因为需要反射实例化对象
+#+BEGIN_SRC java
+public void readExternal(ObjectInput s)
+      throws IOException
+{
+   name = s.readUTF();
+   salary = s.readDouble();
+   hireDay = LocalDate.ofEpochDay(s.readLong());
+}
+
+
+public void writeExternal(ObjectOutput s)
+      throws IOException
+{
+   s.writeUTF(name);
+   s.writeDouble(salary);
+   s.writeLong(hireDay.toEpochDay());
+}
+#+END_SRC
+*** Versioning
+**** get fingerprint
+serialver Employee
+**** set variable
+When a class has a static data member named serialVersionUID, it will not compute the fingerprint manually but will use that value instead.
+当对应fingerprint的类，旧有的属性变动(名字改了/被删了)，都会导致无法正常运行，因此，在向下兼容时，对应设置该变量的类，完全废弃部分属性时，需要更新该属性
+#+BEGIN_SRC java
+class Employee implements Serializable // version 1.1
+{
+   public static final long serialVersionUID = -1814239825517340645L;
+}
+#+END_SRC
+** ZIP Archives
+*** unzip
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args) throws Exception {
+        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream("C:/Users/smile2333/Desktop/Desktop.zip"))) {
+
+            ZipEntry zipEntry = null;
+            while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+
+                File file = new File("C:/Users/smile2333/Desktop/" + zipEntry.getName());
+                file.createNewFile();
+
+                unzip(zipInputStream, file);
+                zipInputStream.closeEntry();
+            }
+
+        }
+    }
+
+    static void unzip(ZipInputStream zipInputStream, File outputFile) throws Exception {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile)) {
+            byte b[] = new byte[1024];
+            while (zipInputStream.read(b) > 0) {
+                fileOutputStream.write(b);
+            }
+        }
+
+    }
+}
+
+#+END_SRC
+*** compress
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args) throws Exception {
+        try(ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream("C:/Users/smile2333/Desktop/test.zip"))) {
+
+            final ZipEntry zipEntry = new ZipEntry("3.txt");
+            zipOutputStream.putNextEntry(zipEntry);
+            new FileInputStream(new File("C:/Users/smile2333/Desktop/3.txt")).transferTo(zipOutputStream);
+            zipOutputStream.closeEntry();
+        }
+    }
+}
+#+END_SRC
+** StandardCharsets
+character encodings that every Java virtual machine must support
+** work with file
+*** Paths
+static Path get(String first, String. . . more)
+**** path
+#+BEGIN_SRC java
+
+// return full path，不同引用，虽然属性相同
+partPath.resolve(fullPath)
+
+// return path join them
+partPath.resolve(partPath2);
+
+// workpath /opt/myapp/work, generate /opt/myapp/temp
+Path tempPath = workPath.resolveSibling("temp");
+
+#+END_SRC
+*** Files
+**** read and write
+#+BEGIN_SRC java
+byte[] bytes = Files.readAllBytes(path);
+var content = new String(bytes, charset);
+List<String> lines = Files.readAllLines(path, charset);
+Files.write(path, content.getBytes(charset));
+iles.write(path, content.getBytes(charset), StandardOpenOption.APPEND);
+Files.write(path, lines);
+#+END_SRC
+**** directory and file
+#+BEGIN_SRC java
+// 只能建一层
+Files.createDirectory(path);
+
+// 父级的也建立出，这个更常用
+Files.createDirectories(path);
+
+Path newPath = Files.createTempFile(dir, prefix, suffix);
+Path newPath = Files.createTempFile(prefix, suffix);
+Path newPath = Files.createTempDirectory(dir, prefix);
+Path newPath = Files.createTempDirectory(prefix);
+#+END_SRC
+**** Copying, Moving, and Deleting Files
+#+BEGIN_SRC java
+Files.copy(fromPath, toPath);
+Files.move(fromPath, toPath);
+Files.copy(fromPath, toPath, StandardCopyOption.REPLACE_EXISTING,
+   StandardCopyOption.COPY_ATTRIBUTES);
+Files.move(fromPath, toPath, StandardCopyOption.ATOMIC_MOVE);
+Files.copy(inputStream, toPath);
+Files.copy(fromPath, outputStream);
+Files.delete(path);
+boolean deleted = Files.deleteIfExists(path);
+#+END_SRC
+*** file info
+**** basic info
+- exists
+- isHidden
+- isReadable, isWritable, isExecutable
+- isRegularFile, isDirectory, isSymbolicLink
+**** directories
+#+BEGIN_SRC java
+// 一层子目录
+Stream<Path> entries = Files.list(pathToDirectory)
+
+// 全部递归子目录
+Stream<Path> entries = Files.walk(pathToRoot)
+
+
+try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir))
+{
+   for (Path entry : entries)
+//      Process entries       
+}
+
+try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir, "*.java"))
+
+
+// static Path walkFileTree(Path start, FileVisitor<? super Path> visitor)
+Files.walkFileTree(root, new SimpleFileVisitor<Path>()
+   {
+      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+            throws IOException
+      {
+         Files.delete(file);
+         return FileVisitResult.CONTINUE;
+      }
+
+
+      public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException
+      {
+         if (e != null) throw e;
+         Files.delete(dir);
+         return FileVisitResult.CONTINUE;
+      }
+   });
+#+END_SRC
+*** zip file system
+#+BEGIN_SRC java
+FileSystem fs = FileSystems.newFileSystem(Paths.get(zipname), null);
+Files.copy(fs.getPath(sourceName), targetPath);
+
+FileSystem fs = FileSystems.newFileSystem(Paths.get(zipname), null);
+Files.walkFileTree(fs.getPath("/"), new SimpleFileVisitor<Path>()
+   {
+      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+            throws IOException
+      {               
+         System.out.println(file);
+         return FileVisitResult.CONTINUE;
+      }
+   });
+#+END_SRC
+*** MEMORY-MAPPED FILES
+**** mapping mode
+FileChannel.MapMode.READ_ONLY 只读，尝试写时会抛出ReadOnlyBufferException
+FileChannel.MapMode.READ_WRITE 可读写，并且会写回源文件，但是是否可见依赖于操作系统
+FileChannel.MapMode.PRIVATE 可读写，但是不写回
+**** usage
+#+BEGIN_SRC java
+FileChannel channel = FileChannel.open(filename)
+int length = (int) channel.size();
+MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, length);
+#+END_SRC
+*** Buffer
+#+BEGIN_SRC java
+// FileLock lock() block util it can access
+// FileLock tryLock() return while it cann't access
+try (FileLock lock = channel.lock()){
+   // access the locked file or segment
+}
+#+END_SRC
+** format output
+| conversion type character | type                       | example |
+|---------------------------+----------------------------+---------|
+| d                         | deciamal integer           | 159     |
+| x                         | hexadecimal integer        | 9f      |
+| o                         | octal integer              | 237     |
+| f                         | fixed-point floating-point | 15.9    |
+| s                         | String                     | hello   |
+| c                         | character                  | H       |
+| b                         | boolean                    | true    |
+| %                         | The percent symbol         | %       |
+| n                         | line separator             |         |
+
+| flag | purpose                                |   example |
+|------+----------------------------------------+-----------|
+| +    | print sign of value                    | +33333.33 |
+| 0    | adds leading zeros                     |    003333 |
+| -    | left-justified field                   |           |
+| (    | enclose negative number in parentheses |           |
+| ,    | add group separators                   |  3,333.33 |
+
+// "%,(.2f" is add flag
+System.out.printf("%,.2f", 10000.0 / 3.0);
+3,333.33
+
+String message = String.format("Hello, %s. Next year,you'll be %d", name, age);
+** trick
+1. 文件名读取，默认情况下都是读相对路径，获取参考的相对路径可以使用System.getProperty("user.dir")
+2. DataOutputStream和DataInputStream使用平台独立的方法写入数据(非文本类型，所以只有写入与读取匹配时，使用才具有意义)
+3. 序列化拿来做clone
+* nio
+最大的特点是selector多路复用
+1. 传统BIO，建立连接会阻塞，接收数据会阻塞，前一步无法避免，但是如果某人在建立连接之后，一直不传数据，就是导致整个程序一直等，一般的旧式解决方法，为把接收数据丢到线程池处理
+2. selector在建立拿到事件时，也必须阻塞，但是在读入连接后，把连接丢入selector管理的channel里面(可以管理一大堆连进来的channel+最开始用来管理接收连接的channel)，之后可以接着往下走，然后轮询当前监控的channel是否来数据了，根据事件类型进行XX处理，比如管理连接的就接收后丢尽selector，而已连的channel如果发数据了，在接收数据，进行其他操作，比如http，实现了一个线程管多个IO。linux内部机制为epoll，nio实质为在OS发展后所体现的一种语言特性的增强、省去了多个线程管数据接收的开销，至于后续代码路径是否采用线程池，则取决于程序如何设计。
+** Buffer
+*** ferture
+0 <= mark <= position <= limit <= capacity
+**** Capacity
+**** Limit
+**** Position
+**** Mark
+用于reset的位置标定
+*** method
+Object array()
+int arrayOffset()
+int capacity()
+Buffer clear() // 全部标识变量都清掉
+Buffer flip() // 直接设置具备的各类属性,position，mark...，表示该buffer已经准备被channel接收(不是作为复位方法，而是作为处理完毕之后的一种快捷方法，因为处理完后，在掉该方法也没有任何意义)，主要为读取数据后进行改变状态作为写出使用
+boolean hasArray()
+boolean hasRemaining()
+boolean isDirect()
+boolean isReadOnly()
+int limit()
+Buffer limit(int newLimit)
+Buffer mark()
+int position()
+Buffer position(int newPosition)
+int remaining()
+Buffer reset()
+Buffer rewind() // 把position倒放，相当于想在读一次
+*** subclass
+**** ByteBuffer
+***** method
+ByteBuffer allocate(int capacity)
+ByteBuffer allocateDirect(int capacity)
+ByteBuffer wrap(byte[] array)
+ByteBuffer wrap(byte[] array, int offset, int length)
+
+ByteBuffer put(byte b); //depent on position
+ByteBuffer get(); // like above
+ByteBuffer put(int index,byte b); 
+ByteBuffer put(int index);
+ByteBuffer put(byte[] src)
+ByteBuffer put(byte[] src, int offset, int length)
+ByteBuffer get(byte[] dst)
+ByteBuffer get(byte[] dst, int offset, int length)
+ByteBuffer compact(); // 与clear类似，但是会把未读的挪到最左边，然后position从右侧开始算
+**** CharBuffer
+**** DoubleBuffer
+**** FloatBuffer
+**** IntBuffer
+**** LongBuffer
+**** ShortBuffer
+**** MappedByteBuffer 
+** channel
+*** method
+void close()
+boolean isOpen()
+*** sub interface
+**** WritableByteChannel
+**** ReadableByteChannel
+*** channels
+WritableByteChannel newChannel(OutputStream outputStream)
+ReadableByteChannel newChannel(InputStream inputStream)
+*** Scatter/Gather I/O
+**** ScatteringByteChannel
+long read(ByteBuffer[] buffers, int offset, int length)
+long read(ByteBuffer[] buffers)
+**** GatheringByteChannel
+long write(ByteBuffer[] buffers, int offset, int length)
+long write(ByteBuffer[] buffers)
+*** FileChannel
+**** method
+void force(boolean metadata) // 类似于stream flush, metadata表示是否文件信息也刷进去，一般不动，因为可以省一点点效率
+long position()
+FileChannel position(long newPosition)
+int read(ByteBuffer buffer)
+int read(ByteBuffer dst, long position)
+long size()
+FileChannel truncate(long size)
+int write(ByteBuffer buffer)
+int write(ByteBuffer src, long position)
+long transferFrom(ReadableByteChannel src, long position, long count)
+long transferTo(long position, long count, WritableByteChannel target)
+**** lock
+FileLock lock() // blocking
+FileLock lock(long position, long size, boolean shared) //blockeing
+FileLock tryLock() // without blocking，失败返回null
+***** FileLock
+****** method
+FileChannel channel()
+void close() // release locked
+boolean isShared()
+boolean isValid()
+boolean overlaps(long position, long size)
+long position()
+void release()
+long size()
+String toString()
+**** Mapping Files into Memory
+MappedByteBuffer map(FileChannel.MapMode mode, long position, long size)
+***** FileChannel.MapMode
+READ_ONLY //写会报错
+READ_WRITE //改了会写回source文件，具体是否可写还要看文件是否支持可写
+PRIVATE // 可以改，但是不会有反应，因为只是操作copy
+***** method
+MappedByteBuffer load()
+boolean isLoaded()
+MappedByteBuffer force()
+*** Socket Channels
+旧式的socket均是block的，因为其提升效率的做法仅为接收到一个请求就新建一个thread用于处理
+**** method
+SelectableChannel configureBlocking(boolean block)
+boolean isBlocking()
+Object blockingLock()
+**** ServerSocketChannel
+***** method
+static ServerSocketChannel open()
+ServerSocket socket()
+SocketChannel accept() //阻塞与否取决于设置
+SocketChannel bind(SocketAddress local)
+**** SocketChannel
+***** method
+static SocketChannel open()
+static SocketChannel open(InetSocketAddress remoteAddr)
+Socket socket()
+boolean connect(SocketAddress remoteAddr)
+boolean isConnectionPending()
+boolean finishConnect()
+boolean isConnected()
+**** DatagramChannel
+***** method
+static DatagramChannel open()
+DatagramSocket socket()
+DatagramChannel connect(SocketAddress remoteAddr)
+boolean isConnected()
+DatagramChannel disconnect()
+SocketAddress receive(ByteBuffer buffer)
+int send(ByteBuffer buffer, SocketAddress destAddr)
+*** Pipes
+一对读写Channel，自动连接
+#+BEGIN_SRC java
+import java.io.IOException;
+
+import java.nio.ByteBuffer;
+
+import java.nio.channels.Pipe;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
+
+public class ChannelDemo
+{
+   final static int BUFSIZE = 10;
+   final static int LIMIT = 3;
+
+   public static void main(String[] args) throws IOException
+   {
+      final Pipe pipe = Pipe.open();
+
+      Runnable senderTask =
+         new Runnable()
+         {
+            @Override
+            public void run()
+            {
+               WritableByteChannel src = pipe.sink();
+               ByteBuffer buffer = ByteBuffer.allocate(BUFSIZE);
+               for (int i = 0; i < LIMIT; i++)
+               {
+                  buffer.clear();
+                  for (int j = 0; j < BUFSIZE; j++)
+                     buffer.put((byte) (Math.random() * 256));
+                  buffer.flip();
+                  try
+                  {
+                     while (src.write(buffer) > 0);
+                  }
+                  catch (IOException ioe)
+                  {
+                     System.err.println(ioe.getMessage());
+                  }
+               }
+               try
+               {
+                  src.close();
+               }
+               catch (IOException ioe)
+               {
+                  ioe.printStackTrace();
+               }
+            }
+         };
+
+      Runnable receiverTask =
+         new Runnable()
+         {
+            @Override
+            public void run()
+            {
+               ReadableByteChannel dst = pipe.source();
+               ByteBuffer buffer = ByteBuffer.allocate(BUFSIZE);
+               try
+               {
+                  while (dst.read(buffer) >= 0)
+                  {
+                     buffer.flip();
+                     while (buffer.remaining() > 0)
+                        System.out.println(buffer.get() & 255);
+                     buffer.clear();
+                  }
+               }
+               catch (IOException ioe)
+               {
+                  System.err.println(ioe.getMessage());
+               }
+            }
+         };
+
+      Thread sender = new Thread(senderTask);
+      Thread receiver = new Thread(receiverTask);
+      sender.start();
+      receiver.start();
+   }
+}
+#+END_SRC
+** selector
+该对象的方法是阻塞的，其本质类似于多路复用，任何一个管理的IO有数据了，自动激活
+把阻塞移除，多个channel的读取，相当于委派给OS进行处理
+*** SelectableChannel
+SelectionKey register(Selector sel, int ops)
+SelectionKey register(Selector sel, int ops, Object att)
+**** SelectionKey.OPS
+OP_ACCEPT
+OP_CONNECT
+OP_READ
+OP_WRITE
+** Charsets
+把字符编码集和编码方案放在了一起
+*** method
+static Charset forName(String charsetName)
+ByteBuffer encode(String s)
+CharBuffer decode(ByteBuffer buffer)
+* nio2
+** FileSystems
+*** list all OS support filesystemProvider
+#+BEGIN_SRC java
+for (FileSystemProvider installedProvider : FileSystemProvider.installedProviders()) {
+    System.out.println(installedProvider);
+}
+#+END_SRC
+*** method
+FileSystem’s Iterable<FileStore> getFileStores()
+** Path
+相当于某些增强的File，但是把属性切分为另一个接口，而文件信息则在FileStore里
+#+BEGIN_SRC java
+public class PathDemo
+{
+   public static void main(String[] args)
+   {
+      FileSystem fsDefault = FileSystems.getDefault();
+      Path path = fsDefault.getPath("a", "b", "c");
+      System.out.println(path);
+      System.out.printf("File name: %s%n", path.getFileName());
+      for (int i = 0; i < path.getNameCount(); i++)
+         System.out.println(path.getName(i));
+      System.out.printf("Parent: %s%n", path.getParent());
+      System.out.printf("Root: %s%n", path.getRoot());
+      System.out.printf("SubPath [0, 2): %s%n", path.subpath(0, 2));
+   }
+}
+#+END_SRC
+*** method
+Path of(String first, String... more)
+Path normalize() // 去掉冗余的路径如../和.
+Path relativize(Path other) // 相对于other的路径
+Path resolve(Path other)
+Path resolve(String other)
+Path resolveSibling(Path other)
+ boolean startsWith(Path other)
+** Files
+*** method
+**** attribute
+FileStore getFileStore(Path path)
+Object getAttribute(Path path, String attribute, LinkOption... options)
+Path setAttribute(Path path, String attribute, Object value, LinkOption... options)
+Path createFile(Path path, FileAttribute<?>... attrs)
+boolean isHidden(Path path)
+**** create tmp file
+Path createTempFile(Path dir, String prefix, String suffix, FileAttribute<?>... attrs)
+Path createTempFile(String prefix, String suffix, FileAttribute<?>... attrs)
+**** reading
+byte[] readAllBytes(Path path)
+List<String> readAllLines(Path path)
+List<String> readAllLines(Path path, Charset cs)
+**** writing
+Path write(Path path, byte[] bytes, OpenOption... options)
+Path write(Path path, Iterable<? extends CharSequence> lines, Charset cs, OpenOption... options)
+Path write(Path path, Iterable<? extends CharSequence> lines, OpenOption... options)
+**** stream
+BufferedReader newBufferedReader(Path path)
+BufferedReader newBufferedReader(Path path, Charset cs)
+InputStream newInputStream(Path path, OpenOption... options)
+***** java.nio.file.OpenOptions
+APPEND: If the file is opened for WRITE access, write bytes to the end of the file rather than to the beginning.
+CREATE: Create a new file when it doesn’t exist.
+CREATE_NEW: Create a new file, failing when the file already exists.
+DELETE_ON_CLOSE: Make a best effort to delete the file when the file is closed.
+DSYNC: Require that every update to the file’s content be written synchronously to the underlying storage device.
+READ: Open the file for read access.
+SPARSE: Open a sparse file (https://en.wikipedia.org/wiki/Sparse_file). When used with the CREATE_NEW option, SPARSE provides a hint that the new file will be sparse. The option is ignored when the file system doesn’t support the creation of sparse files.
+SYNC: Require that every update to the file’s content or metadata be written synchronously to the underlying storage device.
+TRUNCATE_EXISTING: Truncate the length of an existing file that’s opened for WRITE access to 0.
+WRITE: Open the file for write access.
+**** directory
+DirectoryStream<Path> newDirectoryStream(Path dir)
+DirectoryStream<Path> newDirectoryStream(Path dir, DirectoryStream.Filter<? super Path> filter)
+DirectoryStream<Path> newDirectoryStream(Path dir, String glob)
+**** copy/move/delete
+long copy(InputStream in, Path target, CopyOption... options)// Copy from a classic I/O input stream to a path.
+long copy(Path source, OutputStream out)// Copy from a path to a classic I/O output stream.
+Path copy(Path source, Path target, CopyOption... options)//Copy from one path to another
+move(Path source, Path target, CopyOption... options)
+void delete(Path path)
+boolean deleteIfExists(Path path)
+**** travel
+Path walkFileTree(Path start, FileVisitor<? super Path> visitor)
+**** watch service
+监听目录变化，比如idea在外部文件被删除的时间可以感应到文件目录的变化，从而刷新UI 
+#+BEGIN_SRC java
+public class WatchServiceDemo
+{
+   public static void main(String[] args) throws IOException
+   {
+      if (args.length != 1)
+      {
+         System.err.println("usage: java WatchServiceDemo directory");
+         return;
+      }
+      FileSystem fsDefault = FileSystems.getDefault();
+      WatchService ws = fsDefault.newWatchService();
+      Path dir = fsDefault.getPath(args[0]);
+      dir.register(ws, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+      for (;;)
+      {
+         WatchKey key;
+         try
+         {
+            key = ws.take();
+         }
+         catch (InterruptedException ie)
+         {
+            return;
+         }
+         for (WatchEvent event: key.pollEvents())
+         {
+            WatchEvent.Kind kind = event.kind();
+            if (kind == OVERFLOW)
+            {
+               System.out.println("overflow");
+               continue;
+            }
+            WatchEvent ev = (WatchEvent) event;
+            Path filename = (Path) ev.context();
+            System.out.printf("%s: %s%n", ev.kind(), filename);
+         }
+         boolean valid = key.reset();
+         if (!valid)
+            break;
+      }
+   }
+}
+#+END_SRC
+** FileStore
+文件所在的空间设备，如Volumn，Drive，partition之类(具体取决于文件系统)
+*** method
+long getTotalSpace()
+long getUnallocatedSpace()
+long getUsableSpace()
+boolean isReadOnly()
+boolean supportsFileAttributeView(Class<? extends FileAttributeView> type)
+boolean supportsFileAttributeView(String name)
+** FileAttributeView
+*** subclass
+**** BasicFileAttributeView
+creationTime (FileTime)
+fileKey (Object)
+isDirectory (Boolean)
+isOther (Boolean)
+isRegularFile (Boolean)
+isSymbolicLink (Boolean)
+lastAccessTime (FileTime)
+lastModifiedTime (FileTime)
+size (Long)
+**** FileOwnerAttributeView
+**** UserDefinedFileAttributeView
+**** DosFileAttributeView
+archive (Boolean)
+hidden (Boolean)
+readonly (Boolean)
+system (Boolean)
+**** AclFileAttributeView
+*** usage
+Files’s <V extends FileAttributeView> V getFileAttributeView(Path path, Class<V> type, LinkOption... options)
+** Aio
+*** AsynchronousChannel
+**** method
+Future<V> operation(...)
+void operation(... A attachment, CompletionHandler<V,? super A> handler)
+**** subinterface/class
+***** AsynchronousByteChannel
+****** method
+Future<Integer> read(ByteBuffer dst)
+<A> void read(ByteBuffer dst, A attachment, CompletionHandler<Integer,? super A> handler)
+Future<Integer> write(ByteBuffer src)
+<A> void write(ByteBuffer src, A attachment, CompletionHandler<Integer,? super A> handler)
+***** AsynchronousFileChannel
+#+BEGIN_SRC java
+public class Main
+{
+    public static void main(String[] args) throws Exception
+    {
+        if (args.length != 1)
+        {
+            System.err.println("usage: java AFCDemo path");
+            return;
+        }
+        Path path = Paths.get(args[0]);
+        AsynchronousFileChannel ch = AsynchronousFileChannel.open(path);
+        ByteBuffer buf = ByteBuffer.allocate(1024);
+        Future<Integer> result = ch.read(buf, 0);
+        while (!result.isDone())
+        {
+            System.out.println("Sleeping...");
+            Thread.sleep(500);
+        }
+        System.out.println("Finished = " + result.isDone());
+        System.out.println("Bytes read = " + result.get());
+        ch.close();
+    }
+}
+#+END_SRC
+***** AsynchronousServerSocketChannel
+***** AsynchronousSocketChannel
+*** CompletionHandler
+**** method
+void completed(V result, A attachment)
+void failed(Throwable t, A attachment)
+*** AsynchronousChannelGroup
+open(xx组)，组的概念主要用于分配通用的诸如线程池，统一关闭等等分组特性
+** NetworkChannel 
+*** DatagramChannel
+#+BEGIN_SRC java
+//多播
+public class ChannelServer
+{
+    final static int PORT = 9999;
+
+    public static void main(String[] args) throws IOException
+    {
+        NetworkInterface ni;
+        ni = NetworkInterface.getByInetAddress(InetAddress.getLocalHost());
+        DatagramChannel dc;
+        dc = DatagramChannel.open(StandardProtocolFamily.INET)
+                .setOption(StandardSocketOptions.SO_REUSEADDR,
+                        true)
+                .bind(new InetSocketAddress(PORT))
+                .setOption(StandardSocketOptions.IP_MULTICAST_IF,
+                        ni);
+        InetAddress group = InetAddress.getByName("239.255.0.1");
+
+        int i = 0;
+        while (true)
+        {
+            ByteBuffer bb = ByteBuffer.wrap(("line " + i).getBytes());
+            dc.send(bb, new InetSocketAddress(group, PORT));
+            i++;
+        }
+    }
+}
+
+public class ChannelClient
+{
+    final static int PORT = 9999;
+
+    public static void main(String[] args) throws IOException
+    {
+        NetworkInterface ni;
+        ni = NetworkInterface.getByInetAddress(InetAddress.getLocalHost());
+        DatagramChannel dc;
+        dc = DatagramChannel.open(StandardProtocolFamily.INET)
+                .setOption(StandardSocketOptions.SO_REUSEADDR,
+                        true)
+                .bind(new InetSocketAddress(PORT))
+                .setOption(StandardSocketOptions.IP_MULTICAST_IF,
+                        ni);
+        InetAddress group = InetAddress.getByName("239.255.0.1");
+        MembershipKey key = dc.join(group, ni);
+
+        ByteBuffer response = ByteBuffer.allocate(50);
+        while (true)
+        {
+            dc.receive(response);
+            response.flip();
+            while (response.hasRemaining())
+                System.out.print((char) response.get());
+            System.out.println();
+            response.clear();
+        }
+    }
+}
+#+END_SRC
+*** ServerSocketChannel
+*** SocketChannel

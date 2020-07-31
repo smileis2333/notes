@@ -232,16 +232,18 @@ FGC=Major GC
 *** parallel scavenge 年轻代
 类似serial，但是用多个GC线程
 *** ParNew 配CMS
+因为年轻代需要copy，所以需要标记+复制一起来，所以必须魔改
 parallel scavenge不能配CMS，因为产生魔改版本
 *** serial old
-压缩复制
+同serial年轻代，都是直接停了清，但是使用压缩复制，因为分代处理只有一块
 *** parallel old
+类似
 *** cms
 标记/回收的过程是与工作线程一起跑
 1. stw,初始标记root
-2. 用获取到root并发扫
+2. 用获取到root并发扫(工作线程没停)
 3. stw，重标
-4. 清理
+4. 清理(工作线程没停)
 *** G1
 *** ZGC
 *** shanandoah

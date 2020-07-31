@@ -78,8 +78,8 @@ animal.protected?string("Y", "N") 基于 animal.protected 的布尔值来返回字符串 "Y"
 **** 判断对象是否为空
 <#if user??><h1>Welcome ${user}!</h1></#if>
 **** 多级访问的设置
-(animals.python.price)!0
-(animals.python.price)??
+(animals.python.price)!0 //设置默认值
+(animals.python.price)?? // 判空
 *** assign
 
 ** 注释
