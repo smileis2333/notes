@@ -1,1 +1,9 @@
+#+TITLE: 刷路由器
+#+STARTUP: indent
 * 裴讯路由器
+** k2
+开启telnet/ssh，或者刷入breed等
+在定时重启的选项内进行html注入
+ref http://blog.iytc.net/wordpress/?p=1823
+*** telnet
+05|/usr/sbin/telnetd -l /bin/login.sh

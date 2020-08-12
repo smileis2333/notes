@@ -86,3 +86,18 @@ public byte[] someMethod() throws Exception {
 }
 #+END_SRC
 * principle
+1. Spring扫描项目,建个map
+2. 扫controller
+3. 拿RequestMapping标的方法，取映射作为key(如果类也标了，则合并)，值为Method
+4. 根据用户请求，拿出URI进行匹配
+** handlerMapping
+1. 用于取出handler，找的时候是一波列表，因为存在旧式代码的问题，比如Controller接口的handleRequest，HttpRequestHandler的handleRequest
+2. 目的是各种类型的各种分类，如全部使用@Controller的走RequestHandlerMapping
+** handlerAdapter
+1. 类似handlerMapping，也是为兼容处理
+2. 注解方法的是反射调用，而旧式的可以直接调用，强转逻辑直接调用(因为一个uri就对应一个handler)
+*** 处理handlerMethod
+处理处理，反射调用，用了一大堆的ArgumentResolver来处理参数接收与赋值
+
+* 零配置
+Spring Web模块已经设置使用了Servlet3.0之后出台的SPI支持，在META-INF\services\javax.servlet.ServletContainerInitializer设置了SpringServletContainerInitializer，并制定了取实现WebApplicationInitializer接口的类，作为启动配置类之一，之后取出全部进行初始化，所以自定义启动无法用到servlet SPI的部分，实现了WebApplicationInitializer就可以成功被Spring接收到

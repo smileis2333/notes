@@ -14,3 +14,5 @@
 stage
 *** u
 unstage
+*** C-c C-c
+commit

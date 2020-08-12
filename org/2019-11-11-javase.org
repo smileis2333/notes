@@ -650,7 +650,6 @@ static boolean isProxyClass(Class<?> cl)
 **** Exception
 ***** IOException
 ***** RuntimeException
-
 *** throws
 方法定义时指定可能抛出的异常
 *** throw

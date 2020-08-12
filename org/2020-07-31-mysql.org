@@ -6,3 +6,9 @@
 *** page directory
 **** slot
 *** user records
+* trick
+** ID
+InnoDB对于最大主键的记录是不做处理的，如果产生空洞了，默认主键从空洞处开始算
+MyISAM则是会记录当前最大的主键
+** enable cache
+$r=mysql_query(xxx);

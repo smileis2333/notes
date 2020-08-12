@@ -1,48 +1,5 @@
 #+TITLE: java concurrency
 #+STARTUP: indent
-* relevant info
-** thread
-*** benifit
-1. exploiting multiple processor
-2. simplicity of modeling(such as servlet spec and RMI)
-3. simpified handling of asynchronous events
-4. more responsive user interface(such as jwt and swing)
-*** risk
-1. safety hazards(corrupted data)
-2. liveness hazards(such as infinite loop)
-3. performance hazards(due to context switch or failure of design)
-** race condtion
-a possibility of that generating incorrect result depending on a bulk opetions(it would be solve by set the buld operation as atomic)
-常用为
-read-and-write
-check-and-write(lazy initialization)
-* thread safety
-** definition
-not only run correctly in single-thread program(generally refer main programe), but also run correctly when access from multiple thread
-** atomicity
-*** single variable(may be primitive type or collect)
-using build-in mechanisms such atomic variable class (AtomicXXXX) and thread-safe collection
-*** multiple varibale
-use lock to protect
-** lock
-*** intrinsic
-every object has intrinsic lock, when enter synchronized code, the exucuting thread acquire lock, other thread that attempt acquire the same object lock must wait util the thread holding lock complete and release lock
-*** reentrancy
-同一线程可以多次申请锁，这是通过将lock关联一个引用计数来实现的，当计算为0时，即idle，可被申请，非0时，只有持有者才可以继续申请，并且计数1，执行完对应代码块，计数-1，为0时，即完全释放
-#+BEGIN_SRC java
-public class Test(){
-  public synchronized void test1(){
-    System.out.println(123);
-  }
-
-
-  public synchronized void test2(){
-    System.out.println(123);
-    this.test1();
-  }
-}
-#+END_SRC
-
 * motivation
 ** resources utilization
 ** fairness
@@ -64,12 +21,882 @@ public class UnsafeThread{
 code inactive, such as deadlock, starvation, livelock
 ** performance hazards
 such as context swicth, synchronized code block
-* term
+* condition
 ** invarient
 mean some condition that must been true at running for proving the state of application is valid
 ** postcondition
 在某个操作，或者一系列操作后，该条件必须为true，用于证明先前的代码执行成功了
+** precondition
+比如JDK集合的操作如remove/add等操作，取决于内部实现的状态
+* key
 ** Thread safe class
-when a class behavess correctly
+it is running correctly in single thread program, and behaves correctly when used by mutiple thread
+** composing object
+*** requirement
+- Identify the variables that form the object's state;
+- Identify the invariants that constrain the state variables;
+- Establish a policy for managing concurrent access to the object's state.
+*** INSTANCE CONFINEMENT
+把对象组合进来，自己指定对应的同步策略
+#+BEGIN_SRC java
+class PersonSet{
+    @GuaryBy("this")
+    private final Set<Personn>mySet = new HashSet<>();
+
+    public synchronized void addPerson(Person person){
+        mySet.add(person);
+    }
+
+    public synchronized boolean containsPerson(Person person){
+        return mySet.contains(person);
+    }
+}
+#+END_SRC
+*** DELEGATING THREAD SAFETY
+1. using build-in lib Thread safe class/exist thread class, delegate the atomic to its variable itself
+2. if all stata is independent, it may be convenient, but if is have invariant, all the relavant state is need to mannual synchronize
+**** correct demo
+#+BEGIN_SRC java
+class VisualComponent{
+    private final List<KeyListener>keyListeners = new CopyOnWriteArrayList<>();
+    private final List<MouseListener>mouseListeners = new CopyOnWriteArrayList<>();
+
+    public void addKeyListener(KeyListener keyListener){keyListeners.add(keyListener);}
+    public void addMouseListener(MouseListener mouseListener){mouseListeners.add(mouseListener);}
+    public void removeKeyListener(KeyListener keyListener){keyListeners.remove(keyListener);}
+    public void removeMouseListener(MouseListener mouseListener){mouseListeners.remove(mouseListener);}
+}
+#+END_SRC
+**** incorrect demo
+#+BEGIN_SRC java
+// it is not thread safe even though its variable is thread safe, that is because its variable paticipate the invariant which require lower<=upper however
+class NumberRange{
+    private final AtomicInteger lower = new AtomicInteger();
+    private final AtomicInteger upper = new AtomicInteger();
+
+    public void setLower(int i){
+        if (i>upper.get()){
+            throw new IllegalArgumentException("can't set lower to " +i+">upper");
+        }
+        lower.set(i);
+    }
+
+    public void setUpper(int i){
+        if (i>upper.get()){
+            throw new IllegalArgumentException("can't set upper to " +i+"<lower");
+        }
+        upper.set(i);
+    }
+
+    public boolean inRange(int i){
+        return (i>=lower.get()&&i<=upper.get());
+    }
+}
+#+END_SRC
+**** public underlying state
+1. the state variable does not participate any invariants
+2. there is no prohibited state transitions for any of its operation
+correct demo's listeners are state dependent, so it's safe to public the two listeners
+*** ADDING FUNCTIONALITY TO EXISTING THREAD-SAFE CLASSES
+**** 改源码
+最安全，且能保持同步策略一致，但是对前提要求高，比如类库，或者第三方框架一般根本改不了(正常使用情况下)
+**** extends
+1. 取决于内部声明的同步策略
+2. 该类是否把用于设置同步的状态的暴露出来(比如当他使用的是private new Object()作为锁时，且没有提供getter，子类根本无法保持一致的同步策略)
+是否使用要看实现者是否把同步策略文档化
+#+BEGIN_SRC java
+class BetterVector<E>extends Vector<E>{
+    public synchronized boolean putIfAbsent(E x){
+        boolean absent = !contains(x);
+        if (absent)
+            add(x);
+        return absent;
+    }
+}
+#+END_SRC
+**** client-side lock
+#+BEGIN_SRC java
+// 100%错，因为锁的都不是同个东西，只有syncrhonized(list)才能保持锁一致
+class ListHelper <E>{
+    public List<E>list = Collections.synchronizedList(new ArrayList<E>());
+    public synchronized boolean putIfAbsent(E x){
+        boolean absent = list.contains(x);
+        if (absent)
+            list.add(x);
+        return absent;
+    }
+}
+#+END_SRC
+**** Composition
+应该归类为decorator
+#+BEGIN_SRC java
+class ImprovedList<T> implements List<T>{
+    private final List<T>list;
+
+    public ImprovedList(List<T> list) {
+        this.list = list;
+    }
+
+    @Override
+    public synchronized void clear() {
+        list.clear();
+    }
+    
+    ...
+}
+#+END_SRC
+*** document synchronized policies
+猜规范的要求性，最重要的是站在如何实现的角度来看
 ** Reentrancy
 lock held by thread no invocation, the thread held lock can access other code block that required the same lock
+** visibility
+一个线程改了共享状态后其他线程是否可见，可以使用 synchronized，或者volatile单纯实现可见性
+*** error demo
+#+BEGIN_SRC java
+public class NoVisibility {
+    private static boolean ready;
+    private static int number;
+
+    private static class ReadyThread extends Thread {
+        @Override
+        public void run() {
+            while (!ready) {
+                Thread.yield();
+            }
+            System.out.println(number);
+        }
+    }
+
+    public static void main(String[] args) {
+        new ReadyThread().start();
+        number = 42;
+        ready = true;
+    }
+}
+
+#+END_SRC
+** atomic operation
+一组操作能否视为原子操作
+** publication and escape
+*** escape
+**** from consructor
+一个对象只有在完成构造完才能算为有效状态
+1. 建了Thread，并且启动了，(不启动就不算)
+2. 建立内部类，把自己的this的暴露出去了
+**** from method
+return the reference of object whether safety depend if it is immutable object
+*** safe publication
+在必须使用共享对象的环境下，不遵守规则的发布对象可能导致使用者读取到对象不一致的情况
+1. Initializing an object reference from a static initializer(such as `public static Holder holder = new Holder(42);`)
+2. Storing a reference to it into a volatile field or AtomicReference
+3. Storing a reference to it into a final field of a properly constructed object
+4. Storing a reference to it into a field that is properly guarded by a lock(丢到thread safe collection来进行同步维护)
+**** n!=n
+基本很难做到重现
+https://stackoverflow.com/questions/1621435/not-thread-safe-object-publishing
+#+BEGIN_SRC java
+public class Holder {
+    private int n; // 加final，JVM会强制进行初始化安全控制
+
+    public Holder(int n) {
+        this.n = n;
+    }
+
+    public void assertSanity() {
+        if (n != n)
+            throw new AssertionError("This statement is false.");
+    }
+}
+
+// Because consructor is not atomic, it may be broken down to a series of memory writes and allocations,
+//Alloc memory to pointer1
+//Write 42 to pointer1 at offset 0
+//Write pointer1 to someStaticVariable
+//Thread A
+h = new Holder(42);
+
+//Thread B
+h.assertSanity();
+#+END_SRC
+** policies
+*** Thread-confined
+只能方法用，不允许逃逸
+*** Shared read-only
+可以多个读，一个写(可以用volatile来做)
+*** Shared thread-safe
+可以读写，并且不需要用到同步，安全性由类自身提供
+*** Guarded
+使用时，必须用对应的锁来限定访问
+** thread confinement
+*** Ad-hoc thread confinement
+强调类提供者没有进行线程安全的处理，但是提供者提供了对应的文档化资料进行说明使用场景，是否真的安全取决于使用者是否遵守文档以及如何使用该类
+*** Stack Confinement
+per thread per stack，在状态在未逃逸的情况下，各个栈彼此之间的变量是互相隔离的
+*** ThreadLocal
+将一个变量作为一个以thread为键的Map，可以保证各个thread拿到的是所属的专属变量，使用场景有两类，一是旧式的系统进行多线程的重构时，二是各类框架在某类情况下用于简化系统的实现，一般，不建议应用级别的去进行使用
+#+BEGIN_SRC java
+private static ThreadLocal<Connection>connectionHolder = new ThreadLocal<>(){
+    @Override
+    protected Connection initialValue() {
+        return DriverManager.getConnection(DB_URL)
+    }
+};
+#+END_SRC
+** IMMUTABILITY
+*** effect
+1. 在某些情况下(多个变量组成invariant，抽离出来)，可以配合volatile进行简易的atomic处理
+2. inherent thread safe
+*** condition
+1. Its state cannot be modified after construction
+2. All its field are final(理论上可以不必，但是这是一般规范)
+3. It is properly constructed(the this reference does not escape during construction)
+** building block
+*** synchronized collections
+- Vector and Hashtable
+- Collections.synchronizedXxx
+这种的特点为并发访问时，迭代器会失效(可能性，有可能不可见性导致成功，但是为旧数据)，导致迭代器失效时抛出ConcurrentModificationExceptions，该做法称为fail-fast
+失效的可能性很难追溯，比如增强for循环进行了变更操作，比如忘记迭代时同步等
+**** hidden iterator
+- 增强for循环
+- toString
+- compare
+- hashCode
+*** CONCURRENT COLLECTIONS
+1. 消除了ConcurrentModificationException的抛出
+2. 保持了一种所谓的weakly consistent的状态(比如size，只能作为一个预估，而迭代器在使用过程中还会变动等)
+3. 统一增加了一些常用的诸如putIfAbsent等atomic operation
+**** ConcurrentMap
+***** ConcurrentHashMap
+在hashMap的基础上使用了一种lock striping(一段一段锁，而不是全局锁的同步机制)的技术
+replacement for hashMap
+***** ConcurrentSkipListMap
+replacement for SortedMap
+**** ConcurrentSkipListSet
+**** CopyOnWriteArrayList
+读多写少的场景，写的时候内部数组会进行clone
+**** BlockingQueue
+put/take(block opeation)
+offer/poll(return operation status, mainly for custom flexible policies)
+***** LinkedBlockingQueue
+内部实现为链表
+***** ArrayBlockingQueue
+内部实现为数组
+***** PriorityBlockingQueue
+带优先级的
+***** SynchronousQueue
+最特殊的一种，内部没有空间存在，put and take will block unless another thread is already waiting to participate in the handoff
+*** SYNCHRONIZERS
+A synchronizer is any object that coordinates the control flow of threads based on its state
+BlockQueue就是其中一种(只是这个还能顺便当作容器)
+**** Latches
+开了之后就不能再关,场景主要包括
+1. 资源要求，比如XX必须等到resource R加载完成
+2. 服务间互相存在依赖
+3. 平级服务之间，比如王者荣耀游戏需要加载5个人才能进(除非断线)
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        int nThread = 100;
+        CountDownLatch startGate = new CountDownLatch(1);
+        CountDownLatch endGate = new CountDownLatch(nThread);
+
+
+        for (int i=0;i<nThread;++i){
+            new Thread(()->{
+                try {
+                    startGate.await();
+                    endGate.countDown();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+
+        long startTime = System.nanoTime();
+        startGate.countDown();
+        endGate.await();
+        long endTime = System.nanoTime();
+        System.out.println(endTime-startTime);
+    }
+}
+#+END_SRC
+**** FutureTask
+FutureTask is used by the Executor framework to represent asynchronous tasks
+#+BEGIN_SRC java
+// 可以用于表示一种运行状态的值wrapper，可用于cache实现
+public class Main {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        FutureTask<String> hello = new FutureTask<>(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                System.out.println("hello");
+                return "kk";
+            }
+        });
+        hello.run(); // 如果非要用的情况下，一般用于丢在新建线程跑
+        hello.get(); // 拿不到的情况下，block
+    }
+}
+#+END_SRC
+**** Semaphores
+跟iptable的令牌限制很像，拿得到就往下走
+#+BEGIN_SRC java
+class BoundedHashSet<T>{
+    private final Set<T> set;
+    private final Semaphore sem;
+
+    public BoundedHashSet(Set<T> set, Semaphore sem) {
+        this.set = set;
+        this.sem = sem;
+    }
+
+    public boolean add(T o) throws InterruptedException {
+        sem.acquire();
+        boolean wasAdded = false;
+        try {
+            wasAdded = set.add(o);
+            return wasAdded;
+        }
+        finally {
+            if (!wasAdded){
+                sem.release();
+            }
+        }
+    }
+
+    public boolean remove(T o){
+        boolean wasRemoved = set.remove(o);
+        if (wasRemoved)
+            sem.release();
+        return wasRemoved;
+    }
+}
+#+END_SRC
+**** Barriers
+#+BEGIN_SRC java
+// 与latch很类似，但是到达之后会reset，相当于先开后关(默认为关着的)
+public class Main {
+    public static void main(String[] args) {
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(5,()->{
+            System.out.println("跑完一次");
+        });
+
+        for (int i=0;i<10;++i){
+            new Thread(()->{
+                try {
+                    cyclicBarrier.await();
+                    System.out.println("start run");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+    }
+}
+#+END_SRC
+** InterruptedException
+*** deal
+**** Propagate the InterruptedException
+**** Restore the interrupt
+Thread.currenThread.interrupt()
+** Task Execution
+*** execute in thread
+这一块意味着使用原始API进行处理分发，缺乏管理策略
+**** consequence
+1. 任务从主线程移出到新的线程，主线程不阻塞(换到新的线程阻塞，所以目前的container真正的做法是配合NIO，在主线程得到数据SelectionKey.OP_READ后，在把连接丢到线程分发，这样可以完全消除连接后的数据发送延时导致的阻塞时间浪费)，可以接收新的请求
+2. 并行化处理，利用多核性能
+3. Thread task必须线程安全
+**** disadvantage
+1. 裸露API的使用，无法支持各种管理策略，比如FIFO
+2. 不管理的情况下，极有可能到达上线(OS相关)，或者浪费资源(创建与销毁的开销)
+***** Thread lifecycle overhead
+***** Resource consumption
+***** Stability
+*** EXECUTOR FRAMEWORK
+**** Executor
+最大的意义在于切分了任务的提交和执行(提交不一定立刻被执行)
+#+BEGIN_SRC java
+public interface Executor{
+  void execute(Runnable command);
+}
+#+END_SRC
+**** thread pool
+***** FixedThreadPool
+***** CachedThreadPool
+***** SingleThreadExecutor
+***** ScheduledThreadPool
+replacement for Timer
+**** Executors
+newFixedThreadPool
+newCachedThreadPool
+newSingleThreadExecutor
+newScheduledThreadPool
+**** lifecycle
+Executor提供了职责切分，ExecutorService提供了execution的lifeCycle，分别为running, shutting down, and terminated
+#+BEGIN_SRC java
+public interface ExecutorService{
+  void shutdown(); // 新提交的task不再接受，其他已存的task执行完才关闭
+  List<Runnable>shutdownNow(); // abrupt shutdown，运行中的尝试取消掉，未执行的直接放弃
+  boolean isShutdown();
+  boolean isTerminated();
+  boolean awaitTerminated(); // 阻塞到状态切换完毕
+}
+#+END_SRC
+**** task
+***** Runnable
+***** Callable
+提供了类似Runnable的逻辑单元，但是可以带返回值(没返回值的可以用Callable(Void))
+***** Future
+****** definiton
+ExecutorService提供了execution的生命周期，Future提供了task的生命周期
+#+BEGIN_SRC java
+public interface Future<V> {
+    boolean cancel(boolean mayInterruptIfRunning);
+    boolean isCancelled();
+    boolean isDone();
+    V get() throws InterruptedException, ExecutionException;
+    V get(long timeout, TimeUnit unit)
+        throws InterruptedException, ExecutionException, TimeoutException;
+}
+#+END_SRC
+****** from
+******* ExecutorService
+invoke submit
+从java6开始，可以重写AbstractExecutorService的newTaskFor(Callable<T>task)来进行自定义Future wrapper设定
+******* FutureTask
+instantiate a FutureTask for a given Runnable or Callable, then commit it to Executor for execution
+**** CompletionService
+实现类ExecutorCompletionServices
+场景: 如果存在n个任务，需要进行管理时，如果手动管理，则需要创建容器，然后用get来阻塞/轮询状态进行处理
+该类原理：
+1. CompletionService类似一个管理工具，接入一个Executor，然后在接收到task的时候进行wrapper，然后委派给Executor进行处理
+2. 1中wrapper的处理为重写done()，在Executor执行task完毕后，会自动将wrapper加入该类维护的BlockQueue中
+3. 外部直接从该类获取一系列完成的Future
+**** time limit
+1. 对于单个任务是限时的场景，可以直接用Future的V get(long timeout, TimeUnit unit)方法，如果超时，则会抛出异常
+2. 对于多个任务相关汇总限时的场景，一种是自己计时，实现，另一种是调用ExecutorService的invokeAll
+** cancellation and shutdown
+*** 非阻塞方法
+可以用直接一些volatile属性进行判断控制
+#+BEGIN_SRC java
+class PrimeGenerator implements Runnable{
+    private volatile  boolean cancelled;
+    @Override
+    public void run() {
+        while (!cancelled){
+            //doSomething
+        }
+    }
+
+    public void cancel(){
+        this.cancelled = true;
+    }
+}
+#+END_SRC
+*** 阻塞的方法
+**** 支持抛出InterruptedException的方法
+常见于集合操作以及Thread.sleep，Object.wait等，会监听线程状态，在被置为interruption之类，取消标置，抛出InterruptedException，可以用线程中断直接触发异常抛出(注意，抛出后线程的中断状态会被取消)
+***** interrupt
+****** Thread.interrupt
+设置Thread内部中断状态变量
+****** Thread.isInterrupted
+判断
+****** static Thread.interrupted
+取消Thread的内部中断状态
+**** 不支持的
+关键在于其不对线程的状态进行判定，但是会存在一些方法，可以强行触发异常发生，根据类型进行异常抛出来进行阻塞的中止，从而实现线程/任务的取消
+- Synchronous socket I/O in java.io
+- Synchronous I/O in java.nio
+- Asynchronous I/O with Selector
+- Lock acquisition
+***** custom
+****** 旧式做法
+#+BEGIN_SRC java
+class ReadThread extends Thread{
+    private final Socket socket;
+    private final InputStream in;
+
+    public ReadThread(Socket socket, InputStream in) {
+        this.socket = socket;
+        this.in = in;
+    }
+
+    // 通过异常触发直接终止阻塞，并设置线程的状态已取消来完成库方法中，仅阻塞而不对中断做处理的方法
+    public void interrupt(){
+        try {
+            socket.close();
+        }catch (IOException ignored){
+
+        }finally {
+            super.interrupt();
+        }
+    }
+
+    public void run(){
+        try {
+            byte[]buf=new byte[1024];
+            while (true){
+                int count = in.read(buf);
+                if (count<0){
+                    break;
+                }else if (count>0){
+                    // doSomething with buf
+                }
+            }
+        }catch (IOException e){
+            //
+        }
+    }
+}
+#+END_SRC
+****** 新式做法(基于ExecutorService)
+#+BEGIN_SRC java
+public abstract class SocketUsingTask <T> implements CancellableTask<T> {
+    @GuardedBy("this") private Socket socket;
+
+    protected synchronized void setSocket(Socket s) {
+        socket = s;
+    }
+
+    public synchronized void cancel() {
+        try {
+            if (socket != null)
+                socket.close();
+        } catch (IOException ignored) {
+        }
+    }
+
+    public RunnableFuture<T> newTask() {
+        return new FutureTask<T>(this) {
+            public boolean cancel(boolean mayInterruptIfRunning) {
+                try {
+                    SocketUsingTask.this.cancel();
+                } finally {
+                    return super.cancel(mayInterruptIfRunning);
+                }
+            }
+        };
+    }
+}
+
+
+interface CancellableTask <T> extends Callable<T> {
+    void cancel();
+
+    RunnableFuture<T> newTask();
+}
+
+
+@ThreadSafe
+class CancellingExecutor extends ThreadPoolExecutor {
+    public CancellingExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue) {
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
+    }
+
+    public CancellingExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory) {
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory);
+    }
+
+    public CancellingExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, RejectedExecutionHandler handler) {
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, handler);
+    }
+
+    public CancellingExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
+    }
+
+    protected <T> RunnableFuture<T> newTaskFor(Callable<T> callable) {
+        if (callable instanceof CancellableTask)
+            return ((CancellableTask<T>) callable).newTask();
+        else
+            return super.newTaskFor(callable);
+    }
+}
+#+END_SRC
+*** cancellation
+**** intterupt
+1. 进行中断时，哪怕自己的任务进行了中断处理，也不一定能称为良好设计，因为可能产生副作用，比如执行用的线程是线程池整出来，触发中断时，自己设置的Task可以接收到中断异常，进行处理，但同时，也可能触发线程自身的中断异常处理机制，但是额外的效果发生，比如work thread死掉，无法复用。
+2. 除非线程的启动逻辑完全由自己确认(自己创建，自己启动，所有权归自己)，或者在完全确认完第三发那个中断处理逻辑的情况下，才允许用中断来进行所谓cancel
+3. 中断的本质为设置Thread内部的属性状态，而不是强制停止(旧式的强制停止已被Deprecated)
+**** policy
+- how to cancel
+- when the task check
+- what action happen after cancel
+**** demo
+#+BEGIN_SRC java
+class PrimeProducer extends Thread{
+    private final BlockingQueue<BigInteger>queue;
+
+    public PrimeProducer(BlockingQueue<BigInteger> queue) {
+        this.queue = queue;
+    }
+
+    public void run(){
+        try {
+            BigInteger p = BigInteger.ONE;
+            while (!Thread.currentThread().isInterrupted()){
+                queue.put(p=p.nextProbablePrime());
+            }
+        } catch (InterruptedException e) {
+            // doSomething
+            e.printStackTrace();
+        }
+    }
+
+    public void cancel(){
+        interrupt();
+    }
+}
+#+END_SRC
+**** poison pill
+毒丸策略需要在已知生产者，消费者的情况下才使用
+1. 1对1的情况下，丢一个毒丸就行
+2. n对m的情况下，每个生产者需要丢m个(在多的时间，会造成队列资源浪费)
+**** 获取线程内部异常状态
+***** 不做处理时不可见
+#+BEGIN_SRC java
+PrimeGenerator generator = new PrimeGenerator();
+new Thread(generator).start();
+// 跑一秒后，停掉，如果线程执行时在一秒结束前异常发生，无法得到对应的异常信息
+try{
+   SECONDS.sleep(1);
+}finally{
+   generator.cancel();
+}
+#+END_SRC
+***** 做通用处理时，违背了代码不能对执行线程做假设的前提
+#+BEGIN_SRC java
+// 这个方法，可以丢到任意线程执行，但是...这个方法不能确定其执行线程，究竟是哪个线程在处理，因此中断到底被谁先捕获，是否造成副作用，完全无法确认，因此不应该这么实现
+public static void timeRun(Runnable r,long timeout,TimeUnit unit){
+  final Thread taskThread = Thread.currentThread();
+  cancelExec.schedule(new Runnable(){
+    public void run(){
+      taskThread.interrupt();
+    }
+  },timeout,unit);
+}
+r.run()
+#+END_SRC
+***** 自己实现Runnable接口，内部进行异常捕捉，然后定时任务线程打断，最后Thread.join连结控制顺序
+#+BEGIN_SRC java
+public static void timeRun(final Runnable r,long timeout,Timeunit unit) throws InterruptedException{
+  class RethrowableTask implements Runnable{
+    private volatile Throwable t;
+    public void run(){
+      try{
+        r.run();
+      }catch(Throwable t){
+        this.t=t;
+      }
+    }
+    void rethrow(){
+      if(t!=null){
+        throw launderThrowable(t);
+      }
+    }
+  }
+  RethrowableTask task = new RethrowableTask();
+  final Thread taskThread = new Thread(task);
+  taskThread.start();
+  cancelExec.schedule(new Runnable(){
+    public void run(){
+      taskThread.interrupt();
+    }
+  },timeout,unit);
+  taskThread.join(unit.toMills(timeout));
+  task.rethrow();
+}
+#+END_SRC
+***** 用Future来进行任务的取消
+#+BEGIN_SRC java
+public static void timeRun(Runnable r, long timeout, TimeUnit unit){
+    final Future<?> task = taskExec.submit(r);
+    try {
+        task.get(timeout,unit);
+    }catch (TimeoutException e){
+        // doSomething
+    }catch (ExecutionException e){
+        // doSomething; e.getCause()
+    }catch (InterruptedException e){
+        // doSomething
+    }
+    finally {
+        task.cancel(true);
+    }
+}
+#+END_SRC
+*** 线程池shutdownNow时状态保存
+一般情况下，会返回未完成的任务集合(运行中的和待运行的加起来)
+1. 任务实体自己的带了判别属性
+2. 自定义ExecutorService，并抓到异常时进行保存
+*** deal with abnormal thread
+**** 异常全抓
+如果线程调用的是外部代码，比如Swing的event dispatch thread/线程池，应该全部抓Throwable
+**** exception handler
+1. 如果没配置，抓不到的异常最终会进行打印
+2. 对于Executor系列，只有execute的生效，调submit生成future，异常全部都会被wrapper成ExecutionException
+***** Thread.setUncaughtExceptionHandler
+一个线程一个配置
+***** static Thread setDefaultUncaughtExceptionHandler
+全部线程用一个
+*** JVM shutdown
+**** shutdown hook
+1. 可以拿来删临时文件
+2. 可以拿来关闭其他线程，通过触发中断
+3. 确保资源文件成功返还，如关闭文件
+Runtime.addShutdownHook
+**** Daemon threads
+拿来删缓存
+不会导致JVM无法退出
+**** Finalizers
+** Thread pool tuning
+*** implicit coupling between task and execution policy
+Dependent task
+task that exploit thread confinement
+response-time-sensitive task
+task that use threadlocal
+*** pool size calculate
+确认任务类型是CPU密集型还是稀缺资源密集型
+前者使用N+1(N为CPU核心数)
+后者为(核心数*CPU利用率*每个资源卡壳时间占总时长占比)
+*** config
+**** option
+***** corePoolSize
+***** maximumPoolSize
+***** keepAliveTime
+***** Unit
+***** workQueue
+***** threadFactory
+***** rejectHandler
+**** warn
+1. threadpoolexecutor核心数不应该设为0(有些人拿来防止退出时，防止卡住JVM)，但是这样会导致一个问题，因为非核心数目的线程是在workQueue满了之后，才去创建的，所以最开始提交的时候根本无法执行。
+1.6有方法可以完成上述做法(依然不能设置max)，而是设置核心数之后，设置allowCoreThreadTimeOut为true，这样的好处是当空置之后，核心线程也会被回收
+2. 生产中，如果存在大并发量的时候不允许使用Executors的工厂函数，因为fix和single用的workQueue都是无界的，而cache得poolSize是无界的，前者编程人员可能会忘记控制饱和策略(需要强转加设置饱和策略)，两者都可能吃满线程，需要根据生产环境进行外部调整
+三类默认的比对关系，比如workQueue的pool
+**** workQueue
+***** type
+****** bound
+such as ArrayBlockingQueue, or LinkedBlockingQueue with number of limit, used in newFixedThreadPool and newSingleThreadExecutor
+****** unbound
+LinkedBlockingQueue
+****** instant
+SynchronousQueue, used innewCachedThreadPool
+***** Saturation Policies
+****** type
+******* AbortPolicy
+丢了，并且跑一个异常
+******* CallerRunsPolicy
+直接拿当前线程来跑(不交给线程池)
+******* DiscardPolicy
+直接吞掉，不返回异常
+******* DiscardOldestPolicy
+丢到留在workQueue最老的那个
+****** trick
+不管workQueue是否有界，策略不支持阻塞，但是可以通过Semaphore来做到类似的处理
+**** pool
+**** Thread Factories
+给线程池用于生成thread，用于定义thread的各类行为，比如UncaughtExceptionHandler，或者日志分析 
+**** Executors
+***** newXXXThreadPool
+***** unconfigurableExecutorService
+将thread pool进行wrap，防止外部转换为进行属性修改
+**** EXTENDING THREADPOOLEXECUTOR
+***** beforeExecute
+每个任务执行之前，如果失败了task不会执行
+***** afterExecute
+每个任务执行之后
+***** terminated
+线程池终止的时候
+**** PARALLELIZING RECURSIVE ALGORITHMS
+1. 对应的相互独立，可以使用并行化进行提高效率，会由深度搜索变为广度搜索
+2. 对于求解答案一定存在的情况下，有奇效，且不用做任何额外的处理(仍需要在找到的时候进行终止)，但是对于求解答案，无法确定或者不存在的情况，必须针对解空间耗尽的时间进行处理，否则会导致取结果时阻塞(在每个任务提交的时候，进行任务计数，在最终的任务执行完毕时，进行任务数确认，设置最终的解决方案为null，触发求解阻塞消失，具体可参考java concurrency in practice List8.18)
+* Liveness Hazards
+** deadlock
+*** lock-ordering deadlocks
+显示的方法锁多个对象，并且可能产生锁顺序不一致，形成了环路，比如转账
+*** invoke alien method that acquire multiple lock
+such as Executor framework
+*** resource deadlock
+比如两者Connection的线程池，ThreadA申请C1+C2，ThreadB申请C2+C1
+*** solution
+1. 设置规范在锁定时，按序锁，比如读取对象的hash/设置内部的排序级作为锁的顺序
+2. 使用Lock进行超时设置
+3. 尽可能使用opencall(the method with no locks)
+4. Thread Dumps分析后重设代码
+** Starvation
+1. 线程得不到执行的时间，比如priorities/Executor Single
+2. 一个线程持有锁，但是一直不释放(申请了锁之后走了死循环)
+** livelock 
+1. 比如处理一个任务失败了放回queue，然后之后又拿出来重试，然后一直重复失败(可能是代码没对不可修复的错误做处理)
+2. 比如重试的周期过于一致，类似旧式网络的信号冲突，必须引入更随机的重试机制来完成
+* performance and scalability
+** thinking about performance
+*** resources
+- CPU-bound
+- Database-bound
+*** cost
+**** coordinating between threads
+locking, signaling, and memory synchronization
+**** context switching
+包括切换时将环境保存与恢复
+**** thread creation and teardown
+可以采用线程池复用解决一部分
+**** scheduling overhead
+越多时间片，就分得越短
+*** metrics
+**** how fast(针对单个任务的处理)
+- service time
+- latency
+**** how much(针对给定时间段能处理的任务总数，多，不意味着单个任务就快，因为存在分布系统之后，最低最低的网络开销也不可避免，而是分布之后，可以用过加机器来增加吞吐量)
+**** Scalability
+加机器解决吞吐量的能力
+*** tuning
+1. 必须在明确数据规模与场景的情况下，不建议开局就优化
+2. 必须进行数据测量后，名确优化的目标
+3. 单个任务的执行性能与拓展性往往是互斥的
+** Amdahl's law
+speedup<=1/(F+(1-F)/N)
+** serialize
+线程不安全的集合之所以不安全是由于并发访问可能会破坏数据结构，比如采用链表相关的内部实现的可能会导致数据丢失(连接过程中)，而采用数组相关的，则会在扩容时，导致冲突发生
+1. 共享数据比如queue(synchronized LinkedList的每个方法调用都是串行化的，ConcurrentLinkedQueue只有在更新的时候才串行化)
+2. result handling/side effect
+3. log file/container
+** cost
+Context Switching
+当只有一个的时候，不存在调度问题，在大量现成的时候，从中调一个/保存/恢复等都称为context switching
+** Memory Synchronization
+*** synchronized
+*** volatile
+*** Blocking
+** REDUCING LOCK CONTENTION
+*** Reduce the duration for which locks are held
+**** Narrowing Lock Scope (“Get in, Get Out”)
+主要针对的是长运算逻辑的移除，同一个锁拆的太小反而会影响(取决于JVM是否进行了锁粗化)
+*** Reduce the frequency with which locks are requested; or
+**** lock splitting
+让状态独立的，且在中等负载的时候，为其各自使用独立的锁
+**** lock striping
+主要是集合的分块锁，比如ConcurrentHashMap，一个锁对一个bucket，在非并发场景的使用下，开销很大，比如拓容的时候，树化，链表化的时候
+**** Avoiding Hot Fields
+减少热点的数据访问，典型的比如集合的size，如果使用单一变量进行保存，则在更新的时候会导致锁竞争产生加剧，因此使用到lock striping的比如ConcurrentHashMapd的做法是，每个锁处理一部分存储，当更新时，也只是更新到size的一部分，最后在进行汇总计算，产生的结果就是size只能作为估算值，而不可以作为即时的精确值
+*** Replace exclusive locks with coordination mechanisms that permit greater concurrency
+针对的主要是应用层面的说法，比如减少Exclusive lock的使用，转而使用Thread-safe collections，或者根据情况选择对应的类库机制，比如ReadWriteLock，AtomicXXX来进行状态的管理
+** Reducing context switch overhead
+比如各种日志框架对于记录的处理，实际上是将IO-bound的冲突，转而变为对Queue(冲突不可避免，只是冲突的概率/后果/成本有所不同，记录入队与阻塞IO相比成本低廉)的冲突，在专用线程进行日志打印，消除最大的一部分影响，IO-bound
+* language feature
+** volatile
+1. 保持可见性
+2. 防止指令重排
+** synchronized
+*** effect
+1. 保持可见性
+2. 防止指令重排
+3. 保持代码块原子性
+*** principle
+同步块使用的作法为mutux，互斥，即当一个线程进入时，其他线程要等待
+the bytecode instructions for entering and exiting a synchronized block are even called monitorenter and monitorexit
+** build lock library
+*** collection
+*** Lock

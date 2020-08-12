@@ -1,0 +1,24 @@
+#+TITLE:  tomcat
+#+STARTUP: indent
+* hierarchy
+** service
+*** connector
+只有一个类，但是支持配置各种协议，包括http,https,ajp，一个connector只能配一个协议
+**** protocolHandler
+实现了具体的协议解析规则
+***** endPoint
+****** Acceptor
+用于端口监听的thread，收到之后给endpoint让其，注册进poller的selector中
+****** Poller
+对具体的注册行为和属性进行处理，然后找一波/创建worder thread, 丢给worker thread进行处理
+****** Worker
+*** engine
+List<Host>
+**** Host
+List<Context>
+***** Context
+List<Wrapper>
+****** wrapper
+List<Servlet>
+* reference
+https://juejin.im/post/6844903626171777032
