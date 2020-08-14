@@ -250,152 +250,6 @@ private static ThreadLocal<Connection>connectionHolder = new ThreadLocal<>(){
 1. Its state cannot be modified after construction
 2. All its field are final(理论上可以不必，但是这是一般规范)
 3. It is properly constructed(the this reference does not escape during construction)
-** building block
-*** synchronized collections
-- Vector and Hashtable
-- Collections.synchronizedXxx
-这种的特点为并发访问时，迭代器会失效(可能性，有可能不可见性导致成功，但是为旧数据)，导致迭代器失效时抛出ConcurrentModificationExceptions，该做法称为fail-fast
-失效的可能性很难追溯，比如增强for循环进行了变更操作，比如忘记迭代时同步等
-**** hidden iterator
-- 增强for循环
-- toString
-- compare
-- hashCode
-*** CONCURRENT COLLECTIONS
-1. 消除了ConcurrentModificationException的抛出
-2. 保持了一种所谓的weakly consistent的状态(比如size，只能作为一个预估，而迭代器在使用过程中还会变动等)
-3. 统一增加了一些常用的诸如putIfAbsent等atomic operation
-**** ConcurrentMap
-***** ConcurrentHashMap
-在hashMap的基础上使用了一种lock striping(一段一段锁，而不是全局锁的同步机制)的技术
-replacement for hashMap
-***** ConcurrentSkipListMap
-replacement for SortedMap
-**** ConcurrentSkipListSet
-**** CopyOnWriteArrayList
-读多写少的场景，写的时候内部数组会进行clone
-**** BlockingQueue
-put/take(block opeation)
-offer/poll(return operation status, mainly for custom flexible policies)
-***** LinkedBlockingQueue
-内部实现为链表
-***** ArrayBlockingQueue
-内部实现为数组
-***** PriorityBlockingQueue
-带优先级的
-***** SynchronousQueue
-最特殊的一种，内部没有空间存在，put and take will block unless another thread is already waiting to participate in the handoff
-*** SYNCHRONIZERS
-A synchronizer is any object that coordinates the control flow of threads based on its state
-BlockQueue就是其中一种(只是这个还能顺便当作容器)
-**** Latches
-开了之后就不能再关,场景主要包括
-1. 资源要求，比如XX必须等到resource R加载完成
-2. 服务间互相存在依赖
-3. 平级服务之间，比如王者荣耀游戏需要加载5个人才能进(除非断线)
-#+BEGIN_SRC java
-public class Main {
-    public static void main(String[] args) throws InterruptedException {
-        int nThread = 100;
-        CountDownLatch startGate = new CountDownLatch(1);
-        CountDownLatch endGate = new CountDownLatch(nThread);
-
-
-        for (int i=0;i<nThread;++i){
-            new Thread(()->{
-                try {
-                    startGate.await();
-                    endGate.countDown();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        }
-
-        long startTime = System.nanoTime();
-        startGate.countDown();
-        endGate.await();
-        long endTime = System.nanoTime();
-        System.out.println(endTime-startTime);
-    }
-}
-#+END_SRC
-**** FutureTask
-FutureTask is used by the Executor framework to represent asynchronous tasks
-#+BEGIN_SRC java
-// 可以用于表示一种运行状态的值wrapper，可用于cache实现
-public class Main {
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        FutureTask<String> hello = new FutureTask<>(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                System.out.println("hello");
-                return "kk";
-            }
-        });
-        hello.run(); // 如果非要用的情况下，一般用于丢在新建线程跑
-        hello.get(); // 拿不到的情况下，block
-    }
-}
-#+END_SRC
-**** Semaphores
-跟iptable的令牌限制很像，拿得到就往下走
-#+BEGIN_SRC java
-class BoundedHashSet<T>{
-    private final Set<T> set;
-    private final Semaphore sem;
-
-    public BoundedHashSet(Set<T> set, Semaphore sem) {
-        this.set = set;
-        this.sem = sem;
-    }
-
-    public boolean add(T o) throws InterruptedException {
-        sem.acquire();
-        boolean wasAdded = false;
-        try {
-            wasAdded = set.add(o);
-            return wasAdded;
-        }
-        finally {
-            if (!wasAdded){
-                sem.release();
-            }
-        }
-    }
-
-    public boolean remove(T o){
-        boolean wasRemoved = set.remove(o);
-        if (wasRemoved)
-            sem.release();
-        return wasRemoved;
-    }
-}
-#+END_SRC
-**** Barriers
-#+BEGIN_SRC java
-// 与latch很类似，但是到达之后会reset，相当于先开后关(默认为关着的)
-public class Main {
-    public static void main(String[] args) {
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(5,()->{
-            System.out.println("跑完一次");
-        });
-
-        for (int i=0;i<10;++i){
-            new Thread(()->{
-                try {
-                    cyclicBarrier.await();
-                    System.out.println("start run");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (BrokenBarrierException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        }
-    }
-}
-#+END_SRC
 ** InterruptedException
 *** deal
 **** Propagate the InterruptedException
@@ -900,3 +754,209 @@ the bytecode instructions for entering and exiting a synchronized block are even
 ** build lock library
 *** collection
 *** Lock
+* test
+** test for safety
+主线程通过某种机制交换信息，比如Thread.join，然后在work thread等待时间明显超过需求时，额外线程(可以是主线程)进行中断，然后检测工作线程
+** test for performance
+利用AQS的实现来进行计算与线程的启动控制，比如CountDownLatch或者CyclicBarrier
+* built-in mechanisms
+** non-intrinsic
+提供的锁不支持自动释放(synchronized是由JVM管理释放),需要手动管理
+*** Lock
+针对是的是lock方法. The polled tryLock always barges, even for fair locks.
+**** multiple condition queue
+**** support interruption
+支持中断机制(可用于取消任务)，获取时也需要解决中断异常
+**** no block lock acquisition
+tryLock
+**** manage no-block code path
+在于可以根据结构管理非块状代码
+*** ReentrantLock
+**** FAIRNESS
+***** fair
+获取锁的顺序与申请顺序一致(申请的入队)
+***** nonfair(ReentrantLock默认参数)
+允许在刚释放与申请接近，直接插队
+*** ReadWriteLock
+its implements have ReentrantReadWriteLock
+**** FAIRNESS
+***** fair
+排队，相对于可以一次性消费多个reader，但是如果writer申请之后，还有reader申请，只能等writer完成后才轮得到
+1. downgrading from writer to reader is permitted
+2. upgrading from reader to write is not allow
+***** nofair
+类似ReentrantLock
+** intrinsic
+*** synchronized
+** building block
+*** synchronized collections
+- Vector and Hashtable
+- Collections.synchronizedXxx
+这种的特点为并发访问时，迭代器会失效(可能性，有可能不可见性导致成功，但是为旧数据)，导致迭代器失效时抛出ConcurrentModificationExceptions，该做法称为fail-fast
+失效的可能性很难追溯，比如增强for循环进行了变更操作，比如忘记迭代时同步等
+**** hidden iterator
+- 增强for循环
+- toString
+- compare
+- hashCode
+*** CONCURRENT COLLECTIONS
+1. 消除了ConcurrentModificationException的抛出
+2. 保持了一种所谓的weakly consistent的状态(比如size，只能作为一个预估，而迭代器在使用过程中还会变动等)
+3. 统一增加了一些常用的诸如putIfAbsent等atomic operation
+**** ConcurrentMap
+***** ConcurrentHashMap
+在hashMap的基础上使用了一种lock striping(一段一段锁，而不是全局锁的同步机制)的技术
+replacement for hashMap
+***** ConcurrentSkipListMap
+replacement for SortedMap
+**** ConcurrentSkipListSet
+**** CopyOnWriteArrayList
+读多写少的场景，写的时候内部数组会进行clone
+**** BlockingQueue
+put/take(block opeation)
+offer/poll(return operation status, mainly for custom flexible policies)
+***** LinkedBlockingQueue
+内部实现为链表
+***** ArrayBlockingQueue
+内部实现为数组
+***** PriorityBlockingQueue
+带优先级的
+***** SynchronousQueue
+最特殊的一种，内部没有空间存在，put and take will block unless another thread is already waiting to participate in the handoff
+*** SYNCHRONIZERS
+A synchronizer is any object that coordinates the control flow of threads based on its state
+BlockQueue就是其中一种(只是这个还能顺便当作容器)
+**** Latches
+开了之后就不能再关,场景主要包括
+1. 资源要求，比如XX必须等到resource R加载完成
+2. 服务间互相存在依赖
+3. 平级服务之间，比如王者荣耀游戏需要加载5个人才能进(除非断线)
+#+BEGIN_SRC java
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        int nThread = 100;
+        CountDownLatch startGate = new CountDownLatch(1);
+        CountDownLatch endGate = new CountDownLatch(nThread);
+
+
+        for (int i=0;i<nThread;++i){
+            new Thread(()->{
+                try {
+                    startGate.await();
+                    endGate.countDown();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+
+        long startTime = System.nanoTime();
+        startGate.countDown();
+        endGate.await();
+        long endTime = System.nanoTime();
+        System.out.println(endTime-startTime);
+    }
+}
+#+END_SRC
+**** FutureTask
+FutureTask is used by the Executor framework to represent asynchronous tasks
+#+BEGIN_SRC java
+// 可以用于表示一种运行状态的值wrapper，可用于cache实现
+public class Main {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        FutureTask<String> hello = new FutureTask<>(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                System.out.println("hello");
+                return "kk";
+            }
+        });
+        hello.run(); // 如果非要用的情况下，一般用于丢在新建线程跑
+        hello.get(); // 拿不到的情况下，block
+    }
+}
+#+END_SRC
+**** Semaphores
+跟iptable的令牌限制很像，拿得到就往下走
+#+BEGIN_SRC java
+class BoundedHashSet<T>{
+    private final Set<T> set;
+    private final Semaphore sem;
+
+    public BoundedHashSet(Set<T> set, Semaphore sem) {
+        this.set = set;
+        this.sem = sem;
+    }
+
+    public boolean add(T o) throws InterruptedException {
+        sem.acquire();
+        boolean wasAdded = false;
+        try {
+            wasAdded = set.add(o);
+            return wasAdded;
+        }
+        finally {
+            if (!wasAdded){
+                sem.release();
+            }
+        }
+    }
+
+    public boolean remove(T o){
+        boolean wasRemoved = set.remove(o);
+        if (wasRemoved)
+            sem.release();
+        return wasRemoved;
+    }
+}
+#+END_SRC
+**** Barriers
+#+BEGIN_SRC java
+// 与latch很类似，但是到达之后会reset，相当于先开后关(默认为关着的)
+public class Main {
+    public static void main(String[] args) {
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(5,()->{
+            System.out.println("跑完一次");
+        });
+
+        for (int i=0;i<10;++i){
+            new Thread(()->{
+                try {
+                    cyclicBarrier.await();
+                    System.out.println("start run");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+    }
+}
+#+END_SRC
+** condition queue
+condition queue主要参与的关于变量的条件判断，因为，需要在进行条件判定之前获取该锁，即锁与condition queue的对象应该是一致的,无论是Object.wait/Condition.await，都需要在循环中进行条件的判定
+1. 用于保持状态的intrinsic lock
+2. 判断状态变量对应的condition predicate
+3. 对应的intrinsic lock的对象进行wait
+*** Missed Signals
+1. 由于条件判定的代码错误，导致wait无法正确地在通知发生后醒来
+2. notify，唤醒非同质化的condition queue，比如producer/consumer模式(假设采用notify的做法，则若其中一个producer在队列满后，进入了block，而其他的producer/consumer正常工作，在最差的情况下，每次producer唤醒的都是producer，而无法唤醒consumer，在最后producer溢满时，信号彻底丢失)
+*** Object.wait
+争用锁时是非公平的
+per condition queue per intrinsic lock
+notify,notifyAll,wait
+**** notify
+notify可在满足下述条件下使用(一般还是使用notifyAll)：
+1. Uniform waiters，一个状态只用于一个condition queue
+2. One-in, one-out. A notification on the condition variable enables at most one thread to proceed
+*** Condition Lock.newCondition
+争用锁的继承了从Lock派生出来的fair特性
+multiple condition queue per intrinsic lock
+signal,signalAll,await
+* AQS
+一个集成了各种语境下的功能函数的抽象类，主要包括两类处理模式
+1. exclusive
+通过开放tryAcquire，tryRelease，isHeldExclusively来进行表示
+2. share
+通过开放tryAcquireShared，tryReleaseShared来进行表示
