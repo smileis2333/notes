@@ -38,6 +38,28 @@ spring:
         service-name: ${spring.application.name}
 #+END_SRC
 ** Nacos
+#+BEGIN_SRC xml
+ <dependency>
+   <groupId>com.alibaba.cloud</groupId>
+   <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+ </dependency>
+#+END_SRC
+#+BEGIN_SRC yaml
+server:
+  port: 9001
+
+
+spring:
+  application:
+    name: nacos-payment-provider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.211.55.17:8848
+#+END_SRC
+
+@EnableDiscoveryClient
+CP/AP切换
 * 服务调用
 ** Ribbon
 *** IRule
@@ -302,6 +324,54 @@ application.yml改为bootstrap.yml
 *** 设置某个服务支持refresh
 @RefreshScope //标准后的bean所读取的配置，在被actuator refresh之后，@Value读取的数值，会自动刷新为最新值，其他没标的，都不会变
 ** Nacos
+*** dependency
+#+BEGIN_SRC xml
+<dependency>
+    <groupId>com.alibaba.cloud</groupId>
+    <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+</dependency>
+#+END_SRC
+*** config
+#+BEGIN_SRC yaml
+#bootstrap.yml
+server:
+  port: 3377
+
+spring:
+  application:
+    name: nacos-config-client
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.211.55.17:8848 #Nacos服务注册中心地址（本机的写localhost）
+      config:
+        server-addr: 10.211.55.17:8848 #Nacos作为配置中心地址（本机的写localhost）
+        file-extension: yml #指定yml格式配置
+#+END_SRC
+#+BEGIN_SRC yaml
+
+#application.yml
+spring:
+  profiles:
+    active: dev
+#+END_SRC
+*** partition
+默认情况下下列式子等价，也可自定义
+${prefix}-${spring.profile.active}.${file-extension} => ${spring.application.name}-${spring.profile.active}.${file-extension}
+#+BEGIN_SRC yaml
+spring:
+  application:
+    name: nacos-config-client
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.211.55.17:8848 #Nacos服务注册中心地址（本机的写localhost）
+      config:
+        server-addr: 10.211.55.17:8848 #Nacos作为配置中心地址（本机的写localhost）
+        file-extension: yml #指定yml格式配置
+        group: XX_GROUP
+        namespace: namespaceId
+#+END_SRC
 * 服务总线
 ** Bus
 配合Config实现快速的配置更新
