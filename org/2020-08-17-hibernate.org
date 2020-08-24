@@ -1,0 +1,291 @@
+#+TITLE:  hibernate
+#+STARTUP: indent
+* JPA
+persistence.xml只能设置标准属性和部分实现的属性，如果需要用到特定实例的属性设置，需要设置原生的配置文件
+EntityManagerFactory emf = Persistence.createEntityManagerFactory("HelloWorldPU"); //load META-INF/persistence.xml, use the name of persistence-unit to open
+* exclusive
+** SessionFactory
+EntityManagerFactory <==> org.hibernate.SessionFactory
+SessionFactory sessionFactory = new MetadataSources(
+    new StandardServiceRegistryBuilder()
+        .configure("hibernate.cfg.xml").build()
+).buildMetadata().buildSessionFactory();
+*** ServiceRegistry
+**** programmatic
+serviceRegistryBuilder
+    .applySetting("hibernate.connection.datasource", "myDS")
+    .applySetting("hibernate.format_sql", "true")
+serviceRegistryBuilder.applySetting(
+    Environment.TRANSACTION_COORDINATOR_STRATEGY,
+    JtaTransactionCoordinatorBuilderImpl.class
+);
+ServiceRegistry serviceRegistry = serviceRegistryBuilder.build();
+**** loadProperties
+*** MetadataSources
+telling Hibernate which persistent classes are part of your mapping metadata
+MetadataSources metadataSources = new MetadataSources(serviceRegistry);
+metadataSources.addAnnotatedClass(
+    org.jpwh.model.helloworld.Message.class
+);
+MetadataBuilder metadataBuilder = metadataSources.getMetadataBuilder();
+
+Metadata metadata = metadataBuilder.build();
+*** hibernate==>EntityManager-Factory 
+the org.hibernate.jpa.internal.EntityManagerFactoryImpl has a constructor that accepts a SessionFactory.
+* relation control
+** method bind
+优先选项
+#+BEGIN_SRC java
+public void addBid(Bid bid){
+// pre check
+  anItem.getBids().add(aBid);
+  aBid.setItem(anItem);
+}
+#+END_SRC
+** constructor bind
+将单一依赖通过构造器注入，初始化时设置两者的联系
+#+BEGIN_SRC java
+public Bid(Item item){
+  this.item = item;
+  item.getBids().add(this);
+}
+#+END_SRC
+* Domain model metadata
+** annotation
+*** @Entity
+*** @NamedQuery
+定义原生语句
+hibernate可以丢在packafe-info.java
+JPA自带的不行
+#+BEGIN_SRC java
+@NamedQueries({
+    @NamedQuery(
+        name = "findItemById",
+        query = "select i from Item i where i.id = :id"
+    )
+    ,
+    @NamedQuery(
+        name = "findItemByName",
+        query = "select i from Item i where i.name like :name",
+        hints = {
+            @QueryHint(
+                name = org.hibernate.annotations.QueryHints.TIMEOUT_JPA,
+                value = "60000"),
+            @QueryHint(
+                name = org.hibernate.annotations.QueryHints.COMMENT,
+                value = "Custom SQL comment")
+        }
+    )
+})
+#+END_SRC
+*** @Id
+*** @GeneratedValue
+TABLE：使用一个特定的数据库表格来保存主键。
+SEQUENCE：根据底层数据库的序列来生成主键，条件是数据库支持序列。
+IDENTITY：主键由数据库自动生成（主要是自动增长型）
+AUTO：主键由程序控制。
+*** @Table
+@Table(name = "`USERS`") //hibernate可以用``转义
+@Table(name = "\"USERS\"") //JPA使用"转义
+** xml configure
+*** JPA mapping file
+persistence.xml默认加载同路径下的orm.xml(可改名)
+#+BEGIN_SRC xml
+
+<persistence-unit name="SimpleXMLCompletePU">
+<!--persistence.xml....custom mapping file name-->
+    <mapping-file>simple/Mappings.xml</mapping-file>
+</persistence-unit>
+#+END_SRC
+#+BEGIN_SRC xml
+<entity-mappings
+        version="2.1"
+        xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+            http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd">
+
+    <!-- First, global metadata -->
+    <persistence-unit-metadata>
+
+        <!-- Ignore all annotations, all mapping metadata in XML files -->
+        <xml-mapping-metadata-complete/>
+
+        <!-- Some default settings -->
+        <persistence-unit-defaults>
+            <!--
+                Escape all SQL column/table/etc. names, e.g. if your SQL
+                names are actually keywords (a "USER" table for example)
+              -->
+            <delimited-identifiers/>
+        </persistence-unit-defaults>
+
+    </persistence-unit-metadata>
+
+    <entity class="org.jpwh.model.simple.Item" access="FIELD">
+        <attributes>
+            <id name="id">
+                <generated-value strategy="AUTO"/>
+            </id>
+            <basic name="name"/>
+            <basic name="auctionEnd">
+                <temporal>TIMESTAMP</temporal>
+            </basic>
+            <transient name="bids"/>
+            <transient name="category"/>
+        </attributes>
+    </entity>
+
+</entity-mappings>
+#+END_SRC
+*** hibernate mapping file
+1. suffix.hbm.xml，旧式的配置实体类方式，一般已不再使用该种类型进行实体类配置(采用JPA注解为主流)
+2. 文件可以放置多种元素，目前多用于本地SQL配置，以及hibernate专属功能的配置启用，或组件使用
+#+BEGIN_SRC xml
+<?xml version="1.0"?>
+<!-- 
+  Metadata is declared inside a <code>&lt;hibernate-mapping&gt;</code> root element. Attributes such as
+  <code>package</code> name and <code>default-access</code> apply to all mappings in this file. You may include as many
+  entity class mappings as you like.
+  -->
+<hibernate-mapping
+        xmlns="http://www.hibernate.org/xsd/orm/hbm"
+        package="org.jpwh.model.simple"
+        default-access="field">
+
+    <!-- An entity class mapping ,可以配多个，但是约定基本都是一个实体类配一个 -->
+    <class name="Item">
+        <id name="id">
+            <generator class="native"/>
+        </id>
+        <property name="name"/>
+        <property name="auctionEnd" type="timestamp"/>
+    </class>
+
+    <!-- Externalized queries -->
+    <query name="findItemsHibernate">select i from Item i</query>
+
+    <!-- Auxiliary schema DDL -->
+    <database-object>
+        <create>create index ITEM_NAME_IDX on ITEM(NAME)</create>
+        <drop>drop index if exists ITEM_NAME_IDX</drop>
+    </database-object>
+</hibernate-mapping>
+#+END_SRC
+** vendor extension
+*** hibernate
+@org.hibernate.annotations.Cache(
+    usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE
+)
+* Bean Validation
+hibernate exclusive
+** annotation
+@NotNull
+@Size
+@Future
+* Accessing metadata at runtime
+** The dynamic Metamodel API in Java Persistence
+#+BEGIN_SRC java
+@Test
+    public void accessDynamicMetamodel() throws Exception {
+        EntityManagerFactory entityManagerFactory = JPA.getEntityManagerFactory();
+
+        Metamodel mm = entityManagerFactory.getMetamodel();
+
+        Set<ManagedType<?>> managedTypes = mm.getManagedTypes();
+        assertEquals(managedTypes.size(), 1);
+
+        ManagedType itemType = managedTypes.iterator().next();
+        assertEquals(
+            itemType.getPersistenceType(),
+            Type.PersistenceType.ENTITY
+        );
+
+        SingularAttribute nameAttribute =
+            itemType.getSingularAttribute("name");
+        assertEquals(
+            nameAttribute.getJavaType(),
+            String.class
+        );
+        assertEquals(
+            nameAttribute.getPersistentAttributeType(),
+            Attribute.PersistentAttributeType.BASIC
+        );
+        assertFalse(
+            nameAttribute.isOptional() // NOT NULL
+        );
+
+        SingularAttribute auctionEndAttribute =
+            itemType.getSingularAttribute("auctionEnd");
+        assertEquals(
+            auctionEndAttribute.getJavaType(),
+            Date.class
+        );
+        assertFalse(
+            auctionEndAttribute.isCollection()
+        );
+        assertFalse(
+            auctionEndAttribute.isAssociation()
+        );
+    }
+#+END_SRC
+** static metamodel
+#+BEGIN_SRC java
+    @Test
+    public void accessStaticMetamodel() throws Exception {
+
+        SingularAttribute nameAttribute = Item_.name;
+
+        assertEquals(
+            nameAttribute.getJavaType(),
+            String.class
+        );
+    }
+#+END_SRC
+* 设计技巧
+区分entity/value type的关键，在于先将其视为value type，之后再观察是否符合，不符合则进行类型提升
+** entity type
+对于表的实体映射，带主键，生命周期独立(指的是持久型)。Shared references
+** value type
+对于表设计在Java中的二层抽象，无主键，生命周期依赖于外层的实体对象，典型的比如表字段中的三种地址，可以在Java中抽象为Address进行汇总表示
+* option
+** prefix
+#+BEGIN_SRC java
+public class CENamingStrategy extends
+    org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl {
+    @Override
+    public Identifier toPhysicalTableName(Identifier name,
+                                          JdbcEnvironment context) {
+        return new Identifier("CE_" + name.getText(), name.isQuoted());
+    }
+}
+#+END_SRC
+#+BEGIN_SRC xml
+<persistence-unit>name="CaveatEmptorPU">
+    ...
+
+    <properties>
+        <property name="hibernate.physical_naming_strategy"
+                  value="org.jpwh.shared.CENamingStrategy"/>
+    </properties>
+</persistence-unit>
+#+END_SRC
+** Dynamic SQL generation
+插入和更新如果设置自动生成statement，在实体类很多的情况下，会导致大量的语句进行了内存占用。或者字段很多的情况，会影响优化
+@org.hibernate.annotations.DynamicInsert
+@org.hibernate.annotations.DynamicUpdate
+** application view
+在没有DB权限时，进行内存的view建立
+#+BEGIN_SRC java
+@Entity
+@org.hibernate.annotations.Immutable
+@org.hibernate.annotations.Subselect(
+    value = "select i.ID as ITEMID, i.ITEM_NAME as NAME, " +
+            "count(b.ID) as NUMBEROFBIDS " +
+            "from ITEM i left outer join BID b on i.ID = b.ITEM_ID " +
+            "group by i.ID, i.ITEM_NAME"
+)
+#+END_SRC
+** immutable 
+@org.hibernate.annotations.Immutable
+进行语义的不可变设定，hibernate会进行一系列的优化，比如不生成update语句，比如避免脏检查等

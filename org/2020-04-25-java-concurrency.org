@@ -960,3 +960,18 @@ signal,signalAll,await
 通过开放tryAcquire，tryRelease，isHeldExclusively来进行表示
 2. share
 通过开放tryAcquireShared，tryReleaseShared来进行表示
+* CAS
+** Atomic classes
+*** scalars
+AtomicInteger, AtomicLong, AtomicBoolean, and AtomicReference
+To simulate atomic variables of other primitive types, you can cast short or byte values to and from int, and use floatToIntBits or doubleToLongBits for floating-point numbers
+
+适用于低到中等程序的负载
+Atomic还可以直接用于存储比如基于链表的各项数据结构，比如Stack，Queue等(需要使用一些相对复杂的算法来进行数据结构的设计)
+*** field updaters
+*** arrays
+*** compound variables
+** ABA problem
+在使用CAS时，数据与旧数据一致，但是中途是发生过变化后才切换回来的，可以通过加时间戳来解决
+AtomicStampedReference (and its cousin AtomicMarkableReference)
+* JMM
