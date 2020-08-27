@@ -701,31 +701,6 @@ load data infile "/testdir/a.backup" into table b;
 ** 恢复
 mysql > use [dbName]
 mysql > source [file]
-* trick
-** 确定分组后，每个分组是否存在特定的值
-// 例子为一个question对应多个tag，给定一个tag_id,提示提问是否包含或者不包含(多个同理，应用对应的拼串技术即可)
-select * from question q inner join question_tag qt on q.question_id = qt.question group by q.question_id having max(case qt.tag_id when xx then 1 else 0)=0
-** 打印用于数据表描述的三线表
-select
-IFNULL(NULL, '')
-	'名称',
-	column_name '代码',
-	IF(COLUMN_KEY = 'PRI',
-	'是',
-	'否') '外键',
-	IF(1 = 1,
-	'否',
-	'是')'主键',
-	COLUMN_TYPE '数据类型'
-from
-	information_schema.columns
-where
-	table_schema = 'chatroom'
-	and table_name = 'private_chat' ;
-** 单一列进行合并
-SET SESSION group_concat_max_len = 102400; 设置当前session的group by大小，因为可能拼床后溢出，数据丢失
-SELECT GROUP_CONCAT(CONCAT('\'', question_id , '\'')) question_id from question ; 把主键列表进行合并
-SELECT GROUP_CONCAT(CONCAT('select * from question where question_id =', question_id , '') SEPARATOR ' union\r\n') question_id from question ; 拼出select * from xx where 主键=xx union xxx
 * index
 ** clustered index
 一个表一个，一个键对一个数据行的指针
@@ -760,3 +735,98 @@ eg. 比如一个订单和一个用户的信息，可以直接塞到一起，但�
 http://www.zsythink.net/archives/category/%e5%ad%98%e5%82%a8/mysql/
 *** 最左匹配
 *** 索引原理
+* convention
+1. SQL命令大写，库名/表名小写(或者至少风格保持一致)
+* data type
+** general
+CHAR, VARCHAR, BLOB, INT, DEC, DATE, and DATETIME
+* trick
+** 确定分组后，每个分组是否存在特定的值
+// 例子为一个question对应多个tag，给定一个tag_id,提示提问是否包含或者不包含(多个同理，应用对应的拼串技术即可)
+select * from question q inner join question_tag qt on q.question_id = qt.question group by q.question_id having max(case qt.tag_id when xx then 1 else 0)=0
+** 打印用于数据表描述的三线表
+select
+IFNULL(NULL, '')
+	'名称',
+	column_name '代码',
+	IF(COLUMN_KEY = 'PRI',
+	'是',
+	'否') '外键',
+	IF(1 = 1,
+	'否',
+	'是')'主键',
+	COLUMN_TYPE '数据类型'
+from
+	information_schema.columns
+where
+	table_schema = 'chatroom'
+	and table_name = 'private_chat' ;
+** 单一列进行合并
+SET SESSION group_concat_max_len = 102400; 设置当前session的group by大小，因为可能拼床后溢出，数据丢失
+SELECT GROUP_CONCAT(CONCAT('\'', question_id , '\'')) question_id from question ; 把主键列表进行合并
+SELECT GROUP_CONCAT(CONCAT('select * from question where question_id =', question_id , '') SEPARATOR ' union\r\n') question_id from question ; 拼出select * from xx where 主键=xx union xxx
+** escape '
+\'
+''
+* table
+** select
+SELECT [*/column_name] FROM [tableName] [alias] WHERE [condition with AND or OR]
+*** ORDER BY [field [DESC][,second field [DESC]]]
+*** GROUP BY [field]
+*** DISTINCT
+*** LIMIT
+LIMIT [[offset],size]
+** delete
+DELETE FROM [tableName] [alias] where [condtion like select]
+** update
+UPDATE [tableName] [alias] SET [column_name] = [value that may be calculate] WHERE [condtion]
+** insert
+INSERT INTO [tableName] (fieldOrders) VALUES([fieldValues])
+** create
+CREATE TABLE [tableName]([definitionList]);
+*** option
+**** PRIMARY KEY([column_name])
+**** NOT NULL
+**** DEFAULT [value that could be NULL or else]
+**** AUTO INCREMENT
+** structure
+*** DESC [tableName]
+*** DROP TABLE [tableName]
+*** ALTER
+ALTER TABLE [tableName]
+**** RENAME TO [newTableName],
+**** ADD COLUMN [column definition],
+**** CHANGE COLUMN [columnName] [column definition],
+**** MODIFY COLUMN [column definition]
+**** DROP [element such as index/column/pk]
+* condition reserved word
+** <
+** >
+** <=
+** >=
+** BETWEEN
+** IS
+** IN
+** LIKE
+** NOT
+对条件取反
+WHERE NOT name LIKE '%xx'
+WHERE NOT name IN ('%xx') //NOT IN也行，唯一的特例
+* function
+** general
+*** RIGHT([columnName],bound)
+*** LEFT([columnName],bound)
+*** SUBSTRING_INDEX([columnName],[targetChar],[whichTargetChar])
+'aaaa,bbb,cc' ==> aaaa
+*** UPPER
+*** LOWER
+*** REVERSE
+*** LTRIM
+*** RTRIM
+*** LENGTH
+** group
+*** SUM
+*** AVG
+*** MIN
+*** MAX
+*** COUNT
