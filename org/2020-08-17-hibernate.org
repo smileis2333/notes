@@ -1,6 +1,6 @@
 #+TITLE:  hibernate
 #+STARTUP: indent
-* JPA
+* config
 persistence.xml只能设置标准属性和部分实现的属性，如果需要用到特定实例的属性设置，需要设置原生的配置文件
 EntityManagerFactory emf = Persistence.createEntityManagerFactory("HelloWorldPU"); //load META-INF/persistence.xml, use the name of persistence-unit to open
 * exclusive
@@ -242,7 +242,7 @@ hibernate exclusive
         );
     }
 #+END_SRC
-* 设计技巧
+* choose type
 区分entity/value type的关键，在于先将其视为value type，之后再观察是否符合，不符合则进行类型提升
 ** entity type
 对于表的实体映射，带主键，生命周期独立(指的是持久型)。Shared references
@@ -289,3 +289,577 @@ public class CENamingStrategy extends
 ** immutable 
 @org.hibernate.annotations.Immutable
 进行语义的不可变设定，hibernate会进行一系列的优化，比如不生成update语句，比如避免脏检查等
+* map value type
+** map basic properties
+*** @javax.persistence.Transient
+*** @Basic
+optional=true allow NULL自动建表才产生作用，已建好的情况下，由hibernate对入参做检测，可能与DDL不一致
+fetch set lazy loading
+*** @Column(nullable = false)
+*** access
+@Access决定运行时的访问逻辑，可作用于field/entity
+FIELD直接访问
+PROPERTY通过getter/setter访问
+<hibernate-mapping>
+    <class name="Item">
+        <id name="id">
+           ...
+
+        </id>
+        <property name="validated"
+                  column="VALIDATED"
+                  access="noop"/> <!--不在存在于业务逻辑的废弃属性，但又必须根据该字段的进行筛选，会导致注解的处理全部失效，所以如果需要该特性，该配置文件需要对实体进性全部属性的配置-->
+    </class>
+</hibernate-mapping>
+*** @org.hibernate.annotations.Formula
+非表属性，典型的比如计算属性的得出(hibernate对其声明SQL进性子查询嵌入，在查询时一并得出计算结果)
+@org.hibernate.annotations.Formula(
+    "substr(DESCRIPTION, 1, 12) || '...'"
+)
+protected String shortDescription;
+@org.hibernate.annotations.Formula(
+    "(select avg(b.AMOUNT) from BID b where b.ITEM_ID = ID)"
+)
+protected BigDecimal averageBidAmount;
+*** transform
+@Column(name = "IMPERIALWEIGHT")
+@org.hibernate.annotations.ColumnTransformer(
+    read = "IMPERIALWEIGHT / 2.20462",
+    write = "? * 2.20462"
+)
+protected double metricWeight;
+List<Item> result =
+    em.createQuery("select i from Item i where i.metricWeight = :w")
+        .setParameter("w", 2.0)
+        .getResultList();
+转换得到
+// ...
+where
+    i.IMPERIALWEIGHT / 2.20462=?
+*** 数据库默认值
+将默认值生成委派给hibernate，hibernate每次insert/update时，先select得到默认值(有可能可被缓存)，如果不设置，需要重新用户根据主键查一遍得到完整的数据(不查的情况，无法得知默认值生成情况)
+@Temporal(TemporalType.TIMESTAMP)
+@Column(insertable = false, updatable = false)
+@org.hibernate.annotations.Generated(
+    org.hibernate.annotations.GenerationTime.ALWAYS //每次insert/update自动刷新该属刑
+)
+protected Date lastModified;
+<enter/>
+@Column(insertable = false)
+@org.hibernate.annotations.ColumnDefault("1.00")
+@org.hibernate.annotations.Generated(
+    org.hibernate.annotations.GenerationTime.INSERT //insert时才刷新
+)
+protected BigDecimal initialPrice;
+@Temporal 对时间相关字段进性类型指定，第二种做法是使用convertor
+@CreationTimestamp/@UpdateTimestamp与@Generated为同级注解
+*** enumerations
+@Enumerated //默认处理为声明顺序的存储，可以指定为EnumType.STRING直接写标签
+** map embeddable value
+没有独立的生命周期，依赖于其他对象决定自己的存活(实质为多个数据库字段聚合为一个抽象类，大部分声明与Entity类似)，使用@Embeddable
+两快区域的字段进行了embeddable复用
+*** override
+如下，一个对象存在两个Address对象，因为字段的占位复用必须进行重设，否则还需要重新定义一个类似Address的冗余类
+    @Embedded // Not necessary...
+    @AttributeOverrides({
+            @AttributeOverride(name = "street",
+                    column = @Column(name = "BILLING_STREET")), // NULLable!
+            @AttributeOverride(name = "zipcode",
+                    column = @Column(name = "BILLING_ZIPCODE", length = 5)),
+            @AttributeOverride(name = "city",
+                    column = @Column(name = "BILLING_CITY"))
+    })
+    protected Address billingAddress;
+支持无限嵌套
+*** @Lob 指定byte[]转为BLOB类型，默认根据长度转成CHAR/VARCHAR
+//导致延迟加载失效
+@Lob
+protected byte[] image;
+@Lob
+protected String description;
+
+延迟加载，缺点是与JDBC绑定，难以进行单元测试
+@Lob
+    protected java.sql.Blob imageBlob;
+    @Lob
+    protected java.sql.Clob description;
+//指定处理器
+  @org.hibernate.annotations.Type(type = "yes_no")
+    protected boolean verified = false;
+*** custom convertor
+缺陷，无法一值转数据库多列或者反向，同时，查询时也无法按内部字段查询，因为无法转换出SQL，价值取决于数据粒度以及应用场景
+#+BEGIN_SRC java
+@Converter(autoApply = true) // Default for MonetaryAmount properties
+public class MonetaryAmountConverter
+    implements AttributeConverter<MonetaryAmount, String> {
+
+    @Override
+    public String convertToDatabaseColumn(MonetaryAmount monetaryAmount) {
+        return monetaryAmount.toString();
+    }
+
+    @Override
+    public MonetaryAmount convertToEntityAttribute(String s) {
+        return MonetaryAmount.fromString(s);
+    }
+}
+
+@NotNull
+@Convert( // Optional, autoApply is enabled
+    converter = MonetaryAmountConverter.class,
+    disableConversion = false)
+@Column(name = "PRICE", length = 63)
+protected MonetaryAmount buyNowPrice;
+
+//指定特定字段采用转换器
+@Convert(
+    converter = ZipcodeConverter.class,
+    attributeName = "zipcode" // Or "city.zipcode" for nested embeddables
+)
+protected Address homeAddress;
+
+#+END_SRC
+*** custom userType
+多列合为一个对象，可以采用userType机制，自己处理ResultSet和Columns注解指定的多个cloumn映射逻辑
+#+BEGIN_SRC java
+ @NotNull
+ @org.hibernate.annotations.Type(
+     type = "monetary_amount_usd"
+ )
+ @org.hibernate.annotations.Columns(columns = {
+     @Column(name = "BUYNOWPRICE_AMOUNT"),
+     @Column(name = "BUYNOWPRICE_CURRENCY", length = 3)
+ })
+ protected MonetaryAmount buyNowPrice;
+
+ @NotNull
+ @org.hibernate.annotations.Type(
+     type = "monetary_amount_eur"
+ )
+ @org.hibernate.annotations.Columns(columns = {
+     @Column(name = "INITIALPRICE_AMOUNT"),
+     @Column(name = "INITIALPRICE_CURRENCY", length = 3)
+ })
+ protected MonetaryAmount initialPrice;
+
+//package-info.java
+@org.hibernate.annotations.TypeDefs({
+    @org.hibernate.annotations.TypeDef(
+        name = "monetary_amount_usd",
+        typeClass = MonetaryAmountUserType.class,
+        parameters = {@Parameter(name = "convertTo", value = "USD")}
+    ),
+    @org.hibernate.annotations.TypeDef(
+        name = "monetary_amount_eur",
+        typeClass = MonetaryAmountUserType.class,
+        parameters = {@Parameter(name = "convertTo", value = "EUR")}
+    )
+})
+
+#+END_SRC
+* Mapping inheritance
+主要的影响是多态查询，即通过父类引用进行查询
+** Table per concrete class with implicit polymorphism
+每个实体一个表
+父类声明公用字段，子类对数据库列名进行覆盖声明
+#+BEGIN_SRC java
+@MappedSuperclass
+public abstract class BillingDetails {
+    @NotNull
+    protected String owner;
+}
+
+@Entity
+@AttributeOverride(
+        name = "owner",
+        column = @Column(name = "CC_OWNER", nullable = false))
+public class CreditCard extends BillingDetails {
+    @Id
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
+    protected Long id;
+    @NotNull
+    protected String cardNumber;
+    @NotNull
+    protected String expMonth;
+    @NotNull
+    protected String expYear;
+}
+#+END_SRC
+** Table per concrete class with unions
+每个实体一个类，多态查询通过合成union合成
+#+BEGIN_SRC java
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class BillingDetails {
+    @Id
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
+    protected Long id;
+    @NotNull
+    protected String owner;
+}
+
+@Entity
+public class CreditCard extends BillingDetails {
+    @NotNull
+    protected String cardNumber;
+    @NotNull
+    protected String expMonth;
+    @NotNull
+    protected String expYear;
+}
+#+END_SRC
+#+BEGIN_SRC sql
+select
+    ID, OWNER, EXPMONTH, EXPYEAR, CARDNUMBER,
+    ACCOUNT, BANKNAME, SWIFT, CLAZZ_
+ from
+    ( select
+          ID, OWNER, EXPMONTH, EXPYEAR, CARDNUMBER,
+          null as ACCOUNT,
+          null as BANKNAME,
+
+          null as SWIFT,
+          1 as CLAZZ_
+      from
+          CREDITCARD
+      union all
+      select
+          id, OWNER,
+          null as EXPMONTH,
+          null as EXPYEAR,
+          null as CARDNUMBER,
+          ACCOUNT, BANKNAME, SWIFT,
+          2 as CLAZZ_
+      from
+          BANKACCOUNT
+    ) as BILLINGDETAILS
+#+END_SRC
+** Table per class hierarchy
+多个实体字段聚合在一张表中，无法合理设置约束，一般没人用
+** TABLE PER SUBCLASS WITH JOINS
+抽象父类也作为数据库对应表存入，联系通过join实现
+#+BEGIN_SRC java
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class BillingDetails {
+    @Id
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
+    protected Long id;
+    @NotNull
+    protected String owner;
+}
+
+@Entity
+public class BankAccount extends BillingDetails {
+    @NotNull
+    protected String account;
+    @NotNull
+    protected String bankname;
+    @NotNull
+    protected String swift;
+}
+
+@Entity
+@PrimaryKeyJoinColumn(name = "CREDITCARD_ID")
+public class CreditCard extends BillingDetails {
+    @NotNull
+    protected String cardNumber;
+    @NotNull
+    protected String expMonth;
+    @NotNull
+    protected String expYear;
+}
+#+END_SRC
+* Mapping collections
+** support collections
+*** java.util.Set==>java.util.HashSet
+*** java.util.SortedSet==>java.util.TreeSet
+may be hibernate only
+*** java.util.List==>java.util.ArrayList
+*** java.util.Collection==>java.util.ArrayList
+*** java.util.Map==>java.util.HashMap
+*** java.util.SortedMap==>java.util.TreeMap
+may be hibernate only
+** collections of value type
+*** @ElementCollection
+map value type，如果集合存在对应映射表，则一定要加
+#+BEGIN_SRC java
+@Entity
+public class Item {
+
+    @Id
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
+    protected Long id;
+
+    @ElementCollection
+    @CollectionTable(
+            name = "IMAGE", // Defaults to ITEM_IMAGES
+            joinColumns = @JoinColumn(name = "ITEM_ID")) // Default, actually
+    @Column(name = "FILENAME") // Defaults to IMAGES
+    protected Set<String> images = new HashSet<String>(); // Initialize field here
+
+    public Long getId() {
+        return id;
+    }
+
+    public Set<String> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<String> images) {
+        this.images = images;
+    }
+}
+#+END_SRC
+*** map list
+#+BEGIN_SRC java
+@Entity
+public class Item {
+
+    @Id
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
+    protected Long id;
+
+    @ElementCollection
+    @CollectionTable(name = "IMAGE")
+    @OrderColumn // Enables persistent order, Defaults to IMAGES_ORDER
+    @Column(name = "FILENAME")
+    protected List<String> images = new ArrayList<String>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+}
+#+END_SRC
+*** map map
+如果是enum，@MapKeyEnumerated
+如果是时间类型，@MapKeyTemporal
+#+BEGIN_SRC java
+@Entity
+public class Item {
+
+    @Id
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
+    protected Long id;
+
+    @ElementCollection
+    @CollectionTable(name = "IMAGE")  //表名
+    @MapKeyColumn(name = "FILENAME") //作键的表中的字段
+    @Column(name = "IMAGENAME") // 作值的表中的字段
+    protected Map<String, String> images = new HashMap<String, String>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public Map<String, String> getImages() {
+        return images;
+    }
+
+    public void setImages(Map<String, String> images) {
+        this.images = images;
+    }
+}
+#+END_SRC
+*** controll order
+#+BEGIN_SRC java
+// falling back on the String#compareTo() method
+    @ElementCollection
+    @CollectionTable(name = "IMAGE")
+    @Column(name = "FILENAME")
+    @org.hibernate.annotations.SortNatural
+    protected SortedSet<String> images = new TreeSet<String>();
+
+// 加入SQL排序
+    @ElementCollection
+    @CollectionTable(name = "IMAGE")
+    @Column(name = "FILENAME")
+    // @javax.persistence.OrderBy // Only one possible order: "FILENAME asc"
+    @org.hibernate.annotations.OrderBy(clause = "FILENAME desc")
+    protected Set<String> images = new LinkedHashSet<String>();
+#+END_SRC
+** collections of component
+#+BEGIN_SRC java
+//指定生成表主键，不指定则是全部进行列进行合成主键，所以不指定时必须设置字段非空@Column(nullable = false)
+@org.hibernate.annotations.CollectionId(
+ columns = @Column(name = "IMAGE_ID"),
+ type = @org.hibernate.annotations.Type(type = "long"),
+ generator = Constants.ID_GENERATOR)
+ protected Collection<Image> images = new ArrayList<Image>();
+#+END_SRC
+** entity association
+好处是可以使用cascade
+*** many to one/one to many
+建立联系后可以使用JPQL
+select b from Bid b where b.item = :itemParameter 找出全部符合某个item的Bids
+**** many to one
+#+BEGIN_SRC java
+@Entity
+public class Bid {
+
+    @Id
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
+    protected Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY) // Defaults to EAGER
+    @JoinColumn(name = "ITEM_ID", nullable = false)
+    protected Item item;
+
+    @NotNull
+    protected BigDecimal amount;
+
+    public Bid() {
+    }
+
+    public Bid(BigDecimal amount, Item item) {
+        this.amount = amount;
+        this.item = item;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    // ...
+}
+
+#+END_SRC
+**** one to many
+第二种主要用在embbeddable类中，因为无法直接反向关联(不是被关联类自身)
+***** base on @ManyToOne of other side
+#+BEGIN_SRC java
+@Entity
+public class Item {
+
+    @Id
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
+    protected Long id;
+
+    protected String name;
+
+    @OneToMany(mappedBy = "item", // Required for bidirectional association, the properties of other side
+               fetch = FetchType.LAZY) // The default
+    protected Set<Bid> bids = new HashSet<>();
+
+    public Item() {
+    }
+
+    public Item(String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(Set<Bid> bids) {
+        this.bids = bids;
+    }
+    // ...
+}
+#+END_SRC
+***** self maintain
+#+BEGIN_SRC java
+@Entity
+public class Item {
+
+    @Id
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
+    protected Long id;
+
+    @NotNull
+    protected String name;
+
+    @OneToMany
+    @JoinColumn(
+        name = "ITEM_ID",
+        nullable = false
+    )
+    @OrderColumn(
+        name = "BID_POSITION", // Defaults to BIDS_ORDER
+        nullable = false
+    )
+    public List<Bid> bids = new ArrayList<>();
+
+    public Item() {
+    }
+
+    public Item(String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Bid> getBids() {
+        return bids;
+    }
+}
+#+END_SRC
+**** delete
+***** orphanRemoval
+对于从集合移除后，persist item，并提交事务，hibernate进行脏数据检查并自动删除，少用，因为需要先把数据load进内存，如果清空集合(100条)，需要触发100次
+***** @OnDelete
+默认级联处理是先加载在删除，hibernate调用SQL调用直接一次删掉
+*** one to one
+unidirectional
+*** cascade
+对于删除而言，会先触发加载集合数据，在删除，低效
+*** 中间表
+@JoinTable
+对于多对多可以采取两种策略
+1. 为关联表设置对应的实体，然后两侧使用@OneToMany，好处为支持导航
+2. 中间表不存在对应实体，关联两侧直接使用@ManyToMany作关联
+* lazy loading
+仅在能确保数据一定存在的情况下，才具有意义，否则hibernate必须先检查是否为null，在查
+* lifecycle
+** transient
+** persistent
+** detached
+em.detach(user);
+** removed
+删了主键会保留，如果需要去掉需要额外配置
+* EntityManager
+JPA规范，controll/switch data's lifycycle
+* JTA
