@@ -711,17 +711,6 @@ mysql > source [file]
 ** covering index
 在联合索引的情况下，如果不取出额外联合索引额外的字段，不会触发回表
 * 杂项
-** 三范式
-范式提供了表拆分的一种指导
-*** 1NF
-列不可分
-eg. 比如手机和座机号应该不是一个字段
-*** 2NF
-属性由主键决定，而不是依赖主键部分内容，主要为组合主键时的影响
-eg. 比如如果不整个自增Id，那么学生ID+课程Id作为一个考试成绩，是可以满足的，但是如果，学生姓名是依赖于学生ID，因此不满足2NF，需要切分
-*** 3NF
-不要传递依赖
-eg. 比如一个订单和一个用户的信息，可以直接塞到一起，但是用户的信息依赖于用户主键，用户主键依赖于订单主键，因此，让其满足第三范式，做法为直接砍掉除用户主键外的字段，该字段作为外键
 ** 优化手段
 1. 加索引，目的是划分区间，where或者group by的字段
 2. 少用*，限定字段选择，提高返回速度
@@ -830,3 +819,50 @@ WHERE NOT name IN ('%xx') //NOT IN也行，唯一的特例
 *** MIN
 *** MAX
 *** COUNT
+* NF
+** 1NF
+Columns contain only atomic values
+Not in 1NF
+| toy_id | toy        | colors            |
+|--------+------------+-------------------|
+|      5 | whiffeball | white,yellow,blue |
+|      6 | frisbee    | green,yellow      |
+|      9 | kite       | red,blue,green    |
+|     12 | yoyo       | white,yellow      |
+Still not in 1NF，because all color column have same meaning, they aren't atomic
+| toy_id | toy        | color1 | color2 | color3 |
+|--------+------------+--------+--------+--------|
+|      5 | whiffeball | white  | yellow | blue   |
+|      6 | frisbee    | green  | yellow |        |
+|      9 | kite       | red    | blue   | green  |
+|     12 | yoyo       | white  | yellow |        |
+Finally 1NF
+| toy_id | toy        |
+|--------+------------|
+|      5 | whiffeball |
+|      6 | frisbee    |
+|      9 | kite       |
+|     12 | yoyo       |
+
+| toy_id | color  |
+|--------+--------|
+|      5 | white  |
+|      5 | yellow |
+|      5 | blue   |
+|      6 | green  |
+|      6 | yellow |
+|      9 | red    |
+|      9 | blue   |
+|      9 | green  |
+|     12 | white  |
+|     12 | yellow |
+** 2NF
+must be 1NF, and have no partial functional dependencies
+可能的情形有三种
+1. 复合主键，非复合主键的列完全取决于主键，而不是其中的部分内容
+2. 整个表复合主键都是复合主键，项需要满足1
+3. 设置自定义的自增主键，可以强制满足2NF
+eg. 比如不设置个自增Id，那么学生ID+课程Id作为一个考试成绩，是可以满足的，但是如果，学生姓名是依赖于学生ID，因此不满足2NF，需要将学分姓名的资料切分出去
+** 3NF
+改非主键列，可以影响其他项，即不满足3NF，不要传递依赖
+eg. 比如一个订单和一个用户的信息，可以直接塞到一起，但是用户的信息依赖于用户主键，用户主键依赖于订单主键，因此，让其满足第三范式，做法为直接砍掉除用户主键外的字段，该字段作为外键
