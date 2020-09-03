@@ -1077,6 +1077,12 @@ item = em.find(Item.class, ITEM_ID);
 #+END_SRC
 *** entity graph
 使用注解声明哪些懒加载，根据需求进行切换，相比profile，控制性质更弱一些
+** shared data cache
+*** enable immutable entity cached
+正确性取决于类的实现，以及或许操纵，该设置允许直接存对象引用，但是hibernate不判定该类是否从语义真的'不可变'，因此取决于人/该类的设计逻辑
+hibernate.cache.use_reference_entries
+*** bypass sharead data
+
 * query
 ** demo
 #+BEGIN_SRC java
@@ -1256,3 +1262,28 @@ TypedQuery<Item> query = em.createNamedQuery("findItemById", Item.class);
 org.hibernate.Query query = session.getNamedQuery("findItems");
 #+END_SRC
 ** hint
+* batch
+** jpql
+*** update
+update Item i set i.active = true where i.seller = :s
+直接的语句操纵无法刷新hibernate的基于session的缓存实例，二级缓存关于该实体类的缓存全部清掉(哪怕只改到一条，也清掉全部相关)
+** native sql
+默认直接全部清掉二级缓存，因为无法识别对应的影响实体（JPQL或者criteria通过类注解导航找到表，同时确认缓存区域，native sql在hibernate中无法反向找回entity class，理论上可以做到，所以无法确定缓存区域）
+query.addSynchronizedEntityClass(Item.class);
+* cache
+** session cached
+核心: 缓存的是实例，无法跨session，与二级一样基于identifier作key
+** shared data cached
+核心: 缓存的是字段(以特殊的汇编格式)，在hit时组装回去（合情合理，如果存的是entity，会使得多个session操纵的同一实体互相干扰）
+1. 一对一的情况下，得到对应的单个identifier，然后再hit组装
+2. 一对多的情况下，得到集合的identifier列表，然后再挨个hit组装
+*** enable cache
+**** enable in persistence.xml
+**** enable in entity
+1. 设置实体的缓存开启，@Cacheable
+2. 设置缓存策略
+**** config cache implement such as ehcache
+
+** query result cache
+基于statement的结果缓存，以语句自身作键，该缓存与mybatis的缓存策略很类似
+收益率较低，在实际场景中得不到较大的性能提升
