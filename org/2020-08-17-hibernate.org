@@ -247,7 +247,7 @@ hibernate exclusive
 ** entity type
 对于表的实体映射，带主键，生命周期独立(指的是持久型)。Shared references
 ** value type
-对于表设计在Java中的二层抽象，无主键，生命周期依赖于外层的实体对象，典型的比如表字段中的三种地址，可以在Java中抽象为Address进行汇总表示
+对于表设计在Java中的二层抽象，无主键，生命周期依赖于外层的实体对象，典型的比如表字段中的三种地址，可以在Java中抽象为Address进行汇总t表示
 * option
 ** prefix
 #+BEGIN_SRC java
@@ -863,3 +863,396 @@ em.detach(user);
 * EntityManager
 JPA规范，controll/switch data's lifycycle
 * JTA
+* Transaction
+** db level
+** application level
+*** pessimistic
+**** row lock depend on db vendor
+直接上行锁，具体操作由vendor进行处理，hibernate的处理是根据各个DB产商进行比如(h2: select xx from  xxxx for update)的语句级干涉
+**** offline lock
+ORM framework vendor可以选择直接把锁存进DB/内存结构中
+*** optimistic
+**** @Version
+***** 整数
+脏数据检查到就版本号+1，数据库版本必须为-1，否则失败
+检查的范围包括任何vlaue type，@OneToMany and @ManyToMany设置了mappedBy时，不列入检测
+@org.hibernate.annotations.OptimisticLock(excluded = true)关闭某个字段在检测时，对版本号的影响
+***** 时间戳
+安全性略差，因为JVM时间无法精确到毫秒，当并发更改发生在1毫秒以内时，第二个事务无法发现版本号事实上已经变更，集群时还涉及到时间同步问题
+@org.hibernate.annotations.Type(type="dbtimestamp") 从数据库拿时间
+一般是对旧系统/难以更改数据库DDL时的备选方案
+***** OptimisticLocking
+@org.hibernate.annotations.OptimisticLocking(
+    type = org.hibernate.annotations.OptimisticLockType.ALL)// 标注entity，由EntityManager直接判断已经持久化的对象状态，依赖于hibernate
+@org.hibernate.annotations.DynamicUpdate
+需要开启动态SQL生成，由hibernate根据对象的旧状态进行版本确认，生成如下类似SQL:
+#+BEGIN_SRC sql
+update ITEM set NAME = 'New Name'
+    where ID = 123
+        and NAME = 'Old Name'
+        and PRICE = '9.99'
+        and DESCRIPTION = 'Some item for auction'
+        and ...
+
+        and SELLER_ID = 45
+#+END_SRC
+****** OptimisticLockType
+锁的版本脏检查策略(用于动态生成SQL)，包含全部字段做旧检查，脏字段做旧检查(实际中不用，因为如果A改a字段，B改b字段，两者不视为冲突)等
+* helper
+** PersistenceUtilHelper-hibernate
+** HibernateProxyHelper-JPA
+* fetch plan
+1. lazy是对hibernate的处理提示，具体能否完成取决于多个影响因子
+2. eager不一样，是一种强制要求
+** lazy
+*** association
+默认是eager，需要自己指定
+1. 只有必须存在的情况下，即optional=false才有价值
+2. 如果关联字段允许为null，hibernate会先hit db进行字段存在的确认(失去了lazy loading的意义，存在补充手段，字节码操作)
+*** collections
+开始调用内部方法时，进行初始化
+**** partially close lazy loading
+@org.hibernate.annotations.LazyCollection(
+       org.hibernate.annotations.LazyCollectionOption.EXTRA
+)
+size()/isEmpty()/contains()/add()
+根据情况进行部分SQL调用，如select count(\*)不触发集合的元素懒加载
+*** bytecode enhance
+1. @org.hibernate.annotations.Proxy(lazy = false)禁用生成该类的代理类(变相禁止了全部相关的懒加载，作为其他类的关联属性)
+2. @LazyToOne(LazyToOneOption.PROXY)标属性，在访问方法上进行指令插入，替换代理懒加载，一般常用在大字符串/文件流层级的处理手段
+如果超过一个这么标，当其中一个被访问初始化时，其他也会一起初始化，目前hibernate的该处理不完善
+#+BEGIN_SRC java
+@Basic(fetch = FetchType.LAZY) // 如果开启了bytecode enhancer才有用
+protected String description;
+#+END_SRC
+** eager
+根据语义和连表限制决定是否连表进行查询，超过了hibernate允许的连表限制，其他哪怕是eager也是通过额外的query statement获取数据
+* filter data
+** cascading state transitions
+*** cascade option
+**** PERSIST
+PERSIST的时候一起PERSIST
+**** MERGE
+DETACH切到MERGE的时候一起MERGE
+**** REFRESH
+当手动刷新时，关联的实体都刷新
+**** DETACH
+detach的时候一起detach
+**** REPLICATE
+当处于detach，重连时，hibernate判断db是否存在记录，如果存在，存进去，并在事务提交后，新数据刷到db上，如果不存在，使用insert语句插入数据
+** LISTENING TO AND INTERCEPTING EVENTS
+使用了注解描述拦截方法，能够突然拦截方法对于业务的语义作用，但是缺少了部分type safe
+*** callback annotations 
+**** @PostLoad
+每次load进persist context，包括identifier lookup，lazy loading等场景
+**** @PrePersist
+**** @PostPersist
+**** @PreUpdate, @PostUpdate
+**** @PreRemove, @PostRemove
+*** interceptors
+实现public class EmptyInterceptor implements Interceptor, Serializable {
+*** core system event
+hibernate的整个核心基于事件驱动实现，如果需要更深入的修改，需要继承对应的event监听器，进行定制
+** enver
+提供类似版本控制的审计功能，会生成对应实体的版本控制表
+** filter
+* trick
+** refresh
+hibernate只有开启了事务，查询前才会进行flush()，可以调用em.flush(entity)从数据库刷新当前实体
+** make best to use jdk collection interface
+hibernate在内部的实现中，大量涉及了代理，尤其是集合使用了一系列的wrapper替换，如果采用过于具体的类，可能造成兼容性冲突
+** n+1 select problem
+*** error demo
+#+BEGIN_SRC java
+List<Item>items = em.createQuery("select i from Item i").getResultList(); // one query statement
+for(Item item:items){
+  assertNotNull(item.getSeller().getUsername()); //each exucute one query
+}
+#+END_SRC
+*** prefetch
+**** batch
+#+BEGIN_SRC java
+@Entity
+@org.hibernate.annotations.BatchSize(size = 10)
+@Table(name = "USERS")
+public class User{
+}
+List<Item> items = em.createQuery("select i from Item i").getResultList();
+// select * from ITEM
+
+for (Item item : items) {
+    assertNotNull(item.getSeller().getUsername());
+    // select * from USERS where ID in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+}
+
+@Entity
+public class Item {
+
+    @OneToMany(mappedBy = "item")
+    @org.hibernate.annotations.BatchSize(size = 5)
+    protected Set<Bid> bids = new HashSet<>();
+}
+
+List<Item> items = em.createQuery("select i from Item i").getResultList();
+// select * from ITEM
+
+for (Item item : items) {
+    assertTrue(item.getBids().size() > 0);
+    // select * from BID where ITEM_ID in (?, ?, ?, ?, ?)
+}
+#+END_SRC
+**** sub select
+#+BEGIN_SRC java
+@Entity
+public class Item {
+<enter/>
+    @OneToMany(mappedBy = "item")
+    @org.hibernate.annotations.Fetch(
+       org.hibernate.annotations.FetchMode.SUBSELECT
+    )
+    protected Set<Bid> bids = new HashSet<>();
+
+    // ...
+}
+List<Item> items = em.createQuery("select i from Item i").getResultList();
+// select * from ITEM
+for (Item item : items) {
+    assertTrue(item.getBids().size() > 0); // 访问到其中一个集合，直接触发sub select
+    // select * from BID where ITEM_ID in (
+    //  select ID from ITEM
+    // )
+}
+#+END_SRC
+** cartesian product problem
+对于@ManyToOne和@OneToOne，eager都是较为安全的，因为一层中的数据均是作为有效数据，但是对于@OneToMany，导致cartesian product problem，即查询结果的冗余字段膨胀，由于表连接数越大，膨胀得越无法预测
+*** multiple select
+#+BEGIN_SRC java
+@Entity
+public class Item{
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    @org.hibernate.annotations.Fetch(
+       org.hibernate.annotations.FetchMode.SELECT // Defaults to JOIN
+    )
+    protected User seller;
+
+    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER)
+    @org.hibernate.annotations.Fetch(
+       org.hibernate.annotations.FetchMode.SELECT // Defaults to JOIN
+    )
+    protected Set<Bid> bids = new HashSet<>();
+}
+#+END_SRC
+** dynamic eager fetching
+1. 对于实体类的各项fetch plan和策略可能会影响到全局,因为其自身也可能被其他作为属性使用
+2. 抽离出各种场景的执行策略，根据场景进行选择执行，在使用时由用户指定策略
+#+BEGIN_SRC java
+// package-info.java
+@org.hibernate.annotations.FetchProfiles({
+    @FetchProfile(name = Item.PROFILE_JOIN_SELLER,
+        fetchOverrides = @FetchProfile.FetchOverride(
+            entity = Item.class,
+            association = "seller",
+            mode = FetchMode.JOIN
+        )),
+    @FetchProfile(name = Item.PROFILE_JOIN_BIDS,
+        fetchOverrides = @FetchProfile.FetchOverride(
+            entity = Item.class,
+            association = "bids",
+            mode = FetchMode.JOIN
+        ))
+})
+
+// usage demo
+Item item = em.find(Item.class, ITEM_ID); // 执行默认策略
+
+em.clear();
+em.unwrap(Session.class).enableFetchProfile(Item.PROFILE_JOIN_SELLER); // 获取时使用连接策略，一并获取seller
+item = em.find(Item.class, ITEM_ID);
+
+em.clear();
+em.unwrap(Session.class).enableFetchProfile(Item.PROFILE_JOIN_BIDS); // 获取时使用连接策略，一并获取bids和seller，产生了策略交叉
+item = em.find(Item.class, ITEM_ID);
+
+#+END_SRC
+*** entity graph
+使用注解声明哪些懒加载，根据需求进行切换，相比profile，控制性质更弱一些
+* query
+** demo
+#+BEGIN_SRC java
+String searchString = // ...
+Query query = em.createQuery(
+    "select i from Item i where i.name = :itemName"
+).setParameter("itemName", searchString);
+
+// setParameter() is generic method, could bind all type augument except time type
+Date tomorrowDate = // ...
+Query query = em.createQuery(
+    "select i from Item i where i.auctionEnd > :endDate"
+).setParameter("endDate", tomorrowDate, TemporalType.TIMESTAMP);
+#+END_SRC
+** option
+*** JPQL
+**** 1
+select i from Item i
+**** restriction
+***** normal
+select i from Item i where i.name = 'Foo'
+*** criteria
+**** 1
+#+BEGIN_SRC java
+CriteriaQuery criteria = cb.createQuery();
+criteria.select(criteria.from(Item.class));
+Query query = em.createQuery(criteria);
+#+END_SRC
+**** restriction
+***** normal
+#+BEGIN_SRC java
+Root<Item> i = criteria.from(Item.class);
+criteria.select(i).where(
+    cb.equal(i.get("name"), "Foo")
+); // generate select i.ID, i.NAME, ... from ITEM i where i.NAME = 'Foo'
+#+END_SRC
+**** criteriaBuilder
+***** expression
+****** general
+******* equail
+******* gt
+只接收数字
+******* greaterThan
+能比的全能放
+#+BEGIN_SRC java
+Root<Item> i = criteria.from(Item.class);
+criteria.select(i).where(
+    cb.greaterThan(
+        i.<Date>get("auctionEnd"),
+        tomorrowDate
+    )
+);
+#+END_SRC
+******* in
+#+BEGIN_SRC java
+select u from User u where u.username in ('johndoe', 'janeroe')
+Root<User> u = criteria.from(User.class);
+criteria.select(u).where(
+    cb.<String>in(u.<String>get("username"))
+        .value("johndoe")
+        .value("janeroe")
+);
+#+END_SRC
+******* test null
+#+BEGIN_SRC java
+select i from Item i where i.buyNowPrice is null
+Root<Item> i = criteria.from(Item.class);
+criteria.select(i).where(
+    cb.isNull(i.get("buyNowPrice"))
+);
+
+select i from Item i where i.buyNowPrice is not null
+Root<Item> i = criteria.from(Item.class);
+criteria.select(i).where(
+    cb.isNotNull(i.get("buyNowPrice"))
+);
+#+END_SRC
+******* like
+#+BEGIN_SRC java
+select u from User u where u.username like 'john%'
+Root<User> u = criteria.from(User.class);
+criteria.select(u).where(
+    cb.like(u.<String>get("username"), "john%")
+);
+#+END_SRC
+******* not
+#+BEGIN_SRC java
+select u from User u where u.username not like 'john%'
+Root<User> u = criteria.from(User.class);
+criteria.select(u).where(
+    cb.like(u.<String>get("username"), "john%").not()
+);
+#+END_SRC
+****** multi table
+******* cb.tuple(root1,root2)
+******* join
+******** inner
+#+BEGIN_SRC java
+select b from Bid b where b.item.seller.username = 'johndoe'
+Root<Bid> b = criteria.from(Bid.class);
+criteria.select(b).where(
+    cb.equal(
+        b.get("item").get("seller").get("username"),
+        "johndoe"
+    )
+);
+#+END_SRC
+******** left join
+#+BEGIN_SRC java
+select i, b from Item i
+    left join i.bids b on b.amount > 100
+Root<Item> i = criteria.from(Item.class);
+Join<Item, Bid> b = i.join("bids", JoinType.LEFT);
+b.on(
+    cb.gt(b.<BigDecimal>get("amount"), new BigDecimal(100))
+);
+criteria.multiselect(i, b);
+#+END_SRC
+*** native 
+EntityManager#createNativeQuery()
+#+BEGIN_SRC java
+Query query = em.createNativeQuery(
+    "select * from ITEM", Item.class
+);
+#+END_SRC
+** nameing query
+*** bundle with annotation
+可以一批一批用注解绑定到实体类上
+#+BEGIN_SRC java
+@NamedQueries({
+    @NamedQuery(
+        name = "findItemById",
+        query = "select i from Item i where i.id = :id"
+    )
+})
+@Entity
+public class Item {
+    // ...
+}
+
+@NamedNativeQueries //原生SQL
+@NamedNativeQuery 
+#+END_SRC
+*** xml
+#+BEGIN_SRC xml
+<!-- orm.xml-->
+<entity-mappings
+        version="2.1"
+        xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+            http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd">
+
+    <named-query name="findItems">
+        <query><![CDATA[
+            select i from Item i
+        ]]></query>
+        <hint name="javax.persistence.query.timeout" value="60000"/>
+        <hint name="org.hibernate.comment" value="Custom SQL comment"/>
+    </named-query>
+
+    <named-native-query name="findItemsSQL"
+                        result-class="org.jpwh.model.querying.Item">
+        <query>select * from ITEM</query>
+    </named-native-query>
+
+</entity-mappings>
+#+END_SRC
+*** mannual register naming query
+#+BEGIN_SRC java
+EntityManagerFactory#addNamedQuery()
+#+END_SRC
+*** usage
+#+BEGIN_SRC java
+Query query = em.createNamedQuery("findItems");
+TypedQuery<Item> query = em.createNamedQuery("findItemById", Item.class);
+org.hibernate.Query query = session.getNamedQuery("findItems");
+#+END_SRC
+** hint
