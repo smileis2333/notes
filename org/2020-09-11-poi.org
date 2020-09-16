@@ -1,0 +1,186 @@
+#+TITLE:  java poi
+#+STARTUP: indent
+* HSSF处理
+** 样式
+*** 颜色
+#+BEGIN_SRC java
+final HSSFWorkbook primitiveWorkBook = (HSSFWorkbook) workbook;
+final HSSFPalette customPalette = primitiveWorkBook.getCustomPalette();
+// 颜色索引在0-56之间，相当于取代了默认的取色盘
+customPalette.setColorAtIndex((short) 50,(byte) 66, (byte) 215, (byte) 187);
+customPalette.setColorAtIndex((short) 51,(byte) 246, (byte) 175, (byte) 70);
+customPalette.setColorAtIndex((short) 52,(byte) 136, (byte) 146, (byte) 161);
+
+
+final HSSFCellStyle HAS_NOT_STARTED_COLOR = primitiveWorkBook.createCellStyle();
+HAS_NOT_STARTED_COLOR.setFillForegroundColor((short) 50);
+HAS_NOT_STARTED_COLOR.setFillPattern(FillPatternType.SOLID_FOREGROUND); // 设置背景色
+#+END_SRC
+* XSSF处理
+#+BEGIN_SRC java
+XSSFWorkbook workbook = new XSSFWorkbook();
+
+IndexedColorMap colorMap = workbook.getStylesSource().getIndexedColors();
+Font tableHeadOneFontStyle = workbook.createFont();
+        tableHeadOneFontStyle.setBold( true );
+        tableHeadOneFontStyle.setColor( IndexedColors.BLACK.getIndex() );
+
+XSSFCellStyle tableHeaderOneColOneStyle = workbook.createCellStyle();
+        tableHeaderOneColOneStyle.setFont( tableHeadOneFontStyle );
+        tableHeaderOneColOneStyle
+                .setFillForegroundColor( new XSSFColor( new java.awt.Color( 255, 231, 153 ), colorMap ) );
+        tableHeaderOneColOneStyle.setFillPattern( FillPatternType.SOLID_FOREGROUND );
+        tableHeaderOneColOneStyle = setLeftRightBorderColor( tableHeaderOneColOneStyle );
+        tableHeaderOneColOneStyle = alignCenter( tableHeaderOneColOneStyle );
+#+END_SRC
+* trick
+** 甘特图
+#+BEGIN_SRC java
+ @Override
+    public void projectArrangeExport(ProjectArrangeSearchBO search, HttpServletResponse response) {
+        search.setPageSize(1000);
+        PageR<ProjectArrangeItemVo> itemVOS = getProjectArrangeList(search);
+        ProjectBaseInfoEntity baseInfo = projectBaseInfoRepository.findById(search.getProjectId()).orElseThrow(() -> new CommonException("该项目不存在"));
+        String date = DateUtil.parseDateToStr(new Date(), "yyyy-MM-dd");
+        try {
+            List<ProjectArrangeExportExcelDTO> exportDTOs = TypeConverter.convertListWithBiConsumer(itemVOS.getPageData(), ProjectArrangeExportExcelDTO.class, (s, r) -> {
+                r.setImportance(s.getImportance().description);
+                r.setStatus(s.getStatus().description);
+                final long l = ChronoUnit.DAYS.between(Instant.ofEpochMilli(r.getStartTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate(),
+                        Instant.ofEpochMilli(r.getEndTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate()) + 1;
+                r.setRequiredDays(l);
+            });
+
+            LocalDate leftCursor = null;
+            LocalDate rightCursor = null;
+            if (exportDTOs.size()==0){
+                // do nothing
+            }else if (exportDTOs.size()==1){
+                leftCursor = Instant.ofEpochMilli(exportDTOs.get(0).getStartTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+                rightCursor = Instant.ofEpochMilli(exportDTOs.get(0).getEndTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+            } else if (exportDTOs.size()>=2){
+                // 排结束时间，越晚结束越先
+                exportDTOs.sort((a,b)->{ return b.getEndTime().compareTo(a.getEndTime());});
+                rightCursor = Instant.ofEpochMilli(exportDTOs.get(0).getEndTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+                // 按开始时间，越早开始越先
+                exportDTOs.sort((a,b)->{ return a.getStartTime().compareTo(b.getStartTime());});
+                leftCursor = Instant.ofEpochMilli(exportDTOs.get(0).getStartTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+            }
+
+            class Range{
+                int startDay;
+                int endDay;
+            }
+
+            // 按月分块切开区间
+            TreeMap<LocalDate, Range> monthSpanRows = new TreeMap<>();
+            while (!(leftCursor.getYear()==rightCursor.getYear()&&leftCursor.getMonth()==rightCursor.getMonth())){
+                final Range range = new Range();
+                range.startDay = leftCursor.getDayOfMonth();
+                range.endDay = leftCursor.lengthOfMonth();
+                monthSpanRows.put(leftCursor,range);
+                leftCursor = leftCursor.plusMonths(1);
+            }
+            if (leftCursor.getYear()==rightCursor.getYear()&&leftCursor.getMonth()==rightCursor.getMonth()){
+                final Range range = new Range();
+                range.startDay = 1;
+                range.endDay = rightCursor.getDayOfMonth();
+                monthSpanRows.put(leftCursor,range);
+            }
+
+            int defaultFieldOffset = 8;
+            int leftFieldOffset = defaultFieldOffset;
+
+            Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams("项目排期", "项目排期"), ProjectArrangeExportExcelDTO.class, new ArrayList<>(exportDTOs));
+
+            final CellStyle alignStyle = workbook.createCellStyle();
+            alignStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            alignStyle.setAlignment(HorizontalAlignment.CENTER);
+
+
+            final HSSFWorkbook primitiveWorkBook = (HSSFWorkbook) workbook;
+            final HSSFPalette customPalette = primitiveWorkBook.getCustomPalette();
+            customPalette.setColorAtIndex((short) 50,(byte) 66, (byte) 215, (byte) 187);
+            customPalette.setColorAtIndex((short) 51,(byte) 246, (byte) 175, (byte) 70);
+            customPalette.setColorAtIndex((short) 52,(byte) 136, (byte) 146, (byte) 161);
+
+
+            final HSSFCellStyle HAS_NOT_STARTED_COLOR = primitiveWorkBook.createCellStyle();
+            HAS_NOT_STARTED_COLOR.setFillForegroundColor((short) 50);
+            HAS_NOT_STARTED_COLOR.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+            final HSSFCellStyle PROCESSING_COLOR = primitiveWorkBook.createCellStyle();
+            PROCESSING_COLOR.setFillForegroundColor((short) 51);
+            PROCESSING_COLOR.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+            final HSSFCellStyle COMPLETED_COLOR = primitiveWorkBook.createCellStyle();
+            COMPLETED_COLOR.setFillForegroundColor((short) 52);
+            COMPLETED_COLOR.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+            if (monthSpanRows.size() != 0) {
+                int i = 0;
+                Sheet sheet = workbook.getSheetAt(0);
+                for (Row row : sheet) {
+                    if (i==0){
+                        // 创建年月份如2020年7月，2020年8月
+                        for (Map.Entry<LocalDate, Range> entry : monthSpanRows.entrySet()) {
+                            final Range range = entry.getValue();
+                            int rowStart=0,rowEnd=0;
+                            int columnStart=leftFieldOffset,columnEnd=leftFieldOffset+range.endDay-range.startDay;
+                            if (columnEnd!=columnStart) {
+                                sheet.addMergedRegion(new CellRangeAddress(rowStart, rowEnd, columnStart, columnEnd));
+                            }
+                            final Cell cell = row.createCell(leftFieldOffset);
+                            final LocalDate yearMonth = entry.getKey();
+                            cell.setCellValue(String.format("%s年-%s月", yearMonth.getYear(), yearMonth.getMonth().getValue()));
+                            cell.setCellStyle(alignStyle);
+                            leftFieldOffset += range.endDay -range.startDay+1;
+                        }
+                    }else if (i==1){
+                        //创建月内天数循环如1,2,3,..28,1,2,3,..30,与月份对应
+                        for (Map.Entry<LocalDate, Range> entry : monthSpanRows.entrySet()) {
+                            final Range range = entry.getValue();
+                            for (int dayOfMonth = range.startDay, index = 0; dayOfMonth<= range.endDay; ++dayOfMonth,++index){
+                                Cell cell = row.createCell(leftFieldOffset + index);
+                                cell.setCellValue(dayOfMonth);
+                                cell.setCellStyle(alignStyle);
+                            }
+                            leftFieldOffset += range.endDay -range.startDay+1;
+                        }
+                    }else {
+                        // 创建每个项目排期的甘特图时间跨度
+
+                        leftCursor = Instant.ofEpochMilli(exportDTOs.get(0).getStartTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+                        final ProjectArrangeExportExcelDTO currenData = exportDTOs.get(i - 2);
+                        LocalDate startDay = Instant.ofEpochMilli(currenData.getStartTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+                        LocalDate endDay = Instant.ofEpochMilli(exportDTOs.get(i - 2).getEndTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+
+                        final int offsetDays = Period.between(leftCursor, startDay).getDays();
+                        final int rangeDays = Period.between(startDay, endDay).getDays();
+
+                        int rowStart=i,rowEnd=i;
+                        int columnStart=leftFieldOffset+offsetDays,columnEnd=columnStart+rangeDays;
+                        if (columnEnd!=columnStart) {
+                            sheet.addMergedRegion(new CellRangeAddress(rowStart, rowEnd, columnStart, columnEnd));
+                        }
+                        final Cell cell = row.createCell(columnStart);
+                        switch (ProjectArrangeStatusEnum.fromDescription(currenData.getStatus())){
+                            case HAS_NOT_STARTED: cell.setCellStyle(HAS_NOT_STARTED_COLOR); break ;
+                            case PROCESSING: cell.setCellStyle(PROCESSING_COLOR); break ;
+                            case COMPLETED: cell.setCellStyle(COMPLETED_COLOR); break ;
+                        }
+
+                    }
+                    i++;
+                    leftFieldOffset = defaultFieldOffset;
+                }
+            }
+
+            ExcelUtils.downLoadExcel(baseInfo.getName() + "-项目排期" + "(" + date + ")", response, workbook);
+
+        } catch (Exception e) {
+            throw new CommonException("导出excel错误...");
+        }
+
+    }
+#+END_SRC

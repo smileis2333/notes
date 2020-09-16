@@ -21,3 +21,5 @@ pom添加
     <maven.compiler.source>1.9</maven.compiler.source>
     <maven.compiler.target>1.9</maven.compiler.target>
 </properties>
+** git bash
+terminal --> "C:\Program Files\Git\bin\bash.exe" --login -i

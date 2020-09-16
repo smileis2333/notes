@@ -35,3 +35,9 @@ https://blog.devtang.com/2015/11/14/charles-introduction/
 https://www.charlesproxy.com/documentation/
 * 激活
 https://www.zzzmode.com/mytools/charles/
+* trick
+** 网关开启cors，其他微服务没开(导致转发时写回缺少cors相关头)，导致的前端转发导致的跨域问题解决
+用rewrite给response补头(tool-rewrite)
+Access-Control-Allow-Origin: 根据请求发起的ip进行对应设置
+Access-Control-Expose-Headers: Authorization
+Access-Control-Allow-Credentials: true
