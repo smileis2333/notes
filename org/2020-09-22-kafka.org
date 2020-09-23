@@ -1,0 +1,17 @@
+#+TITLE: kafka
+#+STARTUP: indent
+* qucik start
+#+BEGIN_SRC shell
+wget https://apache.website-solution.net/kafka/2.6.0/kafka_2.13-2.6.0.tgz
+tar xzvf kafka_2.13-2.6.0.tgz
+cd kafka_2.13-2.6.0
+bin/zookeeper-server-start.sh config/zookeeper.properties #start zookeeper
+bin/kafka-server-start.sh config/server.properties # start kafka
+
+bin/kafka-topics.sh --create --topic quickstart-events --bootstrap-server localhost:9092 #create topic
+bin/kafka-topics.sh --describe --topic quickstart-events --bootstrap-server localhost:9092 #check target topic
+
+bin/kafka-console-producer.sh --topic quickstart-events --bootstrap-server localhost:9092 # open producer side
+bin/kafka-console-consumer.sh --topic quickstart-events --from-beginning --bootstrap-server localhost:9092 # open consumer side
+
+#+END_SRC

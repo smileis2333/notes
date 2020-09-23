@@ -1,30 +1,6 @@
 #+TITLE: mq
 #+STARTUP: indent
 * rabbitmq
-** install
-*** debian
-#+BEGIN_SRC shell
-apt-get install erlang-nox
-apt-get install rabbitmq-server
-systemctl enable rabbitmq-server
-#+END_SRC
-** concept
-*** Work queues
-多个消费端处理一个队列，传递消息是rabbitmq使用默认交换机
-*** Publish/subscribe
-两条队列接到一个交换机上面，两个消费端分别接队列，场景：转账消息提醒可以是邮件和短信
-*** Routing
-交换机根据不同的routingkey决定把消息送到哪个队列上，比如aa就送到A,是bb/cc/dd就送到B
-*** Topics
-某种意义上讲，就是routingkey通配符匹配
-*** Header
-不用routingkey做交换机分发规则，而是使用header中的 key/value（键值对）匹配队列
-*** RPC
-RPC即客户端远程调用服务端的方法 ，使用MQ可以实现RPC的异步调用，基于Direct交换机实现，流程如下：
-1、客户端即是生产者就是消费者，向RPC请求队列发送RPC调用消息，同时监听RPC响应队列。
-2、服务端监听RPC请求队列的消息，收到消息后执行服务端的方法，得到方法返回的结果
-3、服务端将RPC方法 的结果发送到RPC响应队列
-4、客户端（RPC调用方）监听RPC响应队列，接收到RPC调用结果
 ** usage
 *** java
 **** official(simple client)

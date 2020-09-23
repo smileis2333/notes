@@ -1,0 +1,24 @@
+#+TITLE: hadoop
+#+STARTUP: indent
+* dataset
+** ncaa
+ftp://ftp.ncdc.noaa.gov
+*** prepare
+#+BEGIN_SRC shell
+#!/bin/bash
+# 文件内容解压合并
+path=$(pwd)
+for year_dir in all/*
+do
+    cd $year_dir
+    year=$(basename $year_dir)
+    yearfile=$path/allcombined/$year
+    touch $yearfile
+    for compress_file in $(ls)
+    do
+        gunzip -c $compress_file >> $yearfile
+        echo $compress_file
+    done
+    cd ../..
+done
+#+END_SRC

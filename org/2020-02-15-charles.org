@@ -9,7 +9,7 @@
 proxy-->throttle setting
 
 * Mobile device/remote browser
-安卓7.0及以上系统对于证书的安全策略做了修改，用户证书只能用于代理浏览器的流量，而应用是不会信任这些证书。【ios和安卓<7.0的版本没有此问题】
+安卓7.0及以上系统对于证书的安全策略做了修改，正常的安装证书只能用于代理浏览器的流量，而应用是不会信任这些证书。【ios和安卓<7.0的版本没有此问题】
 
 下载charles证书，电脑端浏览器输入chls.pro/ssl即可下载，如果未下载也可以在charles>>help>>SSL Proxying>>Save Charles Root Certificate保存证书到本地文件夹
 openssl x509 -subject_hash_old -in <证书文件> | head -1

@@ -108,6 +108,11 @@ git reset --soft commitId 只改当前的最新提交，暂存区和工作区不动
 
 git restore -- glob 将通配符匹配的工具区的文件回滚到与暂存区一致，旧版本不是restore而是checkout，暂存区变了则是撤销
 git restore --staged glob 同上，但是是将暂存区回滚到与当前分支的最新提交
+* 托管
+** bitbucket
+git remote add origin git@bitbucket.org:smile2333/rabbitmqdemo.git
+git push -u origin master
+** github
 * principle
 ** git对象
 *** type

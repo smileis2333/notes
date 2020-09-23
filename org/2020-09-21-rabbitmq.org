@@ -1,0 +1,56 @@
+#+TITLE: rabbitmq
+#+STARTUP: indent
+* install
+** debian
+#+BEGIN_SRC shell
+apt-get install erlang-nox
+apt-get install rabbitmq-server
+systemctl enable rabbitmq-server
+#+END_SRC
+** docker
+docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+* cmd
+docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+rabbitmqctl list_queues
+rabbitmqctl list_queues name messages_ready messages_unacknowledged
+rabbitmqctl list_bindings
+rabbitmqctl list_exchanges
+* java
+** basic
+compile group: 'com.rabbitmq', name: 'amqp-client', version: '5.9.0'
+* concept
+** hello world
+[[../img/rabbit-mq-helloworld.jpg]]
+** work queue
+[[../img/rabbit-mq-workqueue.jpg]]
+一条消息被一个消费者处理(正常情况下，不考虑丢失)
+*** message acknowledgments
+配合autoAck和autoDelete可以实现消费端丢失消息时，rebbitmq可以对消息重新入队分配
+*** durable
+1. 队列持久化(声明时指定)
+2. 消息持久化(客户端发送时指定选项，还是可能丢，在保存的时间窗口有几率丢失)
+*** Fair dispatch
+prefetchCount指定发送给每个消费侧的消息数不能超过多少(目的为确保公平性，需要开启ack，否则rabbitmq无法确认消费端数目)
+** publish/subscribe
+[[../img/rabbit-mq-publish-subscribe.jpg]]
+exchange type: fanout
+message via exchange broadcast to all consumer(exchange set to fanout and binding the queue to exchange)
+获取得到随机的队列名，连接到exchange
+场景: 1. 消息通知多个客户端，PC/手机/短信 2. 聊天系统/即时通讯系统
+** routing
+[[../img/rabbit-mq-routing.jpg]]
+exchange type: direct
+queue绑定routing key，在生产者一侧决定routing key参数转发到哪一类消费者，典型比如消费者1对错误日志的保存(持久化)只处理错误日历，消费者2负责暂时收集日历，采集debug之上的全部日志
+** topic
+[[../img/rabbit-mq-topic.jpg]]
+*匹配一个词，#匹配任意词，之间用.分割
+业务routing key
+eg. <speed>.<colour>.<species>三属性描述消息类型
+*.orange.* 只关心橙色动物，
+*.*.rabbit 只关心兔子
+lazy.# 关心lazy开头的
+** RPC
+实质为通过两条队列进行消息传递
+1. 消费者指定任务传递的队列
+2. 生产者传递参数，并指定回传的队列和消息id(防误传)
+[[../img/rabbit-mq-rpc.jpg]]
