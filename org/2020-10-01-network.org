@@ -1,0 +1,59 @@
+#+TITLE: network
+#+STARTUP: indent
+* cable and connector
+** CAT-5(cable) and RJ-45(connector)
+it has an unshielded twisted pair cable or UTP cable，绞合后减少电磁干扰
+color: The orange pair sends data, while the green pair receives data.Blue and brown wires are reserved for future bandwidth capacity.
+strippe: If a wire is striped, then this means that it is positive. If a wire is solid, then the wire is negative.
+*** 568A
+green-pair orange-striped blue-pair solid-orange brown-pair
+*** 568B
+orange-pair green-striped blue-pair solid-green brown-pair
+** coaxial
+[[../img/network-coaxial-cable.png]]
+[[../img/network-coaxial-demo.jpg]]
+** fiber-optic
+SC, ST, LC connector
+*** SingleMode
+传输核心小，工艺高，成本高，传输距离很远时划算(10-100km)
+*** Multimode
+传输核心大，工艺低，适合短距离建设(2000 m+)
+* analyze tools
+** toner and tracer
+toner send signal and tracer catch signal to check cable continuity 
+** multimeter
+测电压，电阻等各项物理参数
+** oscilloscope
+电压波谱
+** logical analyzer
+显示0，1波谱，但是缺点是不满足大于/小于数值时(映射失败)，导致波谱一直固定，但是实际上又是存在电压变化
+** LAN analyzer
+满足上述全部功能，甚至可以支持decode，但是输出比较复杂，价格最贵
+* encoding
+** NRZ(I)
+初始值0，低电压反转，高电压维持旧值
+** NRZ(L)
+高电压代表1，低电压代表0
+** NRZ(S)
+toggle: 0, constant: 1
+* device
+** hub
+HUBS THINK IN TERMS OF ELECTRICITY
+A hub receives incoming signals and sends them out on all the other ports.
+A collision happens when two signals run into one another, creating an error. The sending network device has to back off and wait to send the signal again.
+** switch
+SWITCHES THINK IN TERMS OF FRAMES
+通过学习端口和MAC形成映射表，在转发frame时根据MAC地址发送到指定端口，具有处理器，和内存(可进行缓冲)，所以可以避免collision
+** router
+替换source MAC地址为自己的MAC地址，目标MAC为下一站的MAC地址，IP层的NAT与之极其类似
+* frame
+[[../img/frame-format.jpg]]
+** ethertype
+0x0800 IP协议
+0x0806 ARP
+* packet
+[[../img/packet.png]]
+** PROTOCOL TYPE
+17 -- udp
+1 -- icmp
+6 -- tcp

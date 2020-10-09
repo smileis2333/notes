@@ -2,16 +2,480 @@
 #+STARTUP: indent
 * qucik start
 #+BEGIN_SRC shell
-wget https://apache.website-solution.net/kafka/2.6.0/kafka_2.13-2.6.0.tgz
-tar xzvf kafka_2.13-2.6.0.tgz
-cd kafka_2.13-2.6.0
-bin/zookeeper-server-start.sh config/zookeeper.properties #start zookeeper
-bin/kafka-server-start.sh config/server.properties # start kafka
+/usr/local/zookeeper/bin/zkServer.sh start
+/usr/local/kafka/bin/kafka-server-start.sh -daemon /usr/local/kafka/config/server.properties
 
-bin/kafka-topics.sh --create --topic quickstart-events --bootstrap-server localhost:9092 #create topic
-bin/kafka-topics.sh --describe --topic quickstart-events --bootstrap-server localhost:9092 #check target topic
+/usr/local/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+/usr/local/kafka/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic test
 
-bin/kafka-console-producer.sh --topic quickstart-events --bootstrap-server localhost:9092 # open producer side
-bin/kafka-console-consumer.sh --topic quickstart-events --from-beginning --bootstrap-server localhost:9092 # open consumer side
+/usr/local/kafka/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+/usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic test --from-beginning
 
 #+END_SRC
+** enable remote
+advertised.listeners=PLAINTEXT://123.56.164.131:9092 # appent to server.properties
+* use cases
+** ACTIVITY TRACKING
+** MESSAGING
+** METRICS AND LOGGING
+** COMMIT LOG
+** STREAM PROCESSING
+* topic
+* partition
+** replica
+*** leader
+1. 全部生产和消费请求都经过该broker，在由其，进行备份写出，用于保证一致性
+2. 在初次创建topic时，使用对应算法进行leader平衡，作为partition的preferred leader，在leader宕了后，如果出于in-sync，直接提升，优于其他follower
+*** follower
+数据备份，当leader of partition宕了之后，提升为该partition的leader
+** 分配算法
+*** without rack
+eg:
+6 brokder，10 partitons, replica factor is 3， total 30 partition
+1. 抽取随机数，作为初始broker，比如抽取4
+2. 先分配leader，分配partition0 leader到brokder4,partition1 leader到brokder5,partition2 到broker0，以此类推
+3. 分配follower,分别从分区对应的leader往后排，比如partition0 -->broker5,broker0, partiton1-->broker0,brokder1，依此类推
+*** with rack
+rack1->broker1,broker2,broker3
+rack2->broker4,broker5,broker6
+
+选取顺序为broker1,broker4,broker2...
+* message
+* producer
+** bootstrap.servers
+kafka broker，一般配两个(防止单点故障)，剩下的由于其通讯机制，最终可以完全获取到全部的broker信息
+** key.serializer
+** value.serializer
+** ACKS
+acks=0 无视是否响应，可以尽可能达到网络瓶颈上线的发送能力
+acks=1 收到leader发回的响应，还是有丢失的可能性
+acks=all 由leader确认全部follower同步完成，才确认成功，最安全，消耗最大
+** BUFFER.MEMORY
+** COMPRESSION.TYPE
+压缩格式，默认不压
+** RETRIES
+重试间隔
+** BATCH.SIZE
+batch bytecode memory
+** LINGER.MS
+如果没满，的batch发送间隔
+** CLIENT.ID
+** MAX.IN.FLIGHT.REQUESTS.PER.CONNECTION
+每个连接等待相应的请求数
+** TIMEOUT.MS, REQUEST.TIMEOUT.MS, AND METADATA.FETCH.TIMEOUT.MS
+** MAX.BLOCK.MS
+** MAX.REQUEST.SIZE
+最大的请求的体积，不设置则取决于batch size
+** RECEIVE.BUFFER.BYTES AND SEND.BUFFER.BYTES
+** Serializers
+org.apache.kafka.common.serialization.Serializer<T>
+* consumer
+** consumer group
+each consumer in same group that subsribe same topic read subnet of partitions of the topic
+最小粒度为partition，如果consumer超过了，直接idle，即消费者数量是否能增加消费比率的，成功的前提取决于分区数目
+** options
+*** bootstrap.servers
+*** group.id
+*** key.deserializer
+*** value.deserializer
+*** FETCH.MIN.BYTES
+如果broker消息总数总大小不够，则wait
+*** FETCH.MAX.WAIT.MS
+就算不满足fetch.min.bytes，超时发送的限制
+*** MAX.PARTITION.FETCH.BYTES
+*** SESSION.TIMEOUT.MS
+*** AUTO.OFFSET.RESET
+*** ENABLE.AUTO.COMMIT
+consumer auto save last batch offset record to kafka when poll
+*** PARTITION.ASSIGNMENT.STRATEGY
+**** Range
+每个分区分开算，按均分来，
+eg:
+A,B topic a1,a2,a3, b1,b2,b3
+两个消费者分为
+a1,a2,b1,b2 a3,b3
+**** RoundRobin
+视为全体分配
+上述分配变更为
+a1,a3,b2 a2,b1,b3
+*** CLIENT.ID
+*** MAX.POLL.RECORDS
+*** RECEIVE.BUFFER.BYTES AND SEND.BUFFER.BYTES
+
+** subscribe
+*** topic
+*** partition
+#+BEGIN_SRC java
+List<PartitionInfo> partitionInfos = null;
+partitionInfos = consumer.partitionsFor("topic"); 1
+
+if (partitionInfos != null) {
+    for (PartitionInfo partition : partitionInfos)
+        partitions.add(new TopicPartition(partition.topic(),
+            partition.partition()));
+    consumer.assign(partitions); 2
+
+    while (true) {
+        ConsumerRecords<String, String> records = consumer.poll(1000);
+
+        for (ConsumerRecord<String, String> record: records) {
+            System.out.printf("topic = %s, partition = %s, offset = %d,
+                customer = %s, country = %s\n",
+                record.topic(), record.partition(), record.offset(),
+                record.key(), record.value());
+        }
+        consumer.commitSync();
+    }
+}
+#+END_SRC
+** commit
+__consumer_offsets
+在处理完数据后，保存当前对当前的partition的offset进行提交，在掉线后或者rebalanace后，能够从保存的位置开始读取(但是最后还是有可能重读，因为时间窗口无法消失)
+consumer.commitSync(); //阻塞方法，会失败时retry
+consumer.commitAsync(); //非阻塞，可以塞callback，不能失败时自动retry(因为只能callback进行错误处理)，因为有可能，下个commit成功，如果允许retry，时间差出现，上一次的retry在下一个commit成功后，会造成倒带出现
+#+BEGIN_SRC java
+while (true) {
+    ConsumerRecords<String, String> records = consumer.poll(100);
+    for (ConsumerRecord<String, String> record : records) {
+        System.out.printf("topic = %s, partition = %d, offset =
+            %d, customer = %s, country = %s\n",
+            record.topic(), record.partition(),
+            record.offset(), record.key(), record.value()); 1
+    }
+    try {
+        consumer.commitSync(); 2
+    } catch (CommitFailedException e) {
+        log.error("commit failed", e) 3
+    }
+}
+
+while (true) {
+    ConsumerRecords<String, String> records = consumer.poll(100);
+    for (ConsumerRecord<String, String> record : records) {
+        System.out.printf("topic = %s, partition = %s,
+        offset = %d, customer = %s, country = %s\n",
+        record.topic(), record.partition(), record.offset(),
+        record.key(), record.value());
+    }
+    consumer.commitAsync(new OffsetCommitCallback() {
+        public void onComplete(Map<TopicPartition,
+        OffsetAndMetadata> offsets, Exception e) {
+            if (e != null)
+                log.error("Commit failed for offsets {}", offsets, e);
+        }
+    }); 1
+}
+
+try {
+    while (true) {
+        ConsumerRecords<String, String> records = consumer.poll(100);
+        for (ConsumerRecord<String, String> record : records) {
+            System.out.printf("topic = %s, partition = %s, offset = %d,
+                customer = %s, country = %s\n",
+                record.topic(), record.partition(),
+                record.offset(), record.key(), record.value());
+        }
+        consumer.commitAsync(); 1
+    }
+} catch (Exception e) {
+    log.error("Unexpected error", e);
+} finally {
+    try {
+        consumer.commitSync(); 2
+    } finally {
+        consumer.close();
+    }
+}
+
+// 纯手动指定提交offset，自动和半自动都是提供最后的一系列offset(多个partition)，纯手动就必须先存record的全部相关metadata，然后再交给kafka client
+private Map<TopicPartition, OffsetAndMetadata> currentOffsets =
+    new HashMap<>(); 1
+int count = 0;
+....
+
+while (true) {
+    ConsumerRecords<String, String> records = consumer.poll(100);
+    for (ConsumerRecord<String, String> record : records) {
+        System.out.printf("topic = %s, partition = %s, offset = %d,
+            customer = %s, country = %s\n",
+            record.topic(), record.partition(), record.offset(),
+            record.key(), record.value()); 2
+        currentOffsets.put(
+            new TopicPartition(record.topic(), record.partition()),
+            new OffsetAndMetadata(record.offset()+1, "no metadata")); 3
+        if (count % 1000 == 0)   4
+            consumer.commitAsync(currentOffsets, null);  // 内部会根据partition选择offset commit，其他废弃
+        count++;
+    }
+}
+#+END_SRC
+** Rebalance Listeners
+*** 诸如文件，socket句柄的清理处理
+#+BEGIN_SRC java
+private Map<TopicPartition, OffsetAndMetadata> currentOffsets =
+    new HashMap<>();
+
+private class HandleRebalance implements ConsumerRebalanceListener { 1
+    public void onPartitionsAssigned(Collection<TopicPartition>
+        partitions) { 2
+    }
+
+    public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
+        System.out.println("Lost partitions in rebalance. " +
+            "Committing current offsets:" + currentOffsets);
+        consumer.commitSync(currentOffsets); 3
+    }
+}
+
+try {
+    consumer.subscribe(topics, new HandleRebalance()); 4
+
+    while (true) {
+        ConsumerRecords<String, String> records = consumer.poll(100);
+        for (ConsumerRecord<String, String> record : records) {
+            System.out.printf("topic = %s, partition = %s, offset = %d,
+                 customer = %s, country = %s\n",
+                 record.topic(), record.partition(), record.offset(),
+                 record.key(), record.value());
+             currentOffsets.put(
+                 new TopicPartition(record.topic(), record.partition()),
+                 new OffsetAndMetadata(record.offset()+1, null));
+        }
+        consumer.commitAsync(currentOffsets, null);
+    }
+} catch (WakeupException e) {
+    // ignore, we're closing
+} catch (Exception e) {
+    log.error("Unexpected error", e);
+} finally {
+    try {
+        consumer.commitSync(currentOffsets);
+    } finally {
+        consumer.close();
+        System.out.println("Closed consumer and we are done");
+    }
+}
+#+END_SRC
+*** offset 存到db，以及复原
+#+BEGIN_SRC java
+public class SaveOffsetsOnRebalance implements ConsumerRebalanceListener {
+
+    public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
+        commitDBTransaction(); 1
+    }
+
+    public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
+        for(TopicPartition partition: partitions)
+            consumer.seek(partition, getOffsetFromDB(partition)); 2
+    }
+}
+
+
+consumer.subscribe(topics, new SaveOffsetOnRebalance(consumer));
+consumer.poll(0);
+
+for (TopicPartition partition: consumer.assignment())
+    consumer.seek(partition, getOffsetFromDB(partition));   3
+
+while (true) {
+    ConsumerRecords<String, String> records =
+        consumer.poll(100);
+    for (ConsumerRecord<String, String> record : records) {
+        processRecord(record);
+        storeRecordInDB(record);
+        storeOffsetInDB(record.topic(), record.partition(),
+            record.offset()); 4
+    }
+    commitDBTransaction();
+}
+#+END_SRC
+** exit
+线程安全，触发WakeupException，并在下一次poll，反馈停止
+consumer.wakeup()
+** Deserializers
+#+BEGIN_SRC java
+Properties props = new Properties();
+props.put("bootstrap.servers", "broker1:9092,broker2:9092");
+props.put("group.id", "CountryCounter");
+props.put("key.deserializer",
+    "org.apache.kafka.common.serialization.StringDeserializer");
+props.put("value.deserializer",
+    "io.confluent.kafka.serializers.KafkaAvroDeserializer"); 1
+props.put("specific.avro.reader","true");
+props.put("schema.registry.url", schemaUrl); 2
+String topic = "customerContacts"
+
+KafkaConsumer<String, Customer> consumer =
+    new KafkaConsumer<>(props);
+consumer.subscribe(Collections.singletonList(topic));
+
+System.out.println("Reading topic:" + topic);
+
+while (true) {
+    ConsumerRecords<String, Customer> records = consumer.poll(1000); 3
+
+    for (ConsumerRecord<String, Customer> record: records) {
+        System.out.println("Current customer name is: " +
+            record.value().getName()); 4
+    }
+    consumer.commitSync();
+}
+
+#+END_SRC
+* avro
+#+BEGIN_SRC java
+// 使用生成的Customer类
+Properties props = new Properties();
+
+props.put("bootstrap.servers", "localhost:9092");
+props.put("key.serializer",
+   "io.confluent.kafka.serializers.KafkaAvroSerializer");
+props.put("value.serializer",
+   "io.confluent.kafka.serializers.KafkaAvroSerializer"); 1
+props.put("schema.registry.url", schemaUrl); 2
+
+String topic = "customerContacts";
+
+Producer<String, Customer> producer = new KafkaProducer<String,
+   Customer>(props); 3
+
+// We keep producing new events until someone ctrl-c
+while (true) {
+    Customer customer = CustomerGenerator.getNext(); 4
+    System.out.println("Generated customer " +
+        customer.toString());
+    ProducerRecord<String, Customer> record =
+        new ProducerRecord<>(topic, customer.getName(), customer); 5
+    producer.send(record); 6
+}
+
+// 直接存，直接写
+Properties props = new Properties();
+props.put("bootstrap.servers", "localhost:9092");
+props.put("key.serializer",
+   "io.confluent.kafka.serializers.KafkaAvroSerializer"); 1
+props.put("value.serializer",
+   "io.confluent.kafka.serializers.KafkaAvroSerializer");
+props.put("schema.registry.url", url); 2
+
+String schemaString =
+    "{\"namespace\": \"customerManagement.avro\",
+     "\"type\": \"record\", " + 3
+     "\"name\": \"Customer\"," +
+     "\"fields\": [" +
+      "{\"name\": \"id\", \"type\": \"int\"}," +
+      "{\"name\": \"name\", \"type\": \"string\"}," +
+      "{\"name\": \"email\", \"type\": " + "[\"null\",\"string\"], " +
+       "\"default\":\"null\" }" +
+    "]}";
+Producer<String, GenericRecord> producer =
+   new KafkaProducer<String, GenericRecord>(props); 4
+
+Schema.Parser parser = new Schema.Parser();
+Schema schema = parser.parse(schemaString);
+
+for (int nCustomers = 0; nCustomers < customers; nCustomers++) {
+    String name = "exampleCustomer" + nCustomers;
+    String email = "example " + nCustomers + "@example.com";
+
+    GenericRecord customer = new GenericData.Record(schema); 5
+    customer.put("id", nCustomers);
+    customer.put("name", name);
+    customer.put("email", email);
+
+    ProducerRecord<String, GenericRecord> data =
+        new ProducerRecord<String,
+            GenericRecord>("customerContacts", name, customer);
+    producer.send(data);
+}
+#+END_SRC
+* Partitioner
+#+BEGIN_SRC java
+// custom by business
+import org.apache.kafka.clients.producer.Partitioner;
+import org.apache.kafka.common.Cluster;
+import org.apache.kafka.common.PartitionInfo;
+import org.apache.kafka.common.record.InvalidRecordException;
+import org.apache.kafka.common.utils.Utils;
+
+public class BananaPartitioner implements Partitioner {
+
+    public void configure(Map<String, ?> configs) {} 1
+
+    public int partition(String topic, Object key, byte[] keyBytes,
+                         Object value, byte[] valueBytes,
+                         Cluster cluster) {
+        List<PartitionInfo> partitions = cluster.partitionsForTopic(topic);
+        int numPartitions = partitions.size();
+
+        if ((keyBytes == null) || (!(key instanceOf String))) 2
+            throw new InvalidRecordException("We expect all messages " +
+                "to have customer name as key")
+
+        if (((String) key).equals("Banana"))
+            return numPartitions - 1; // Banana will always go to last partition
+
+        // Other records will get hashed to the rest of the partitions
+        return (Math.abs(Utils.murmur2(keyBytes)) % (numPartitions - 1))
+    }
+
+    public void close() {}
+}
+#+END_SRC
+* broker
+** controller
+1. 默认第一个在集群中启动的broker成为controller，注册进zookeeper
+2. 负责选择各个partition的leader(在其他broker宕机/离开，或者新加partition导致rebalance时)
+3. 新加broker进入时，如果存在replica partition，controller通知其从各个leader进行数据同步
+4. 其他broker watch zookeeper，controller宕了之后替换上去
+5. 通过zookeeper存版本号防止出现split brain
+* client
+kafka对于客户端的通讯机制与FastDFS类似，均不是透明的，而是提供接口，供client获取关于leader/partition的信息，客户端自己根据信息进行请求发送，如果直接发到client，kafka follower直接reject，数据只能从leader拿到
+kafka的外部通讯和集群之间的通讯机制是同一套，根据请求的类型，进行不同处理来进行通讯，请求类型20+(包括produce,fetch,...)
+client-->any broker-->获取cluster metadata 
+client-->leader of partition--->consumer/produce
+broker-->broker--->sync data with the leader
+leader-->follower---> sync progress check(replica.lag.time.max.ms 超时后，视为out of sync，无法被提升为leader)
+* request
+** Request type (also called API key)
+such as fetch, produce，metadata 指定核心的处理逻辑以及取得的数据
+*** fetch
+*** produce
+*** metadata
+拿到cluster metadata，如果过了interval，refresh，如果其他类型的请求失败，refresh
+** Request version (so the brokers can handle clients of different versions and respond accordingly)
+版本兼容设置，高兼容低，典型的比如以前不带broker of controller,1之后的版本就带了
+** Correlation ID: a number that uniquely identifies the request and also appears in the response and in the error logs (the ID is used for troubleshooting)
+追踪信息
+** Client ID: used to identify the application that sent the request
+追踪信息
+* administering
+** kafka-topics.sh
+kafka-topics.sh --zookeeper zoo1.example.com:2181/kafka-cluster --create --topic my-topic --replication-factor 2 --partitions 8
+kafka-topics.sh --zookeeper zoo1.example.com:2181/kafka-cluster --alter --topic my-topic --partitions 16
+kafka-topics.sh --zookeeper zoo1.example.com:2181/kafka-cluster --delete --topic my-topic
+kafka-topics.sh --zookeeper zoo1.example.com:2181/kafka-cluster --list
+** kafka-consumer-groups.sh
+kafka-consumer-groups.sh --zookeeper zoo1.example.com:2181/kafka-cluster --list # older
+kafka-consumer-groups.sh --new-consumer --bootstrap-server kafka1.example.com:9092 --list #newer
+kafka-consumer-groups.sh --zookeeper zoo1.example.com:2181/kafka-cluster --describe --group testgroup
+kafka-consumer-groups.sh --zookeeper zoo1.example.com:2181/kafka-cluster --delete --group testgroup
+kafka-consumer-groups.sh --zookeeper zoo1.example.com:2181/kafka-cluster --delete --group testgroup --topic my-topic
+** kafka-run-class.sh
+kafka-run-class.sh kafka.tools.ExportZkOffsets --zkconnect zoo1.example.com:2181/kafka-cluster --group testgroup --output-file offsets
+kafka-run-class.sh kafka.tools.ImportZkOffsets --zkconnect zoo1.example.com:2181/kafka-cluster --input-file offsets
+** kafka-configs.sh
+kafka-configs.sh --zookeeper zoo1.example.com:2181/kafka-cluster
+--alter --entity-type topics --entity-name <topic name>
+--add-config <key>=<value>[,<key>=<value>...]`
+** kafka-console-consumer.sh
+kafka-console-consumer.sh --zookeeper zoo1.example.com:2181/kafka-cluster --topic my-topic
+kafka-console-consumer.sh --zookeeper zoo1.example.com:2181/kafka-cluster --topic __consumer_offsets --formatter 'kafka.coordinator.GroupMetadataManager$OffsetsMessage Formatter' --max-messages 1
+** kafka-console-producer.sh
+kafka-console-producer.sh --broker-list kafka1.example.com:9092,kafka2.example.com:9092 --topic my-topic
+* stream processing
+** event stream
+一种数据模型集合的定义，unbound，ordered，replayable(order特性可与rdb类比，其order是order by的一种展示性，而非数据存储结构)
+* ref
+[[https://queue.acm.org/detail.cfm?id=2745385][There is No Now]]
+[[https://learning.oreilly.com/library/view/kafka-the-definitive/9781491936153/][Kafka: The Definitive Guide]]

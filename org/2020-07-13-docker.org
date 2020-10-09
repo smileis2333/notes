@@ -675,3 +675,5 @@ each container has its own namespace
 *** exited
 *** removing
 ** env variable better than link
+* ref
+[[https://learning.oreilly.com/library/view/docker-in-action/9781617294761/][Docker in Action, Second Edition]]
