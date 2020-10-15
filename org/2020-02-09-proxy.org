@@ -1,9 +1,22 @@
 #+TITLE: proxy
 #+STARTUP: indent
-* gradle
+* application config
+** gradle
 ./gradlew -DsocksProxyHost=yourHost -DsocksProxyPort=yourHostPort your-command
 eg:
  ./gradlew -DsocksProxyHost=127.0.0.1 -DsocksProxyPort=1080 your-command
+** browser
+*** switchomega
+**** 代理服务器
+配置host，协议，列表选择后流量全走该服务器
+**** 自动切换模式
+根据域名通配符，网址通配符，网址正则进行匹配，根据特定的规则选定对应的代理服务器
+**** PAC模式
+根据PAC脚本进行代理服务器选择
+**** 虚模式
+相当接口的概念，在自动切换模式，设置虚场景模式，实际走的代理服务器取决于虚模式的事实设置，可以做到，多个代理服务器可以共享一套自动切换规则
+** PAC script
+little js function
 * socket5
 ** tool
 *** shadowsocks-libev
@@ -11,13 +24,15 @@ eg:
 *** proxychains
 *** vpn-tether
 手机开启ssr共享给电脑
-* browser
-** switchomega
-*** 代理服务器
-配置host，协议，列表选择后流量全走该服务器
-*** 自动切换模式
-根据域名通配符，网址通配符，网址正则进行匹配，根据特定的规则选定对应的代理服务器
-*** PAC模式
-根据PAC脚本进行代理服务器选择
-*** 虚模式
-相当接口的概念，在自动切换模式，设置虚场景模式，实际走的代理服务器取决于虚模式的事实设置，可以做到，多个代理服务器可以共享一套自动切换规则
+* proxy
+** public
+** private
+* target
+- Document access controller
+- Child filter
+- Security firewall
+- Web cache
+- Surrogate
+- Content router
+- Transcoder
+- Anonymizer

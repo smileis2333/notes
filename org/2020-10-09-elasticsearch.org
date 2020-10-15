@@ -1,3 +1,5 @@
+#+TITLE: elasticsearch
+#+STARTUP: indent
 * install
 ** debian
 #+BEGIN_SRC bash

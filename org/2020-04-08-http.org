@@ -1,35 +1,338 @@
 #+TITLE: http
 #+STARTUP:indent
-* structure
+* resources
+** come from
+*** static file
+*** generate file
+** client view
+在客户端看来，操作都是透明的，因为客户端只能看见最终的文件，而无法观察到内部的处理过程
+** URI
+*** URL
+[[../img/url.png][url format]]
+地址定位资源，尾部的链接多层级与web server的配置路径一般情况下是一致的(如果没作)
+<scheme>://<user>:<password>@<host>:<port>/<path>;<params>?<query>#<frag>
+可以不是http协议，提供了一种统一的寻址机制，典型的比如
+eg
+1. 用浏览器ftp下文件，如果没有浏览器或其他客户端，需要建立连接，然后一层一层进入目录，然后切换模式，最后再下载文件
+2. 对于http server相对不是那么明显，因为寻址是再server端完成的，但是也是与文件系统的目录对应一致
+**** absolute path
+**** relative path
+1. 有<Base>读<Base>
+2. 没有Base读嵌入相对路径的文件作为Base url
+3. 合并路径得到最终的资源(一般又由browser处理)
+*** URN
+url其实质就是将应用协议的操作(ftp)或文件存储路径(http)暴露给用户，而URN旨在通过纯命名符号的形式直接定义资源，很难替代URL，因为当前的网络体系是建立在层级的体系上
+名字定位资源，而不受资源在server的文件存储位置影响
+eg:
+urn:ietf:rfc:2141
+** MIME types
+起源于老式的电子邮件交互时代
+identifier resources type for client(web browser) to display or invoke default application to open(such as windows office suite file)
+[[../img/mine_type.png][mine type]]
+format: [primary object type]/[a specific subtype]
+* transactions
+** generic format
+Start line
+Header fields
+
+Body
 ** request
-*** request line
-**** http method
-***** get
-idempotent幂等性的，根据http规范，get方法必须没有side effects
-***** post
-http规范不限定一定幂等(处理过程失败，结果没返回，但是扣钱等情况)，但是实现的时候大多数使用事务进行确保
-***** put
-***** delete
-***** patch
-***** head
-***** trace
-***** options
-***** connect
-**** path of resources
-**** protocol version
-*** request header
-**** content-type
-text/html
-application/pdf
-video/quicktime
-application/java
-image/jpeg
-application/jar
-application/octet-stream
-application/x-zip
-*** payload(depent on http method)
+<method> <request-URL> <version>
+<headers>
+
+
+<entity-body>
+*** method
+get
+put
+post
+delete
+head -- 拿header头
+options -- 检测支持的method
+trace -- trace proxy
+*** content-type
+**** form-data
+可以传文件或者表单，带分界符
+Content-Type: multipart/form-data; boundary=--------------------------869499447916789433928274 # 分界符
+Content-Length: 2614
+Connection: keep-alive
+
+----------------------------869499447916789433928274
+Content-Disposition: form-data; name="n1"
+
+v1
+----------------------------869499447916789433928274
+Content-Disposition: form-data; name="n2"
+
+v2
+----------------------------869499447916789433928274
+Content-Disposition: form-data; name="f1"; filename="gobrand.txt"
+Content-Type: text/plain
+
+...文件数据
+**** x-www-form-urlencoded
+只能传表单数据
+POST /post HTTP/1.1
+User-Agent: PostmanRuntime/7.26.5
+Accept: */*
+Cache-Control: no-cache
+Postman-Token: 4fd48fdb-cb1a-448e-a5e7-1dac7d1c78e6
+Host: 127.0.0.1:8080
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 11
+Connection: keep-alive
+
+n1=v1&n2=v2
+**** raw
+字符串，如json等
+**** binary
+二进制
 ** response
-*** response headers
-the first line is HTTP/[version] [statusCode] [A text version of the status code], such as (HTTP/1.2 200 OK)
-*** body hold the content
-* cookies
+<version> <status> <reason-phrase>
+<headers>
+
+<entity-body>
+*** status
+**** 1xx
+100 请求探测，如上传时请求接口，头部设置期待100，如果拿到了，在传
+101 升级协议
+**** 2xx
+200 OK
+201 put后created
+202 accepted，不确保完成
+203 缺认证信息
+204 无内容
+205 重置内容
+206 取得部分内容(跟request指定的range有关)
+**** 3xx
+300 多个引用可以选，如i18
+301 Moved permanently
+302 临时移动，http1.1时被切为33和307，只能走get(因为存在信息丢失，post跑get)
+303 带着post信息重定向，302的post转get语义切分(这部分是post转post)
+304 Not Modified，主要是页面缓存时确定内容是否刷新(设置对应的header)
+305 use proxy，比如通过对应的proxy才能走通
+307 302的get转get语义切分
+**** 4xx
+400 bad request 请求格式有问题
+401 未认证
+403 禁止访问
+404 not found
+405 method not allow
+406 not accepted
+407 代理服务器需要认证
+408 处理超时
+409 冲突
+410 类似404,但是具有有过资源的语义
+411 server要求client设置content-length
+412 condition fail
+413 请求大小大于返回负载
+414 URL too long
+415 unsupported media type
+416 Requested Range Not Satisfiable
+417 Expectation Failed
+**** 5xx
+500 Internal Server Error
+501 Not Implemented
+502 Bad Gateway，proxy相关
+503 Service Unavailable，服务不可用，未来可能可用的语义
+504 Gateway Timeout
+505 HTTP Version Not Supported
+** header
+*** general header
+Connection
+Date
+MIME-Version
+Trailer
+Transfer-Encoding
+Upgrade
+Via
+Cache-Control
+*** request header
+**** information
+Client-IP
+From
+Host
+Referer
+UA-Color
+UA-CPU
+UA-Disp
+UA-OS
+UA-Pixels
+User-Agent
+**** accept
+Accept
+Accept-Charset
+Accept-Encoding
+Accept-Language
+TE
+**** condition
+Expect
+If-Match
+If-Modified-Since
+If-None-Match
+If-Range
+If-Unmodified-Since
+Range
+**** security
+Authorization
+Cookie
+Cookie2
+**** proxy
+Max-Forwards
+Proxy-Authorization
+Proxy-Connection
+*** response header
+**** information
+Age
+Public
+Retry-After
+Server
+Title
+Warning
+**** Negotiation
+Accept-Ranges
+Vary
+**** security
+Proxy-Authenticate
+Set-Cookie
+Set-Cookie2
+WWW-Authenticate
+*** entity header
+**** information
+Allow
+Location
+**** content
+Content-Base
+Content-Encoding
+Content-Language
+Content-Length
+Content-Location
+Content-MD5
+Content-Range
+Content-Type
+**** caching
+ETag
+Expires
+Last-Modified
+*** Extension header
+* version
+** 0.9
+只支持GET，protocol创建初期，deprecated
+** 1.0
+主要特征出现, deprecated
+** 1.0+
+厂商竞赛，杂草丛生
+** 1.1
+再规范，整合1.0各种client特征
+** 2.0(旧名ng)
+http + ssl = https
+* connection
+** protocol layer
+建立TCP连接，一次握手，两次握手，第三次握手(捎带数据，如果小数据直接就一波解决了，因为TCP,IP头20byte，TCP segment头20byte，满载报文可以达到1500byte)
+** header
+modern proxies must never proxy the Connection header or any headers whose names appear inside the Connection values
+keep-alive 1.0时代默认没开
+persistent 1.1时代默认开启，除非Connection: close手动指定关闭
+*** Connection:
+**** value
+- HTTP header field names, listing headers relevant for only this connection
+- Arbitrary token values, describing nonstandard options for this connection
+- The value close, indicating the persistent connection will be closed when done
+*** Keep-Alive:
+**** value
+Connection: Keep-Alive
+Keep-Alive: max=5, timeout=120
+5 transactions, 120ms
+** optimistic
+*** Parallel connections
+[[../img/http_parallel_connection.png][Parallel Connections]]
+针对的是客户端，一次性开多个TCP连接
+*** Persistent connections
+[[file:~/Desktop/personal/study/img/http_persistent_connection.png][Persistent Connections]]
+复用连接，省handshake，并且发送窗口已经得到了一部分tune，但是针对多个连接使用同一个 persistent connection时，还是serial
+*** Pipelined connections
+[[file:~/Desktop/personal/study/img/http_pipeline_connection.png][Pipelined Connections]]
+在persistent connectiond的基础上，不要求完成 transaction在进行下一个，request可以按序直接丢，response也必须按序返回，因为屁事多(幂等性才能走，带side-effect不走，因为浏览器需要在炸了的时候进行重试)，bug多，实用性在主流的浏览器上均是默认关闭中
+*** Multiplexed connections
+* proxy
+** Via header
+Via               = "Via" ":" ( waypoint )[", " ( waypoint )...]
+waypoint          = ( received-protocol received-by [ comment ] )
+received-protocol = [ protocol-name "/" ] protocol-version
+received-by       = ( host [ ":" port ] ) | pseudonym
+** trace method
+将服务器收到的request塞到response body，最主要的是可以从client进行查看request的via头，观察经过proxy，但是大部分的website都不支持，因为可能暴露网络结构
+** MAX-FORWARDS header
+指定最长可经过的proxy，每次经过proxy，-1
+* gateway
+** server protocol converters gateway
+** application server gateway
+*** website plugin CGI
+*** Tomcat, PHP plugin, Jetty
+** tunnel gateway
+CONNECT home.netscape.com:443 HTTP/1.0
+User-agent: Mozilla/4.0
+
+[[file:~/Desktop/personal/study/img/http_tunel_gateway.png][Using CONNECT to establish an SSL tunnel]]
+* cached
+** private cached
+一般指browser cached that storing in disk filesystem
+** public cached
+proxy cached
+[[file:~/Desktop/personal/study/img/http_Proxy_Cache_Hierarchies.png][Proxy Cache Hierarchies]]
+** revalidation
+*** server side
+**** Expires header
+Expires: Fri, 05 Jul 2002, 05:00:00 GMT
+**** Cache-Control header
+Cache-Control: max-age=484200
+***** uncachable document
+Pragma: no-cache
+Cache-Control: no-cache
+Cache-Control: no-store
+***** cached document in cached server
+Cache-Control: max-age=3600
+Cache-Control: s-maxage=3600 #用在指示cached server的revalidation
+***** tell cached revaladate on every access
+Cache-Control: must-revalidate
+*** client side
+condition methods(get with condition header)
+**** If-Modified-Since: <date>
+**** If-None-Match: <tags>
+response的etag可以带回etag，附带文件checksum之类的值，客户端在决定revalidation时，可用etag传入，web server支持weak validator(改注释视为文件etag值不变x)和strong validator
+**** Cache-Control header
+Cache-Control: max-stale = <s>
+Cache-Control: min-fresh = <s>
+Cache-Control: max-age = <s>
+Cache-Control: no-cache Pragma: no-cache
+Cache-Control: no-store
+Cache-Control: only-if-cached
+* identification, authorization, security
+** identification
+*** cookie
+Set-Cookie: name=value [; expires=date] [; path=path] [; domain=domain] [; secure] # response header
+Cookie: name1=value1 [; name2=value2] ... # request header
+*** authentication
+是专为http设计的防止暴露credential和replay attack的认证协议，在https情况下，仅仅作为心理上的慰籍，不具备过大的作用，大部分更多的是由application server进行认证上的管理和digest(nonce也没卵用，digest基本只要一次，因为https本来就被加密过一次了)
+**** basic authentication
+1. 对于使用native 认证的情况下，以server返回401，触发浏览器打开认证弹窗输入username,password后，进行base64编码，设置到Authentication头，进行resend request
+2. 对于现代单页web系统，常配合cookie获取jwt令牌，在作为Authentication内容传入(包含各类权限信息和签名)
+***** realm
+[[file:~/Desktop/personal/study/img/http_authentication_realm.png][Security realms in a web server]]
+一组资源和一个用户关联，一般可以关联多个，在认证框架中常常出现
+HTTP/1.0 401 Unauthorized
+WWW-Authenticate: Basic realm="Corporate Financials"
+**** Digest Authentication
+[[file:~/Desktop/personal/study/img/http_digest_authentication.png][Basic versus digest authentication syntax]]
+核心原理
+1. one-way functions such as MD5 防止密码逆解析而暴露(Base64是对称加密)
+2. 在1的前提下加入nonce，使得客户端每次能重新生成digest(防止请求被capture-replay，如果不每次一样，且不走https，在capture请求的时候，不知道正确的密码，但是可以使用digest等价于密码)
+* https
+[[file:~/Desktop/personal/study/img/http_ca_cert_format.png][Typical digital signature format]]
+核心原理(信任链原理):
+1. CA保证了公钥，算法分发的过程能够准确的达到client，而不被篡改(CA私钥加密证书信息，client公钥解开确认完整性，证书内指定的website的公钥和算法)
+2. 用1得到的公钥和算法进行对称加密算法和密钥协商，协商过程被加密(客户端发起)
+3. 交互过程中使用2的协商密钥和算法加密后传输
+* ref
+[[https://learning.oreilly.com/library/view/http-the-definitive/1565925092/][HTTP: The Definitive Guide]]

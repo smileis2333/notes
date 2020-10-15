@@ -56,6 +56,7 @@ git commit -amd '注释内容' 直接暂存，并提交
 git mv fileName1 fileName2 改名工作区文件，然后也暂存
 git rm fileName 删除文件，并将变更暂存
 git hash-object [target]
+git cherry-pick [hash]
 * branch
 git branch
 git branch -v

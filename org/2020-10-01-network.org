@@ -57,3 +57,27 @@ SWITCHES THINK IN TERMS OF FRAMES
 17 -- udp
 1 -- icmp
 6 -- tcp
+* protocol
+** tcp
+*** performance
+**** handshake
+**** delayed acknowledgment
+一般的实现为定时100-200ms，ack缓存到buffer中，如果需要发送data segment时(该segment与ack同方向，ip:port)，把需要return的ack都塞进data segment header里，一起发出去(省一个segment发送)，如果定时窗口到了，还没有需要发data segment的需求，则创建一个segment(只带了缓存区的ack)，然后发出去
+对于上层的某些协议，不一定有用，比如http，对于第二次回程握手，在该情况下会增加延迟
+**** TCP slow start
+发送窗口的扩增，在每次成功收到ack后，呈指数增长直至阈值
+**** Nagle’s Algorithm and TCP_NODELAY
+1. 数据segment到达缓存时，如果达到满载MTU，则发出去，否则停留（第一个没限制）
+2. 如果收到ack，则把同向的segment数据串起来，发出去，减少发包数目
+
+eg:
+telnet击键
+Hello会先H发出去，然后再Nagle开启的情况下，未收到H的情况下，其他字符缓存，收到后，对ello四个segment合为一个segment发出
+
+disadvantage:
+与delayed ack混用时，造成死锁(解除依赖与delay ack的定时窗口)，在http之类的协议上有很大问题
+**** TIME_WAIT Accumulation and Port Exhaustion
+客户端端口在连接后断开后，ip:port记录起来，在2MSL的时间内，不可使用，防止脏数据进入(现在路由器基本不可能，所以值已经变得很小)
+
+* ref
+[[https://learning.oreilly.com/library/view/head-first-networking/9780596804398/][Head First Networking]]
