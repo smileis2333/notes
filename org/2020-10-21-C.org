@@ -1,0 +1,95 @@
+#+TITLE: C
+#+STARTUP: indent
+* grammer
+** controll flow
+*** loop
+#+BEGIN_SRC C
+while(<some condition>){
+
+}
+
+do{
+
+}while(<some condition>)
+
+for(<statement>;<condition>;<statement>){
+
+}
+#+END_SRC
+*** condition
+*** break
+*** continue
+** bitwise
+** stdio.h
+*** printf
+*** scanf
+*** fgets
+*** data stream
+**** stdout/stderr/strin
+fscanf()
+fprintf()
+2> --> stderr redirection
+**** custom
+FILE * file = fopen([file],[mode])
+eg
+FILE * in_file = fopen("input.txt","r")
+FILE * ouput_file = fopen("output.txt","w")
+
+fprintf(out_file, "Don't wear %s with %s", "red", "green");
+fscanf(in_file, "%79[^\n]\n", sentence);
+fclose(in_file);
+fclose(out_file);
+** string.h
+strchr
+strcmp
+strstr
+strcpy
+strlen
+strcat
+** argument/option
+*** argument
+#+BEGIN_SRC C
+// ./a b c d e 
+// b c d e will be argument
+int main(int argc,char *argv[]){ // argc is 5, argv is 'b c d e \0'
+}
+#+END_SRC
+*** option
+getopt()
+1. 不带:代表该option不支持参数
+2. 带:代表必须带参数，否则报错(可以space后带，或者不用space直接跟在后面)
+3. 带::代表可选参数(但是参数必须直接跟在option字母后面，不能space)
+#+BEGIN_SRC C
+#include <stdio.h>
+#include <unistd.h>
+ 
+int main(int argc, char *argv[]) {
+    int o;
+    const char *optstring = "abc:"; // 有三个选项-abc，其中c选项后有冒号，所以后面必须有参数
+    while ((o = getopt(argc, argv, optstring)) != -1) {
+        switch (o) {
+            case 'a':
+                printf("opt is a, oprarg is: %s\n", optarg);
+                break;
+            case 'b':
+                printf("opt is b, oprarg is: %s\n", optarg);
+                break;
+            case 'c':
+                printf("opt is c, oprarg is: %s\n", optarg);
+                break;
+            case '?':
+                printf("error optopt: %c\n", optopt);
+                printf("error opterr: %d\n", opterr);
+                break;
+        }
+    }
+    return 0;
+}
+#+END_SRC
+* standard
+** ANSI C
+** C99
+** C11
+* compiler
+** gcc
+** clang

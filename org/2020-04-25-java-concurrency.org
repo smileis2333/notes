@@ -242,6 +242,8 @@ private static ThreadLocal<Connection>connectionHolder = new ThreadLocal<>(){
     }
 };
 #+END_SRC
+**** 原理
+每个thread内置ThreadLocalMap，其内部的entry是弱引用，以threadLocal作key，对应的thread存的值为value，在
 ** IMMUTABILITY
 *** effect
 1. 在某些情况下(多个变量组成invariant，抽离出来)，可以配合volatile进行简易的atomic处理

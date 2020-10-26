@@ -58,7 +58,7 @@ SWITCHES THINK IN TERMS OF FRAMES
 1 -- icmp
 6 -- tcp
 * protocol
-** tcp
+** TCP
 *** performance
 **** handshake
 **** delayed acknowledgment
@@ -78,6 +78,26 @@ disadvantage:
 与delayed ack混用时，造成死锁(解除依赖与delay ack的定时窗口)，在http之类的协议上有很大问题
 **** TIME_WAIT Accumulation and Port Exhaustion
 客户端端口在连接后断开后，ip:port记录起来，在2MSL的时间内，不可使用，防止脏数据进入(现在路由器基本不可能，所以值已经变得很小)
-
+** DNS
+*** effect
+1. 负载均衡，平衡资源分发
+2. 邮件source check，reverse DNS
+3. 商业化以及virtual host托管
+*** step
+1. 从最后的.xxx开始解析，读浏览器读不到解析结果，读到则完成，否则继续
+2. 读OS缓存以及host之类的，读到则完成，否则继续
+3. 读本地DNS缓存，读到则完成，否则继续
+4. 分割域名查询(如www.baidu.com)，视角切换到本地DNS server，
+   a. 发送到root server，返回.com的DNS server(A server)
+   b. 发送到A server，返回.baidu.com(B server)
+   c. 发送到B server，返回www.baidu.com的IP
+** DHCP
+** NAT
+* attack
+** MAC spoofing
+** replay attack
+* wireless
+** AP
+** 
 * ref
 [[https://learning.oreilly.com/library/view/head-first-networking/9780596804398/][Head First Networking]]

@@ -1,6 +1,6 @@
 #+TITLE: spring
 #+STARTUP: indent
-* unducument
+* wait-to-delete
 springwebstarted自带了hibernate对于java校验api的实现
 
 使用mockmvc进行单元测试
@@ -19,4 +19,87 @@ ps: Java变量的初始化顺序为：静态变量或静态语句块–>实例变量或初始化语句块–>构造
 可以多种方式获取到登录的用户：
 controller建议用参数@AuthenticationPrincipal User user获取
 通用获取方法: Authentication authentication =    SecurityContextHolder.getContext().getAuthentication();User user = (User) authentication.getPrincipal(); 这种可以任何层级的代码中都可以使用(不被限制于controller)
-* principle
+* IoC Container
+IoC指的是入口类，需要一系列的类组合用于完成任务，而其创建过程却脱离了它的控制，其以松耦合的形式保持连接手段，如字段属性，并通过提供设置入口，如构造器，setter，其他方法等，供client进行implement setting，(Spring IoC Container在此处是作为client)
+** basic package
+org.springframework.beans
+org.springframework.context
+** define
+在自建项目中设置的松耦合依赖中，或者第三方支持插拔式依赖时，设置依赖依赖关系，由IoC Container consume configuration metadata, generate fully configured and executable system or application
+** metedata config
+*** XML
+*** Annotation
+*** code
+** create method option
+*** setter
+1. 作为可选依赖，设置后替换，默认的实现
+2. JMX MBean管理
+*** construtor
+最大的好处，可以强制环形依赖无法形成
+**** disambiguation
+#+BEGIN_SRC xml
+<!--指定type-->
+<bean id="exampleBean" class="examples.ExampleBean">
+    <constructor-arg type="int" value="7500000"/>
+    <constructor-arg type="java.lang.String" value="42"/>
+</bean>
+
+<!--指定参数位置-->
+<bean id="exampleBean" class="examples.ExampleBean">
+    <constructor-arg index="0" value="7500000"/>
+    <constructor-arg index="1" value="42"/>
+</bean>
+
+<!--指定参数名-->
+<bean id="exampleBean" class="examples.ExampleBean">
+    <constructor-arg name="years" value="7500000"/>
+    <constructor-arg name="ultimateAnswer" value="42"/>
+</bean>
+#+END_SRC
+#+BEGIN_SRC java
+public class ExampleBean {
+
+    // Number of years to calculate the Ultimate Answer
+    private int years;
+
+    // The Answer to Life, the Universe, and Everything
+    private String ultimateAnswer;
+
+    public ExampleBean(int years, String ultimateAnswer) {
+        this.years = years;
+        this.ultimateAnswer = ultimateAnswer;
+    }
+}
+#+END_SRC
+*** static method
+实际类型自动根据方法推断，常用于legacy code适配
+#+BEGIN_SRC xml
+<bean id="clientService"
+    class="examples.ClientService"
+    factory-method="createInstance"/>
+#+END_SRC
+*** instance method
+用已经创建的bean，里面带创建其他对象的方法，实际类型自动根据方法推断
+#+BEGIN_SRC xml
+<!-- the factory bean, which contains a method called createInstance() -->
+<bean id="serviceLocator" class="examples.DefaultServiceLocator">
+    <!-- inject any dependencies required by this locator bean -->
+</bean>
+
+<!-- the bean to be created via the factory bean -->
+<bean id="clientService"
+    factory-bean="serviceLocator"
+    factory-method="createClientServiceInstance"/>
+#+END_SRC
+* Bean scope
+singleton
+prototype
+request -- each http request has its own instance
+session -- lifecycle和seesion一致
+application -- lifecycle和ServletContext一致
+websockert -- lifecycle和websocker一致
+* BeanFactoryPostProcessor
+* BeanPostProcessor
+* autowire
+@Inject JSR 330 replace @Autowired
+

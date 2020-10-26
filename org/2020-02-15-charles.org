@@ -5,6 +5,15 @@
 1. help-->ssl proxying-->install charles root certificate
 2. 安装到受信任的根证书颁发机构
 3. ssl proxying setting控制对哪些域名进行https代理或者全局https代理(单个代理设置对应host/域名和port，全局代理设置*:443)
+** 原理
+1. client向charles建立的endpoint建立连接
+2. charles连接后，向真实的website发出申请，得到真实的公钥rpub
+3. charles生成该website需要的拦截用的密钥对(私钥vpri和公钥vpub，长度取决于rp的长度，为了保持一致)
+4. 用charles证书私钥(非拦截的website私钥，而是与前述步骤手动安装进去charles证书对应，里面塞了charles公钥)签出对应的website对应的证书，返回
+5. client用得到的证书，进行签名校验(拿charles里面的公钥进行签署人/算法/内容校验)，校验通过
+6. client在第三次握手时，确立的对称密钥和加密算法，塞到payload前用vpub加密
+7. charles得到6的对称密钥和加密算法(用vpri解密)，在向实际的website发一遍(用rpub签名)，建立到真实website的连接
+8. client通过6确立的对称密钥和加密算法进行请求体加密后发送，charles capture请求后用6得到的密钥和算法解密(显示到UI上)，然后根据设置决定是否breakpoint/forword/reject/rewrite等操作
 * 弱网测试
 proxy-->throttle setting
 

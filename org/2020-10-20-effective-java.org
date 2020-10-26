@@ -1,0 +1,51 @@
+#+TITLE: effective java
+#+STARTUP: indent
+* ITEM 1: CONSIDER STATIC FACTORY METHODS INSTEAD OF CONSTRUCTORS
+** advantage
+1. 表意清晰(场景1，参数签名无法尽可能对返回值做出解释，BigInteger(int, int, Random)逐渐过渡为BigInteger.probablePrime，场景2，签名参数类型个数对等，如均需要3string+2int，由于参数签名的限制，只能采用调转顺序，容易导致混乱)
+2. they are not required to create a new object each time they’re invoked(主要针对的是instance-controlled class)，更极端点，可以创建都不用，如Boolean直接预创建了TRUE和FALSE
+3. hiding implemenration, return subtype of their return typex
+* ITEM 2: CONSIDER A BUILDER WHEN FACED WITH MANY CONSTRUCTOR PARAMETERS
+** advantage
+1. 解决长参数可读性
+2. 强制instance使用前的一致性
+** disadvantage
+1. 参数不多时，显得更冗长
+2. 每个实例都来一遍builder实例，性能有消耗
+* ITEM 3: ENFORCE THE SINGLETON PROPERTY WITH A PRIVATE CONSTRUCTOR OR AN ENUM TYPE
+#+BEGIN_SRC java
+
+// Singleton with public final field
+public class Elvis {
+    public static final Elvis INSTANCE = new Elvis();
+    private Elvis() { ... }
+    public void leaveTheBuilding() { ... }
+}
+
+// Singleton with static factory，可以控制实现如wrap或者per instance per thread
+public class Elvis {
+    private static final Elvis INSTANCE = new Elvis();
+    private Elvis() { ... }
+    public static Elvis getInstance() { return INSTANCE; }
+    public void leaveTheBuilding() { ... }
+}
+
+// 序列化单例最简单的实现，但是不太适用需要extend的场景
+public enum Elvis {
+    INSTANCE;
+    public void leaveTheBuilding() { ... }
+}
+#+END_SRC
+* ITEM 4: ENFORCE NONINSTANTIABILITY WITH A PRIVATE CONSTRUCTOR
+对于目的用于group function的类，应禁止实例化，通过private constructor实现
+#+BEGIN_SRC java
+// Noninstantiable utility class
+public class UtilityClass {
+    // Suppress default constructor for noninstantiability
+    private UtilityClass() {
+        throw new AssertionError();
+    }
+    ... // Remainder omitted
+}
+#+END_SRC
+* ITEM 5: PREFER DEPENDENCY INJECTION TO HARDWIRING RESOURCES

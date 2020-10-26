@@ -20,7 +20,6 @@ little js function
 * socket5
 ** tool
 *** shadowsocks-libev
-    ss-local -s ck-7.forever-over.gq -p 20039 -l 1080 -k apBPAP123 -m chacha20-ietf
 *** proxychains
 *** vpn-tether
 手机开启ssr共享给电脑

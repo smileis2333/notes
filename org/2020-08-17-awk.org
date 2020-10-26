@@ -1,3 +1,106 @@
 #+TITLE:  awk
 #+STARTUP: indent
+awk [options] 'Pattern{Action}' file
+* variable
+$0 表示显示整行 ，$NF表示当前行分割后的最后一列$0 表示显示整行 ，$NF表示当前行分割后的最后一列
+$(NF-1)代表最后一列的前一列
+FS：输入字段分隔符， 默认为空白字符
+OFS：输出字段分隔符， 默认为空白字符
+RS：输入记录分隔符(输入换行符)， 指定输入时的换行符
+ORS：输出记录分隔符（输出换行符），输出时用指定符号代替换行符
+NF：number of Field，当前行的字段的个数(即当前行被分割成了几列)，字段数量
+NR：行号，当前处理的文本行的行号。
+FNR：各文件分别计数的行号
+FILENAME：当前文件名
+ARGC：命令行参数的个数
+ARGV：数组，保存的是命令行所给定的各参数
+** demo
+#+BEGIN_SRC shell
 
+awk -v myvar=haha 'BEGIN {print myvar}' test
+# haha
+
+awk  'BEGIN {v1=123;v2=234; print v1, v2}' test
+# 123 234
+
+
+#+END_SRC
+* pattern
+** BEGIN
+** END
+** condition
+支持关系运算，正则匹配，行匹配
+** demo
+#+BEGIN_SRC shell
+
+# test file content
+abc 123 iuy sasa
+saf saa asa asasa sfgd
+
+awk '{print $1,$2}' test
+# output
+abc 123
+saf saa
+
+awk '{print $2,$4,$5}' test
+# output
+123 sasa
+saa asasa sfgd
+
+awk '{print $1,$2,"hehe"}' test
+# output
+abc 123 hehe
+saf saa hehe
+
+awk '{print "hehe:"$1,"hehe: "$2}' test
+# output
+hehe:abc hehe: 123
+hehe:saf hehe: saa
+
+awk 'BEGIN{print "start"} {print} END{print "end" }' test
+#output
+start
+abc 123 iuy sasa
+saf saa asa asasa sfgd
+end
+
+# 1 2 3 4 5
+# 1 2 3 4
+awk 'NF==5 {print}' test
+# 1 2 3 4 5
+
+#+END_SRC
+* function
+rand()
+gsub('l','L',$1) 第一列的全部l字符换成L
+sub('l','L',$1) 第一列的第一个l字符换成L
+length(),length($1)
+index($0,"lll") lll在当前行的position
+
+* 分隔符
+** 输入分隔符
+** 输出分隔符
+** demo
+#+BEGIN_SRC shell
+
+# content
+# aaa#bbb#ccc
+# ddd#eee#fff
+
+awk  '{print $1}' test
+# output
+# aaa#bbb#ccc
+# ddd#eee#fff
+
+awk -F# '{print $1}' test
+# output
+# aaa
+# ddd
+
+
+awk -F# -v OFS='------' '{print $1,$2}' test
+# output
+# aaa------bbb
+# ddd------eee
+
+#+END_SRC

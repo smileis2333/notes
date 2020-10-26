@@ -1,0 +1,10 @@
+#+TITLE: go
+#+STARTUP:indent
+* convension
+1. 大写开头的name表示导出可外部访问，反之，只适用在package内部
+2. 驼峰式命名
+* declaration
+** complete
+ var [variableName] [variableType] = [varaibleValue]
+** shorcut 
+[variableName] := [variableValue]

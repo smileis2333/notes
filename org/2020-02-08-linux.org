@@ -10,7 +10,8 @@ apt list --installed
 apt-get install curl software-properties-common
 curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
 apt install nodejs
-* kill with pipeline  kill $(ps aux | grep '[p]ython csp_build.py' | awk '{print $2}')
+* kill process with pipeline
+kill $(ps aux | grep '[p]ython csp_build.py' | awk '{print $2}')
 * grep
 --color=auto 或者 --color：表示对匹配到的文本着色显示
 -i：在搜索的时候忽略大小写
@@ -26,3 +27,5 @@ apt install nodejs
 -q：静默模式，不输出任何信息，当我们只关心有没有匹配到，却不关心匹配到什么内容时，我们可以使用此命令，然后，使用"echo $?"查看是否匹配到，0表示匹配到，1表示没有匹配到。
 -P：表示使用兼容perl的正则引擎。
 -E：使用扩展正则表达式，而不是基本正则表达式，在使用"-E"选项时，相当于使用egrep。
+* pipe
+(./a | ./b) < [source] >[output] 2> [erroroutput]

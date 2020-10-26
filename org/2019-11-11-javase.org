@@ -815,7 +815,7 @@ public interface Iterator<E>{
 **** Priority Queues
 *** Maps
 **** Map views
-出于Jav本身数据结构设计的影响，Map本身不隶属于Collection接口，但是获得其对象的key的collectin或者值的colletion，或者，或者的Entry的集合
+出于Java本身数据结构设计的影响，Map本身不隶属于Collection接口，但是获得其对象的key的collectin或者值的colletion，或者，或者的Entry的集合
 Set<K>keySet()
 Collection<V>values()
 Set<Map.Entry<K,V>> entrySet()
