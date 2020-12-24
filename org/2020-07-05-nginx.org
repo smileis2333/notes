@@ -81,3 +81,9 @@ web server root directory
 ** modules
 模块库
 ** sbin
+* self sign
+** mannual
+https://www.cnblogs.com/surplus/p/11423201.html
+生成的证书必须符合对应的规则，否则应用和browser都不认
+** util
+https://stackoverflow.com/questions/27294589/creating-self-signed-certificate-for-domain-and-subdomains-neterr-cert-commo

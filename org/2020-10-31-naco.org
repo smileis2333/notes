@@ -1,0 +1,8 @@
+#+TITLE: nacos
+#+STARTUP:indent
+* script
+sh startup.sh -m standalone
+bash startup.sh -m standalone
+* 坑
+** 读网卡没处理，直接按序读网卡(可能会读到虚拟网卡)
+手动配置网卡和ip，傻逼社区没人修

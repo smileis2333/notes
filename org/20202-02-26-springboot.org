@@ -9,3 +9,8 @@ String path = Thread.currentThread().getContextClassLoader().getResource("").get
 application-dev之类
 ** 命令
  java -jar  xx.jar --spring.profiles.active=prod
+* thin jar
+目前没方案，除非完全手动配置，无法动态加载
+https://stackoverflow.com/questions/48850628/forcing-including-lib-from-local-repo-into-jar-with-spring-thin-layout
+https://github.com/spring-projects/spring-boot/issues/13772
+https://www.baeldung.com/spring-boot-thin-jar

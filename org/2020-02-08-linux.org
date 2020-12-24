@@ -12,6 +12,11 @@ curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
 apt install nodejs
 * kill process with pipeline
 kill $(ps aux | grep '[p]ython csp_build.py' | awk '{print $2}')
+* wireless
+https://blog.csdn.net/z2066411585/article/details/78761753
+* bash
+https://github.com/dylanaraps/pure-bash-bible
+https://github.com/Idnan/bash-guide
 * grep
 --color=auto 或者 --color：表示对匹配到的文本着色显示
 -i：在搜索的时候忽略大小写
@@ -29,3 +34,9 @@ kill $(ps aux | grep '[p]ython csp_build.py' | awk '{print $2}')
 -E：使用扩展正则表达式，而不是基本正则表达式，在使用"-E"选项时，相当于使用egrep。
 * pipe
 (./a | ./b) < [source] >[output] 2> [erroroutput]
+* grub
+https://blog.51cto.com/bluetom/1730895
+* shell readline
+http://readline.kablamo.org/emacs.html
+* dirver
+https://unix.stackexchange.com/questions/41817/linux-how-to-find-the-device-driver-used-for-a-device

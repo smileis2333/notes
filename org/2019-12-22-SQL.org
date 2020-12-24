@@ -60,7 +60,6 @@ mysqladmin -uroot password 123456
 set password for hj3@127.0.0.1 = password('88888');
 -- 直接改表(需要确定版本)
 update mysql.`user` set password = password('11111') where user = 'hj3'; -- before 5.7
-update mysql.`user` set authentication_string = password('22222') where user = 'hj3'; -- 5.7 and after
 **** reset
 1. 停止服务
 2. mysqld_safe --skip-grant-tables &

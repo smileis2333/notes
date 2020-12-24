@@ -1,0 +1,4 @@
+#+TITLE: mongodb
+#+STARTUP: indent
+show dbs
+db.getCollection('company').update({},{$unset:{businesses:null}},{ multi: true}) //É¾×Ö¶Î

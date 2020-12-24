@@ -25,6 +25,15 @@ openssl x509 -subject_hash_old -in <证书文件> | head -1
 用上述运行结果作为证书的改名，同时后缀改为0
 adb连接手机，将文件复制到/system/etc/security/cacerts/，并chmod 644，如果无法复制则mount -o rw,remount /，重复上述步骤直至成功，重启，可以抓取到部分https，其他的根据条件做类似处理
 charles-->proxy-->ssl proxy setting，设置location*:443, *:*
+
+openssl x509 -subject_hash_old -in charles-proxy-ssl-proxying-certificate.pem |head -1 #生成file name
+
+adb devices #测试连通性
+adb shell #进入shell
+su - # 提权
+mount -o rw,remount / #修改read only filesystem
+cp /storage/self/primary/Download/charles-proxy-ssl-proxying-certificate.pem /system/etc/security/cacerts/
+PC关闭防火墙
 * 接口测试
 repeat 重复申请请求
 compose 对请求编辑后在发出

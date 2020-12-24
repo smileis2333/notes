@@ -490,3 +490,6 @@ public Object discovery(){
 }
 
 #+END_SRC
+* trick
+** loadbalancer client not found
+https://stackoverflow.com/questions/63702885/java-lang-illegalstateexception-no-feign-client-for-loadbalancing-defined-did

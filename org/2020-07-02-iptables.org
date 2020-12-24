@@ -155,3 +155,5 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 http://www.zsythink.net/archives/1663
 * reference
 http://www.zsythink.net/archives/category/%e8%bf%90%e7%bb%b4%e7%9b%b8%e5%85%b3/iptables/
+* general
+iptables -I IN_public_allow -p tcp --dport 20001 -j ACCEPT #iptable开端口，比如网关或者其他需要暴露端口的服务，centos7

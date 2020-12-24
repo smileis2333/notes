@@ -65,6 +65,8 @@ select sql_no_cache name from stu;
 
 -- 缓存白名单(推荐)
 select sql_cache name from stu;
+* 系统管理语句
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'yaXxCg86Kx';
 * console
 ** Start Service
 *** 包管理器安装

@@ -1,6 +1,7 @@
-#+TITLE:  Tecent Related
-* 小程序
+#+TITLE:  wechat
 #+STARTUP: indent
+* 小程序
+** subscribe
 #+BEGIN_SRC js
 激活一次性订阅/长期订阅，必须作为函数注册到可以激活点击事件的元素中，由用户触发后进行授权
 function subscribe(){
@@ -27,6 +28,22 @@ module.exports = {
   subscribe: subscribe
 }
 #+END_SRC
+** user info
+*** openid
+*** jscode
+jscode配合appid和secret换取openid和session key
+*** session_key
+用户的资料与登录是隔离的，需要分段多次授权，之后授权得到的数据，是加密的，比如手机号，传到服务器在由对应的session key来进行解密，会话的状态一般由开发者自己定义维持，比如会话标识存进redis，每次调接口，小程序把标识顺路带回来
+eg:
+拉勾网，登录注册链接生成时生成authId，之后扫码跳转，小程序抽取出authId作为会话标识，并依次提供code给服务器，提供加密后用户数据给服务器解密，都是靠authId进行识别
 * 滚动视图区域(scroll-view)
 * 小程序联系公众号以及别的微信平台功能手段
 创建微信开放平台账号，将对应的小程序、公众号绑到同一个微信开放平台状态，之后获取到的用户凭证除了openId之外，同一开放平台账号下的程序还能获取到同样的unionId，根据unionId字段进行映射，即可将小程序与公众号联系起来
+* weui
+** preview
+https://weui.io/
+** weui-wxss
+https://github.com/Tencent/weui-wxss
+* reference
+[[https://developers.weixin.qq.com/miniprogram/introduction/qrcode.html#%25E9%2585%258D%25E7%25BD%25AE%25E6%25B5%2581%25E7%25A8%258B][扫二维码激活小程序(如拉钩网注册登录)]]
+[[https://developers.weixin.qq.com/miniprogram/dev/reference/][小程序开发文档]]

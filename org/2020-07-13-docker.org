@@ -677,3 +677,7 @@ each container has its own namespace
 ** env variable better than link
 * ref
 [[https://learning.oreilly.com/library/view/docker-in-action/9781617294761/][Docker in Action, Second Edition]]
+* general
+docker update --restart=always mongo-dev
+docker --tail 100 [pid/pname]
+docker logs -f [pid/name] //all logs

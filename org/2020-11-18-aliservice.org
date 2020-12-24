@@ -1,0 +1,5 @@
+#+TITLE: ali service
+* mail
+https://help.aliyun.com/knowledge_detail/36576.html
+* openapi explorer
+https://api.aliyun.com/?spm=a2c4g.11186623.2.13.304e50a4oJ0wKF#/

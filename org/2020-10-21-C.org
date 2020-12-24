@@ -20,16 +20,17 @@ for(<statement>;<condition>;<statement>){
 *** break
 *** continue
 ** bitwise
-** stdio.h
-*** printf
-*** scanf
-*** fgets
-*** data stream
-**** stdout/stderr/strin
+** standard library
+*** stdio.h
+**** printf
+**** scanf
+**** fgets
+**** data stream
+***** stdout/stderr/strin
 fscanf()
 fprintf()
 2> --> stderr redirection
-**** custom
+***** custom
 FILE * file = fopen([file],[mode])
 eg
 FILE * in_file = fopen("input.txt","r")
@@ -39,14 +40,111 @@ fprintf(out_file, "Don't wear %s with %s", "red", "green");
 fscanf(in_file, "%79[^\n]\n", sentence);
 fclose(in_file);
 fclose(out_file);
-** string.h
+**** fopen
+FILE *my_file = fopen("photo.jpg", "r");
+**** fileno
+int descriptor = fileno(my_file);
+*** string.h
 strchr
 strcmp
 strstr
 strcpy
 strlen
 strcat
-** argument/option
+*** stdlib.h
+**** void *malloc(size_t size)
+**** void free(void *ptr)
+**** void qsort (array pointer,length,elementsize, comparator)
+#+BEGIN_SRC c
+#include <stdio.h>
+#include <stdlib.h>
+
+int compare_scores(const void* score_a, const void* score_b){
+    int a = *(int*)score_a;
+    int b = *(int*)score_b;
+    return a-b;
+}
+ 
+
+int main(){
+    int scores[] = {543,323,32,554,11,3,112};
+    qsort(scores,7,sizeof(int),compare_scores);
+    for (int i = 0; i < 7; i++)
+    {
+        printf("%d\n",scores[i]);
+    }
+    
+}
+#+END_SRC
+*** sys/wait.h
+#+BEGIN_SRC c
+#include <sys/wait.h>
+
+int main(){
+  int pid_status; //用bit存结果信息,WEXITSTATUS()可以检测
+
+  if(waitpid(pid,&pid_status,0)==-1){
+    //error handle
+  }
+}
+#+END_SRC
+*** unistd.h
+**** dup2
+1. 换file descriptor对应的data stream
+2. 实现类似command line手动重定向的效果
+3. 实现父子进程通讯(配合pipe())
+#+BEGIN_SRC c
+#include <stdio.h>
+#include <unistd.h>
+
+int main()
+{
+// 最终文件是3hoho，表现出写缓存存在
+    FILE *my_file = fopen("test.txt", "w");
+    int descriptor = fileno(my_file);
+    printf("%d", descriptor); //    fflush(stdout); 才可以实现file descriptor打在终端，第二个输出打在文件上
+
+    if(dup2(descriptor,1)){
+        printf("%s","hohoo");
+    }
+
+    return 0;
+}
+#+END_SRC
+**** pipe
+#+BEGIN_SRC c
+#include <stdio.h>
+#include <unistd.h>
+
+int main()
+{
+    int fd[2];
+    if(pipe(fd)==-1){
+        //error handling
+    }
+
+    pid_t pid = fork();
+    if(!pid){
+        printf("I am child process %d\n",pid);
+        //child process, it may be check pid generated from fork()
+        close(fd[0]); // close read
+        dup2(fd[1],1); // set newly data stream to stdout
+        printf("I write to parent");
+    }else {
+
+        char childoutput[100];
+        printf("I am parent process, i get child process %d\n",pid);
+        //parent process
+        close(fd[1]); // close write
+        dup2(fd[0],0); // set newly data stream to stdout
+        gets(childoutput);
+        printf("I get message from child, the message is:%s",childoutput);
+    }
+
+    return 0;
+}
+#+END_SRC
+*** argument/option
 *** argument
 #+BEGIN_SRC C
 // ./a b c d e 
@@ -86,6 +184,329 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 #+END_SRC
+** vararg
+#+BEGIN_SRC c
+#include <stdarg.h>
+#include <stdio.h>
+
+void print_int(int args, ...)
+{
+    va_list ap;
+    va_start(ap, args);
+    int i;
+    for (i = 0; i < args; ++i)
+    {
+        printf("argument: %i\n", va_arg(ap, int));
+    }
+    va_end(ap);
+}
+
+int main(){
+    print_int(3,110,330,220);
+}
+#+END_SRC
+** system call
+*** system()
+//interpret the string, no security(such as error string or dangerous command)
+system("dir D:")
+system("gedit")
+*** exec
+handle out current process to new created process, it's useful for start script that start the application
+| uses                 | character |
+|----------------------+-----------|
+| list of args         | l         |
+| array/vector or args | v         |
+| search the path      | p         |
+| enviroment vars      | e         |
+**** execl
+execl("/home/flynn/clu","/home/flynn/clu","pp","cc",NULL) //第一个指定了program的loading路径，第二个参数是process的应用名，通常保持一致(ps aux得到的信息)，从第二个参数到NULL之间都是参数
+**** execp
+**** execle
+execle("/home/flynn/clu","/home/flynn/clu","pp","cc",NULL,env_vars) //从第二个参数到NULL之间都是参数，最后的是环境变量
+**** execv
+execv("/home/flynn/clu",my_args) // my_args为字符串数组
+**** execvp
+execv("clu",my_args) // 从PATH找clue启动
+*** fork
+pid_t pid = fork(); //pid_t为整数，具体类型取决于操作系统，因此，需要被抽象，child process 拿到pid=0
+** signal
+*** sigaction
+#+BEGIN_SRC c
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <signal.h>
+
+void diediedie(int sig){
+    puts("Goodbye cruel world,...\n");
+    exit(1);
+}
+
+int catch_signal(int sig,void (*handler)(int)){
+    struct sigaction action;
+    action.sa_handler = handler;
+    sigemptyset(&action.sa_mask);
+    action.sa_flags=0;
+    return sigaction(sig,&action,NULL);
+}
+
+int main(){
+    if(catch_signal(SIGINT,&diediedie)==-1){
+        printf("error setting signal handler");
+    }
+    char name[30];
+    printf("Enter your name\n");
+    fgets(name,30,stdin);
+    printf("Hello %s\n",name);
+    return 0;
+}
+#+END_SRC
+*** self emit signal
+#+BEGIN_SRC c
+raise(SIGTERM); // 主要是通用库的封装，根据场景需要设置
+
+alarm(120); //emie SIGALRM per 120 second, like timer when config handler，后调用的alarm会清空前一个的时间设置
+catch_signal(SIGTERM, SIG_DFL);
+#+END_SRC
+** network
+*** socket
+#+BEGIN_SRC c
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <signal.h>
+
+int main(){
+    // create socket
+    int listener_d = socket(PF_INET,SOCK_STREAM,0); // return socket descriptor
+    if(listener_d==-1){
+        // errno("Cann't open socket");
+    }
+    
+    // bind port
+    struct sockaddr_in name;
+    name.sin_family = PF_INET;
+    name.sin_port = (in_port_t)htons(30000);
+    name.sin_addr.s_addr = htonl(INADDR_ANY);
+    int c = bind(listener_d,(struct sockaddr*)&name,sizeof(name));
+    if(c == -1){
+        // error("Cann't bind a socket");
+    }
+
+    // listen，调参，queue 10个
+    if(listen(listener_d,10)==-1){ 
+        // error("Cann't listen a socket");
+    }
+
+    // accept, get connection descriptor
+    struct sockaddr_storage client_addr;
+    unsigned int address_size = sizeof(client_addr);
+    int connect_d = accept(listener_d,(struct sockaddr*)&client_addr,&address_size);
+    if(connect_d==-1){
+        // error("Cann't accept a socket");
+    }
+
+    // send data
+    char *msg = "hello world, network";
+    if(send(connect_d,msg,strlen(msg),0)==-1){
+        // error("send success");
+    }
+}
+#+END_SRC
+** thread
+#+BEGIN_SRC c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <errno.h>
+#include <pthread.h>
+
+void* dose_not(void *a){
+    int i = 0;
+    for ( i = 0; i < 5; i++){
+        sleep(1);
+        puts("Does not!");
+    }
+    return NULL;
+}
+
+void* dose_too(void *a){
+    int i = 0;
+    for ( i = 0; i < 5; i++){
+        sleep(1);
+        puts("Does too!");
+    }
+    return NULL;
+}
+
+void error(char *msg){
+    fprintf(stderr,"%s:%s\n",msg,strerror(errno));
+    exit(1);
+}
+
+int main(){
+    printf("start");
+    pthread_t t0;
+    pthread_t t1;
+    if(pthread_create(&t0,NULL,dose_not,NULL) == -1){
+        error("cann't create thread t0");
+    }
+    if(pthread_create(&t1,NULL,dose_too,NULL) == -1){
+        error("cann't create thread t1");
+    }
+
+    // 如果进程死了，则threea一起杀掉
+    void* result;
+    if(pthread_join(t0,&result)==-1){
+        error("cann't joint t0");
+    }
+    if(pthread_join(t1,&result)==-1){
+        error("cann't joint t1");
+    }
+}
+#+END_SRC
+* data type
+** int
+** float
+** chat
+** array
+** struct
+*** declare
+#+BEGIN_SRC c
+
+// full declare
+struct fish {
+   const char *name;
+   const char *species;
+   int teeth;
+   int age;
+};
+
+struct fish snappy = {"snappy","pirana",69,4}
+
+// type alias
+typedef struct {
+  int cell_no;
+  const char *wallpaper;
+  float minutes_of_charge;
+} 
+phone;
+phone p = {5557879, "s.png", 1.35};
+#+END_SRC
+*** warn
+**** copy by value
+#+BEGIN_SRC c
+#include <stdio.h>
+
+typedef struct {
+  const char *name;
+  const char *species;
+  int age;
+} turtle;
+
+void happy_birthday(turtle t)
+{
+  t.age = t.age + 1;
+  printf("Happy Birthday %s! You are now %i years old!\n",
+    t.name, t.age);
+}
+
+int main()
+{
+  turtle myrtle = {"Myrtle", "Leatherback sea turtle", 99};
+  happy_birthday(myrtle);
+  printf("%s's age is now %i\n", myrtle.name, myrtle.age); // it still 99, because function just copy the value
+  return 0;
+}
+#+END_SRC
+**** pointer operation
+#+BEGIN_SRC c
+#include <stdio.h>
+
+typedef struct {
+  const char *name;
+  const char *species;
+  int age;
+} turtle;
+
+void happy_birthday(turtle *t)
+{
+  (*t).age = (*t).age + 1; //不能*t.age，因为计算机从右开始算，该写法为表示对t的age指针进行解引用。真正的简写为t->age
+  printf("Happy Birthday %s! You are now %i years old!\n",(*t).name, (*t).age);
+}
+
+int main()
+{
+  turtle myrtle = {"Myrtle", "Leatherback sea turtle", 99};
+  happy_birthday(&myrtle);
+  printf("%s's age is now %i\n", myrtle.name, myrtle.age); // it still 99, because function just copy the value
+  return 0;
+}
+
+#+END_SRC
+*** bitfield
+#+BEGIN_SRC c
+typedef struct{
+  short low_pass_vcf;
+  short filter_coupler;
+  short reverb;
+  short sequential;
+}synth; // without bitfield, all field take space
+
+typedef struct{
+  unsigned int low_pass_vcf:1;
+  unsigned int filter_coupler:1;
+  unsigned int reverb:1;
+  unsigned int sequential:1;
+  ...
+}synth;
+
+#+END_SRC
+** union
+#+BEGIN_SRC c
+//大小取决于其中占比最大的属性
+typedef struct {
+  short count;
+  float weight;
+  float volume;
+} quantity;
+
+quantity q ={4}
+quantity q ={.weight=5} // 后赋值的属性冲掉的先前的赋值，所以如果访问非赋值字段，得到的是无效数据
+
+//解决对无效数据的访问通常配合enum进行使用，即struct中塞入union和enum，根据enum决定当前union是哪个字段(if判断)
+typedef enum{
+  COUNT,POUNDS,PINS
+}unit_of_measure;
+
+typedef struct {
+  const char *name;
+  const char *country;
+  quantity amout;
+  unit_of_measure units;
+}fruit_order;
+
+
+fruit_order fo = ...
+if(fruit_order.unit_of_measure==PINS){
+// read count
+}
+else if(fruit_order.unit_of_measure==POUNDS){
+//read weight
+}
+
+#+END_SRC
+** enum
+#+BEGIN_SRC c
+typedef enum{
+  COUNT,POUNDS,PINS
+}unit_of_measure;
+#+END_SRC
 * standard
 ** ANSI C
 ** C99
@@ -93,3 +514,69 @@ int main(int argc, char *argv[]) {
 * compiler
 ** gcc
 ** clang
+* header file
+1. C preprocess遇到未declare的函数，默认视为int，如果返回值对不上，则直接报错
+2. 而直接声明且实现，则可能导致递归(智能度低/保持最小子集带来的障碍)，因此，在C处理中，先声明后实现是常见的处理手段
+3. header file的核心为抽离出所有的函数声明，在主入口#include，在preprocess时进行融合处理，另一个主要用途是代码共享(如共享库，系统库的接口暴露信息，用于link阶段的使用)
+eg:
+#include <stdio.h> //标准库
+#include "totaller.h" // 自定义
+* compile
+source file
+->preprocess
+actual file
+->compile
+assermbly code
+-->assermble
+object code
+->link
+execute program
+
+gcc message_hider.c encrypt.c -o message_hider
+* share
+** function
+header file + plus c file with implementation of function of header file
+** variable
+extern int passcode
+* build
+** raw
+#+BEGIN_SRC bash
+gcc -c *.c # compile to object code
+gcc *.o -o lauch # link to file
+#+END_SRC
+** build tool
+trace file change instead of mannual operation
+genric the process of generate for judging if need to recompile
+*** make
+- The dependencies
+- The recipe
+make的原理是感知depenecy与target的时间戳先后顺序，然后如果target的时间的早于dependency，则应用rule进行重新生成
+
+makefile:
+#+BEGIN_SRC cmake
+launch.o: launch.c launch.h thruster.h  # 这里需要加入header file，原因是哪怕launch.c没变过，在preprocess展开的时候需要引用header file，而只监控c file是无法感知header file的变化的
+   gcc -c launch.c # rule的begin需要tab，早期设计者疏忽
+thruster.o: thruster.h thruster.c
+   gcc -c thruster.c
+launch: launch.o thruster.o
+   gcc launch.o thruster.o - launch
+#+END_SRC
+* link
+** static
+merge all(include static lib named .a, and application object code) into single execute file, without any way to change its runtime behavior
+ar -rcs libhfsecurity.a encrypt.o checksum.o
+gcc test_code.c (-L/{self-lib-directoty}) -lhfsecurity -o test_code
+/usr/local/include
+** dynamic
+loading lib that named dynamic library at runtime(.so,.dll.etc), it's like config file
+gcc -I/includes -fPIC -c hfcal.c -o hfcal.o
+-fPIC generate position-dependent code
+gcc -shared hfcal.o -o
+                       hfcal.dll(windows)
+                       libhfcal.dll.a(cygwin on windows)
+                       libhfcal.so(linux or unix)
+                       libhfcal.dylib(mac)
+
+gcc test_code.c (-L/{self-lib-directoty}) -lhfsecurity -o test_code //the generate exucete file function replace with placeholder, when execute, it load the dynamic library
+* win10
+https://sourceforge.net/projects/mingw-w64/files/

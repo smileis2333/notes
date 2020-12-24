@@ -1,0 +1,4 @@
+#+TITLE: id generate method
+* snowflake
+https://github.com/beyondfengyu/SnowFlake/blob/master/SnowFlake.java
+* uuid

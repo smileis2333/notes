@@ -16,3 +16,5 @@ stage
 unstage
 *** C-c C-c
 commit
+* org
+(setq org-hide-emphasis-markers t) 关闭强调符号的隐藏

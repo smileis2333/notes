@@ -1,0 +1,5 @@
+#+TITLE: postman
+#+STARTUP: indent
+* shortcut
+ctrl+alt+c == open console
+

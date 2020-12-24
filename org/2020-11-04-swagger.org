@@ -1,0 +1,8 @@
+#+TITLE: swagger
+#+STARTUP: indent
+* 坑列表
+1. @Valid等303标准注解，如果再api和实现都标了，swagger报错，无法进入swagger-ui.html
+2. 必须设置@Requestmapping，空不允许，"/"也不允许，错误结果如1
+3. 集成登录接口，可以使用fake controller的方式生成文档
+4. jwt配置
+https://stackoverflow.com/questions/50545286/spring-boot-swagger-ui-set-jwt-token

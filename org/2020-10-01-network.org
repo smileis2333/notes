@@ -1,63 +1,105 @@
 #+TITLE: network
 #+STARTUP: indent
-* cable and connector
-** CAT-5(cable) and RJ-45(connector)
+* phisical
+** cable and connector
+*** CAT-5(cable) and RJ-45(connector)
 it has an unshielded twisted pair cable or UTP cable，绞合后减少电磁干扰
 color: The orange pair sends data, while the green pair receives data.Blue and brown wires are reserved for future bandwidth capacity.
 strippe: If a wire is striped, then this means that it is positive. If a wire is solid, then the wire is negative.
-*** 568A
+**** 568A
 green-pair orange-striped blue-pair solid-orange brown-pair
-*** 568B
+**** 568B
 orange-pair green-striped blue-pair solid-green brown-pair
-** coaxial
+*** coaxial
 [[../img/network-coaxial-cable.png]]
 [[../img/network-coaxial-demo.jpg]]
-** fiber-optic
+*** fiber-optic
 SC, ST, LC connector
-*** SingleMode
+**** SingleMode
 传输核心小，工艺高，成本高，传输距离很远时划算(10-100km)
-*** Multimode
+**** Multimode
 传输核心大，工艺低，适合短距离建设(2000 m+)
-* analyze tools
-** toner and tracer
+** analyze tools
+*** toner and tracer
 toner send signal and tracer catch signal to check cable continuity 
-** multimeter
+*** multimeter
 测电压，电阻等各项物理参数
-** oscilloscope
+*** oscilloscope
 电压波谱
-** logical analyzer
+*** logical analyzer
 显示0，1波谱，但是缺点是不满足大于/小于数值时(映射失败)，导致波谱一直固定，但是实际上又是存在电压变化
-** LAN analyzer
+*** LAN analyzer
 满足上述全部功能，甚至可以支持decode，但是输出比较复杂，价格最贵
-* encoding
-** NRZ(I)
-初始值0，低电压反转，高电压维持旧值
-** NRZ(L)
-高电压代表1，低电压代表0
-** NRZ(S)
-toggle: 0, constant: 1
-* device
-** hub
+** device
+*** hub
 HUBS THINK IN TERMS OF ELECTRICITY
 A hub receives incoming signals and sends them out on all the other ports.
 A collision happens when two signals run into one another, creating an error. The sending network device has to back off and wait to send the signal again.
-** switch
+*** switch
 SWITCHES THINK IN TERMS OF FRAMES
 通过学习端口和MAC形成映射表，在转发frame时根据MAC地址发送到指定端口，具有处理器，和内存(可进行缓冲)，所以可以避免collision
-** router
+*** router
 替换source MAC地址为自己的MAC地址，目标MAC为下一站的MAC地址，IP层的NAT与之极其类似
-* frame
-[[../img/frame-format.jpg]]
-** ethertype
-0x0800 IP协议
-0x0806 ARP
-* packet
+* layer
+** application
+** transport layer
+*** tcp segment
+** network layer
+1. 最核心的的multiplex和demultiplex，尤其是聚合TCP的流量
+2. checksum只check头(payload的数据完整性由上层提供，v6没有校验字段，原因: 损坏的情况下，最多发错，最终也被废弃，而光纤传输造成的误码也较少，因此舍弃)
+*** packet
 [[../img/packet.png]]
-** PROTOCOL TYPE
+**** PROTOCOL TYPE
 17 -- udp
 1 -- icmp
 6 -- tcp
+** link layer
+*** frame
+[[file:~/Desktop/personal/study/img/frame_format.jpg][frame format]]
+**** Preamble and SFD
+用于接收方同步时钟
+**** DST
+**** SRC
+**** type/length
+多用字段，大于1536就是type，否则则是表length
+***** ethertype
+0x0800 IPv4
+0x86DD IPv6
+0x0806 ARP
+***** length
+**** P/Q Tag
+***** VLAN
+***** QoS
+**** payload
+1. 一般是上层协议的流量，不足最小则补0(64bytes)，物理设计因子，因为CSMA/CD检测电路，必须跑完一圈才能激活电压警告，因为需要最小长度，否则无法固定检测机制
+2. 在一些快速以太网的配置，可能会配置jumbo frame，payload可高达9000byte，但是无法与规范定义的常用switch进行交互操作
+**** CRC
+校验值，用于接收方快捷检测是否信号受损(数据corr)
+*** stp(span tree protocol)
+1. 对于end user来讲是透明的，主要用途是用于link layer的链路冗余，而物理结构可能呈环状
+2. frame转发机制下+环状下，会导致traffic loop，进行导致broad storm，导致整个switch的性能被占满，所以需要协议进行生成traffic path，即剪枝，形成单向通道（通过最终设置某些端口有效，某些端口关闭的做法来实现，'关闭'是逻辑概念，不是实际概念，因为可以针对vlan进行所谓的特定vlan'关闭'，特定vlan'开启'）
+3. 生成协议主要依赖链路开销，即一层一层加，在链路明显不同的情况下，stp的完成过程很直观，[[file:~/Desktop/personal/study/img/stp_demo_path.jpg][stp demo path]]
+在链路开销等价的情况下，根据bridge id/port id进行判断
+4. topology change，非根桥的switch传(TCN)BPDU给root，root发送老化时间更改为更短的时间差，从而促使重新学习路径
+5. stp的最大开销在于其主要操作均需反馈root bridge，然后在进行向下传递，并且端口的状态变化也会造成一定的延迟
+**** port state
+[[file:~/Desktop/personal/study/img/stp_port_state.jpg][port state transition]]
+blocking, listening, learning, forwarding, and disabled
+*** rstp
+从Cisco和其他厂商的做法中吸取优化思想，并将其进行标准化，在stp的基础上，对port state进行了优化定义，并通过增加其他机制进行convergence
+1. 边缘端口up后直接进入forword(连接station的边界port)
+2. 端口状态从五种缩减为三种(forwarding, learning, discarding)
+3. stp的路径维持信息都是从root bridge开始分发，然后non-root bridge做适当处理后进行转发，而RSTP，non-root bridge也会进行自动发送信息进行路径的有效性检测
+4. topolog change，通知root和其他bridge，然后立刻flush table
+5. 加入了port role的概念(分别为root,alternate,designate,backup)在邻接链路断开时，使用backup和alternate port进行重建尝试，最优者作为新的path，避免全部重来，[[file:~/Desktop/personal/study/img/rstp_port_role.jpg][rstp port role]]
+6. 支持了每个vlan每个生成树
+*** arp
+1. IPv4才用，IPv6转换的功能被融合到别的模块
+2. 用于same subnet的情况下进行的IP转换，非subnet则是直接流量转到gateway那边(arp gateway的ip)
+3. DST为 ff:ff:ff:ff:ff:ff
+4. frame format存在冗余部分，即arp reply的header和data部分都存在了自身的MAC address(历史原因，TCP/IP协议栈没成为主流时，对其他协议的支持)
 * protocol
+官方规则或体系，用于统治或外交。衍生到网络，则是常见的C/S通讯模式，C/S不限于物理实体，也可以是同台电脑的两个进程通讯
 ** TCP
 *** performance
 **** handshake
@@ -93,11 +135,239 @@ disadvantage:
    c. 发送到B server，返回www.baidu.com的IP
 ** DHCP
 ** NAT
-* attack
-** MAC spoofing
-** replay attack
-* wireless
-** AP
-** 
+借助系统防火墙的功能进行设置，linux是iptable/firewalld/ubw等
+* standard
+** ethernet
+802 serial
+*** 802.3
+1. 一条电缆共享多台station
+2. 同一时间段只能有一种frame在cable上传输
+3. 各个station 使用CSMA/CD，在传输frame前检测(特殊的电路处理)，每次*2，默认重试16为限
+*** 802.3i/10BASE-T
+1. shared cable被twisted-pair wiring替代(相当于从物理结构上线缆可以传两帧)
+2. 以star topology进行组合，以switch作为中心缓冲，此时station 不需要在使用 CSMA/CD 进行检测
+3. 1配合2，实现了full-duplex的通讯(不在存在conflit和单frame传输)，此时增加的成本是switch的计算和缓冲成本
+*** 802.11/WIFI
+format参照了802.3，基本一致，由于使用共享频道进行信号连接(相当于多个人用同一共享线缆)，使用CDMA/CA进行冲突避免
+
+*** 802.1p/q(VLAN and QoS)
+vlan: link layer的隔离技术
+QoS: 提供指示性的数值标志packet的重要，如只需要best effort/route ....
+* definition
+** network
+属于同一network彼此可以进行通讯
+** internetwork
+经由router将单一的network组合的概念
+** internet architecture(一般用大写开头的Internet表示)
+1. 一种划分协议分层的设计决策，如这几个协议完成这块，另外几个完成另外功能，有Internet和OSI七层，最为著名，实际上被真正意义实现的只有Internet(TCP/IP protocol suite)
+2. 划分的好处还有一点，是可以在往下传的时候，进行一定的处理，一个包被分成下成的多个包，或者多个包合成一个(multiplexing)，每一层都允许 multiplexing
+3. 每层设备需实现对应的层级协议(实际上就是吹牛逼，因为switch和router需要/监控/调试/连接，事实上也是基本全部协议栈都实现了，除非穷逼买不起正经设备)
+** internet
+在internetwork的基础上，将全部网络连结后，全部联机用户具备了与其他任意联机用户通讯的网路概念
+** intranet
+内网，指属性该网络下的资源只对该网络下的host进行开放，多指企业内网(用VPN接入)
+** extranet
+相对于intranet，指intranet需要经由VPN访问的外部资源，本质上没区别，是一种根据所处位置进行判别标识的术语(如inbound/outbound)
+** WWW
+常与internet混淆，实际上是internet的一种子集，基于HTTP(S)的C/S主流通讯方案形成的信息通讯网络
+** multiplexing
+一堆传输数据能塞入多个不同来源的数据，在达到目的地后进行可进行分离处理
+*** statistical multiplexing
+在星型网络拓扑中，流量在switch中的buffer实现FIFO，实现尽可能的带宽占用，不浪费
+*** time-division multiplexing (TDM)
+跟分时系统类似，固定给固定端口入口的流量的设置时间片/固定流量，类似电话网的拨通不说话，也收钱，无法完整利用网络的运载功能，类似高速不可换道
+** attack
+*** MAC spoofing
+*** replay attack
+** wireless
+*** AP
+** X.25
+有状态协议，switch保存连接信息，然后之后的每个packet带标识(每次switch从buffer查table拿出连接信息)，现已废弃，因为连接信息太过复杂，后续的协议实际是每个都是对应的比如ip(数据冗余，可以类比token解决方案和jwt，但是随着各种设备的发展，轻微的性能损耗远比有状态连接协议的复杂性要划算)
+** message bonudaries
+使用协议的实现时，是否存在所谓的边界，
+1. 有边界: UDP的每次调用都是直接发，实际上接收者是依次收到已经分割的数据包
+2. 无边界: TCP的发送存在所谓的缓存，窗口概念，当发两个包时，可能存在多种情况(
+a. 两个包比较小合成了一个包
+b. 第一个数据加上第二个数据的一部分形成的一个包，第二个TCP包是第二个数据的一部分
+c. 第一个数据的一部分满载，形成一个包，剩下的和第二个数据形成第二个包，etc
+)，如果应用程序的发送没有自定义分割规则，则信息本身已经失去了区分的边界
+https://www.it1352.com/395474.html
+** End-to-End Argument
+一种关于function/feature如何组织的论点，该论点:
+The function in question can completely and correctly be implemented only with the knowledge and help of the application standing at the end points of the communication system. Therefore, providing that questioned function as a feature of the communication itself is not possible. (Sometimes an incomplete version of the function provided by the communication system may be useful as a performance enhancement.)
+描述功能性的完全在现实中是不可能，因此，需要分层，并每次只实现一部分的功能，实现残缺函数的集合，并往上叠积木完成事实上的功能
+** fate sharing
+描述了一种状态的对等保持，典型比如TCP的状态，实际是由sender和receriver决定的(不考虑中途的路由器拆包的情况下)，而一般情况下，不取决于底层协议簇，哪怕modern/线路/路由表刷新，突然断了一小段时间，只要不超过状态维持的超时时间，TCP还是视为未断开，能够完全确保立刻破坏连接的做法是破坏单边的当前的TCP连接，与一荣俱荣，一损俱损类似
+** Error Control
+对传输过程的导致的数据受损如何处理，一般出于end to end argument的使用，常在底部协议允许对可纠正的传输字段进行修复(轻度处理)，当超过限度后，丢包
+best effort delivery: frame delay protocol and ip protocol
+** Flow Control
+1. 一般的网络通讯，有一个渐进的功能，最开始发少量包，然后成功后发更多包(统计学概念，类似JVM分代假说，是科学也是玄学)
+2. 因为需要由外部机制，一般是sender越发越多，然后receiver控制rate controll，落实到TCP，则是window controll和web server的slow start的概念(事实上，是一种规范，如果sender搞破坏，也是可以无视flow controlle，所以一般还需要防火墙配置违法IP处理规则)
+** protocol identifier
+eg. 比如2个PDU被封装后，传给了下层，在传到receiver host的时候 demulplexing时需要根据protocol identifier的值来进行解析处理
+这是每层的协议基本解析原理，但是每个层的学术名有所不同，
+比如port概念用于标识TCP/UDP流量传给哪个应用
+往下是决定下层流量是TCP/UDP/ICMP的标识位，为Protocol field
+往下是标识下层流量是IP/ARP的标识位，为ethertype
+[[file:~/Desktop/personal/study/img/protocol_identifier.jpg][protocol identifier]]
+
+[[file:~/Desktop/personal/study/img/demux.jpg][ethenet demux]]
+last: 往下是MAC address，决定从哪个交换端口把流量丢出去(不太算，已经是物理细节的一部分)
+*** port number
+16-bit(0-65536)
+*** protocol field
+8-bit(0-255)
+1 (ICMP)
+2 (IGMP)
+4 (IPv4)
+6 (TCP)
+17 (UDP)
+这一部分的protocol的值可以嵌套的，比如IP的解析为IP，tunel的实现可以通过该部分进行处理，可以无线套娃
+**** well known port
+0-1023, generally require root privileges
+**** registered port
+1024–49151, IANA保留，最好不用
+**** dynamic/private port
+49152–65535
+*** ethertype
+** application
+*** client/server
+client和server非对等，server宕了就service就停
+*** peer to peer
+去中心化的原理，消除了client/server的边界，client也可以参与到协议中的server角色，典型的应用协议比如BT
+参与到协议中host组成了overlay network
+** attack
+*** spoofing
+伪造source address
+*** DDos(distributed Denial-of-service)
+多台机器集中向特定服务器进行spoofing发包，导致服务器带宽/CPU/吃满
+*** unaccess attack
+集中在应用层，透过漏洞/窃取credetial进行攻击，如果是建立在TCP上的会话通讯协议，因为需要建立通话，所以sender必须暴露ip(或者gateway的ip)，相较于spoofying，溯源成本较低
+** ip
+其意义首先是在底层网络之上叠了一层规则，从而实现了全部互联的能力
+反向证明: 设备的MAC地址只能作底层通讯，不可能所有设备都是同一厂商，如果基于MAC地址作映射(全部MAC大部分都是无序)，则会导致routes膨胀，即一台host必须了解全部的物理设备的MAC地址并存在本地，对时刻新增/报废/临时维修而导致更新routes，成本过于巨大，将导致这个方案完全不可行，因此，只能使用一种动态的人为指定的地址来进行实际划分
+1. 最开始的方案为IP池分类处理，即只认classful network作为路由表，而企业内部采用subnet进行内部网络管理(subnet传不到外层的route)
+2. 随着分配IP的实践，证明了路由表classful network的routes还是过于庞大(多少个net num prefix，就意味着全部路由器都需要对应数量的route)，因为需要进一步减少产生的routes，并产生了CIDR(参照subnet的管理方式，让网络可以带cidr mask进行更细级别的划分，subnet和cidr是两码事，最后subnet还是无法传到global internet，且可以逐层聚合，一般由ISP进行可聚合地址的区域分配，然后逐层聚合，最终最上层的route的数目尽可能少，被此方式分配的地址成为PA地址，RMB战士可以用PI地址(即独立于ISP，只是交钱让其额外写入route))
+*** v4
+dotted-quad or dotted-decimal notation
+165.195.130.107
+下述依次是历史进程
+**** classful address
+在classful的基础上引入的subnet对internet不可见的，只是对于LAN本地的处理，因此，路由无法聚合，存在多少个classful network(假设全部分配完了)，最终的路由就有多大，解决路由的做法最终通过CIDR，最直接的理解就是subnet必须物理上经由一个router连起来(因为对全局internet不可见)，而CIDR可以物理分割掉(因为子网信息被传播到global internet)
+***** A
+0 net(7bit) host[24bit]
+***** B
+10 net(14bit) host[16bit]
+***** C
+110 net(21bit) host[8bit]
+***** D
+1110 multicast address[28bit]
+***** E
+1111 reserved address[28bit]
+**** subnet address
+在分配了classful地址后，由于其本身站点可能存在多个LAN的接入，究竟如何配置，如何管理，假如分配A类，在具体配置IP时，究竟如何给，比如是连续的还是分块的，又怎么分快，才好管理，因此，产生了subnet address，特定于站点内存的网络，而internet仍然只认classful address，无视subnet address，此时的subnet是固定的，即B类，的基础上切多一位当net，则割成了两个等量host的subnet(后续才衍生出了VLSM)
+
+给某个网站分了128.32（B类地址），路由三个接口，分别接入internet，以及两个LAN（可能一个是对外提供服务A service，一个提供B service）
+只有router以及两个LAN下的全部host都必须知道该LAN集合的子网结构，从两个LAN传出的信息已经剥离了subnet info
+[[file:~/Desktop/personal/study/img/subnet_address.jpg][subnet address]]
+
+**** subnet mask
+计算原理为直接作&(AND operation)
+1. 最初的形式是连续的1，连续的0表示法
+2. 跟IP地址写一样的xx.xx.xx.xx
+3. 现在主流的表示法为斜杠跟数字（表示前缀多少个1），可读性好
+**** VLSM
+在subnet的基础上，其subnet mask不等，即LAN A可能是/20，LAN B是/21，LAN C可能是/22，每个LAN的主机配置上更加灵活(RIP v1不支持VLSM，v2支持)
+[[file:~/Desktop/personal/study/img/VLSM.jpg][VLSM]]
+**** broadcast address
+让host全置为1，计算原理subnet反转后作 OR operation
+**** CIDR
+出于划分灵活度和route aggregate的目的，采用VLSM的思想，将原来只用于LANs的subnet思想进行了采纳，在global internet采用了类似的做法，使其
+***** network prefix
+采用subnet的思想扩充到global internet，类似于subnet mask，但是已经传播在internet
+**** Aggregation
+kk77
+**** special-use address
+0.0.0.0/8 => all host in local networks
+10.0.0.0/8  => private network
+127.0.0.1/8 => loopback address
+169.254.0.0/16 => linked local address
+172.16.0.0/12 => private network
+192.0.0.0/24 => IETF protocol assignment
+192.0.2.0/24 =>  TEST-NET-1 address approved for use in document
+192.88.99.0/24 => 6to4 relays
+192.168.0.0/16 => private network
+192.18.0.0/15 => benchmarks and performance testing
+192.51.100.0/24 => TEST-NET-2 address approved for use in document
+203.0.113.0/24 => TEST-NET-3 address approved for use in document
+224.0.0.0/4 => IPv4 multicast address
+240.0.0.0/4 => reserved space(formerly class E),except 255.255.255.255
+255.255.255.255/32 => local network(limited)broadcast address
+*** v6
+切八块，每块使用16进制(2^4)
+5f05:2000:80ad:5800:0058:0800:2023:1d71
+**** 简写规则
+1. 消每块的前缀0
+2. 连续的0000:0000:0000快可以简写::（0:0:0:0:0:0:0:1 => ::1，2001:0db8:0:0:0:0:0:2 => 2001:db8::2），只能用一次，因为多块存在歧义，按规范选最长的简写
+3. 表示旧的ipv4(::ffff:10.0.0.1 )
+
+**** IIDs
+Link-local IPv6 addresses (and some global IPv6 addresses) use interface identifiers (IIDs) as a basis for unicast IPv6 address assignment
+IIDs 从MAC地址生成
+
+***** EUI
+EUI 64 = OUI(24bit) + 40bit extension identifier
+EUI 48 = OUI(24bit) + 24bit extension identifier
+48转64，前三个字节保留，塞入FFFE
+00-11-22-33-44-55 => 00-11-22-FF-FE-33-44-55
+
+OUI第一个字节的最后两位是 *u* bit 和 *g* bit，通过反转 *u* bit来生成IID
+
+00:30:48:2A:19:89 (EUI 48)
+00:30:48:ff:fe:2a:19:89 （modified EUI 64）
+02:30:48:ff:fe:2a:19:89 (IID)
+fe80::230:48ff:fe2a:1989/64 （标识该地址从IID派生出来的）
+
+*** unicast address
+标识单一主机的地址
+*** multicast address
+标识组的地址，其他主机加入该组，
+**** model
+主流支持的形式有ASM和SSM两类
+***** ASM
+any sender may send to any group; a receiver joins the group by specifying only the group address
+***** SSM
+per sender per group, receiver specifies the address of a  group address and a source IP address
+***** scope
+****** node-local(same computer)
+****** link-local(same subnet)
+****** site-local
+****** global（entire internet）
+****** administrative
+**** ipv4
+[[file:~/Desktop/personal/study/img/ipv4_multicast_address.jpg][ipv4 multicast address]]
+**** ipv6
+***** base
+[[file:~/Desktop/personal/study/img/ipv6_multicast_address.jpg][ipv6 mutlcast address]]
+关键在第二个字节指定了flag和scope(node-local,link-local...)，该address只是base模板，具体format由scope和RPT bit的值进行决定
+***** unicast hrbrid
+[[file:~/Desktop/personal/study/img/ipv6_unitcast_multicast_address.jpg][hybrid unicast multicast address format]]
+***** link local
+[[file:~/Desktop/personal/study/img/ipv6_link_local_multicast_address_format.jpg][link local mutticast address format]]
+用到了IID用于生成
+** allocation
+*** authority
+**** IANA
+***** RIPs
+1. 除了保留的unicast，其他基本上按照洲划分，通过NRO的机构进行协调，然后这些大机构在往国家级别发放IP，国家在发给ISP，ISP在按照区域进行同prefix ip发放(为了聚合route)
+2. 对于multicast address，非全局的可以有LAN管理进行管理设置，如各种支持协议，其他全局的部分由组织进行管理发放
+** encoding
+*** NRZ(I)
+初始值0，低电压反转，高电压维持旧值
+*** NRZ(L)
+高电压代表1，低电压代表0
+*** NRZ(S)
+toggle: 0, constant: 1
 * ref
 [[https://learning.oreilly.com/library/view/head-first-networking/9780596804398/][Head First Networking]]

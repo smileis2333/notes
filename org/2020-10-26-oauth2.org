@@ -1,7 +1,17 @@
 #+TITLE: oauth2
 #+STARTUP: indent
-* authorization-code
-* implicit
-* password
-* client credentials
+* mode
+** authorization-code
+主流授权模式，配合用户认证和website的client_id和client_secret换token，即能防止泄露的风险，又能符合website server跟踪user的activities，oauth server vendor还能赚钱，一举多得
+** implicit
+用户自己认证后，token以hash的形式返回到redirect_url上，在offline的前端应用才有用
+** password
+用户丢给website server username和password，website server直接去换token，在获取user info
+** client credentials
+website server自己拿client_id和client_secret换token，拿自己相关的信息，或者自己自建resource server的资源
+* ref
+https://www.jianshu.com/p/84a4b4a1e833
+http://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html
+https://www.cnblogs.com/xusir/p/3473554.html
+
 

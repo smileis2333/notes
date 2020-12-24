@@ -2,7 +2,6 @@
 #+AUTHOR: HJ
 #+EMAIL: hj980959100@gmail.com
 #+STARTUP: indent
-
 * ORM
 主要目的：操作实体类等价于操作数据库表
 建立两个映射关系：

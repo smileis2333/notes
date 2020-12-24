@@ -77,3 +77,5 @@ find file
 集成neovim在设置中加入
 "vim.neovimPath": "C:/tools/neovim/Neovim/bin/nvim.exe",
 "vim.enableNeovim": true,
+* config C/C++ env
+https://segmentfault.com/a/1190000014800106?utm_source=tag-newest
