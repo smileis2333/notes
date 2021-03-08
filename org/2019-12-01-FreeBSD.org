@@ -205,3 +205,7 @@ pkg install drm-kmod 如果不行，就需要从port编译该
 
 * ref
 https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/
+* 设置
+** sshd
+PermitRootLogin yes #/etc/ssh/sshd_config
+/etc/rc.d/sshd restart

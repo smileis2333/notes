@@ -678,6 +678,8 @@ each container has its own namespace
 * ref
 [[https://learning.oreilly.com/library/view/docker-in-action/9781617294761/][Docker in Action, Second Edition]]
 * general
+docker run --publish 8080:80 --name hello-world [image]
+
 docker update --restart=always mongo-dev
 docker --tail 100 [pid/pname]
 docker logs -f [pid/name] //all logs

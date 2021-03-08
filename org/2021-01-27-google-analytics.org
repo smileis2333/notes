@@ -1,0 +1,8 @@
+#+TITLE: GA
+#+STARTUP: indent
+建立的分析账号隶属于用户账号
+在跟具体的服务账号进行关联(服务账号也隶属与用户账号)
+分析账号-->媒体资源-->数据视图
+GA admin: https://analytics.google.com/analytics/web
+GCP service account: https://console.cloud.google.com/projectselector2/iam-admin/serviceaccounts?supportedpurview=project
+API: https://developers.google.com/analytics/devguides/reporting/core/v4/quickstart/service-java

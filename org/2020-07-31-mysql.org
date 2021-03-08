@@ -252,3 +252,26 @@ mysqlbinlog --start-datetime "2017-3-4 10:40:00" mybinlog.000001;
 mysqlbinlog --start-datetime "2017-3-4 10:40:00" --stop-datetime "2017-3-4 10:55:00" mybinlog.000001;
 ** 中继日志
 ** innodb存储引擎级别的事务日志
+* procedure
+DROP PROCEDURE IF EXISTS `gobrand-platform-questionnaire-dev`.presetuser;
+
+DELIMITER $$
+$$
+CREATE DEFINER=`root1`@`localhost` PROCEDURE `gobrand-platform-questionnaire-dev`.`presetuser`()
+begin
+	select count(*) into @usernums from t_user;
+	IF @usernums=0 THEN
+    	select 'insert new user';
+    	insert into `gobrand-platform-questionnaire-dev`.t_user(id,username,`password`) values(1,'15815817741','{bcrypt}$2a$10$/MYGd63eey3lk.Ae8BUgMu1b28WlULp.9WZeIRsZ/FKQMCxz7DJjC');
+	END IF;
+end$$
+DELIMITER ;
+call presetuser();
+* ref
+** index
+https://stackoverflow.com/questions/4691799/why-does-mysql-not-use-an-index-for-a-greater-than-comparison/4691996
+** remote connect
+*** mysql8
+CREATE USER 'root'@'%' IDENTIFIED BY 'yaXxCg86Kx';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  WITH GRANT OPTION;
+FLUSH PRIVILEGES;

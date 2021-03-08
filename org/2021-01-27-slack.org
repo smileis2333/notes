@@ -1,0 +1,15 @@
+#+TITLE: slack
+#+STARTUP: indent
+https://zhuanlan.zhihu.com/p/21396775?utm_source=wechat_session
+https://www.jianshu.com/p/20625e5e9ef7
+* integrate platform
+** tettra
+** guru
+** trello
+* bot
+/command text
+command为自定义的内容
+代码中，可以text作为命令执行参数，类似/tettra help/suggest
+开启socket mode可以以websocket维持链接
+** java
+https://slack.dev/java-slack-sdk/

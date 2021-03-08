@@ -24,6 +24,7 @@ pom添加
 ** git bash
 terminal --> "C:\Program Files\Git\bin\bash.exe" --login -i
 * ideavim
+** config
 let mapleader = ","   " leader is comma
 let localleader = "," " leader is comma
 
@@ -85,5 +86,16 @@ noremap ,wh <C-W>h<CR>
 noremap ,wl <C-W>l<CR>
 noremap ,wj <C-W>j<CR>
 noremap ,wk <C-W>k<CR>
-* ideavim actionlist
+** actionlist
 https://gist.github.com/zchee/9c78f91cc5ad771c1f5d
+* jrebel
+http://www.cicoding.cn/other/jrebel-activation/
+http://jrebel.cicoding.cn
+
+GUID生成器：
+
+http://jrebel.cicoding.cn/guid
+
+监听配置格式：
+
+http://jrebel.cicoding.cn/GUID

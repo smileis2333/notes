@@ -1,0 +1,30 @@
+#+TITLE: link layer
+#+STARTUP: indent
+* ethernet
+[[file:~/Desktop/personal/study/img/frame_format_RFC1042_RFC894.gif][RFC 894 and RFC 1042]]
+** RFC 894
+DST(6 byte)--SRC(6 byte)--type(2 byte)--data(46-1500byte)--CRC(4 byte)
+** RFC1042
+DST(6 byte)--SRC(6 byte)--length(2 byte)--LLC(3 byte)--SNAP(5 byte)--type(2 byte)--data(46-1500)--CRC(4 byte)
+- 为了加入LLC，和SNAP的功能
+- 为了保持兼容，因为已存在的type没有超过某个阈值，所以将type重载成length，用于标识data长度
+- data(38) = old data(46)-LLC(3 byte)-SNAP(5 byte)-type(2 byte)
+* SLIP(Serial Line IP)
+END (0xc0)--IP datagram--END (0xc0)
+[[file:~/Desktop/personal/study/img/slip_encapsulation.gif][SLIP encapsulation]]
+特点
+1. 不带任何所谓的MAC地址，具体通讯由上层协议(IP)决定，即通讯双方必须实现知道对方的IP
+2. 完全不兼容其他link layer协议
+3. 不带CRC，即数据包的破损，只能由上层协议自己进行确认
+** CSLIP Compressed SLIP
+* PPP(Point-to-Point Protocol)
+[[file:~/Desktop/personal/study/img/ppp_frame.gif][Format of PPP frames]]
+1. 一样不带MAC，带type field，所以支持多种协议的datagram
+2. 支持连通后设置压缩选项，即常量消除，type filed压成一个，即传输可视为3byte(SLIP 2byte)
+escae:
+0x7e --> 0x7d, 0x5e
+0x7d --> 0x7d, 0x5d
+* MTU
+data部分占用的最大byte，影响上层协议如何传输，如果在IP层需要传输的IP数据包(加上IP header)超过MTU，会进行拆分为最大上限的MTU
+* path MTU
+从一侧到另一侧的MTU的最小值，带方向，因为数据包传输路由并非一定固定

@@ -1,0 +1,58 @@
+#+TITLE: servlet stack
+#+STARTUP: indent
+* springmvc
+** DispatcherServlet
+the servlet central all process and view resolution, actual work is performed by configurable delegate components
+*** standalone config(except springboot)
+**** servlet 3.0 SPI
+spring web下的META-INF/services/javax.servlet.ServletContainerInitializer指定了org.springframework.web.SpringServletContainerInitialize，该类扫描WebApplicationInitializer接口的实现类进行context的初始化
+#+BEGIN_SRC java
+
+public class MyWebApplicationInitializer implements WebApplicationInitializer {
+
+    @Override
+    public void onStartup(ServletContext servletContext) {
+
+        // Load Spring web application configuration
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(AppConfig.class);
+
+        // Create and register the DispatcherServlet
+        DispatcherServlet servlet = new DispatcherServlet(context);
+        ServletRegistration.Dynamic registration = servletContext.addServlet("app", servlet);
+        registration.setLoadOnStartup(1);
+        registration.addMapping("/app/*");
+    }
+}
+#+END_SRC
+**** xml
+#+BEGIN_SRC xml
+<web-app>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/app-context.xml</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>app</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value></param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>app</servlet-name>
+        <url-pattern>/app/*</url-pattern>
+    </servlet-mapping>
+
+</web-app>
+
+#+END_SRC

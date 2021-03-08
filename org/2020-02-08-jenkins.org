@@ -87,3 +87,15 @@ if [ "$pid" ];then
 fi
 java -jar build/libs/jenkins_demo-0.0.1-SNAPSHOT.jar &
 #+END_SRC
+* schedule
+1. 默认构建可以设置时区，但不能带参
+2. param schedul插件可以带参，但是不能带时区
+tzselect设置时区
+
+需要设置JAVA_OPTS带-Duser.timezone=Asia/Shanghai
+00 8 * * *%BRANCH=dev;BUILD_ENV=TEST;MODULE=all
+10 8 * * *%BRANCH=dev;BUILD_ENV=DEV;MODULE=all
+00 13 * * *%BRANCH=dev;BUILD_ENV=TEST;MODULE=all
+10 13 * * *%BRANCH=dev;BUILD_ENV=DEV;MODULE=all
+00 20 * * *%BRANCH=dev;BUILD_ENV=TEST;MODULE=all
+10 20 * * *%BRANCH=dev;BUILD_ENV=DEV;MODULE=all

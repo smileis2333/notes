@@ -7,8 +7,6 @@ eg:
  ./gradlew -DsocksProxyHost=127.0.0.1 -DsocksProxyPort=1080 your-command
 ** browser
 *** switchomega
-**** 代理服务器
-配置host，协议，列表选择后流量全走该服务器
 **** 自动切换模式
 根据域名通配符，网址通配符，网址正则进行匹配，根据特定的规则选定对应的代理服务器
 **** PAC模式
@@ -17,12 +15,22 @@ eg:
 相当接口的概念，在自动切换模式，设置虚场景模式，实际走的代理服务器取决于虚模式的事实设置，可以做到，多个代理服务器可以共享一套自动切换规则
 ** PAC script
 little js function
-* socket5
+** JVM
+-Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=8888
+* sock5
 ** tool
 *** shadowsocks-libev
+ss-local -s [host] -p [port] -l 1080 -k apBPAP123 -m chacha20-ietf
 *** proxychains
 *** vpn-tether
 手机开启ssr共享给电脑
+*** mellow
+PROCESS-NAME, clash-win64.exe, Direct
+PROCESS-NAME, clash.exe, Direct
+PROCESS-NAME, unknown process, Direct
+
+流量转clash，目前未成功
+*** clash
 * proxy
 ** public
 ** private
@@ -35,3 +43,9 @@ little js function
 - Content router
 - Transcoder
 - Anonymizer
+* service provider
+surfshark
+nordvpn
+nsl
+* dns
+https://medium.com/@TachyonDevel/%E6%BC%AB%E8%B0%88%E5%90%84%E7%A7%8D%E9%BB%91%E7%A7%91%E6%8A%80%E5%BC%8F-dns-%E6%8A%80%E6%9C%AF%E5%9C%A8%E4%BB%A3%E7%90%86%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-62c50e58cbd0

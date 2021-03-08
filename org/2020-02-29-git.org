@@ -125,3 +125,5 @@ git push -u origin master
 一个commit就是一个我们所创建的提交，它指向了一个tree，这个tree保存了某一时刻项目根目录中的直接文件信息和直接目录信息，也就是说，这个tree会指向直接文件的blob对象，并且指向直接子目录的tree对象，子目录的tree对象又指向了子目录中直接文件的blob，以及子目录的直接子目录的tree，依此类推。
 *** 哈希码
 标识每个git对象
+* genral
+git rm -r --cached .gradle // 剔除被误加入VCS的文件，-r递归

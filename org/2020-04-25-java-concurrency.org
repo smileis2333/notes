@@ -977,3 +977,5 @@ Atomic»¹¿ÉÒÔÖ±½ÓÓÃÓÚ´æ´¢±ÈÈç»ùÓÚÁ´±íµÄ¸÷ÏîÊı¾İ½á¹¹£¬±ÈÈçStack£¬QueueµÈ(ĞèÒªÊ¹ÓÃÒ
 ÔÚÊ¹ÓÃCASÊ±£¬Êı¾İÓë¾ÉÊı¾İÒ»ÖÂ£¬µ«ÊÇÖĞÍ¾ÊÇ·¢Éú¹ı±ä»¯ºó²ÅÇĞ»»»ØÀ´µÄ£¬¿ÉÒÔÍ¨¹ı¼ÓÊ±¼ä´ÁÀ´½â¾ö
 AtomicStampedReference (and its cousin AtomicMarkableReference)
 * JMM
+* code resources
+https://github.com/yjfox/-Java-Concurrency-in-Practice-Source-Code

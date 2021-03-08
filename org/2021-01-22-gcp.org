@@ -1,0 +1,6 @@
+#+TITLE: gcp
+#+STARTUP: indent
+* user account
+带账号密码，可登录，用途:
+1. 主要通行于各个谷歌客户端服务，如keep，drive,gmail
+2. 作为各个GCP infru的父级账号(如GA)，和GCP的服务账号(绑定对于用户信息的读取和具体诸如GA账号的信息读取，用于GCP部署权限的细化)

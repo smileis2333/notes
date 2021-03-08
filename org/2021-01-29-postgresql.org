@@ -1,0 +1,3 @@
+#+TITLE: postgresql
+#+STARTUP: indent
+select enum_range(null::my_typ)

@@ -2,4 +2,7 @@
 #+STARTUP: indent
 * shortcut
 ctrl+alt+c == open console
-
+* 层级
+Collection->folder->request，前两个可以指定pre script
+* enviroment
+存变量，供script用

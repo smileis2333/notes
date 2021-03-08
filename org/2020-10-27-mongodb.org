@@ -2,3 +2,25 @@
 #+STARTUP: indent
 show dbs
 db.getCollection('company').update({},{$unset:{businesses:null}},{ multi: true}) //É¾×Ö¶Î
+
+// ×ªobjectId
+{
+    $addFields: {
+        "_positionId": {
+            "$toObjectId": "$positionId"
+        },
+        "_resumeId": {
+            "$toObjectId": "$resumeId"
+        }
+    }
+}
+
+//Á¬±í
+{
+    $lookup: {
+        from: 'position',
+        localField: '_positionId',
+        foreignField: '_id',
+        as: 'positionInfo'
+    }
+}

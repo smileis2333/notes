@@ -211,4 +211,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 #+END_SRC
 ** 多账户登录
 应该统一endpoint，由客户端指定账户类型，后端可以再UserService处注入httprequest读取账户类型，第二种方案是重写provider来进行自定义数据类型保存
+** 5.0之后默认PasswordEncoder match设计变成{加密类型}加密密码，即要么换，要么使用新的生成策略
 * principle

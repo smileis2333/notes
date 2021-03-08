@@ -1,0 +1,6 @@
+#+TITLE: baidu service
+#+STARTUP: indent
+* tongji
+js https://tongji.baidu.com/open/api/more
+vue集成 https://www.cnblogs.com/wayneliu007/p/10716160.html
+统计后台 https://tongji.baidu.com/web/homepage/index

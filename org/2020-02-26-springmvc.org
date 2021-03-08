@@ -1,5 +1,10 @@
 #+TITLE: springmvc
 #+STARTUP: indent
+* principle
+1. DispatcherServlet作为中心配置，用单一servlet实例mapping全部请求，并进行分发，在Servlet API的基础上，实现了一个类可以处理url映射，
+2. HandlerMapping，获取handler用，主要用于支持@RequestMapping的解析和处理，另一种配置是配置文件类型，即对Servlet单对单的处理
+3. Handler，实际的调用链
+4. HandlerAdapter，注解型的是springmvc自己支持的类型，简单型的chain invoke，两种细节上的处理不一致，因为需要Adapter进行调用，屏蔽具体的调用细节
 * 跨域配置
 ** springboot
 *** configuration

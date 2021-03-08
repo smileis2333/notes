@@ -1,5 +1,10 @@
 #+TITLE: ali service
+#+STARTUP: indent
 * mail
 https://help.aliyun.com/knowledge_detail/36576.html
 * openapi explorer
 https://api.aliyun.com/?spm=a2c4g.11186623.2.13.304e50a4oJ0wKF#/
+* oss
+** 服务器签名前端上传
+签名链接不支持的acl的设置，如果私有bucket需要临时链接上传公开，只能在oss callback服务器的时候做处理
+https://help.aliyun.com/document_detail/31927.html?spm=a2c4g.11186623.6.1734.d27643d3VVhFe7

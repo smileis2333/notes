@@ -1,4 +1,4 @@
-#+TITLE: 前端生态组件
+#+TITLE: 前端相关
 #+STARTUP: indent
 * js
 ** vuejs
@@ -16,3 +16,6 @@ ref  https://github.com/showdownjs/showdown
 * icon
 ** iconfont
 *** usage in vuejs
+* 像素
+px、物理像素、rem、rpx的关系
+https://www.jianshu.com/p/1b69f0df78f3?from=timeline

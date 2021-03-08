@@ -42,38 +42,47 @@ SWITCHES THINK IN TERMS OF FRAMES
 替换source MAC地址为自己的MAC地址，目标MAC为下一站的MAC地址，IP层的NAT与之极其类似
 * layer
 ** application
+对实际中的各类需求进行了定义，如涉及到文件，产生了FTP，NFS等相关协议，即时传输后的预览渲染产生了HTTP(browser实质就是一个实现了多功能的HTTP client)，通讯/管理需要则产生了TELNET，SSH,SNMP
 ** transport layer
-*** tcp segment
+*** tcp
+**** tcp segment
+*** udp
 ** network layer
 1. 最核心的的multiplex和demultiplex，尤其是聚合TCP的流量
 2. checksum只check头(payload的数据完整性由上层提供，v6没有校验字段，原因: 损坏的情况下，最多发错，最终也被废弃，而光纤传输造成的误码也较少，因此舍弃)
-*** packet
+*** ip datagram
 [[../img/packet.png]]
 **** PROTOCOL TYPE
 17 -- udp
 1 -- icmp
 6 -- tcp
+*** icmp
+不能隶属于上层的原因(不属于应用层协议)，也不存在承载上层数据的能力(一般情况下，存在pingtunel之类的hack框架)(即不存在port概念)
+
+
 ** link layer
-*** frame
+*** ethenet
+**** frame
 [[file:~/Desktop/personal/study/img/frame_format.jpg][frame format]]
-**** Preamble and SFD
+[[file:~/Desktop/personal/study/img/frame_format_RFC1042_RFC894.gif][1st frame format img]]
+***** Preamble and SFD
 用于接收方同步时钟
-**** DST
-**** SRC
-**** type/length
+***** DST
+***** SRC
+***** type/length
 多用字段，大于1536就是type，否则则是表length
-***** ethertype
+****** ethertype
 0x0800 IPv4
 0x86DD IPv6
 0x0806 ARP
-***** length
-**** P/Q Tag
-***** VLAN
-***** QoS
-**** payload
+****** length
+***** P/Q Tag
+****** VLAN
+****** QoS
+***** payload
 1. 一般是上层协议的流量，不足最小则补0(64bytes)，物理设计因子，因为CSMA/CD检测电路，必须跑完一圈才能激活电压警告，因为需要最小长度，否则无法固定检测机制
 2. 在一些快速以太网的配置，可能会配置jumbo frame，payload可高达9000byte，但是无法与规范定义的常用switch进行交互操作
-**** CRC
+***** CRC
 校验值，用于接收方快捷检测是否信号受损(数据corr)
 *** stp(span tree protocol)
 1. 对于end user来讲是透明的，主要用途是用于link layer的链路冗余，而物理结构可能呈环状
@@ -93,13 +102,46 @@ blocking, listening, learning, forwarding, and disabled
 4. topolog change，通知root和其他bridge，然后立刻flush table
 5. 加入了port role的概念(分别为root,alternate,designate,backup)在邻接链路断开时，使用backup和alternate port进行重建尝试，最优者作为新的path，避免全部重来，[[file:~/Desktop/personal/study/img/rstp_port_role.jpg][rstp port role]]
 6. 支持了每个vlan每个生成树
-*** arp
+*** address resolution
+[[file:~/Desktop/personal/study/img/arp_frame_format.gif][arp/rarp frame format]]
+设计上存在冗余部分，arp/rarp格式基本一致，除了frame type和op不一致
+**** format
+-----
+前两位是MAC地址
+然后frame type，可能是0x0806(arp)/0x0835(rarp)
+-----
+hard type 1就代表ethernet
+proto type 0x0800(跟ethernet承载ip报文一致)
+hard size，1byte
+proto size，1byte
+-----
+op
+1-arp request
+2-arp reply
+3-rarp request
+4-rarp reply
+-----
+sender ethernet addr
+sender ip address
+target ethenet addr
+target ip addr
+***** 注意事项
 1. IPv4才用，IPv6转换的功能被融合到别的模块
 2. 用于same subnet的情况下进行的IP转换，非subnet则是直接流量转到gateway那边(arp gateway的ip)
 3. DST为 ff:ff:ff:ff:ff:ff
 4. frame format存在冗余部分，即arp reply的header和data部分都存在了自身的MAC address(历史原因，TCP/IP协议栈没成为主流时，对其他协议的支持)
+**** arp
+ip转MAC
+***** proxy arp
+通过一个arp server，透明的处理arp解析(在现今，已经很少使用，带来的问题大于利)，主要用于解决
+1. 老旧设备不支持subnet的支持，因此只能在gateway设置proxy arp
+2. 没设置网关的情况下，只能通过网关配置proxy arp，由网关来主动解析ip，令其透明的在link layer传输数据给gateway
+***** Gratuitous ARP
+1. 启动的时候发送arp解析自己的ip，用于确认配置的ip是否有误
+2. 可以在换卡启动的时候，更新其他host的arp的entry表(因为该特性是广播的)
+**** rarp
+常见于无盘系统(获取ip，之后loading系统)，host接收第一个rarp reply
 * protocol
-官方规则或体系，用于统治或外交。衍生到网络，则是常见的C/S通讯模式，C/S不限于物理实体，也可以是同台电脑的两个进程通讯
 ** TCP
 *** performance
 **** handshake
@@ -136,6 +178,8 @@ disadvantage:
 ** DHCP
 ** NAT
 借助系统防火墙的功能进行设置，linux是iptable/firewalld/ubw等
+** UDP
+在IP的基础上提供了端口号供应用区分，目的在于由上层应用自己决定连接(在各种需要性能的自定义特化协议，如视频流的处理)
 * standard
 ** ethernet
 802 serial
@@ -371,3 +415,5 @@ per sender per group, receiver specifies the address of a  group address and a s
 toggle: 0, constant: 1
 * ref
 [[https://learning.oreilly.com/library/view/head-first-networking/9780596804398/][Head First Networking]]
+[[https://learning.oreilly.com/library/view/tcpip-illustrated-volume/9780132808200/][TCP/IP Illustrated, Volume 1: The Protocols(second edition)]]
+[[https://learning.oreilly.com/library/view/tcpip-illustrated-volume/0201633469/][TCP/IP Illustrated, Volume 1: The Protocols(first edition)]]

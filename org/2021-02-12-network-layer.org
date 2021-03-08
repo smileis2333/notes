@@ -1,0 +1,41 @@
+#+TITLE: network(ip) layer
+#+STARTUP: indent
+* ipv4
+[[file:~/Desktop/personal/study/img/ipv4_format.gif][ipv4 format]]
+** header
+-----
+第一个是版本号(4bit)，指定小版本的差异，决定处理方式
+第二个是header length(4bit)，因为v4存在扩展字段，所以需要指定header长度才能读取，鸡肋(拓展字段基本已经废弃)
+TOS(3bit(无效字段)+4bitTOS+0)，只有四位有用，指定datagram的需求(如最小延迟-交互式应用如telent，最大负载-如文件传输，最大可靠性)，其他也是被废弃的字段(路由协议中，指定了可靠性)
+datagram总长(16bit)，-header length得到数据包大小，最大值取决于link layer的MTU
+-----
+identification field(16bit)用于fragmentation和resssembly
+flags(3bit) 同上
+fragment offset 同上
+-----
+TTL(8bit) --> upper limit number of router throught
+protocol field(8bit) --> transport layer 
+header checksum(16bit)
+-----
+src ip(32bit)
+-----
+dst ip(32bit)
+-----
+options(if any)
+-----
+data
+-----
+** subnet
+内部网络管理，subnet mask不会分配到公网的routes上
+** CIDR
+1. 与classful network一样，是一种分配方法
+2. 取代classful network，为了更加方便的进行地址分配与aggregate route
+* icmp
+[[file:~/Desktop/personal/study/img/icmp_encap_within_ip_datagram.gif][ICMP messages encapsulated within an IP datagram]]
+[[file:~/Desktop/personal/study/img/icmp_format.gif][ICMP message format]]
+[[file:~/Desktop/personal/study/img/icmp_message_type.gif][ICMP Message Types]]
+** 禁止针对以下生成icmp error message
+- icmp error message(防止无限产生错误信息)
+- 广播/多播
+- link layer广播
+- fragment
