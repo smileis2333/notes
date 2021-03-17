@@ -683,3 +683,6 @@ docker run --publish 8080:80 --name hello-world [image]
 docker update --restart=always mongo-dev
 docker --tail 100 [pid/pname]
 docker logs -f [pid/name] //all logs
+docker run -it --rm  top.gobrad/questionnaire /bin/bash # ÅÜÍê¾ÍÉ¾³ı
+docker image build --tag qqqq .
+* docker-compose

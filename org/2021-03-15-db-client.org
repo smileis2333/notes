@@ -1,0 +1,5 @@
+#+TITLE:  db client
+#+STARTUP: indent
+* dbeaver
+** mock enum
+expression = VALID|INVALID

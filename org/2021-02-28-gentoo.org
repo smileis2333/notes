@@ -1,6 +1,7 @@
 #+TITLE: gentoo
 #+STARTUP: indent
 * install 
+** legacy bios
 #+BEGIN_SRC bash
 rc-service sshd start
 
@@ -28,7 +29,7 @@ swapon /dev/sda3
 ntpd -q -g
 mount /dev/sda4 /mnt/gentoo
 tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
-echo MAKEOPTS="-j4" >> /mnt/gentoo/etc/portage/make.conf
+echo MAKEOPTS="-j4" >> /mnt/gentoo/etc/portage/make.conf # 一般为核心数+1
 mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf # 阿里的或者163
 mkdir --parents /mnt/gentoo/etc/portage/repos.conf
 cp /mnt/gentoo/usr/share/portage/config/repos.conf /mnt/gentoo/etc/portage/repos.conf/gentoo.conf
@@ -62,4 +63,128 @@ emerge --ask sys-kernel/genkernel
 nano -w /etc/fstab
 /dev/sda2	/boot	ext2	defaults	0 2
 genkernel all
+
+# bootloaded
+# grub2
+
+umount -l /mnt/gentoo/dev{/shm,/pts,}
+umount -R /mnt/gentoo
 #+END_SRC
+** uefi bios + nvme
+#+BEGIN_SRC bash
+rc-service sshd start
+
+# 分区+设置文件系统
+parted -a optimal /dev/nvme0n1
+mklabel gpt
+unit mib
+mkpart primary 1 3
+name 1 grub
+set 1 bios_grub on
+mkpart primary 3 131
+name 2 boot
+mkpart primary 131 643
+name 3 swap
+mkpart primary 643 -1
+name 4 rootfs
+set 2 boot on
+quit
+mkfs.fat -F 32 /dev/nvme0n1p2
+mkfs.ext4 /dev/nvme0n1p4
+mkswap /dev/nvme0n1p3
+swapon /dev/nvme0n1p3
+
+# 挂载rootfs并设置系统相关设置，如mirror和user和编译选项等
+ntpd -q -g
+mount /dev/nvme0n1p4 /mnt/gentoo
+tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
+echo MAKEOPTS="-j7" >> /mnt/gentoo/etc/portage/make.conf # 一般为核心数+1
+mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf # 阿里的或者163
+mkdir --parents /mnt/gentoo/etc/portage/repos.conf
+cp /mnt/gentoo/usr/share/portage/config/repos.conf /mnt/gentoo/etc/portage/repos.conf/gentoo.conf
+
+# 把引用挂进去，chroot进去
+cp --dereference /etc/resolv.conf /mnt/gentoo/etc/
+mount --types proc /proc /mnt/gentoo/proc
+mount --rbind /sys /mnt/gentoo/sys
+mount --make-rslave /mnt/gentoo/sys
+mount --rbind /dev /mnt/gentoo/dev
+mount --make-rslave /mnt/gentoo/dev
+chroot /mnt/gentoo /bin/bash
+source /etc/profile
+export PS1="(chroot) ${PS1}"
+mount /dev/nvme0n1p2 /boot # 挂sda2挂进来
+
+emerge-webrsync
+
+# 选profile
+# 更新
+
+# 时区配置
+echo "Asia/Shanghai" > /etc/timezone
+emerge --config sys-libs/timezone-data
+
+# 国际化
+env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
+
+emerge --ask sys-kernel/gentoo-sources
+emerge --ask sys-kernel/genkernel
+nano -w /etc/fstab
+/dev/nvme0n1p2	/boot	vfat	defaults	0 2
+genkernel --makeopts=-j7 all
+
+grub-install --target=x86_64-efi --efi-directory=/boot --removable # 有些主板限制，如b460m
+
+grub-mkconfig -o /boot/grub/grub.cfg
+
+
+# 确认能启动后最好update world
+emerge --ask --verbose --update --deep --newuse @world
+#+END_SRC
+* dispatch-conf
+genkernel就会导致该问题
+设软件包A有如下USE：use1,use2,use3;
+你的全局USE以及包A的单独USE都没有use2;
+你想安装软件包B，而B依赖于A，且要求A必须使用use2;
+这时系统就会在/etc/portage/package.use文件中替你记录A使用use2;
+然后你需要运行dispatch-conf(etc-update没用过),然后系统会列出需要改变的地方让你确认，同意系统所做的修改就按u，不同意就按z
+* tool
+sys-apps/pciutils
+app-admin/sysklogd
+net-misc/dhcpcd
+net-wireless/wpa_supplicant
+net-dialup/ppp
+sys-boot/grub:2
+* general
+emerge --update --deep --with-bdeps=y --newuse @world #更新系统
+* network
+** wireless
+//wpa_supplicant，只是相当于插了网线，还需要dhcpclient，Gentoo推荐dhcpcd
+https://pluhuxc.github.io/2018/08/19/use-wpa_supplicant-connect-wifi.html
+https://wiki.gentoo.org/wiki/Network_management_using_DHCPCD#Setup
+*** /etc/wpa_supplicant/wpa_supplicant.conf
+# 连接配置
+# Allow users in the 'wheel' group to control wpa_supplicant
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=wheel
+
+# Make this file writable for wpa_gui / wpa_cli
+update_config=1
+
+network={
+        ssid="302三人"
+        #psk="00001111"
+        psk=bb939e2d790316f5f1085c3ce044d171a4d01988797b2366ac1fabb6b41b0677
+}
+*** /etc/conf.d/wpa_supplicant
+wpa_supplicant_args="-B -M -c/etc/wpa_supplicant/wpa_supplicant.conf"
+rc启动参数
+*** dhcp
+rc-update add dhcpcd default # 让dhcp客户端开机启动
+*** /etc/conf.d/net
+# Gentoo net.* scripts
+modules_wlp1s0="wpa_supplicant"
+config_wlp1s0="dhcp"
+* portage
+/var/lib/portage/world # 用户自己安装的package
+* font
+https://gist.github.com/kidlj/f30e82c2c6f064990596

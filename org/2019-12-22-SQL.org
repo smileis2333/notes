@@ -465,6 +465,7 @@ REPEATABLE-READ : 此隔离级别翻译为 "可重复读" 或者 "可重读"。 
 
 SERIALIZABLE : 此隔离级别翻译为"串行化"。直接加锁，持久化，多个其他终端大概率会超时，完全符合ACID
 * index
+https://www.freecodecamp.org/news/database-indexing-at-a-glance-bb50809d48bd/
 ** clustered index
 一个表一个，一个键对一个数据行的指针
 ** secondary index
@@ -486,7 +487,9 @@ b,c为联合索引
 
 select a from where a >0; -- 一定走索引
 select * from where a>0; -- 需要找一遍额外的主键索引，*需要拿到d，可能走，也可能不走，取决被预估的数据量，即条数多不多，如果很多条数即回表，成本大于从头开始算，优化器不走索引
-
+** 多列索引原理
+作索引的时候把column拼起来
+查的时候把条件拼起来
 * 杂项
 ** 优化手段
 1. 加索引，目的是划分区间，where或者group by的字段
