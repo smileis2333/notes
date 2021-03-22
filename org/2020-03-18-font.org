@@ -1,0 +1,38 @@
+#+TITLE: font
+#+STARTUP: indent
+* format
+** Bitmap fonts
+** Outline or vector fonts
+* render
+** font hint
+** antialises
+** sub-pixe rendering
+通过控制边界点阵的颜色来实现抗锯齿(另一个用途可以用来实现动画更加平滑，九秒移动一帧时，已经到了物理上的限制)
+http://www.lagom.nl/lcd-test/
+* linux config
+eg:gentoo
+system-wide fontconfig---->enable 51-local.conf and create /etc/fonts/local.conf
+#+BEGIN_SRC xml
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+  <alias>
+    <family>sans-serif</family>
+    <prefer>
+      <family>Ubuntu</family>
+      <family>TakaoPGothic</family>
+      <family>Droid Sans</family>
+    </prefer>
+    <default><family>DejaVu Sans</family></default>
+  </alias>
+</fontconfig>
+#+END_SRC
+
+per-user fontconfig---->enable 50-user.conf (which might be enabled by default), and have the end users use the ~/.config/fontconfig/fonts.conf
+
+
+fc-match Arial 
+
+https://wiki.gentoo.org/wiki/Fontconfig
+** ms font such as yahei
+https://gist.github.com/kidlj/f30e82c2c6f064990596
