@@ -26,3 +26,11 @@ C:\WINDOWS\system32\drivers\etc
 * Ŀ¼
 ** tmp
 ~/AppData/Local/Temp
+* wsl
+https://superuser.com/questions/1520079/vmware-and-docker-on-same-windows-10-pc
+https://github.com/microsoft/WSL/discussions/4872
+https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the-linux-kernel-update-package
+touch /etc/fstab
+update-alternatives --set iptables /usr/sbin/iptables-legacy
+update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+service docker start
