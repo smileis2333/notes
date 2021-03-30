@@ -275,3 +275,14 @@ https://stackoverflow.com/questions/4691799/why-does-mysql-not-use-an-index-for-
 CREATE USER 'root'@'%' IDENTIFIED BY 'yaXxCg86Kx';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  WITH GRANT OPTION;
 FLUSH PRIVILEGES;
+* log
+#+BEGIN_SRC sql
+-- bin log
+show binary logs; -- 查看当天总数(rotate)
+show variables like 'log_bin'; -- 查看是否开启
+show variables like '%datadir%'; --  查看binlog位置
+
+-- query log
+SET global general_log = 1;
+SHOW VARIABLES LIKE '%general%';
+#+END_SRC
