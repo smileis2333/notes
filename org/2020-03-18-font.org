@@ -36,3 +36,29 @@ fc-match Arial
 https://wiki.gentoo.org/wiki/Fontconfig
 ** ms font such as yahei
 https://gist.github.com/kidlj/f30e82c2c6f064990596
+* font & encoding
+- convension?
+** Characters
+描述的是一组所谓的语言的基本单位，如英文的a,b,c，表意文字的中文的'门''你'等，不存在任何的位置信息
+** glyphs
+字形，符合同一字符的语言，往往存在着特定场景下的若干字体形态，以中文来讲，就是草书，楷书，英文的就是典型的serif，sans-serif
+** encoding
+1. 将Characters以所谓的表格规范文档化，如Unicode，假如以100001(十进制)为字符'a'，那么当计算机出现100001的时候，我们可以根据规范知道是代表字母a，即规范是一组给人看的严格的规范(对字体的组成和构成描述)
+2. 计算机一无所知，所以，才出现所谓的字体安装一说。对计算机而已，100001只是一个普通的数值，必须将其与特定字体集(glyphs)绑定(即将提供的glyph，人按照规范进行数值的绑定)，才能将字体在屏幕上显示出来
+*** history
+ASCII --> EBCDIC --> ISO 2222 --> ISO 8859 -->  Unicode?
+** unicode
+*** propetties
+http://www.unicode.org/Public/UNIDATA/UnicodeData.txt
+**** basic(针对单个character)
+code point-->position
+name --> description(for human reading or for enter name to map code point)
+**** block and script(针对range)
+http://www.unicode.org/Public/UNIDATA/Blocks.txt
+https://www.unicode.org/Public/UNIDATA/Scripts.txt  由于历史原因和设计原因，导致字符的所属集合描述是撕裂的(如中文的字符分布在两个plane)，因为提供了script对各个字符集做了所谓的汇总
+**** Age
+描述被录入错误的，建议不在使用的character
+**** General category
+使用场景/功能描述，如标点符号，数字，控制字符等
+**** render propeties
+控制显示
