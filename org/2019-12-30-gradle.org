@@ -171,3 +171,8 @@ compile group: 'org.springframework.security', name: 'spring-security-config', v
 * trick
 ** idea创建gradle web不带web.xml，创建web.xml
 File -> Project Structure -> facets -> Deployment Descriptors -> + -> web.xml(设置好路径就会自动创建)
+* lombok warning
+src/main/java/lombok.config
+
+config.stopBubbling=true
+lombok.equalsAndHashCode.callSuper=call

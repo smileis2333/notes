@@ -99,3 +99,75 @@ tzselect设置时区
 10 13 * * *%BRANCH=dev;BUILD_ENV=DEV;MODULE=all
 00 20 * * *%BRANCH=dev;BUILD_ENV=TEST;MODULE=all
 10 20 * * *%BRANCH=dev;BUILD_ENV=DEV;MODULE=all
+* jenkinsfile
+jenkin支持的pipeline语法，支持声明式和scirpt(groovy)
+对于复杂的构建，有较强的表示
+
+!!!对于复杂的多分支，需要额外的支持，比如集中化管理jenkinsfile，处理传参数，目前还是鸡肋，包括刷新jenkinsfile，具有极大的复杂度
+
+#+BEGIN_SRC groovy
+pipeline {
+  agent any
+  parameters {
+    booleanParam(name: 'Refresh',
+            defaultValue: false,
+            description: '刷新部署流程，刷新后需要在按一下部署')
+    choice(name: 'ENV', choices: ['dev', 'test'], description: '部署环境')
+    choice(name: 'BRANCH', choices: ['dev','bo-test','bo-test2'], description: '部署分支')
+  }
+  stages {
+    stage('checkout') {
+      steps {
+        git(url: 'https://github.com/smile-2333/questionnaire.git', branch: "${params.BRANCH}", credentialsId: '111222')
+      }
+    }
+    stage('Read Jenkinsfile') {
+      when {
+        expression { return params.Refresh == true }
+      }
+      steps {
+        echo("stop")
+      }
+    }
+    stage('Run Jenkinsfile') {
+      when {
+        expression { return params.Refresh == false }
+      }
+      stages {
+        stage('package') {
+          agent {
+            docker {
+              image 'adoptopenjdk/openjdk11:jdk-11.0.10_9-alpine-slim'
+              args '-v /root/.gradle:/root/.gradle'
+            }
+
+          }
+          steps {
+            script {
+              echo "${params.BRANCH}"
+              echo 'current jdk'
+              sh 'java -version'
+              sh 'chmod +x ./gradlew'
+              echo 'current gradle status'
+              sh './gradlew --status'
+
+              echo 'package start'
+              sh './gradlew build -x test --warning-mode all'
+              echo 'package end'
+            }
+          }
+        }
+        stage('build docker image') {
+          agent none
+          steps {
+            echo 'start build image'
+            sh 'docker context ls'
+            echo 'end build image'
+          }
+        }
+
+      }
+    }
+  }
+}
+#+END_SRC
