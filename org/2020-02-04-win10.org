@@ -34,3 +34,5 @@ touch /etc/fstab
 update-alternatives --set iptables /usr/sbin/iptables-legacy
 update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 service docker start
+** git
+git config --global core.autocrlf true

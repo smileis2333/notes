@@ -99,3 +99,4 @@ tzselect…Ë÷√ ±«¯
 10 13 * * *%BRANCH=dev;BUILD_ENV=DEV;MODULE=all
 00 20 * * *%BRANCH=dev;BUILD_ENV=TEST;MODULE=all
 10 20 * * *%BRANCH=dev;BUILD_ENV=DEV;MODULE=all
+* with docker

@@ -31,11 +31,39 @@ data
 1. 与classful network一样，是一种分配方法
 2. 取代classful network，为了更加方便的进行地址分配与aggregate route
 * icmp
+** formar
 [[file:~/Desktop/personal/study/img/icmp_encap_within_ip_datagram.gif][ICMP messages encapsulated within an IP datagram]]
 [[file:~/Desktop/personal/study/img/icmp_format.gif][ICMP message format]]
 [[file:~/Desktop/personal/study/img/icmp_message_type.gif][ICMP Message Types]]
+*** type
+15
+*** code
+specific condition
 ** 禁止针对以下生成icmp error message
 - icmp error message(防止无限产生错误信息)
 - 广播/多播
 - link layer广播
 - fragment
+** 种类
+*** address mask request and reply
+拿address mask
+*** timestamp request and reply
+*** port unreachable
+*** echo request and reply
+基本在ping上使用，大部分的系统
+identifier用于区别process，如多个tty开多个ping
+sequence number用于区分第一个包，区分发送的echo request
+* routing protocol
+取代手工配置，实现自动配置IP route的协议
+** IGP(in autonomous system)
+*** Hello
+*** RIP
+run on udp
+[[file:~/Desktop/personal/study/img/rip_format.gif][rip format]]
+[[file:~/Desktop/personal/study/img/rip_message.gif][rip message]]
+[[file:~/Desktop/personal/study/img/ripv2_message.gif][ripv2 message]]
+*** OSPF
+** EGP(between the routers in different autonomous systems)
+*** BGP
+* CIDR
+start from c class address --> apply for all address
