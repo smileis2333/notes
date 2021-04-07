@@ -105,3 +105,6 @@ terminal --> "C:\Program Files\Git\bin\bash.exe" --login -i
 * wsl
 https://github.com/yuk7/wsldl
 https://github.com/VPraharsha03/GentooWSL2
+* command line to long
+  <component name="PropertiesComponent">
+    <property name="dynamic.classpath" value="true" />

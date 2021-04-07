@@ -13,5 +13,9 @@ website server×Ô¼ºÄÃclient_idºÍclient_secret»»token£¬ÄÃ×Ô¼ºÏà¹ØµÄĞÅÏ¢£¬»òÕß×Ô¼º×
 https://www.jianshu.com/p/84a4b4a1e833
 http://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html
 https://www.cnblogs.com/xusir/p/3473554.html
-
-
+* spring oauth
+** client
+http://localhost:56789/oauth2/authorization/github //±ØĞëÈÃ·şÎñÆ÷Òıµ¼redirect£¬²»È»ÎŞ·¨»ñÈ¡state(³ı·Ç¹Øµô,²»½¨Òé)
+'/logi'n Ä¬ÈÏµÄlogin page£¬»á¸úSecurity³åÍ»£¬¿ÉÒÔÓÃorder´¦Àíµô
+** keycloak
+docker run -d -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:12.0.4
