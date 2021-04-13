@@ -212,4 +212,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 ** 多账户登录
 应该统一endpoint，由客户端指定账户类型，后端可以再UserService处注入httprequest读取账户类型，第二种方案是重写provider来进行自定义数据类型保存
 ** 5.0之后默认PasswordEncoder match设计变成{加密类型}加密密码，即要么换，要么使用新的生成策略
+** cors
+auth url默认不走CorsFilter，需要手动加进去
+配置随着版本变更，会有各种类型的写法配置，
+*** 2.4.3
+#+BEGIN_SRC java
+@Configuration
+public class CORSConfig {
+    @Value("${gobrand.cors-domain}")
+    private String corsDomain;
+
+    @Value("${gobrand.protocol}")
+    private String protocol;
+
+    private CorsConfiguration buildConfig() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        final String origin = String.format("%s://%s", protocol, corsDomain);
+        corsConfiguration.addAllowedOrigin(origin); // 1允许任何域名使用
+        corsConfiguration.addAllowedHeader("*"); // 2允许任何头
+        corsConfiguration.addAllowedMethod("*"); // 3允许任何方法（post、get等）
+        corsConfiguration.setAllowCredentials(true);
+        return corsConfiguration;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", buildConfig()); // 4
+        return new CorsFilter(source);
+    }
+}
+
+#+END_SRC
+
 * principle

@@ -15,7 +15,35 @@ http://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html
 https://www.cnblogs.com/xusir/p/3473554.html
 * spring oauth
 ** client
-http://localhost:56789/oauth2/authorization/github //必须让服务器引导redirect，不然无法获取state(除非关掉,不建议)
+http://localhost:56789/oauth2/authorization/github 
+//必须让服务器引导redirect，不然无法获取state(除非关掉,不建议)
 '/logi'n 默认的login page，会跟Security冲突，可以用order处理掉
-** keycloak
-docker run -d -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:12.0.4
+** principle
+@AuthenticationPrincipal OAuth2User user
+* keycloak
+redhat的开源认证方案，支持多种认证模型，基于角色Permission，和细粒度Permission
+docker run -d -p 8080:8080 --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:12.0.4
+** provider
+默认只支持keboro和LDAP，如果要自己接入，要自定义Provider进行打包，存在两种部署的做法
+1. Keycloak Deployer，直接丢进/opt/jboss/keycloak/standalone/deployments，jBoss会自动解包(类似Tomcat)
+2. 涉及自定义的SPI，Register a provider using Modules
+https://www.keycloak.org/docs/latest/server_development/#_providers
+常规情况下，使用第一种，可以用内嵌keycloak在JUnit对provider进行测试，之后打包部署即可
+** realm
+多个共享账户的域，用于区分多个账号体系
+** client
+类比交钱给微信拿xxid和xxcredential
+*** 用于多个共享同个账户体系的系统
+*** 用于同个系统的多个微服务
+** client code
+一个client可以用于一个系统、或多个系统，每个系统在获取AccessToken的时候，配置文件指定scope，之前颁发的令牌只会包含Scope所指定的系统的Role--->限定了最终能使用到的细粒度权限
+** Roles
+** mysql as db
+https://stackoverflow.com/questions/62107991/keycloak-in-docker-container-mysql-on-host-gives-org-keycloak-services-serv
+* ref
+https://160668873.gitbook.io/tkey-docs/ren-shi-jie-duan-bi-du/tkey-baisc //tkey
+* core
+不跨域不存在单点登录问题；
+非浏览器端不存在单点登录问题；
+浏览器跨域解决单点登录的方法就只有：redirect，cors
+什么session，什么令牌，这些都是登录问题，不是单点登录问题。

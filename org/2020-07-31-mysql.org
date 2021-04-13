@@ -286,3 +286,5 @@ show variables like '%datadir%'; --  ²é¿´binlogÎ»ÖÃ
 SET global general_log = 1;
 SHOW VARIABLES LIKE '%general%';
 #+END_SRC
+* general
+mysql -uroot -pyaXxCg86Kx -h 192.168.51.39 -P 3306

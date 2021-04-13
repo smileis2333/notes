@@ -40,3 +40,7 @@ https://blog.51cto.com/bluetom/1730895
 http://readline.kablamo.org/emacs.html
 * dirver
 https://unix.stackexchange.com/questions/41817/linux-how-to-find-the-device-driver-used-for-a-device
+* centos
+** port
+firewall-cmd --zone=public --add-port=80/tcp --permanent
+firewall-cmd --reload

@@ -149,14 +149,18 @@ genkernel就会导致该问题
 这时系统就会在/etc/portage/package.use文件中替你记录A使用use2;
 然后你需要运行dispatch-conf(etc-update没用过),然后系统会列出需要改变的地方让你确认，同意系统所做的修改就按u，不同意就按z
 * tool
+** host
 sys-apps/pciutils
 app-admin/sysklogd
 net-misc/dhcpcd
 net-wireless/wpa_supplicant
 net-dialup/ppp
 sys-boot/grub:2
-* general
-emerge --update --deep --with-bdeps=y --newuse @world #更新系统
+** wsl
+vim
+nginx
+docker
+git
 * network
 ** wireless
 //wpa_supplicant，只是相当于插了网线，还需要dhcpclient，Gentoo推荐dhcpcd
@@ -188,3 +192,11 @@ config_wlp1s0="dhcp"
 /var/lib/portage/world # 用户自己安装的package
 * font
 https://gist.github.com/kidlj/f30e82c2c6f064990596
+* config
+** ebuild repo location
+/var/db/pkg + 种类+具体应用-xx版本
+* general
+emerge --update --deep --with-bdeps=y --newuse @world #更新系统
+
+
+emerge --ask --autounmask-write =xorg-server-1.11.99.2 # 取消对xx，比如~amd64的mask，自动写入package.accept

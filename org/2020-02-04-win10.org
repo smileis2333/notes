@@ -36,3 +36,9 @@ update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 service docker start
 ** git
 git config --global core.autocrlf true
+** memory limit
+%HOME%/.wslconfig
+
+[wsl2]
+memory=4GB  # Any size you feel like
+
