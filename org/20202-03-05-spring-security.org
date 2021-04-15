@@ -246,3 +246,28 @@ public class CORSConfig {
 #+END_SRC
 
 * principle
+* oauth
+#+BEGIN_SRC yaml
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github: # spring security预设的aouth provider，其他都被默认设置好了
+            clientId: 3c5e748405a71fe5ad36
+            clientSecret: 0bdc22fa41906e60486b07ba4c600f996c6e5c96
+          gb-bsite: # 自定义的，需要指定类型和重定向
+            client-id: survey
+            client-secret: 8c6b1389-7585-40c3-adbd-ffe7bc054e26
+            authorization-grant-type: authorization_code
+            redirect-uri: http://api.questionnaire.dev.gobrand.top/login/oauth2/code/gb-bsite 
+            # 认证完毕的回调，code会丢到该回调的后面，必须设置，用于设置上下文，真正的最终回调需要在.oauth2Login().defaultSuccessUrl(domain)设置
+
+        provider:
+          gb-bsite: # 自定义provider
+            authorization-uri: http://localhost:8080/auth/realms/business-account/protocol/openid-connect/auth
+            token-uri: http://localhost:8080/auth/realms/business-account/protocol/openid-connect/token
+            user-info-uri: http://localhost:8080/auth/realms/business-account/protocol/openid-connect/userinfo
+            user-name-attribute: preferred_username
+
+#+END_SRC
