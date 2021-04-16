@@ -247,6 +247,7 @@ public class CORSConfig {
 
 * principle
 * oauth
+** config
 #+BEGIN_SRC yaml
 spring:
   security:
@@ -269,5 +270,64 @@ spring:
             token-uri: http://localhost:8080/auth/realms/business-account/protocol/openid-connect/token
             user-info-uri: http://localhost:8080/auth/realms/business-account/protocol/openid-connect/userinfo
             user-name-attribute: preferred_username
+
+#+END_SRC
+** resource server
+对于使用spring oauth2(deprecated)外的认证产品，由于字段格式不符合spring security的抽取规则，直接本地数据库操作的原理是UserService返回UserDetail的时候把Authority写入属性
+*** eg: keycloak
+为了方便统一，可以从keycloak的Scope配置设置Mapper
+[[file:~/Desktop/personal/study/img/keycloak_map_role.png][keycloak map role for spring security convenient]]
+#+BEGIN_SRC java
+// 如果更复杂，需要整个重写Converter，默认的只抽一个字段
+    private JwtAuthenticationConverter jwtAuthenticationConverter() {
+        // create a custom JWT converter to map the roles from the token as granted authorities
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName(JWT_ROLE_NAME); // default is: scope, scp
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix(ROLE_PREFIX ); // default is: SCOPE_
+
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+        return jwtAuthenticationConverter;
+    }
+
+#+END_SRC
+即是oauth client，又是resource server，不是自己对自己resource server，上下文不可能同一个，AuthenticationToken只有一个，除非改了写入逻辑
+https://stackoverflow.com/questions/58805033/using-spring-boot-2-oauth-client-and-resourceserver-in-the-same-context
+*** spring gateway as oauth client
+https://piotrminkowski.com/2020/10/09/spring-cloud-gateway-oauth2-with-keycloak/
+#+BEGIN_SRC yaml
+server:
+  port: 9090
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: 3c5e748405a71fe5ad36
+            clientSecret: 0bdc22fa41906e60486b07ba4c600f996c6e5c96
+          gb-bsite:
+            client-id: survey
+            client-secret: 8c6b1389-7585-40c3-adbd-ffe7bc054e26
+            authorization-grant-type: authorization_code
+            redirect-uri: http://127.0.0.1:9090/login/oauth2/code/gb-bsite
+
+        provider:
+          gb-bsite:
+            authorization-uri: http://bsite.auth.dev.gobrand.top/auth/realms/business-account/protocol/openid-connect/auth
+            token-uri: http://bsite.auth.dev.gobrand.top/auth/realms/business-account/protocol/openid-connect/token
+            user-info-uri: http://bsite.auth.dev.gobrand.top/auth/realms/business-account/protocol/openid-connect/userinfo
+            user-name-attribute: preferred_username
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay
+      routes:
+        - id: survey # 调研工具转发
+          uri: http://127.0.0.1:56789
+          predicates:
+            - Path=/survey/**
+          filters:
+            - StripPrefix=1
 
 #+END_SRC

@@ -23,7 +23,7 @@ http://localhost:56789/oauth2/authorization/github
 ** principle
 @AuthenticationPrincipal OAuth2User user
 * ref
-https://160668873.gitbook.io/tkey-docs/ren-shi-jie-duan-bi-du/tkey-baisc //tkey
+https://160668873.gitbook.io/tkey-docs/ren-shi-jie-duan-bi-du/tkey-baisc //基本概念
 * core
 不跨域不存在单点登录问题；
 非浏览器端不存在单点登录问题；

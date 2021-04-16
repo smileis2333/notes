@@ -7,21 +7,24 @@ docker run -d -p 8080:8080 --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PA
 默认只支持keboro和LDAP，如果要自己接入，要自定义Provider进行打包，存在两种部署的做法
 1. Keycloak Deployer，直接丢进/opt/jboss/keycloak/standalone/deployments，jBoss会自动解包(类似Tomcat)
 2. 涉及自定义的SPI，Register a provider using Modules
+https://www.baeldung.com/java-keycloak-custom-user-providers
 https://www.keycloak.org/docs/latest/server_development/#_providers
 常规情况下，使用第一种，可以用内嵌keycloak在JUnit对provider进行测试，之后打包部署即可
 ** realm
 多个共享账户的域，用于区分多个账号体系
 ** client
-类比交钱给微信拿xxid和xxcredential
-*** 用于多个共享同个账户体系的系统
-*** 用于同个系统的多个微服务
+多个接入的app
 ** client code
-一个client可以用于一个系统、或多个系统，每个系统在获取AccessToken的时候，配置文件指定scope，之前颁发的令牌只会包含Scope所指定的系统的Role--->限定了最终能使用到的细粒度权限
+一组Mapper，用于映射字段
+
+scope配置role，描述-->在登陆的用户拥有该角色时该scope的Mapper才生效，没有则代表全部都生效
 ** Roles
+纯字段描述
 ** mysql as db
 https://stackoverflow.com/questions/62107991/keycloak-in-docker-container-mysql-on-host-gives-org-keycloak-services-serv
 * ref
 https://blog.csdn.net/little_kelvin/article/details/111239241
 https://blog.csdn.net/little_kelvin/article/details/111303674
+https://www.baeldung.com/postman-keycloak-endpoints postman endpoint test
 * theme
 https://stackoverflow.com/questions/52641379/keycloak-deploy-custom-theme-in-docker/52755388
