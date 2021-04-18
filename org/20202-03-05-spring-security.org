@@ -331,3 +331,73 @@ spring:
             - StripPrefix=1
 
 #+END_SRC
+** oauth clientÄÃaccess token
+SpringUtil.getBean(OAuth2AuthorizedClientService.class).loadAuthorizedClient("gb-bsite","15815817741")
+*** ×¢Èëjwt£¬redirect
+#+BEGIN_SRC java
+@RequiredArgsConstructor
+@Slf4j
+@Component
+public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
+    private final ObjectMapper objectMapper;
+
+    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
+    private static final String JWT_ROLE_NAME = "roles";
+    private static final String ROLE_PREFIX = "ROLE_";
+
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+
+
+        OAuth2AuthenticationToken oldAuth = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<>(oldAuth.getAuthorities());
+
+        // extract authority
+        OAuth2AuthorizedClient oAuth2AuthorizedClient = SpringUtil.getBean(OAuth2AuthorizedClientService.class).loadAuthorizedClient("gb-bsite", "15815817741");
+        Jwt jwt = SpringUtil.getBean(JwtDecoder.class).decode(oAuth2AuthorizedClient.getAccessToken().getTokenValue());
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName(JWT_ROLE_NAME); // default is: scope, scp
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix(ROLE_PREFIX ); // default is: SCOPE_
+        Collection<GrantedAuthority> convert = jwtGrantedAuthoritiesConverter.convert(jwt);
+        grantedAuthorities.addAll(convert);
+
+
+        OAuth2AuthenticationToken newAuth = new OAuth2AuthenticationToken(oldAuth.getPrincipal(), grantedAuthorities, oldAuth.getAuthorizedClientRegistrationId());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        handle(request, response);
+
+        clearAuthenticationAttributes(request);
+
+    }
+
+    protected void clearAuthenticationAttributes(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            return;
+        }
+        session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+    }
+
+    protected void handle(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+
+//        String targetUrl = determineTargetUrl(authentication);
+        String targetUrl = "http://localhost:56789/open/auth-info";
+
+        if (response.isCommitted()) {
+            log.debug(
+                    "Response has already been committed. Unable to redirect to "
+                            + targetUrl);
+            return;
+        }
+
+        redirectStrategy.sendRedirect(request, response, targetUrl);
+    }
+
+}
+
+#+END_SRC
