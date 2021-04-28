@@ -1,0 +1,7 @@
+#+TITLE: awesome list for self interst
+#+STARTUP: indent
+* awesome cli app
+https://github.com/agarrharr/awesome-cli-apps
+* oauth
+** keycloak
+** CAS

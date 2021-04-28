@@ -1,0 +1,6 @@
+#+TITLE: book resources code
+#+STARTUP: indent
+* java concurrency in practice
+https://github.com/yjfox/-Java-Concurrency-in-Practice-Source-Code
+* tcp ip volume
+https://github.com/QianChenglong/TCP-IP-Illustrated-Volume-1

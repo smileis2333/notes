@@ -62,3 +62,6 @@ https://www.unicode.org/Public/UNIDATA/Scripts.txt  由于历史原因和设计原因，导致
 使用场景/功能描述，如标点符号，数字，控制字符等
 **** render propeties
 控制显示
+* reference
+https://www.cnblogs.com/youxia/p/LinuxDesktop004.html linux字体配置指南
+http://www.unicode.org/Public/UNIDATA/UnicodeData.txt unicode编码

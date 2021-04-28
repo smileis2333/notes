@@ -192,6 +192,8 @@ general_log:表示查询日志是否开启，ON表示开启，OFF表示未开启，默认为OFF
 log_output:表示当查询日志开启以后，以哪种方式存放，log_output可以设置为4种值，"FILE"、"TABLE"、"FILE,TABLE"、"NONE"。此值为"FILE"表示存放于指定的文件中，此值为"TABLE"表示存放于mysql库的general_log表中，此值为"FILE,TABLE"表示将查询日志同时存放于指定的文件与general_log表中，一般不会进行这样的设置，因为这样会徒增很多IO压力，如果开启，建议设置为"table",此值为"NONE"时表示不记录查询日志，即使general_log设置为ON，如果log_output设置为NONE，也不会记录查询日志，其实，log_output不止用户控制查询日志的输出，慢查询日志的输出也是由此参数进行控制，也就是说，log_output设置为file，就表示查询日志和慢查询日志都存放到对应的文件中，设置为table，查询日志和慢查询日志就都存放在对应的数据库表中。
 
 general_log_file： 表示当log_output的值设置为"FILE"或者"FILE,TABLE"时，将查询日志存放于哪个日志文件中，换句话说，就是通过此参数指定查询日志的文件，默认情况下，此文件名于主机名相同，而且使用了相对路径，默认位置为datadir变量所对应的目录位置，一般为/var/lib/mysql目录下
+
+docker exec mysql-dev tail -n 0 -f /var/lib/mysql/51ba6e3e8d58.log
 ** 慢查询日志
 mysqldumpslow用于分析文件的慢查询记录，如果存储为表，则无法使用
 

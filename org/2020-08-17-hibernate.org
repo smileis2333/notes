@@ -1287,3 +1287,6 @@ query.addSynchronizedEntityClass(Item.class);
 ** query result cache
 基于statement的结果缓存，以语句自身作键，该缓存与mybatis的缓存策略很类似
 收益率较低，在实际场景中得不到较大的性能提升
+* general
+** count 原生count
+https://www.baeldung.com/hibernate-criteria-queries

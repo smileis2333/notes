@@ -195,8 +195,22 @@ https://gist.github.com/kidlj/f30e82c2c6f064990596
 * config
 ** ebuild repo location
 /var/db/pkg + 种类+具体应用-xx版本
+** unmask
+/etc/portage/profile/package.use.mask
+
+# Mask docs for GTK 2.x
+=x11-libs/gtk+-2* doc
+# Unmask mysql support for QT
+x11-libs/qt -mysql
 * general
 emerge --update --deep --with-bdeps=y --newuse @world #更新系统
 
 
 emerge --ask --autounmask-write =xorg-server-1.11.99.2 # 取消对xx，比如~amd64的mask，自动写入package.accept
+
+echo "category/packagename **" >> /etc/portage/package.accept_keywords
+* other
+** java
+/etc/portage/profile/package.use.mask
+dev-java/openjdk -gentoo-vm
+dev-java/openjdk-bin -gentoo-vm

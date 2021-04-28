@@ -941,3 +941,12 @@ package.json配置
   },
 
 #+END_SRC
+* vue3
+** webpack
+*** invalid host header
+会禁用127.0.0.1指向的域名访问
+devServer: {
+...
+disableHostCheck: true
+...
+}

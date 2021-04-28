@@ -102,4 +102,5 @@ websockert -- lifecycle和websocker一致
 * BeanPostProcessor
 * autowire
 @Inject JSR 330 replace @Autowired
-
+* 值得注意
+https://spring.io/blog/2020/06/08/migrating-spring-boot-s-build-to-gradle

@@ -3,3 +3,11 @@
 * dbeaver
 ** mock enum
 expression = VALID|INVALID
+* navicat
+
+注册机，本地伪装注册破解器(离线不离线无所谓)
+
+失败的几种可能
+1. 注册表没清干净 HKEY_CURRENT_USER\Software\PremiumSoft
+2. host只读导致无法被修改伪装服务
+3. 版本对应不上，中文版对中文版，英文版对英文版

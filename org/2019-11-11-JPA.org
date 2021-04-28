@@ -42,3 +42,6 @@ name：指定数据库表的列名称。
 ** Specification
 ** 坑
 JPQL更改需要两项，Repository开启@Modifying，上层方法开启事务@Transactional
+* column mapping
+** json map
+https://stackoverflow.com/questions/44308167/how-to-map-a-mysql-json-column-to-a-java-entity-property-using-jpa-and-hibernate

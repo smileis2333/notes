@@ -4,12 +4,17 @@
 redhatµÄ¿ªÔ´ÈÏÖ¤·½°¸£¬Ö§³Ö¶àÖÖÈÏÖ¤Ä£ÐÍ£¬»ùÓÚ½ÇÉ«Permission£¬ºÍÏ¸Á£¶ÈPermission
 docker run -d -p 8080:8080 --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:12.0.4
 ** provider
+*** user storage provider(federation)
+**** kerboro
+**** LDAP
+**** custom
 Ä¬ÈÏÖ»Ö§³ÖkeboroºÍLDAP£¬Èç¹ûÒª×Ô¼º½ÓÈë£¬Òª×Ô¶¨ÒåProvider½øÐÐ´ò°ü£¬´æÔÚÁ½ÖÖ²¿ÊðµÄ×ö·¨
 1. Keycloak Deployer£¬Ö±½Ó¶ª½ø/opt/jboss/keycloak/standalone/deployments£¬jBoss»á×Ô¶¯½â°ü(ÀàËÆTomcat)
 2. Éæ¼°×Ô¶¨ÒåµÄSPI£¬Register a provider using Modules
 https://www.baeldung.com/java-keycloak-custom-user-providers
 https://www.keycloak.org/docs/latest/server_development/#_providers
-³£¹æÇé¿öÏÂ£¬Ê¹ÓÃµÚÒ»ÖÖ£¬¿ÉÒÔÓÃÄÚÇ¶keycloakÔÚJUnit¶Ôprovider½øÐÐ²âÊÔ£¬Ö®ºó´ò°ü²¿Êð¼´¿É
+
+³£¹æÇé¿öÏÂ£¬Ê¹ÓÃµÚÒ»ÖÖ£¬¿ÉÒÔÓÃÄÚÇ¶keycloakÔÚJUnit¶Ôprovider½øÐÐ²âÊÔ£¬Ö®ºó´ò°ü²¿Êð¼´¿É(12.0.4 embbeddedÆô¶¯ÓÐÎÊÌâ£¬´ý´¦Àí)
 ** realm
 ¶à¸ö¹²ÏíÕË»§µÄÓò£¬ÓÃÓÚÇø·Ö¶à¸öÕËºÅÌåÏµ
 ** client
@@ -22,9 +27,38 @@ scopeÅäÖÃrole£¬ÃèÊö-->ÔÚµÇÂ½µÄÓÃ»§ÓµÓÐ¸Ã½ÇÉ«Ê±¸ÃscopeµÄMapper²ÅÉúÐ§£¬Ã»ÓÐÔò´ú±íÈ
 ´¿×Ö¶ÎÃèÊö
 ** mysql as db
 https://stackoverflow.com/questions/62107991/keycloak-in-docker-container-mysql-on-host-gives-org-keycloak-services-serv
+** code demo
+#+BEGIN_SRC java
+session.getKeycloakSessionFactory().getProviderFactories(UserStorageProvider.class) //factory
+
+((DefaultKeycloakSession) ksession).context.getRealm().getUserStorageProviders() // model
+
+
+
+        List<T> list = new LinkedList<>();
+        for (UserStorageProviderModel model : getStorageProviders(realm)) {
+            if (!model.isEnabled()) continue;
+            UserStorageProviderFactory factory = (UserStorageProviderFactory) session.getKeycloakSessionFactory().getProviderFactory(UserStorageProvider.class, model.getProviderId());
+            if (factory == null) {
+                logger.warnv("Configured UserStorageProvider {0} of provider id {1} does not exist in realm {2}", model.getName(), model.getProviderId(), realm.getName());
+                continue;
+            }
+            if (Types.supports(type, factory, UserStorageProviderFactory.class)) {
+                list.add(type.cast(getStorageProviderInstance(session, model, factory)));
+            }
+
+
+        }
+
+// ÄÃ³ö¹¤³§
+session.getKeycloakSessionFactory().getProviderFactories(UserStorageProvider.class).stream().collect(Collectors.toMap(Object::getClass, Function.identity())).get(CustomUserStorageProviderFactory.class)
+
+((DefaultKeycloakSession) session).context.getRealm().getUserStorageProviders()
+#+END_SRC
 * ref
 https://blog.csdn.net/little_kelvin/article/details/111239241
 https://blog.csdn.net/little_kelvin/article/details/111303674
 https://www.baeldung.com/postman-keycloak-endpoints postman endpoint test
+https://lists.jboss.org/pipermail/keycloak-user/2018-September/015412.html  dependencies missiong, result no class found
 * theme
 https://stackoverflow.com/questions/52641379/keycloak-deploy-custom-theme-in-docker/52755388

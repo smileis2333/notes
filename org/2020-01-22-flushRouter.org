@@ -7,3 +7,5 @@
 ref http://blog.iytc.net/wordpress/?p=1823
 *** telnet
 05|/usr/sbin/telnetd -l /bin/login.sh
+* 固件
+https://github.com/hq450/fancyss_history_package

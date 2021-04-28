@@ -4,5 +4,16 @@
 ctrl+alt+c == open console
 * 层级
 Collection->folder->request，前两个可以指定pre script
-* enviroment
+* eniroment
 存变量，供script用
+* script
+** cookie
+#+BEGIN_SRC javascript
+// 用editthiscooki复制出session id(具体根据Application server的体系决定，本例用的JSESSIONID)
+// Cookie 45B01D5B9CC5A2AEBD46C226D824A86A
+
+var Header = require('postman-collection').Header
+pm.request.headers.add(new Header("Cookie: JSESSIONID=" + pm.globals.get('Cookie')))
+#+END_SRC
+* document
+https://blog.csdn.net/u013613428/article/details/82120152

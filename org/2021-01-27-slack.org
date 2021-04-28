@@ -1,7 +1,12 @@
 #+TITLE: slack
 #+STARTUP: indent
+* cons/pros
+** pros
 https://zhuanlan.zhihu.com/p/21396775?utm_source=wechat_session
 https://www.jianshu.com/p/20625e5e9ef7
+** cons
+- 速度
+- 国际化
 * integrate platform
 ** tettra
 ** guru
@@ -13,3 +18,5 @@ command为自定义的内容
 开启socket mode可以以websocket维持链接
 ** java
 https://slack.dev/java-slack-sdk/
+https://slack.dev/java-slack-sdk/guides/getting-started-with-bolt-socket-mode#gradle
+https://api.slack.com/community

@@ -1,6 +1,7 @@
 #+TITLE: win10 related
 #+STARTUP: indent
 * keyboard shortcut
+https://support.microsoft.com/en-us/windows/keyboard-shortcuts-in-windows-dcc61a57-8ff0-cffe-9796-cb9706c75eec
 - ctrl + z undo
 - ctrl + y redo
 - ctrl + x cut
@@ -27,18 +28,24 @@ C:\WINDOWS\system32\drivers\etc
 ** tmp
 ~/AppData/Local/Temp
 * wsl
-https://superuser.com/questions/1520079/vmware-and-docker-on-same-windows-10-pc
-https://github.com/microsoft/WSL/discussions/4872
-https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the-linux-kernel-update-package
-touch /etc/fstab
-update-alternatives --set iptables /usr/sbin/iptables-legacy
-update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
-service docker start
-** git
+** git(all unmodified show modified because of crlf)
 git config --global core.autocrlf true
 ** memory limit
 %HOME%/.wslconfig
 
 [wsl2]
 memory=4GB  # Any size you feel like
+** distro
+*** installer
+https://github.com/yuk7/wsldl
+*** gentoo
+https://github.com/VPraharsha03/GentooWSL2
+** ридятсж╒
+touch /etc/fstab
+update-alternatives --set iptables /usr/sbin/iptables-legacy
+update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+service docker start
 
+https://superuser.com/questions/1520079/vmware-and-docker-on-same-windows-10-pc
+https://github.com/microsoft/WSL/discussions/4872
+https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the-linux-kernel-update-package
