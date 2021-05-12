@@ -244,7 +244,40 @@ public class CORSConfig {
 }
 
 #+END_SRC
+** 非标准flow如国内
+#+BEGIN_SRC java
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .addFilter(corsFilter)
+//                .addFilter(passwordIdentityAuthenticationFilter())
+                .authorizeRequests()
+                .antMatchers("/client/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/user/activity/{\\d+}").permitAll()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
+//                .antMatchers(URLConstant.OPEN_URL_PREFIX).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(authorization -> {
+                                    authorization
+                                            .authorizationRequestResolver(
+                                                    authorizationRequestResolver(this.clientRegistrationRepository)
+                                            );
+                                }
+                        ).successHandler(loginSuccessHandler)
+                )
+//                .oauth2Login()
+//                .successHandler(loginSuccessHandler)
+//                .and().logout().logoutUrl(URLConstant.LOGOUT_URL).logoutSuccessHandler(logoutSuccessHandler)
+//                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationFailEntryPoint)
+                .and().csrf().disable()
+                .httpBasic().disable();
+    }
 
+#+END_SRC
 * principle
 * oauth
 ** config

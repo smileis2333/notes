@@ -62,3 +62,5 @@ https://www.baeldung.com/postman-keycloak-endpoints postman endpoint test
 https://lists.jboss.org/pipermail/keycloak-user/2018-September/015412.html  dependencies missiong, result no class found
 * theme
 https://stackoverflow.com/questions/52641379/keycloak-deploy-custom-theme-in-docker/52755388
+* debug
+https://groups.google.com/g/keycloak-user/c/4QMfloC9cho
