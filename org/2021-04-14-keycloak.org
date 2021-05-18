@@ -56,10 +56,23 @@ session.getKeycloakSessionFactory().getProviderFactories(UserStorageProvider.cla
 ((DefaultKeycloakSession) session).context.getRealm().getUserStorageProviders()
 #+END_SRC
 * ref
+** backend
 https://blog.csdn.net/little_kelvin/article/details/111239241
 https://blog.csdn.net/little_kelvin/article/details/111303674
 https://www.baeldung.com/postman-keycloak-endpoints postman endpoint test
 https://lists.jboss.org/pipermail/keycloak-user/2018-September/015412.html  dependencies missiong, result no class found
+https://github.com/Jeff-Tian/keycloak-services-social-weixin non-standarad idp such as wechat
+https://github.com/mrk08/keycloak-vk/blob/master/src/main/java/ru/codecamp/keycloak/social/vk/VKIdentityProvider.java non-standarad refer
+https://stackoverflow.com/questions/50143342/keycloak-backchannel-logout back channel logout
+https://www.zhihu.com/question/302288255 user federation and sms
+** frontend
+https://stackoverflow.com/questions/65020000/using-keycloak-in-vue3-but-not-on-startup
+** cors
+https://lists.jboss.org/pipermail/keycloak-user/2017-September/011890.html
+** link
+https://blog.csdn.net/zollty/article/details/111315146
+** document
+https://www.keycloak.org/docs/12.0/server_development/index.html
 * theme
 https://stackoverflow.com/questions/52641379/keycloak-deploy-custom-theme-in-docker/52755388
 * debug

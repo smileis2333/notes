@@ -11,7 +11,10 @@ https://nickcraver.com/blog/2016/02/03/stack-overflow-a-technical-deconstruction
 ** storage
 ** Technology stack
 * cache
-* backpressure https://medium.com/@jayphelps/backpressure-explained-the-flow-of-data-through-software-2350b3e77ce7
+* backpressure
+https://medium.com/@jayphelps/backpressure-explained-the-flow-of-data-through-software-2350b3e77ce7
+* oop model
+https://kb.cnblogs.com/page/520743/
 * step
 ** 快速原型
 ** 中间层抽象

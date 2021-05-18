@@ -950,3 +950,5 @@ devServer: {
 disableHostCheck: true
 ...
 }
+* ref
+https://segmentfault.com/a/1190000013277423 slot讲解

@@ -52,3 +52,7 @@ edit /etc/fdfs/mod_fastdfs.conf
 ** java
 由于作者没有发布出去，因此需要编译后，进行安装
 ref https://github.com/happyfish100/fastdfs-client-java
+* refer
+https://www.cnblogs.com/yufeng218/p/8111961.html install guide
+https://sourceforge.net/projects/fastdfs/files/ download link
+https://tieba.baidu.com/p/5684739892?red_tag=3042725017 issue

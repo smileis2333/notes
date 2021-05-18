@@ -54,3 +54,8 @@ lazy.# 关心lazy开头的
 1. 消费者指定任务传递的队列
 2. 生产者传递参数，并指定回传的队列和消息id(防误传)
 [[../img/rabbit-mq-rpc.jpg]]
+* refer
+https://www.rabbitmq.com/getstarted.html
+https://www.rabbitmq.com/confirms.html#acknowledgement-modes
+https://www.rabbitmq.com/production-checklist.html
+https://www.rabbitmq.com/monitoring.html

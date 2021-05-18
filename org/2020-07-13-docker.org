@@ -677,6 +677,7 @@ each container has its own namespace
 ** env variable better than link
 * ref
 [[https://learning.oreilly.com/library/view/docker-in-action/9781617294761/][Docker in Action, Second Edition]]
+https://stackoverflow.com/questions/65272764/ports-are-not-available-listen-tcp-0-0-0-0-50070-bind-an-attempt-was-made-to
 * general
 docker run --publish 8080:80 --name hello-world [image]
 
@@ -686,3 +687,4 @@ docker logs -f [pid/name] //all logs
 docker run -it --rm  top.gobrad/questionnaire /bin/bash # ÅÜÍê¾ÍÉ¾³ý
 docker image build --tag qqqq .
 * docker-compose
+

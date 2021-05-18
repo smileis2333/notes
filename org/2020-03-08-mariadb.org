@@ -10,3 +10,9 @@ flush privileges;
 
 /etc/mysql/mariadb.conf.d
 bind-address=0.0.0.0
+* data type
+https://blog.csdn.net/changanyi/article/details/80101776
+* charset 
+https://mariadb.com/kb/en/setting-character-sets-and-collations/
+* identifier
+https://blog.csdn.net/fdipzone/article/details/45035483

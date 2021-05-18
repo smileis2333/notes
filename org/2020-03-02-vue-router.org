@@ -125,3 +125,5 @@ this.$route.query.id
 https://router.vuejs.org/zh/guide/essentials/nested-routes.#+BEGIN_HTML
 0
 #+END_HTML
+* ref
+https://www.cnblogs.com/hjptopshow/p/9202966.html query与param传参区别

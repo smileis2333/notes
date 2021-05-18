@@ -44,3 +44,9 @@ https://unix.stackexchange.com/questions/41817/linux-how-to-find-the-device-driv
 ** port
 firewall-cmd --zone=public --add-port=80/tcp --permanent
 firewall-cmd --reload
+* xserver
+https://blog.csdn.net/rivarola/article/details/41041931
+https://www.cnblogs.com/hw-1015/articles/5910969.html
+* ref
+https://tieba.baidu.com/p/4809205799?red_tag=1697252423 lfs
+https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf fhs

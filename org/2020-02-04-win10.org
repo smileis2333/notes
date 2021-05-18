@@ -53,3 +53,5 @@ https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the
 
 
 https://stackoverflow.com/questions/65272764/ports-are-not-available-listen-tcp-0-0-0-0-50070-bind-an-attempt-was-made-to
+* script
+win +r shutdown -s -t 3600 //关机，1小时后

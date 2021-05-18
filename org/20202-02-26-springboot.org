@@ -14,3 +14,5 @@ application-dev÷Æ¿‡
 https://stackoverflow.com/questions/48850628/forcing-including-lib-from-local-repo-into-jar-with-spring-thin-layout
 https://github.com/spring-projects/spring-boot/issues/13772
 https://www.baeldung.com/spring-boot-thin-jar
+* general
+java -jar xx.jar --server.port=8080

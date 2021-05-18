@@ -214,3 +214,5 @@ echo "category/packagename **" >> /etc/portage/package.accept_keywords
 /etc/portage/profile/package.use.mask
 dev-java/openjdk -gentoo-vm
 dev-java/openjdk-bin -gentoo-vm
+* compile
+https://github.com/distcc/distcc distcc

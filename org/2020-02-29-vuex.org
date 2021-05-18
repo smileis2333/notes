@@ -362,3 +362,5 @@ store.registerModule(['nested', 'myModule'], {
 
 // 之后就可以通过 store.state.myModule 和 store.state.nested.myModule 访问模块的状态。
 #+END_SRC
+* ref
+https://www.jianshu.com/p/120eaf50331c

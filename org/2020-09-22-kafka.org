@@ -479,3 +479,5 @@ kafka-console-producer.sh --broker-list kafka1.example.com:9092,kafka2.example.c
 * ref
 [[https://queue.acm.org/detail.cfm?id=2745385][There is No Now]]
 [[https://learning.oreilly.com/library/view/kafka-the-definitive/9781491936153/][Kafka: The Definitive Guide]]
+https://kafka.apache.org/quickstart
+https://github.com/oldratlee/translations/blob/master/log-what-every-software-engineer-should-know-about-real-time-datas-unifying/README.md

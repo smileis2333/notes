@@ -31,9 +31,17 @@ PROCESS-NAME, unknown process, Direct
 
 流量转clash，目前未成功
 *** clash
-* proxy
-** public
-** private
+https://docs.nsl-net.cc/usr-interface/surge-tutorial
+*** converter
+https://sub.forever-idiot.eu.org/
+*** v2ray
+https://yearliny.com/v2ray-complete-tutorial/
+* tunnel
+** udp2raw-tunnel
+https://github.com/wangyu-/udp2raw-tunnel/blob/master/doc/kcptun_step_by_step.md
+* vpn(l2tp)
+https://blog.toright.com/posts/5176/ubuntu-%E6%9E%B6%E8%A8%AD-l2tp-ipsec-vpn-server-mac-%E7%9B%B8%E5%AE%B9.html
+https://adriangin.wordpress.com/2018/03/03/how-to-setup-l2tp-ipsec-vpn-servers-debian/
 * target
 - Document access controller
 - Child filter
@@ -43,9 +51,24 @@ PROCESS-NAME, unknown process, Direct
 - Content router
 - Transcoder
 - Anonymizer
-* service provider
-surfshark
-nordvpn
-nsl
 * dns
 https://medium.com/@TachyonDevel/%E6%BC%AB%E8%B0%88%E5%90%84%E7%A7%8D%E9%BB%91%E7%A7%91%E6%8A%80%E5%BC%8F-dns-%E6%8A%80%E6%9C%AF%E5%9C%A8%E4%BB%A3%E7%90%86%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-62c50e58cbd0
+* proxy server
+** http
+https://blog.csdn.net/dianagreen7/article/details/80033063
+https://docs.ginuerzh.xyz/gost/tls/
+* vendor
+速蛙云
+NSL
+N3R0
+* 防失联
+https://free-ss.site/ // 免费上网账号，速度慢，可能存在蜜罐
+* bbr
+https://github.com/tcp-nanqinlang/wiki/wiki/general bbr一键脚本
+https://www.moerats.com/archives/297/
+https://www.tecmint.com/increase-linux-server-internet-speed-with-tcp-bbr/ 
+https://www.moerats.com/archives/10/
+https://www.moerats.com/archives/387/
+* ref
+https://blog.charlieethan.com/index.php/archives/04.html/comment-page-1 黑名单
+https://program-think.blogspot.com/2019/04/Proxy-Tricks.html?m=1 method

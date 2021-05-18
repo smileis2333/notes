@@ -87,3 +87,5 @@ https://www.cnblogs.com/surplus/p/11423201.html
 生成的证书必须符合对应的规则，否则应用和browser都不认
 ** util
 https://stackoverflow.com/questions/27294589/creating-self-signed-certificate-for-domain-and-subdomains-neterr-cert-commo
+* refer
+https://www.cnblogs.com/knowledgesea/p/5199046.html quick info

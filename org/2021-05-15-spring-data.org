@@ -1,0 +1,4 @@
+#+TITLE: spring data
+#+STARTUP: indent
+* ref
+https://www.gitmemory.com/issue/spring-cloud/spring-cloud-openfeign/146/533275272

@@ -270,6 +270,7 @@ end$$
 DELIMITER ;
 call presetuser();
 * ref
+https://www.cnblogs.com/yuwensong/p/3955834.html export
 ** index
 https://stackoverflow.com/questions/4691799/why-does-mysql-not-use-an-index-for-a-greater-than-comparison/4691996
 ** remote connect

@@ -1,9 +1,16 @@
 #+TITLE: 前端相关
 #+STARTUP: indent
 * js
-** vuejs
-** react
-** angular
+https://www.runoob.com/js/js-tutorial.html 菜鸟教程
+** framework
+*** vuejs
+*** react
+*** angular
+*** jQuery
+https://www.runoob.com/jquery/jquery-install.html
+https://www.cnblogs.com/njccqx/p/6650089.html html中用jQuery判断复选框是否选中
+* css
+https://www.cnblogs.com/qcloud1001/p/9848619.html flex布局
 * 富文本编辑器
 tinymce
 * markdown
@@ -19,3 +26,22 @@ ref  https://github.com/showdownjs/showdown
 * 像素
 px、物理像素、rem、rpx的关系
 https://www.jianshu.com/p/1b69f0df78f3?from=timeline
+* svg
+https://developer.mozilla.org/zh-CN/docs/Web/SVG/Tutorial/Basic_Shapes
+* online tool
+https://www.layoutit.com/build bootstrap builder
+http://pikock.github.io/bootstrap-magic/app/#!/editor builder
+* nodejs
+** yarn
+https://yarn.bootcss.com/docs/usage/
+* resources
+http://www.csszengarden.com/tr/zh-cn/ zen garden
+https://www.jianshu.com/p/3bc7404af887 开源的后台控制面板
+** bootstrap
+https://bootsnipp.com/ bootstrap样式组件
+https://startbootstrap.com/themes bootstrap样式组件
+https://bootstrapstudio.io/
+** icon
+http://www.fontawesome.com.cn/faicons/
+* ref
+https://github.com/iamjoel/front-end-plugins 常用插件
