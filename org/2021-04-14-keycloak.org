@@ -56,6 +56,7 @@ session.getKeycloakSessionFactory().getProviderFactories(UserStorageProvider.cla
 ((DefaultKeycloakSession) session).context.getRealm().getUserStorageProviders()
 #+END_SRC
 * ref
+https://www.cnblogs.com/Zhang-Xiang/p/14777202.html?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+cnblogs%2FwhQe+%28%E5%8D%9A%E5%AE%A2%E5%9B%AD_%E9%A6%96%E9%A1%B5%29 
 ** backend
 https://blog.csdn.net/little_kelvin/article/details/111239241
 https://blog.csdn.net/little_kelvin/article/details/111303674
@@ -73,6 +74,8 @@ https://lists.jboss.org/pipermail/keycloak-user/2017-September/011890.html
 https://blog.csdn.net/zollty/article/details/111315146
 ** document
 https://www.keycloak.org/docs/12.0/server_development/index.html
+** keycloak self security
+https://stackoverflow.com/questions/54482881/keycloak-custom-spi-rest-endpoint-with-authorization custom rest api with permission
 * theme
 https://stackoverflow.com/questions/52641379/keycloak-deploy-custom-theme-in-docker/52755388
 * debug

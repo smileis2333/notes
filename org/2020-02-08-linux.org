@@ -50,3 +50,11 @@ https://www.cnblogs.com/hw-1015/articles/5910969.html
 * ref
 https://tieba.baidu.com/p/4809205799?red_tag=1697252423 lfs
 https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf fhs
+* script
+#+BEGIN_SRC bash
+
+# trace log file
+tail -f -n 0 access.log(文件被删除的加内容无效)
+tail -F -n 0 access.log(尝试打开)
+
+#+END_SRC
