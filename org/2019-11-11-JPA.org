@@ -32,6 +32,8 @@ name：指定数据库表的列名称。
                         updateable：是否可以更新
                         columnDefinition: 定义建表时创建此列的DDL
                         secondaryTable: 从表名。如果此列不建在主表上（默认建在主表），该属性定义该列所在从表的名字搭建开发环境[重点]
+** EntityManager
+https://www.baeldung.com/hibernate-entitymanager
 * Spring Data JPA
 概念：是对JPA的再封装
 原来：创建继承自JpaRepository和JpaSpecificationExecutor的接口，设置配置后，使用时，Spring会自动创建该接口的实现类，将基本请求转发到SimpleJPARepositoy
