@@ -40,6 +40,11 @@ memory=4GB  # Any size you feel like
 https://github.com/yuk7/wsldl
 *** gentoo
 https://github.com/VPraharsha03/GentooWSL2
+
+
+# make.conf
+GENTOO_MIRRORS="https://mirrors.ustc.edu.cn/gentoo/"
+MAKEOPTS="-j7"
 ** ридятсж╒
 *** docker
 touch /etc/fstab
