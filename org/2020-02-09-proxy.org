@@ -16,7 +16,9 @@ eg:
 ** PAC script
 little js function
 ** JVM
--Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=8888
+-Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=8888 // 对封装JVM http client的有用
+
+-DsocksProxyHost=127.0.0.1 -DsocksProxyPort=8889 // 对从socket构建http client有用，如Apache DefaultHttpClient
 * sock5
 ** tool
 *** shadowsocks-libev
