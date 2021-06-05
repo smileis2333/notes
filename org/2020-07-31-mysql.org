@@ -295,4 +295,16 @@ mysql -uroot -pyaXxCg86Kx -h 192.168.51.39 -P 3306
 #+BEGIN_SRC sql
 show full processlist;
 show  VARIABLES like '%timeout%';
+
+-- 生成行数用于抽取位置
+SELECT
+	@rownum := @rownum + 1 row_num,
+	t.id
+FROM
+	(
+	SELECT
+		@rownum := 0) r,
+	(SELECT * from t_questionnaire_info where status = 'INVALID') t
+
 #+END_SRC
+
