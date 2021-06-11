@@ -1,0 +1,13 @@
+#+TITLE:  bios relative concept
+#+STARTUP: indent
+* boot without grub
+* legacy bios
+* UEFI bios
+https://zhuanlan.zhihu.com/p/262069479 
+可以塞多个EFI分区来启动，启动的时候按对应主板按键(微星如F11来进入启动列表)，不用grub在加入win10引导
+* bootloader
+- 常见于多系统如Win10启动，引导多个windows相关系统
+- linux引导多系统如其他发行版，windows，同系统不同内核
+https://unix.stackexchange.com/a/326994/476644 如果没有对应需求，可以不要grub等bootloader
+** grub
+** grub2

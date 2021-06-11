@@ -1,3 +1,8 @@
 #+TITLE: jmeter
 #+STARTUP: indent
+* quick start
 https://zhuanlan.zhihu.com/p/36526346
+* record request
+File --> Templates --> Recording
+* curl import
+Tools --> Import from cURL

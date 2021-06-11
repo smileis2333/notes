@@ -1,0 +1,94 @@
+#+TITLE:  Java Management Extensions (JMX) framework
+#+STARTUP: indent
+* architecture
+** Instrumentation layer
+被管理的资源
+** JMX agent layer
+可以描述成宿主环境，或镜像之类的registry，可以从MBeanServer接口追溯具体的实现
+** Remote management layer
+客户端，如Jconsole，以及Tomcat的资源管理界面，或者自定义的JMX Connector进行后续处理
+* MBean
+** standard MBean
+即被管理的类自己或者实现的接口要以MBean结尾，即要求命名规范
+#+BEGIN_SRC java
+package hj;
+
+public class Game implements GameMBean {
+
+    private String playerName;
+
+    @Override
+    public void playFootball(String clubName) {
+        System.out.println(
+                this.playerName + " playing football for " + clubName);
+    }
+
+    @Override
+    public String getPlayerName() {
+        System.out.println("Return playerName " + this.playerName);
+        return playerName;
+    }
+
+    @Override
+    public void setPlayerName(String playerName) {
+        System.out.println("Set playerName to value " + playerName);
+        this.playerName = playerName;
+    }
+    
+}
+
+package hj;
+
+public interface GameMBean {
+
+    public void playFootball(String clubName);
+
+    public String getPlayerName();
+
+    public void setPlayerName(String playerName);
+
+}
+
+
+import hj.Game;
+
+import javax.management.*;
+import java.lang.management.ManagementFactory;
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            ObjectName objectName = new ObjectName("hj:type=basic,name=game");
+            MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+            server.registerMBean(new Game(), objectName);
+        } catch (MalformedObjectNameException | InstanceAlreadyExistsException |
+                MBeanRegistrationException | NotCompliantMBeanException e) {
+            // handle exceptions
+        }
+        while (true) {
+        }
+    }
+}
+
+#+END_SRC
+** dynamic MBean
+要求实现javax.management.DynamicMBean，由于没有受到命名规范的影响，所以全部的操作和信息均可视为动态配置，即xx方法可以增加xx1方法和xx1属性，以此类推(类似反射)
+** open MBean	
+** model MBean	
+* MBeanServer
+* 接入层(client)
+** jconsole
+直接接入，根据是否设置安全策略设置参数后连接
+** web(jdmk)
+** client code
+** Notification
+负责MBean通讯的机制
+*** Notification
+封装信息
+*** broadcaster
+*** listener 
+*** filiter 
+* general
+** 注意事项
+* 最佳实践
+ 将某个类需要被管理的资源，抽象出对应的(类名)+MBean的接口

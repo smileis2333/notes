@@ -1,0 +1,9 @@
+#+TITLE: 操作系统
+#+STARTUP: indent
+* 内核分类
+** hrbrid
+*** Darwin-XNU
+** 宏内核
+Linux
+** 微内核
+*** NT

@@ -80,3 +80,34 @@ https://blog.csdn.net/zollty/article/details/111315146
 https://www.keycloak.org/docs/12.0/server_development/index.html
 ** keycloak self security
 https://stackoverflow.com/questions/54482881/keycloak-custom-spi-rest-endpoint-with-authorization custom rest api with permission
+* admin rest api
+存在两种调用法: 
+1. 一种基于账号体系本身里的账号
+2. 基于service account(即client_id和client_secret换token来调用)
+* 权限相关
+如使用一个账号访问自定义的Endpoint Resource，
+Clients --> Admin-cli  --> Scope
+* provider
+除非必要，否则不建议拿来用，版本升级可能被废弃
+** 持久存在
+如果要拿，可以直接一步到位，直接拿provider
+*** hostname
+*** event listener
+** each request each instance(light-weight object)
+比较像EntityManager和对应的Factory
+拿的时候只能先拿工厂，在拿去建Provider
+*** Authenticator
+*** IDP provider
+* deploy
+1. Keycloak Deployer (most case)
+2. 有自己定制的SPI需要部署
+* dependencies
+jboss-deployment-structure.xml用途
+1. 将keycloak services的私有依赖提供给拓展包
+2. 使用Keycloak Runtime已经存在的环境依赖
+* extenstion point
+1. 现有的SPI如UserStorageProviderFactory(外部存储)，SocialIdentityProviderFactory(social login)
+2. 抽象出新的SPI
+* flow
+** subflow
+** executions
