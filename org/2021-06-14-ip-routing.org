@@ -1,0 +1,92 @@
+#+TITLE: ip routing
+#+STARTUP: indent
+* routing mechanism
+The routing done by IP, when it searches the routing table and decides which interface to send a packet out
+* routing policy
+a set of rules that decides which routes go into the routing table
+** dynamic route(autoconfig)
+取代手工配置，实现自动配置IP route的协议
+*** IGP(in autonomous system)
+**** Hello
+**** RIP
+run on udp
+[[file:~/Desktop/personal/study/img/rip_message.gif][rip message]]
+[[file:~/Desktop/personal/study/img/ripv2_message.gif][ripv2 message]]
+***** v1
+最大的缺陷，无法带subnet info，假设分类网络(Deprecated)，其作内部分割时，即subnet时，多出来的subnet无法用ripv1传播到整个AS
+
+[[file:~/Desktop/personal/study/img/rip_format.gif][rip format]]
+Initialization --> 当进程启动时，发出请求，要求获得整个route table
+Request received --> 收到请求，1. 要route table就给 2. 其他根据具体场景做处理
+Response received --> 收到响应，可以改动到route
+Regular routing updates --> 30s发一次广播route table
+Triggered updates --> 如果route table变动了，就发route table广播(事件机制)
+
+每个route entry绑定3m，相当于如果缺失6次新的route table信息，标记metric为16后被删掉，并延迟60s在广播
+****** demo
+[[file:~/study-record/img/ripv1_simple.jpg][ripv1 demo]]
+场景:
+router: R1, R2
+roure: N1, N2, N3, N4
+
+step1
+R1通过N1对应的接口把N2广播出去，metrics为1
+R1通过N2对应的接口把N1广播出去，metrics为1
+注意:R1两条都广播没有任何意义(即N1也通过N1对应接口发没有任何意义，因为已经处于邻接路由器的知识的一部分)
+R2同理
+
+step2
+R1获得的N4是1，所以+1=2
+即最终的路由表
+N1 1
+N2 1(邻接接口没有意义)
+N4 2
+
+****** metrics
+hop count
+
+**** OSPF
+*** EGP(between the routers in different autonomous systems)
+**** BGP
+*** IRDP
+用icmp来作
+** static route
+mannual added or created by icmp redirect
+* tool
+** netstat
+*** simple table
+netstat -rn
+
+Routing tables
+Destination       Gateway            Flags    Refcnt  Use    Interface
+140.252.13.65     140.252.13.35      UGH      0       0      emd0
+127.0.0.1         127.0.0.1          UH       1       0      lo0
+default           140.252.13.33      UG       0       0      emd0
+140.252.13.32     140.252.13.34      U        4       25043  emd0
+*** complex table
+netstat -rn
+
+Routing tables
+Destination       Gateway            Flags    Refcnt Use       Interface
+140.252.13.65     140.252.13.35      UGH      0      171       le0
+127.0.0.1         127.0.0.1          UH       1      766       lo0
+140.252.1.183     140.252.1.29       UH       0      0         sl0
+default           140.252.1.183      UG       1      2955      sl0
+140.252.13.32     140.252.13.33      U        8      99551     le0
+*** flags
+U --> up
+G --> is a gateway
+H --> to a host
+D --> created by redirect，即IP和对应的HOST不是一台
+M --> modified by redirect
+** route
+route add default sun 1
+route add slip bsdi 1
+** routed
+** gated
+* redirects
+通过接口的来源方向，决定是否往回发送重定向，即收到报文和回传报文的物理接口是同一个，那么很显然，其应该直接发送到目的地，而不是在链路层传到当前host
+[[file:~/study-record/img/icmp_redirect.gif][icmp redirect]]
+* missing route
+- generated on this host --> "host unreachable" or "network unreachable."
+- forward datagram --> ICMP host unreachable error is sent back to original sender

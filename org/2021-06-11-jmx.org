@@ -73,8 +73,158 @@ public class Main {
 #+END_SRC
 ** dynamic MBean
 要求实现javax.management.DynamicMBean，由于没有受到命名规范的影响，所以全部的操作和信息均可视为动态配置，即xx方法可以增加xx1方法和xx1属性，以此类推(类似反射)
+#+begin_src java
+public class GameDynamic implements DynamicMBean {
+
+    private Integer monitorNum = 1;
+
+    private Game game = new Game();
+
+    private String className = this.getClass().getName();
+    private String description = "Simple implementation of a dynamic MBean.";
+    private MBeanAttributeInfo[] attributes = new MBeanAttributeInfo[2];
+    private MBeanConstructorInfo[] constructors = new MBeanConstructorInfo[1];
+    private MBeanOperationInfo[] operations = new MBeanOperationInfo[2];
+    private MBeanInfo mBeanInfo;
+    private MBeanNotificationInfo[] notifications = new MBeanNotificationInfo[0];
+
+    public GameDynamic() {
+        buildDynamicMBean();
+    }
+
+    private void buildDynamicMBean() {
+        Constructor<?>[] ctors = this.getClass().getConstructors();
+        constructors[0] = new MBeanConstructorInfo(
+                "HelloDynamic(): Constructs a HelloDynamic object", ctors[0]);
+        // attributes
+        attributes[0] = new MBeanAttributeInfo("playerName", "java.lang.String",
+                "Game playerName", true, true, false);
+        attributes[1] = new MBeanAttributeInfo("monitorNum", "java.lang.Integer",
+                "Game monitorNum", true, true, false);
+
+        // methods
+        operations[0] = new MBeanOperationInfo("playFootball",
+                "playFootball(String)", new MBeanParameterInfo[]{new MBeanParameterInfo("clubName", "java.lang.String", "")}, "void",
+                MBeanOperationInfo.INFO);
+        operations[1] = new MBeanOperationInfo("addMonitor",
+                "addMonitor", null, "void",
+                MBeanOperationInfo.INFO);
+
+        // MBeanInfo
+        mBeanInfo = new MBeanInfo(this.className, description, attributes,
+                constructors, operations, notifications);
+    }
+
+    @Override
+    public Object getAttribute(String attribute) throws AttributeNotFoundException, MBeanException, ReflectionException {
+        if ("playerName".equals(attribute)) {
+            System.out.println("read playerName");
+            return game.getPlayerName();
+        } else if ("monitorNum".equals(attribute)) {
+            return monitorNum;
+        }
+        return null;
+    }
+
+    @Override
+    public void setAttribute(Attribute attribute) throws AttributeNotFoundException, InvalidAttributeValueException, MBeanException, ReflectionException {
+        if ("playerName".equals(attribute.getName())) {
+            System.out.println("set playerName");
+            game.setPlayerName(String.valueOf(attribute.getValue()));
+        } else if ("monitorNum".equals(attribute)) {
+            this.monitorNum = Integer.valueOf(attribute.getValue().toString());
+        }
+    }
+
+    @Override
+    public AttributeList getAttributes(String[] attributeNames) {
+        if (attributeNames == null) {
+            throw new RuntimeOperationsException(
+                    new IllegalArgumentException(
+                            "attributeNames[] cannot be null"),
+                    "Cannot invoke a getter of " + className);
+        }
+        AttributeList resultList = new AttributeList();
+
+        // if attributeNames is empty, return an empty result list
+        if (attributeNames.length == 0)
+            return resultList;
+
+        // build the result attribute list
+        for (int i = 0; i < attributeNames.length; i++) {
+            try {
+                Object value = getAttribute((String) attributeNames[i]);
+                resultList.add(new Attribute(attributeNames[i], value));
+            } catch (Exception e) {
+                // print debug info but continue processing list
+                e.printStackTrace();
+            }
+        }
+        return (resultList);
+    }
+
+    @Override
+    public AttributeList setAttributes(AttributeList attributes) {
+        // Check attributes to avoid NullPointerException later on
+        if (attributes == null) {
+            throw new RuntimeOperationsException(
+                    new IllegalArgumentException(
+                            "AttributeList attributes cannot be null"),
+                    "Cannot invoke a setter of " + className);
+        }
+        AttributeList resultList = new AttributeList();
+
+        // if attributeNames is empty, nothing more to do
+        if (attributes.isEmpty())
+            return resultList;
+
+        // try to set each attribute and add to result list if successful
+        for (Iterator i = attributes.iterator(); i.hasNext(); ) {
+            Attribute attr = (Attribute) i.next();
+            try {
+                setAttribute(attr);
+                String name = attr.getName();
+                Object value = getAttribute(name);
+                resultList.add(new Attribute(name, value));
+            } catch (Exception e) {
+                // print debug info but keep processing list
+                e.printStackTrace();
+            }
+        }
+        return (resultList);
+    }
+
+    @Override
+    public Object invoke(String actionName, Object[] params, String[] signature) throws MBeanException, ReflectionException {
+        if ("playFootball".equals(actionName)) {
+            game.playFootball("111");
+        } else if ("addMonitor".equals(actionName)) {
+            String operationName = "monitor" + monitorNum;
+            addNewOperation(operationName);
+            this.monitorNum++;
+        }
+        return null;
+    }
+
+    private void addNewOperation(String operationName) {
+        MBeanOperationInfo[] res = Arrays.copyOf(operations, operations.length + 1);
+        res[res.length-1] = new MBeanOperationInfo(operationName,
+                operationName, null, "void",
+                MBeanOperationInfo.INFO);
+        buildDynamicMBean();
+        operations = res;
+    }
+
+    @Override
+    public MBeanInfo getMBeanInfo() {
+        return mBeanInfo;
+    }
+}
+#+end_src
+
 ** open MBean	
-** model MBean	
+** model MBean
+作为代理暴露包含的对象的信息，即对上文提供的dynamic MBean内部使用的Game对象的各类信息进行自动暴露
 * MBeanServer
 * 接入层(client)
 ** jconsole
@@ -90,5 +240,13 @@ public class Main {
 *** filiter 
 * general
 ** 注意事项
-* 最佳实践
- 将某个类需要被管理的资源，抽象出对应的(类名)+MBean的接口
+* 注意事项
+** 最佳实践
+将某个类需要被管理的资源，抽象出对应的(类名)+MBean的接口，即资源本身就是MBean也能被注册，但是不建议
+** idea jmx
+有些版本会导致jconsole检测本地实例失败，可以开启远程
+-Djava.rmi.server.hostname=127.0.0.1
+-Dcom.sun.management.jmxremote
+-Dcom.sun.management.jmxremote.port=4444
+-Dcom.sun.management.jmxremote.ssl=false
+-Dcom.sun.management.jmxremote.authenticate=false

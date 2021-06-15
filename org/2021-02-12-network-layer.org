@@ -53,17 +53,5 @@ specific condition
 基本在ping上使用，大部分的系统
 identifier用于区别process，如多个tty开多个ping
 sequence number用于区分第一个包，区分发送的echo request
-* routing protocol
-取代手工配置，实现自动配置IP route的协议
-** IGP(in autonomous system)
-*** Hello
-*** RIP
-run on udp
-[[file:~/Desktop/personal/study/img/rip_format.gif][rip format]]
-[[file:~/Desktop/personal/study/img/rip_message.gif][rip message]]
-[[file:~/Desktop/personal/study/img/ripv2_message.gif][ripv2 message]]
-*** OSPF
-** EGP(between the routers in different autonomous systems)
-*** BGP
 * CIDR
 start from c class address --> apply for all address

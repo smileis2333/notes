@@ -8,3 +8,5 @@ choco uninstall [packageName]
 *** options
 **** -X
 remove dependency
+* ref
+https://docs.chocolatey.org/en-us/choco/commands/

@@ -45,7 +45,7 @@ https://github.com/VPraharsha03/GentooWSL2
 # make.conf
 GENTOO_MIRRORS="https://mirrors.ustc.edu.cn/gentoo/"
 MAKEOPTS="-j7"
-** 疑难杂症
+** 坑
 *** docker
 touch /etc/fstab
 update-alternatives --set iptables /usr/sbin/iptables-legacy
@@ -58,5 +58,7 @@ https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the
 
 
 https://stackoverflow.com/questions/65272764/ports-are-not-available-listen-tcp-0-0-0-0-50070-bind-an-attempt-was-made-to
+*** vim
+ctrl+v关掉
 * script
 win +r shutdown -s -t 3600 //关机，1小时后

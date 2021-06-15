@@ -35,7 +35,11 @@ https://github.com/Idnan/bash-guide
 * pipe
 (./a | ./b) < [source] >[output] 2> [erroroutput]
 * grub
+1. 一个bootloader，主要用于linux各类发行版的引导(也能处理后引导windows)
+2. 本质上只有真正安装到磁盘分区上的才是真正的grub，而通常的grub安装包，严格来讲是辅助安装grub的工具包
 https://blog.51cto.com/bluetom/1730895
+** grub
+** grub2
 * shell readline
 http://readline.kablamo.org/emacs.html
 * dirver

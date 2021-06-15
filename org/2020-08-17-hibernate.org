@@ -1290,3 +1290,6 @@ query.addSynchronizedEntityClass(Item.class);
 * general
 ** count 原生count
 https://www.baeldung.com/hibernate-criteria-queries
+* ref
+https://blog.csdn.net/weixin_30437847/article/details/95211223 连接池
+https://www.cnblogs.com/jianzhixuan/p/6923216.html 数据库wait_timeout
