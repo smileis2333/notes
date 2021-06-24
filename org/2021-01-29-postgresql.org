@@ -2,3 +2,39 @@
 #+STARTUP: indent
 select enum_range(null::my_typ)
 https://www.postgresql.org/docs/online-resources/
+* open log queries
+data/postgresql.conf
+
+log_statement = 'all'
+* look current variables
+SELECT name, setting FROM pg_settings;
+* 注意事项
+左匹配不一定失效，与mysql的判定有所区别
+
+#+BEGIN_SRC sql
+-- 设identity和username为unique索引
+
+-- mysql 部分，在缺失第一块的identity时，无法走
+SELECT * from t_user tu order by id desc;
+SELECT * from t_user tu where id = 100000;
+SELECT * FROM t_user tu where username  = '+36(687)661-451';
+EXPLAIN SELECT * FROM t_user tu where username  = '+36(687)661-451';
+-- 1	SIMPLE	tu		ALL					94615	10.0	Using where
+SELECT * FROM t_user tu where user_identity = 'BUSINESS' AND username  = '+36(687)661-451';
+EXPLAIN SELECT * FROM t_user tu where user_identity = 'BUSINESS' AND username  = '+36(687)661-451';
+-- 1	SIMPLE	tu		const	t_user_user_identity_IDX	t_user_user_identity_IDX	1226	const,const	1	100.0	
+
+
+-- postgrelsql
+SELECT * FROM t_user ORDER BY id DESC;
+SELECT * FROM t_user tu WHERE id = 100000;
+SELECT * FROM t_user tu WHERE username = '+19(942)848-217';
+EXPLAIN SELECT * FROM t_user tu WHERE username = '+19(942)848-217';
+-- Index Scan using identity_username_index on t_user tu  (cost=0.42..3398.43 rows=1 width=211)
+--   Index Cond: ((username)::text = '+19(942)848-217'::text)
+SELECT * FROM t_user tu WHERE user_identity  = 'BUSINESS' AND username = '+19(942)848-217';
+EXPLAIN SELECT * FROM t_user tu WHERE user_identity  = 'BUSINESS' AND username = '+19(942)848-217';
+-- Index Scan using identity_username_index on t_user tu  (cost=0.42..8.44 rows=1 width=211)
+--   Index Cond: (((user_identity)::text = 'BUSINESS'::text) AND ((username)::text = '+19(942)848-217'::text))
+
+#+END_SRC

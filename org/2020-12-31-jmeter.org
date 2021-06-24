@@ -6,3 +6,8 @@ https://zhuanlan.zhihu.com/p/36526346
 File --> Templates --> Recording
 * curl import
 Tools --> Import from cURL
+* general
+** cmd run
+.\jmeter.bat -n -t .\testplan\static_page.jmx -l .\testplan\result.txt -e -o .\testplan\webreport
+** assertion
+
