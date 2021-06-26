@@ -38,3 +38,6 @@ EXPLAIN SELECT * FROM t_user tu WHERE user_identity  = 'BUSINESS' AND username =
 --   Index Cond: (((user_identity)::text = 'BUSINESS'::text) AND ((username)::text = '+19(942)848-217'::text))
 
 #+END_SRC
+* json相关
+取json最后一个
+tr.education_infos->-1

@@ -46,4 +46,46 @@ https://www.baeldung.com/hibernate-entitymanager
 JPQL更改需要两项，Repository开启@Modifying，上层方法开启事务@Transactional
 * column mapping
 ** json map
-https://stackoverflow.com/questions/44308167/how-to-map-a-mysql-json-column-to-a-java-entity-property-using-jpa-and-hibernate
+https://stackoverflow.com/questions/44308167/how-to-map-a-mysql-json-column-to-a-java-entity-property-using-jpa-and-hibernate   
+* trick
+** 无外键关联作连接
+#+BEGIN_SRC java
+
+
+// 比如问卷的答卷信息和结构信息的拆表(结构信息太大)，需要结构信息也作为查询时，关联性的处理有两种明确做法
+// 1. @Subselect来一个视图
+// 2. 使用关联
+// 后续在查
+@Entity
+@Table(name = "t_questionnaire_info", indexes = {
+        @Index(name = "questionnaire_proto_id_index", columnList = "questionnaire_proto_id"),
+})
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class QuestionnaireInfo extends BaseEntity {
+
+    @JsonIgnore
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT), updatable = false, insertable = false)
+    private QuestionnaireStructure structure;
+
+}
+
+@Entity
+@Table(name = "t_questionnaire_proto_structure")
+@Data
+@EqualsAndHashCode(callSuper = true)
+@TypeDef(
+        name = "json",
+        typeClass = JsonStringType.class
+)
+public class QuestionnaireProtoStructure extends BaseEntity {
+    @Column(columnDefinition = "MEDIUMTEXT")
+    @Convert(converter = JsonToQuestionsConverter.class)
+    private List<BaseQuestion> questions;
+}
+
+#+END_SRC
+** @Subselect 和@Synchronize
+https://stackoverflow.com/questions/25226244/what-is-the-use-of-synchronize-in-hibernate
+当视图读取的字段依赖某实体的字段时，在无@Synchronize时，可能存在所谓的滞后，甚至不更新现象，当指定字段后，当字段更新时，检测是否内存变动，决定查询时，先flush内存到数据库

@@ -17,3 +17,8 @@ pm.request.headers.add(new Header("Cookie: JSESSIONID=" + pm.globals.get('Cookie
 #+END_SRC
 * document
 https://blog.csdn.net/u013613428/article/details/82120152
+* oauth2
+目录 --> 配置Client id, Client secret, username, password, accessTokenUrl
+1. 默认一定能拿到access token，以Github为例，可以直接拿到对应的accessToken，直接申请Github信息
+2. 只能针对标准化且能username和password登录Oauth2授权，无法进行其他变种登录
+3. 无法建立服务器初始化的oauth2产生的连接(目前)，可以做到直接连接认证中心的那种回调回应用
