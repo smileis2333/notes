@@ -2,3 +2,38 @@
 #+STARTUP: indent
 select enum_range(null::my_typ)
 https://www.postgresql.org/docs/online-resources/
+* group to array
+array_agg(fiedName)
+* array has some value
+#+begin_src sql
+select
+	t.id,
+	t.industry_ids,
+	t.report_type,
+	t.create_time,
+	t.modify_time,
+	t.status,
+	t.remark
+from
+	(
+	select
+		*,
+		(
+		select
+			array_agg(industry_id) industry_ids
+		from
+			t_industry_report_relation tirr
+		where
+			industry_report_id = tir.id
+		group by
+			tir.id)
+	from
+		t_industry_report tir)t
+where 1=ANY(industry_ids); 
+#+end_src
+* general
+#+begin_src sql
+-- check type
+
+
+#+end_src

@@ -300,15 +300,15 @@ dotted-quad or dotted-decimal notation
 **** classful address
 在classful的基础上引入的subnet对internet不可见的，只是对于LAN本地的处理，因此，路由无法聚合，存在多少个classful network(假设全部分配完了)，最终的路由就有多大，解决路由的做法最终通过CIDR，最直接的理解就是subnet必须物理上经由一个router连起来(因为对全局internet不可见)，而CIDR可以物理分割掉(因为子网信息被传播到global internet)
 ***** A
-0 net(7bit) host[24bit]
+0 net(7bit) host[24bit] --> 1.0.0.1～126.255.255.254
 ***** B
-10 net(14bit) host[16bit]
+10 net(14bit) host[16bit] --> 128.0.0.1～191.255.255.254
 ***** C
-110 net(21bit) host[8bit]
+110 net(21bit) host[8bit] --> 192.0.0.1～223.255.255.254
 ***** D
-1110 multicast address[28bit]
+1110 multicast address[28bit] --> 224.0.0.1～239.255.255.254
 ***** E
-1111 reserved address[28bit]
+1111 reserved address[28bit] --> 240.0.0.1～255.255.255.254
 **** subnet address
 在分配了classful地址后，由于其本身站点可能存在多个LAN的接入，究竟如何配置，如何管理，假如分配A类，在具体配置IP时，究竟如何给，比如是连续的还是分块的，又怎么分快，才好管理，因此，产生了subnet address，特定于站点内存的网络，而internet仍然只认classful address，无视subnet address，此时的subnet是固定的，即B类，的基础上切多一位当net，则割成了两个等量host的subnet(后续才衍生出了VLSM)
 

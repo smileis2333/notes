@@ -1,0 +1,4 @@
+#+TITLE: ddd design
+#+STARTUP: indent
+* ³äÑªÄ£ÐÍ
+https://kb.cnblogs.com/page/520743/
