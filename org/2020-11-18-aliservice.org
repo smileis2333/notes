@@ -8,3 +8,9 @@ https://api.aliyun.com/?spm=a2c4g.11186623.2.13.304e50a4oJ0wKF#/
 ** 服务器签名前端上传
 签名链接不支持的acl的设置，如果私有bucket需要临时链接上传公开，只能在oss callback服务器的时候做处理
 https://help.aliyun.com/document_detail/31927.html?spm=a2c4g.11186623.6.1734.d27643d3VVhFe7
+** 托管静态站点
+bucket列表 --> 选定bucket --> 基础设置 -->静态页面开启
+
+由于策略改动，默认会带上Content-Disposition:attachment作为下载文件打开，解决方案
+1. 配置cname指过去，可以自动消除掉
+2. 移除header，可以用Charles rewrite或者Nginx proxy_hide_header来处理字段，前者最简单

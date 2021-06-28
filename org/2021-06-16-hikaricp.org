@@ -1,0 +1,28 @@
+#+TITLE: hikaricp
+#+STARTUP: indent
+* javassist
+https://github.com/brettwooldridge/HikariCP/issues/1198
+1. Resultset等相关接口要求覆盖50+method，而实际需要覆盖的可能就几个，因此，将类抽象为abstract，然后覆盖对应的方法，而实际最终的代码，在用javasist生成出来
+2. JDBC如果由于标准的迭代加了新的接口，可以自动被加入，而不用作多版本更新
+3. 字节码部分提速(次要部分)
+
+* ConcurrentBag 
+ConcurrentBag --> 两端无锁获取+SynchronousQueue来处理并发大的情况
+ThreadLocal<List<Object>> threadList; 无锁，在PoolEntry返回时，缓存到ThreadLocal
+CopyOnWriteArrayList<T> sharedList; 无锁，存储PoolEntry用于全部线程共享
+SynchronousQueue<T> handoffQueue;  并发解决，在前两段失败时，进入阻塞获取，直到能拿到新连接(连接扩充/连接返还时)
+** two cache --> one syn
+*** Share List
+*** ThreadLocal
+*** SynchronousQueue
+
+* leak detect
+泄露检测
+默认值为0即禁用
+在获取连接时，设置ProxyConnection，准确来讲是Javassist生成的HakariProxyConnection，并进行定时任务的绑定，超时即认定为泄露
+
+
+https://jacksonpuppy.com/2017-11-05/datasource-hikari.html
+* metrics
+** dropwizard
+** jmx

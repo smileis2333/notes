@@ -61,4 +61,7 @@ https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf fhs
 tail -f -n 0 access.log(文件被删除的加内容无效)
 tail -F -n 0 access.log(尝试打开)
 
+# wsl需要加disable-inotify，否则会假死
+tail ---disable-inotify -f -n 0 postgresql-2021-06-24_141528.log
+
 #+END_SRC
