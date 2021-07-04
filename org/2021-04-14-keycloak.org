@@ -111,3 +111,8 @@ jboss-deployment-structure.xml”√Õæ
 * flow
 ** subflow
 ** executions
+* genenral
+#+BEGIN_SRC bash
+# allow remote connect
+xxx.sh -b 0.0.0.0
+#+END_SRC

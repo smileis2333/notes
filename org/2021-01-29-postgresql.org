@@ -2,7 +2,6 @@
 #+STARTUP: indent
 select enum_range(null::my_typ)
 https://www.postgresql.org/docs/online-resources/
-<<<<<<< HEAD
 * group to array
 array_agg(fiedName)
 * array has some value
@@ -68,7 +67,7 @@ SELECT * FROM t_user tu WHERE id = 100000;
 SELECT * FROM t_user tu WHERE username = '+19(942)848-217';
 EXPLAIN SELECT * FROM t_user tu WHERE username = '+19(942)848-217';
 -- Index Scan using identity_username_index on t_user tu  (cost=0.42..3398.43 rows=1 width=211)
---   Index Cond: ((username)::text = '+19(942)848-217'::text)
+--   Index Con: ((username)::text = '+19(942)848-217'::text)
 SELECT * FROM t_user tu WHERE user_identity  = 'BUSINESS' AND username = '+19(942)848-217';
 EXPLAIN SELECT * FROM t_user tu WHERE user_identity  = 'BUSINESS' AND username = '+19(942)848-217';
 -- Index Scan using identity_username_index on t_user tu  (cost=0.42..8.44 rows=1 width=211)
@@ -78,4 +77,5 @@ EXPLAIN SELECT * FROM t_user tu WHERE user_identity  = 'BUSINESS' AND username =
 * json相关
 取json最后一个
 tr.education_infos->-1
->>>>>>> d4016e72292953dc1d724fd72b932274cc971597
+* 全文索引
+https://www.jianshu.com/p/0dc2a8bf9631

@@ -862,7 +862,6 @@ em.detach(user);
 删了主键会保留，如果需要去掉需要额外配置
 * EntityManager
 JPA规范，controll/switch data's lifycycle
-* JTA
 * Transaction
 ** db level
 ** application level
