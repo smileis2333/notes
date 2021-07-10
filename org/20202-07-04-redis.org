@@ -88,3 +88,45 @@ EXEC
 * program
 ** java
 jedis
+* mq
+#+BEGIN_SRC java
+// spring-boot-starter-data-redis
+@RestController
+@RequiredArgsConstructor
+public class SampleController {
+
+    private final RedisTemplate<String, String> redisTemplate;
+
+    @GetMapping("/test")
+    String send1(String data) {
+        redisTemplate.convertAndSend("redismq", data);
+        System.out.println("async log");
+        return "success";
+    }
+
+}
+
+@Configuration
+class Config {
+    @Bean
+    RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
+                                            MessageListenerAdapter listenerAdapter) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(listenerAdapter, new PatternTopic("redismq")); //ÅäÖÃÒª¶©ÔÄµÄ¶©ÔÄÏî
+        return container;
+    }
+
+}
+
+@Component
+class RedisSubscriber extends MessageListenerAdapter {
+
+    @Override
+    public void onMessage(Message message, byte[] bytes) {
+        System.out.println(String.format("channel is %s", new String(message.getChannel(),StandardCharsets.UTF_8)));
+        System.out.println(String.format("data is %s", new String(bytes, StandardCharsets.UTF_8)));
+    }
+
+}
+#+END_SRC

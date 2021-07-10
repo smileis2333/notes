@@ -3,6 +3,145 @@
 建立的分析账号隶属于用户账号
 在跟具体的服务账号进行关联(服务账号也隶属与用户账号)
 分析账号-->媒体资源-->数据视图
-GA admin: https://analytics.google.com/analytics/web
-GCP service account: https://console.cloud.google.com/projectselector2/iam-admin/serviceaccounts?supportedpurview=project
-API: https://developers.google.com/analytics/devguides/reporting/core/v4/quickstart/service-java
+
+GA admin
+https://analytics.google.com/analytics/web
+
+GCP service account
+https://console.cloud.google.com/projectselector2/iam-admin/serviceaccounts?supportedpurview=project
+
+API
+https://developers.google.com/analytics/devguides/reporting/core/v4/quickstart/service-java
+
+在线Rest查询面板
+https://ga-dev-tools.appspot.com/query-explorer/
+* flow
+创建媒体资源
+
+媒体资源设置-->创建 Universal Analytics 媒体资源-->填入站点地址
+
+数据视图访问权限管理-->授权特定google service account权限
+
+网站植入ga脚本
+
+1. 从GA站点获取实时数据(没有开放接口)
+2. 使用代码获取GA分析报告，非实时(且实际数据在第一天或者偶尔会丢失部分数据)
+** demo
+#+BEGIN_SRC java
+public class HelloAnalyticsReporting {
+    private static final String APPLICATION_NAME = "Hello Analytics Reporting";
+    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    // 登录账号的secret，一般用Google service account来登录
+    private static final String KEY_FILE_LOCATION = "C:\\Users\\admin\\Desktop\\gb-project-302509-bcb654fb5a26.json";
+
+    // 对应的数据视图
+    private static final String VIEW_ID = "ga:246349053";
+    public static void main(String[] args) {
+        try {
+            AnalyticsReporting service = initializeAnalyticsReporting();
+
+            GetReportsResponse response = getReport(service);
+            printResponse(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Initializes an Analytics Reporting API V4 service object.
+     *
+     * @return An authorized Analytics Reporting API V4 service object.
+     * @throws IOException
+     * @throws GeneralSecurityException
+     */
+    private static AnalyticsReporting initializeAnalyticsReporting() throws GeneralSecurityException, IOException {
+
+        HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+        GoogleCredential credential = GoogleCredential
+                .fromStream(new FileInputStream(KEY_FILE_LOCATION))
+                .createScoped(AnalyticsReportingScopes.all());
+
+        // Construct the Analytics Reporting service object.
+        return new AnalyticsReporting.Builder(httpTransport, JSON_FACTORY, credential)
+                .setApplicationName(APPLICATION_NAME).build();
+    }
+
+    /**
+     * Queries the Analytics Reporting API V4.
+     *
+     * @param service An authorized Analytics Reporting API V4 service object.
+     * @return GetReportResponse The Analytics Reporting API V4 response.
+     * @throws IOException
+     */
+    private static GetReportsResponse getReport(AnalyticsReporting service) throws IOException {
+        // Create the DateRange object.
+        DateRange dateRange = new DateRange();
+        dateRange.setStartDate("7DaysAgo");
+        dateRange.setEndDate("today");
+
+        // Create the Metrics object.
+        Metric sessions = new Metric()
+                .setExpression("ga:sessions")
+                .setAlias("sessions");
+
+        Dimension pageTitle = new Dimension().setName("ga:pageTitle");
+
+        // Create the ReportRequest object.
+        ReportRequest request = new ReportRequest()
+                .setViewId(VIEW_ID)
+                .setDateRanges(Arrays.asList(dateRange))
+                .setMetrics(Arrays.asList(sessions))
+                .setDimensions(Arrays.asList(pageTitle));
+
+        ArrayList<ReportRequest> requests = new ArrayList<ReportRequest>();
+        requests.add(request);
+
+        // Create the GetReportsRequest object.
+        GetReportsRequest getReport = new GetReportsRequest()
+                .setReportRequests(requests);
+
+        // Call the batchGet method.
+        GetReportsResponse response = service.reports().batchGet(getReport).execute();
+
+        // Return the response.
+        return response;
+    }
+
+    /**
+     * Parses and prints the Analytics Reporting API V4 response.
+     *
+     * @param response An Analytics Reporting API V4 response.
+     */
+    private static void printResponse(GetReportsResponse response) {
+
+        for (Report report: response.getReports()) {
+            ColumnHeader header = report.getColumnHeader();
+            List<String> dimensionHeaders = header.getDimensions();
+            List<MetricHeaderEntry> metricHeaders = header.getMetricHeader().getMetricHeaderEntries();
+            List<ReportRow> rows = report.getData().getRows();
+
+            if (rows == null) {
+                System.out.println("No data found for " + VIEW_ID);
+                return;
+            }
+
+            for (ReportRow row: rows) {
+                List<String> dimensions = row.getDimensions();
+                List<DateRangeValues> metrics = row.getMetrics();
+
+                for (int i = 0; i < dimensionHeaders.size() && i < dimensions.size(); i++) {
+                    System.out.println(dimensionHeaders.get(i) + ": " + dimensions.get(i));
+                }
+
+                for (int j = 0; j < metrics.size(); j++) {
+                    System.out.print("Date Range (" + j + "): ");
+                    DateRangeValues values = metrics.get(j);
+                    for (int k = 0; k < values.getValues().size() && k < metricHeaders.size(); k++) {
+                        System.out.println(metricHeaders.get(k).getName() + ": " + values.getValues().get(k));
+                    }
+                }
+            }
+        }
+    }
+}
+#+END_SRC

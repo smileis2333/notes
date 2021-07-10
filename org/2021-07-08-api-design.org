@@ -1,0 +1,5 @@
+#+TITLE: api design
+#+STARTUP: indent
+https://zhuanlan.zhihu.com/p/68435690
+
+https://thenextweb.com/news/future-api-design-orchestration-layer
