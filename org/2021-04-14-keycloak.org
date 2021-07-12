@@ -59,27 +59,6 @@ session.getKeycloakSessionFactory().getProviderFactories(UserStorageProvider.cla
 https://stackoverflow.com/questions/52641379/keycloak-deploy-custom-theme-in-docker/52755388
 * debug
 https://groups.google.com/g/keycloak-user/c/4QMfloC9cho
-* ref
-https://www.cnblogs.com/Zhang-Xiang/p/14777202.html?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+cnblogs%2FwhQe+%28%E5%8D%9A%E5%AE%A2%E5%9B%AD_%E9%A6%96%E9%A1%B5%29 
-** backend
-https://blog.csdn.net/little_kelvin/article/details/111239241
-https://blog.csdn.net/little_kelvin/article/details/111303674
-https://www.baeldung.com/postman-keycloak-endpoints postman endpoint test
-https://lists.jboss.org/pipermail/keycloak-user/2018-September/015412.html  dependencies missiong, result no class found
-https://github.com/Jeff-Tian/keycloak-services-social-weixin non-standarad idp such as wechat
-https://github.com/mrk08/keycloak-vk/blob/master/src/main/java/ru/codecamp/keycloak/social/vk/VKIdentityProvider.java non-standarad refer
-https://stackoverflow.com/questions/50143342/keycloak-backchannel-logout back channel logout
-https://www.zhihu.com/question/302288255 user federation and sms
-** frontend
-https://stackoverflow.com/questions/65020000/using-keycloak-in-vue3-but-not-on-startup
-** cors
-https://lists.jboss.org/pipermail/keycloak-user/2017-September/011890.html
-** link
-https://blog.csdn.net/zollty/article/details/111315146
-** document
-https://www.keycloak.org/docs/12.0/server_development/index.html
-** keycloak self security
-https://stackoverflow.com/questions/54482881/keycloak-custom-spi-rest-endpoint-with-authorization custom rest api with permission
 * admin rest api
 存在两种调用法: 
 1. 一种基于账号体系本身里的账号
@@ -116,3 +95,63 @@ jboss-deployment-structure.xml用途
 # allow remote connect
 xxx.sh -b 0.0.0.0
 #+END_SRC
+* social account
+** 登录的情况下绑定
+#+BEGIN_SRC java
+// 需要作判定处理，因为会回调，否则会死循环，该处少判断
+    @GetMapping("wechat/link")
+    public void wechatlink(@AuthenticationPrincipal KeycloakAuthenticationToken principle, HttpServletRequest request, HttpServletResponse response) {
+        AccessToken token = principle.getAccount().getKeycloakSecurityContext().getToken();
+        String clientId = token.getIssuedFor();
+        String nonce = UUID.randomUUID().toString();
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        String provider = "wechat";
+        String input = nonce + token.getSessionState() + clientId + provider;
+        byte[] check = md.digest(input.getBytes(StandardCharsets.UTF_8));
+        String hash = Base64Url.encode(check);
+        request.getSession().setAttribute("hash", hash);
+        String redirectUri = KeycloakUriBuilder.fromUri(request.getRequestURL().toString())
+                .replaceQuery(null)
+                .queryParam("response", "true").build().toString();
+        String accountLinkUrl = KeycloakUriBuilder.fromUri("http://bsite.auth.dev.gobrand.top")
+                .path("/auth/realms/{realm}/broker/{provider}/link")
+                .queryParam("nonce", nonce)
+                .queryParam("hash", hash)
+                .queryParam("client_id", token.getIssuedFor())
+                .queryParam("redirect_uri", redirectUri).build(keycloakSpringBootProperties.getRealm(), provider).toString();
+        response.setStatus(302);
+        response.setHeader("Location", accountLinkUrl);
+    }
+
+#+END_SRC
+* ref
+https://www.cnblogs.com/Zhang-Xiang/p/14777202.html?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+cnblogs%2FwhQe+%28%E5%8D%9A%E5%AE%A2%E5%9B%AD_%E9%A6%96%E9%A1%B5%29 
+** backend
+https://blog.csdn.net/little_kelvin/article/details/111239241
+https://blog.csdn.net/little_kelvin/article/details/111303674
+https://www.baeldung.com/postman-keycloak-endpoints postman endpoint test
+https://lists.jboss.org/pipermail/keycloak-user/2018-September/015412.html  dependencies missiong, result no class found
+https://github.com/Jeff-Tian/keycloak-services-social-weixin non-standarad idp such as wechat
+https://github.com/mrk08/keycloak-vk/blob/master/src/main/java/ru/codecamp/keycloak/social/vk/VKIdentityProvider.java non-standarad refer
+https://stackoverflow.com/questions/50143342/keycloak-backchannel-logout back channel logout
+https://www.zhihu.com/question/302288255 user federation and sms
+** frontend
+https://stackoverflow.com/questions/65020000/using-keycloak-in-vue3-but-not-on-startup
+** cors
+https://lists.jboss.org/pipermail/keycloak-user/2017-September/011890.html
+** link
+https://blog.csdn.net/zollty/article/details/111315146
+
+realmA登录realmB，等价于自链接
+https://zhuanlan.zhihu.com/p/360846976
+** document
+https://www.keycloak.org/docs/12.0/server_development/index.html
+** keycloak self security
+https://stackoverflow.com/questions/54482881/keycloak-custom-spi-rest-endpoint-with-authorization custom rest api with permission

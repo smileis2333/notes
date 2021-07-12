@@ -1,0 +1,256 @@
+#+TITLE:  java generics(泛型)
+#+STARTUP: indent
+* type erase(泛型擦除)
+1. 如果是无上下界/无限定通配符，擦除成Object
+2. 如果是有上界，擦除成上界对应的类型(第一个边界)
+3. 如果是有下界，擦除成Object
+#+BEGIN_SRC java
+
+// 被擦除成Object
+// 证据1
+ArrayList<String> list1 = new ArrayList<>();
+ArrayList<Integer> list2 = new ArrayList<>();
+System.out.println(list1.getClass() == list2.getClass()); // true
+// 证据2
+ArrayList<Integer> list1 = new ArrayList<>();
+list1.add("aaa"); // compile error
+list1.getClass().getDeclaredMethod("add",Object.class).invoke(list1,"aaa"); // compile success
+
+#+END_SRC
+** 桥接
+*** code
+#+BEGIN_SRC java
+// 解决继承下的泛化的方法重写
+class Pair<T> {
+
+    private T value;
+
+    public T getValue() {
+        return value;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
+}
+class DateInter extends Pair<Date> {
+
+    @Override
+    public void setValue(Date value) {
+        super.setValue(value);
+    }
+
+    @Override
+    public Date getValue() {
+        return super.getValue();
+    }
+}
+
+
+
+#+END_SRC
+*** javap
+javap -c out/production/untitled/DateInter
+
+class DateInter extends Pair<java.util.Date> {
+  DateInter();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method Pair."<init>":()V
+       4: return
+
+  public void setValue(java.util.Date);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokespecial #2                  // Method Pair.setValue:(Ljava/lang/Object;)V
+       5: return
+
+  public java.util.Date getValue();
+    Code:
+       0: aload_0
+       1: invokespecial #3                  // Method Pair.getValue:()Ljava/lang/Object;
+       4: checkcast     #4                  // class java/util/Date
+       7: areturn
+
+  public void setValue(java.lang.Object);  --> 调重写的setValue
+    Code:
+       0: aload_0
+       1: aload_1
+       2: checkcast     #4                  // class java/util/Date
+       5: invokevirtual #5                  // Method setValue:(Ljava/util/Date;)V
+       8: return
+
+  public java.lang.Object getValue();  --> 生成了如果人工写，无法通过编译的代码
+    Code:
+       0: aload_0
+       1: invokevirtual #6                  // Method getValue:()Ljava/util/Date;
+       4: areturn
+}
+
+* wildcard type
+** lower
+<? super ClassType>
+** Unbounded
+<?>
+** upper
+<? extends ClassType>
+
+#+BEGIN_SRC java
+
+#+END_SRC
+** purpose
+upper used to read data, while lower is for writing
+#+BEGIN_SRC java
+
+class A{}
+class B extends A {}
+
+// 如下两个方法不会报错
+public static void funA(A a) {
+    // ...          
+}
+public static void funB(B b) {
+    funA(b);
+    // ...             
+}
+
+// 如下funD方法会报错
+public static void funC(List<A> listA) {
+    // ...          
+}
+public static void funD(List<B> listB) {
+    funC(listB); // Unresolved compilation problem: The method doPrint(List<A>) in the type test is not applicable for the arguments (List<B>)
+    // ...             
+}
+
+// 据此引出了上下界的概念
+public static void funC(List<? extends A> listA) {
+    // ...          
+}
+public static void funD(List<B> listB) {
+    funC(listB); // OK
+    // ...             
+}
+#+END_SRC
+* why
+语法糖，在编译器自动生成类型转换和检测，尤其对于集合的作用最大
+原理: 先检查，在擦除
+* 场景
+** 泛型类
+#+BEGIN_SRC java
+// 一元
+class Point<T>{         // 此处可以随便写标识符号，T是type的简称  
+    private T var ;     // var的类型由T指定，即：由外部指定  
+    public T getVar(){  // 返回值的类型由外部决定  
+        return var ;  
+    }  
+    public void setVar(T var){  // 设置的类型也由外部决定  
+        this.var = var ;  
+    }  
+}  
+public class GenericsDemo06{  
+    public static void main(String args[]){  
+        Point<String> p = new Point<String>() ;     // 里面的var类型为String类型  
+        p.setVar("it") ;                            // 设置字符串  
+        System.out.println(p.getVar().length()) ;   // 取得字符串的长度  
+    }  
+}
+
+
+// 二元
+class Notepad<K,V>{       // 此处指定了两个泛型类型  
+    private K key ;     // 此变量的类型由外部决定  
+    private V value ;   // 此变量的类型由外部决定  
+    public K getKey(){  
+        return this.key ;  
+    }  
+    public V getValue(){  
+        return this.value ;  
+    }  
+    public void setKey(K key){  
+        this.key = key ;  
+    }  
+    public void setValue(V value){  
+        this.value = value ;  
+    }  
+} 
+public class GenericsDemo09{  
+    public static void main(String args[]){  
+        Notepad<String,Integer> t = null ;        // 定义两个泛型类型的对象  
+        t = new Notepad<String,Integer>() ;       // 里面的key为String，value为Integer  
+        t.setKey("汤姆") ;        // 设置第一个内容  
+        t.setValue(20) ;            // 设置第二个内容  
+        System.out.print("姓名；" + t.getKey()) ;      // 取得信息  
+        System.out.print("，年龄；" + t.getValue()) ;       // 取得信息  
+  
+    }  
+}
+#+END_SRC
+** 泛型方法
+#+BEGIN_SRC java
+
+interface Info<T>{        // 在接口上定义泛型  
+    public T getVar() ; // 定义抽象方法，抽象方法的返回值就是泛型类型  
+}
+class InfoImpl<T> implements Info<T>{   // 定义泛型接口的子类  
+    private T var ;             // 定义属性  
+    public InfoImpl(T var){     // 通过构造方法设置属性内容  
+        this.setVar(var) ;
+    }
+    public void setVar(T var){
+        this.var = var ;
+    }
+    public T getVar(){
+        return this.var ;
+    }
+}
+public class GenericsDemo24{
+    public static void main(String arsg[]){
+        Info<String> i = null;        // 声明接口对象  
+        i = new InfoImpl<String>("汤姆") ;  // 通过子类实例化对象  
+        System.out.println("内容：" + i.getVar()) ;
+    }
+}  
+
+
+ public static void main(String[] args) throws Exception {
+     /**不指定泛型的时候*/
+     int i = Test.add(1, 2); //这两个参数都是Integer，所以T为Integer类型  
+     Number f = Test.add(1, 1.2); //这两个参数一个是Integer，以风格是Float，所以取同一父类的最小级，为Number  
+     Object o = Test.add(1, "asd"); //这两个参数一个是Integer，以风格是Float，所以取同一父类的最小级，为Object  
+
+     /**指定泛型的时候*/
+     int a = Test.<Integer>add(1, 2); //指定了Integer，所以只能为Integer类型或者其子类  
+     int b = Test.<Integer>add(1, 2.2); //编译错误，指定了Integer，不能为Float  
+     Number c = Test.<Number>add(1, 2.2); //指定为Number，所以可以为Integer和Float  
+ }
+
+ public static <T> T add(T x,T y){
+     return y;
+ }
+#+END_SRC
+* trick
+** 拿到泛型类型
+#+BEGIN_SRC java
+ class GenericType<T> {
+    private T data;
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public static void main(String[] args) {
+        GenericType<String> genericType = new GenericType<String>() {};
+        Type superclass = genericType.getClass().getGenericSuperclass();
+        //getActualTypeArguments 返回确切的泛型参数, 如Map<String, Integer>返回[String, Integer]
+        Type type = ((ParameterizedType) superclass).getActualTypeArguments()[0];
+        System.out.println(type);//class java.lang.String
+    }
+}
+
+#+END_SRC

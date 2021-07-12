@@ -1214,49 +1214,6 @@ static void yield() // causes the currently executing thread to yield to another
 void join()
 void join(long millis)
 Thread.State getState()
-** generic programming
-*** type erase
-*** wildcard type
-**** lower
-<? super ClassType>
-**** Unbounded
-<?>
-**** upper
-<? extends ClassType>
-**** purpose
-upper used to read data, while lower is for writing
-*** why
-#+BEGIN_SRC java
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
-
-public class Main2 {
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        ArrayList<Dog> dogs = new ArrayList<>();
-        accept(dogs);
-
-        // compile error
-        acceptWithoutWildCard(dogs);
-    }
-
-    public static void acceptWithoutWildCard(List<Animal>animals){
-
-    }
-
-    public static void accept(List<? extends Animal> animals){
-
-    }
-}
-class Animal{
-
-}
-
-class Dog extends Animal{
-
-}
-
-#+END_SRC
 ** streams
 *** create
 #+BEGIN_SRC java
