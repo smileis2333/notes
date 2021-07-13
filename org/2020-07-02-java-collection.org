@@ -85,10 +85,15 @@ public interface Iterator<E>{
 * WeakHashMap
 该类的保存是弱引用，若其他在其他地方的引用已取消，该类的元素可以被垃圾收集器回收
 * Map views
+* TreeMap
+* Maps
+** Map views
 出于Java本身数据结构设计的影响，Map本身不隶属于Collection接口，但是获得其对象的key的collectin或者值的colletion，或者，或者的Entry的集合
 Set<K>keySet()
 Collection<V>values()
 Set<Map.Entry<K,V>> entrySet()
+** WeakHashMap
+该类的保存是弱引用，若其他在其他地方的引用已取消，该类的元素可以被垃圾收集器回收
 * views and wrapper
 借助view的概念，使用将对于抽取出来的子集合影响到父集合身上(清除父集合创建出来的子view，父集合跟着清掉)，以及Map映射为Collection的操作
 ** small collections
@@ -143,7 +148,8 @@ var result = new HashSet<String>(firstSet);
 result.retainAll(secondSet);
 taffMap.keySet().removeAll(terminatedIDs);
 relocated.addAll(staff.subList(0, 10));
-* converting between collections and array
+* general
+converting between collections and array
 #+BEGIN_SRC java
 String[] values = . . .;
 var staff = new HashSet<>(List.of(values));

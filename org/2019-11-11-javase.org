@@ -84,6 +84,16 @@ public enum VoteTargetType {
 *** Object wrapper
 Integer, Long, Boolean and so on.
 主要解决容器接收对象的矛盾
+Integer默认-128-127的缓存(可以通过VM参数改)，即
+#+begin_src java
+Integer m = 123;
+Integer n = 123;
+System.out.println(m == n); // true
+
+Integer m = 323;
+Integer n = 323;
+System.out.println(m == n); // false
+#+end_src
 **** api
 int intValue()
 static String toString(int i)
@@ -94,7 +104,7 @@ static Integer valueOf(String s)
 static Integer valueOf(String s, int radix)
 Number parse(String s)
 其他类似
-*** Strings
+*** String
 **** substring(start,end) 
 左开右闭
 **** Concatenation
