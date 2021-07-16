@@ -22,3 +22,6 @@ https://blog.csdn.net/u013613428/article/details/82120152
 1. 默认一定能拿到access token，以Github为例，可以直接拿到对应的accessToken，直接申请Github信息
 2. 只能针对标准化且能username和password登录Oauth2授权，无法进行其他变种登录
 3. 无法建立服务器初始化的oauth2产生的连接(目前)，可以做到直接连接认证中心的那种回调回应用
+* trick
+基于OIDC的服务器初始化，可以通过Multiple chain认证来实现，即支持Session，也支持Access Token方法两段式来避免认证Flow的疯狂跳转和脚本撰写
+

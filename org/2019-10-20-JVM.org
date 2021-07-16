@@ -258,3 +258,17 @@ java -X
 java -XX:+
 java -XX:+PrintCommandLineFlags
 java -XX:+PrintFlagsFinal
+* tool
+** jps(JavaVirtual Machine Process Status Tool)
+查存活的JVM进程号
+** jstack
+查对应JVM信息
+** jinfo
+看对应的JVM的参数信息，也可以某种程度上改
+** jmap
+查看统计信息并可以dump
+** jstat
+看GC统计信息
+jstat -gcutil 2815 1000 
+** jdb
+自带调试器，与IDE基于同一套底层API
