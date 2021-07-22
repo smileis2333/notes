@@ -1,6 +1,11 @@
 #+TITLE: shiro
 #+STARTUP: indent
 * Subject
+代表用户，不一定是HttpSession，Shiro能在具体环境下自动切换Session实例，如
+- 客户端应用直接读用户数据
+- 服务器应用直接以HttpSession为内容作封装
+- 可能是第三方进程
+- cron job
 * SecurityManager
 * Realms
 ** demo
@@ -196,3 +201,28 @@ SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(upToken.getUsername
 @RequiresPermissions (value={“user:a”, “user:b”}, logical= Logical.OR)
 *** @RequiresUser
 *** @RequiresGuest
+* ref 
+quick start
+http://shiro.apache.org/10-minute-tutorial.html 
+* config
+
+支持多种方式的配置注入，官方默认推荐ini格式，可认为是穷逼DI
+[main]
+# SecurityManager组件相关配置，使用了Common的Beanutil，并且模块化的实现使得该配置处可以使用对象导航
+# Objects and their properties are defined here,
+# Such as the securityManager, Realms and anything
+# else needed to build the SecurityManager
+...
+myRealm.connectionTimeout = 30000
+myRealm.username = jsmith
+...
+
+[users]
+# 静态配置，适合存粹的MVP开发
+
+[roles]
+# 静态配置，配置
+# user1 = 2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b, role1, role2, ...
+
+[urls]
+# 声明接口Permission
