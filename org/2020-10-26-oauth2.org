@@ -15,6 +15,8 @@ website server×Ô¼ºÄÃclient_idºÍclient_secret»»token£¬ÄÃ×Ô¼ºÏà¹ØµÄĞÅÏ¢£¬»òÕß×Ô¼º×
 https://www.jianshu.com/p/84a4b4a1e833
 http://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html
 https://www.cnblogs.com/xusir/p/3473554.html
+https://160668873.gitbook.io/tkey-docs/ren-shi-jie-duan-bi-du/tkey-baisc //»ù±¾¸ÅÄî
+https://auth0.com/docs/authorization/which-oauth-2-0-flow-should-i-use auth flow select
 * spring oauth
 ** client
 http://localhost:56789/oauth2/authorization/github 
@@ -22,8 +24,6 @@ http://localhost:56789/oauth2/authorization/github
 '/logi'n Ä¬ÈÏµÄlogin page£¬»á¸úSecurity³åÍ»£¬¿ÉÒÔÓÃorder´¦Àíµô
 ** principle
 @AuthenticationPrincipal OAuth2User user
-* ref
-https://160668873.gitbook.io/tkey-docs/ren-shi-jie-duan-bi-du/tkey-baisc //»ù±¾¸ÅÄî
 * core
 ** ¸ù±¾Ô­Òò
 ²»¿çÓò²»´æÔÚµ¥µãµÇÂ¼ÎÊÌâ£»

@@ -23,6 +23,8 @@ little js function
 ** tool
 *** shadowsocks-libev
 ss-local -s [host] -p [port] -l 1080 -k apBPAP123 -m chacha20-ietf
+
+ss-local -s 地址 -p 20039 -l 1080 -k 密码 -m chacha20-ietf
 *** proxychains
 *** vpn-tether
 手机开启ssr共享给电脑
@@ -60,6 +62,12 @@ https://medium.com/@TachyonDevel/%E6%BC%AB%E8%B0%88%E5%90%84%E7%A7%8D%E9%BB%91%E
 https://blog.csdn.net/dianagreen7/article/details/80033063
 https://docs.ginuerzh.xyz/gost/tls/
 * vendor
+N3RO
+36DCup
+ssrcloud
+Mengdi-Cloud
+忍者云
+MunCloud 
 速蛙云
 NSL
 N3R0

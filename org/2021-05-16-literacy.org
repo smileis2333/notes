@@ -13,3 +13,4 @@ https://en.wikipedia.org/wiki/Software_requirements_specification
 https://en.wikipedia.org/wiki/Class_diagram
 https://www.cnblogs.com/JacZhu/p/9779975.html jwt cons
 https://www.cnblogs.com/zuopeng/p/4141467.html lvm and gcc diff
+https://zhuanlan.zhihu.com/p/32229929

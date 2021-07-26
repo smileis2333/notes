@@ -45,3 +45,6 @@ https://bootstrapstudio.io/
 http://www.fontawesome.com.cn/faicons/
 * ref
 https://github.com/iamjoel/front-end-plugins 常用插件
+https://dribbble.com/ 平面设计品
+* 轮播
+swiper

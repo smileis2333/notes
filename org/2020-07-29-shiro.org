@@ -226,3 +226,33 @@ myRealm.username = jsmith
 
 [urls]
 # 声明接口Permission
+* authorization
+ModularRealmAuthorizer --> iterate realms
+** RolePermissionResolver
+转Role为Permission，常见于无Permission概念的认证系统接入，如LDAP没有Permission，但是可以将对应的Role包含的Permission进行外置来进行 roles --> permissions的转换
+** Permission
+*** Wildcard Permissions
+# 多部份资源描述(Multiple parts)
+printer:query
+# 拼在一起写(Multiple values)
+printer:print,query
+# All Values
+printer:*
+
+#+begin_src java
+// 当使用基于上述模式的permission控制时，权限检测必须进行具体
+// 以用户A具有对于打印机的lp7200的打印权限，第一条检查能通过，第二条则不能
+
+
+//要求用户有对于打印机的lp7200的打印权限
+if ( SecurityUtils.getSubject().isPermitted("printer:print:lp7200") ) {
+    //print the document to the lp7200 printer }
+}
+
+//要求用户有对于全部打印机的的打印权限, printer:print --> printer:print:*
+if ( SecurityUtils.getSubject().isPermitted("printer:print") ) {
+    //print the document }
+}
+#+end_src
+
+

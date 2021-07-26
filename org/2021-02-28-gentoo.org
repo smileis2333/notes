@@ -216,3 +216,34 @@ dev-java/openjdk -gentoo-vm
 dev-java/openjdk-bin -gentoo-vm
 * compile
 https://github.com/distcc/distcc distcc
+* my world
+app-editors/emacs
+app-editors/vim
+app-i18n/kcm-fcitx
+app-portage/gentoolkit
+app-shells/bash-completion
+dev-db/mariadb
+dev-java/gradle-bin
+dev-vcs/git
+kde-apps/dolphin
+kde-apps/kmix
+kde-apps/spectacle
+kde-misc/yakuake
+kde-plasma/plasma-meta
+media-fonts/font-adobe-100dpi
+media-fonts/wqy-zenhei
+net-libs/nodejs
+net-misc/aria2
+sys-apps/mlocate
+sys-boot/grub
+sys-kernel/gentoo-sources
+www-client/firefox-bin
+www-client/google-chrome
+www-servers/nginx
+
+USE
+INPUT_DEVICES="libinput"
+VIDEO_CARDS="nouveau"
+USE="xft pulseaudio"
+MAKEOPTS="-j5"
+GENTOO_MIRRORS="https://mirrors.163.com/gentoo/"

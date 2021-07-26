@@ -434,3 +434,6 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 }
 
 #+END_SRC
+* ref
+即是服务器又当资源服务器，多段配置
+https://stackoverflow.com/questions/44970848/spring-security-jwt-token-for-api-and-session-for-web

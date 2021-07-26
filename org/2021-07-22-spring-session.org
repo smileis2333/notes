@@ -1,0 +1,2 @@
+
+https://stackoverflow.com/questions/43523648/spring-session-creation-policy-per-request

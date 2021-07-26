@@ -79,3 +79,7 @@ EXPLAIN SELECT * FROM t_user tu WHERE user_identity  = 'BUSINESS' AND username =
 tr.education_infos->-1
 * È«ÎÄË÷Òý
 https://www.jianshu.com/p/0dc2a8bf9631
+* ref
+https://dba.stackexchange.com/questions/129924/how-to-disable-the-logging-of-parameter-values-in-postgresql
+
+https://stackoverflow.com/questions/68111064/how-to-get-full-statement-in-postgresql log full statement

@@ -1,0 +1,4 @@
+#+TITLE: identity resource
+#+STARTUP: indent
+* 生成假数据
+http://www.haoweichi.com/
