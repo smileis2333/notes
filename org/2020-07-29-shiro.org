@@ -6,6 +6,10 @@
 - 服务器应用直接以HttpSession为内容作封装
 - 可能是第三方进程
 - cron job
+* Session
+1. 提供了no-web和web的实现
+2. timeout机理是在访问的时候才校验(subject.getSession()，为了性能考虑)
+3. 由于2的原因(即不访问就一直占用内存)，必须开启定时任务进行定期purge session
 * SecurityManager
 * Realms
 ** demo
