@@ -155,3 +155,9 @@ https://zhuanlan.zhihu.com/p/360846976
 https://www.keycloak.org/docs/12.0/server_development/index.html
 ** keycloak self security
 https://stackoverflow.com/questions/54482881/keycloak-custom-spi-rest-endpoint-with-authorization custom rest api with permission
+* token
+SSO Session Max  --> 控制过期和刷新时间的最大边界
+
+Access Token Lifespan  --> 过期时间
+
+SSO Session Idle --> 刷新时间
