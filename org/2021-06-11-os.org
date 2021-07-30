@@ -86,3 +86,119 @@ CS段寄存器
 
 ** 保护模式
 ** 长模式
+* login gate
+输入可以通过类似的构造往上叠加，形成3-input AND(Or) gate
+** and gate
+[[file:~/study-record/img/and_gate.png][and gate]] ==> [[file:~/study-record/img/and_gate_symbol.jpg][symbol]]
+
+** or gate
+[[file:~/study-record/img/or_gate.png][or gate]] ==> [[file:~/study-record/img/or_gate_symbol.jpg][symbol]]
+** xor gate
+[[file:~/study-record/img/xor_gate.png][xor gate]] ==> [[file:~/study-record/img/xor_gate_symbol.jpg][symbol]]
+** NOT OR gate(nor gate)
+[[file:~/study-record/img/nor_gate.png][nor gate]] ==> [[file:~/study-record/img/nor_gate_symbol.jpg][symbol]]
+** NOT And gate(nand gate)
+[[file:~/study-record/img/nand_gate.png][nand gateway]] ==> [[file:~/study-record/img/nand_gate_symbol.jpg][symbol]]
+** inverter
+[[file:~/study-record/img/inverter.png][inverter]] ==> [[file:~/study-record/img/inverter_symbol.jpg][symbol]]
+** buffer
+[[file:~/study-record/img/buffer_circuit.png][buffer]] ==> [[file:~/study-record/img/buffer_circuit_symbol.jpg][symbol]]
+作用:
+- 放大信息
+- 延迟
+** 2-Line-to-4-Line Decoder
+[[file:~/study-record/img/dream_kitty.png][input device]]
+(N x ((M x (W + T)) + (F x (1 – W)))) + B
+
+[[file:~/study-record/img/w_signal.jpg][w output]]
+[[file:~/study-record/img/b_signal.jpg][b output]]
+[[file:~/study-record/img/t_signal.jpg][t output]]
+[[file:~/study-record/img/o_signal.jpg][o output]]
+
+[[file:~/study-record/img/wbto_combine.png][combine all to become 2-line-to-4-line-decoder]]
+
+真值表
+| A1 | A2 | w | b | t | o |
+|  0 |  0 | 1 | 0 | 0 | 0 |
+|  0 |  1 | 0 | 0 | 1 | 0 |
+|  1 |  0 | 0 | 1 | 0 | 0 |
+|  1 |  1 | 0 | 0 | 0 | 1 |
+
+decode后的真值是单位矩阵，事实上可以通过设计让其不以单位矩阵的形式呈现
+** 转换(De Morgan’s Laws)
+[[file:~/study-record/img/de_morgan_formula.jpg][formula]] ==> [[file:~/study-record/img/de_morgan_formula_1.jpg][circuit1]], [[file:~/study-record/img/de_morgan_formula_2.jpg][circuit2]]
+* 加法机演化思路
+** 纯加法机(数值均是正数，溢出数值无法确认)
+全部位置用于表示数值，如4bit可以代表16个数字，原理是处理三个输入，并往上一位套娃，第一个bit由于不存在，所以默认为空
+** 能加能减机(两个数字都是正数且A>B，在加一个输入信息表示加还是减法)
+
+条件:
+- 8bit加法机
+- A>B，A=253，B=176
+
+原理：
+1. 消除借位(xor gate)，即可以使用纯加法机
+2. 带来的第九个进位，可以直接废弃,因为A>B且A均属于0~2^8，所以最终数值一定还在范围内
+3. 纯加法机的第一bit用处理符号信号来输入
+
+
+10进制
+253-176 ==> 253-176+1000-1000 ==> 253-176+999-999 ==> 253+(999-176)-999
+2进制
+11111101-10110000
+==> 
+11111101-10110000+11111111+1-100000000
+==>
+11111101+(11111111-10110000)(inverter)+1-100000000
+==>
+(11111101+01001111+1)(加法机一定会进位，进位拿去当underflow的信息，与sub作xor gate，拿来作报警，相当于-100000000可以不用算)
+
+
+
+** 加法机(数值存在符号，由第一位确定)
+***  ten’s complement
+该做法的范围内的语义完全对应上，而进位可以直接无视
+
+银行存款上限为499$,最低为-500$，所以如果不使用符号位，限定三个位，可以以500~999作-500~-1的映射
+–500 –499 –498 … –4 –3 –2 –1 0 1 2 3 4 … 497 498 499
+==>
+500 501 502 … 996 997 998 999 000 001 002 003 004 … 497 498 499
+
+-1=999
+1=1
+999+1=1000，大于3位的可以无视，所以-1+1=0，
+同理，
+-499+2=501+002=503 ==> -497
+
+mapping转换机制，位数的最大值在+1，即-1转换为 -1+999+1
+*** two’s complement
+从数值上避免了符号位(以隐含的形式，并且可以直接避免对于减法的处理)
+
+8bit
+|   binaty | decimal |
+| 10000000 |    -128 |
+| 10000001 |    -127 |
+| 10000010 |    -126 |
+| 10000011 |    -125 |
+|      ... |     ... |
+| 11111101 |      -3 |
+| 11111110 |      -2 |
+| 11111111 |      -1 |
+| 00000000 |       0 |
+| 00000001 |       1 |
+| 00000010 |       2 |
+|      ... |     ... |
+| 01111100 |     124 |
+| 01111101 |     125 |
+| 01111110 |     126 |
+| 01111111 |     127 |
+
+先反转在+1，二进制直接存该补码
+10000001+01111100=11111101，实际值为-3
+
+mapping转换机制，位数的最大值在+1，即-125，数值部分01111101反转10000010在加1即10000011
+
+注意:
+10000011+10000011=100000110 进位了
+01111101+01111101=11111101 
+上述都属于溢出，可以观察到通用的部分即符号变味，因此，以输入源最高位的两个信号配合最终结果的信号，如果两个输入同符号且最终结果和该符号不同，即代表越界(不同符号一定是落在bit区间内，如-1+127=11111111+01111111=101111110，去掉进位即为126)
