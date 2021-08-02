@@ -1,0 +1,142 @@
+#+TITLE: algorithm
+#+STARTUP: indent
+* sort
+** bubble sort
+O(n^2)
+每次冒一个最大或者最小(这里以最大为例)
+20, 40, 30, 10, 60, 50
+
+==>
+20, 30, 10, 40, 50, | 60
+==>
+20, 10, 30, 40, | 50, 60
+==>
+10, 20, 30, | 40, 50, 60
+==>
+10, 20, | 30, 40, 50, 60
+==>
+10, | 20, 30, 40, 50, 60
+
+
+#+begin_src java
+// 原始版本
+public void bubbleSort(int[] input) {
+    for (int i = 0; i < input.length; i++) {
+        for (int j = 0; j < input.length - i - 1; j++) {
+            if (input[j] > input[j + 1]) {
+                int tmp = input[j];
+                input[j] = input[j + 1];
+                input[j + 1] = tmp;
+            }
+        }
+    }
+}
+
+// 因为循环导致冒泡次数每次冒一次，可以看到冒泡区间逐渐变小，但是即使已经有序了，原始版本也是需要接着冒泡，直到区间缩小为0，因为冒泡的优化，可以通过确认是否产生交换，来决定是否已经有序并停止
+// 改进版本
+public void bubbleSort(int[] input) {
+    for (int i = 0; i < input.length; i++) {
+        boolean order = true;
+        for (int j = 0; j < input.length - i - 1; j++) {
+            if (input[j] > input[j + 1]) {
+            // 基于以下事实：
+            // - 只要没交换，就可以确定一定已经有序
+            // - 如果交换了，不能确定是否已经有序
+                order = false;
+                int tmp = input[j];
+                input[j] = input[j + 1];
+                input[j + 1] = tmp;
+            }
+        }
+        if (order) {
+            return;
+        }
+    }
+}
+#+end_src
+** quick sort
+例子：
+30, 40, 60, 10, 20, 50
+假如pivot从左边开始，等于30
+==>
+20, 40, 60, 10, 30, 50
+==>
+20, 30, 60, 10, 40, 50
+==>
+20, 10, 60, 30, 40, 50
+==>
+20, 10, 30, 60, 40, 50
+
+左边递归
+20, 10
+==>
+10, 20
+
+右边递归
+60, 40, 50
+==>
+50, 40, 60
+
+50, 40
+==>
+40, 50
+
+排序完  成
+
+
+
+快排，原理为以一个基数(pivot)为准，先找到该基数的位置，在分别对两边剩余下的块进行排序
+时间复杂度，最大O(n^2)，最小O(nlogn)
+#+begin_src java
+public void quickSort(int[] input) {
+    this.quickSort(input, 0, input.length - 1);
+}
+
+public void quickSort(int[] a, int l, int r) {
+    if (l < r) {
+        int i, j, x;
+        i = l;
+        j = r;
+        x = a[i];
+
+        while (i < j) {
+            while (i < j && a[j] >= x)
+                j--;
+            if (i < j)
+                a[i++] = a[j];
+
+            while (i < j && a[i] <= x)
+                i++;
+            if (i < j)
+                a[j--] = a[i];
+        }
+        a[i] = x;
+        quickSort(a, l, i - 1);
+        quickSort(a, i + 1, r);
+    }
+}
+#+end_src
+** insert sort
+#+begin_src java
+public void insertSort(int[] input) {
+    for (int i = 1; i < input.length; i++) {
+        int j;
+        for (j = i - 1; j >= 0; j--)
+            if (input[j] < input[i])
+                break;
+        if (j != i - 1) {
+            int tmp = input[i];
+            int k;
+            for (k = i - 1; k > j; k--) {
+                input[k + 1] = input[k];
+            }
+            input[k + 1] = tmp;
+        }
+    }
+}
+
+#+end_src
+** merge sort
+#+begin_src java
+
+#+end_src

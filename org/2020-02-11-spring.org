@@ -102,5 +102,10 @@ websockert -- lifecycle和websocker一致
 * BeanPostProcessor
 * autowire
 @Inject JSR 330 replace @Autowired
+* 循环依赖解决原理
+以A-->B-->A，声明顺序为A，B
+
+s
+
 * 值得注意
 https://spring.io/blog/2020/06/08/migrating-spring-boot-s-build-to-gradle
