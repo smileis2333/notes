@@ -20,3 +20,111 @@ command为自定义的内容
 https://slack.dev/java-slack-sdk/
 https://slack.dev/java-slack-sdk/guides/getting-started-with-bolt-socket-mode#gradle
 https://api.slack.com/community
+*** dependency
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation("com.slack.api:bolt-socket-mode:1.6.1")
+    implementation("javax.websocket:javax.websocket-api:1.1")
+    implementation("org.glassfish.tyrus.bundles:tyrus-standalone-client:1.17")
+    implementation group: 'cn.hutool', name: 'hutool-all', version: '5.5.7'
+    implementation("org.slf4j:slf4j-simple:1.7.30")
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.23'
+}
+*** demo
+#+BEGIN_SRC java
+public class MyApp {
+    public static void main(String[] args) throws Exception {
+        // App expects an env variable: SLACK_BOT_TOKEN
+        App app = new App();
+
+        // hello测试
+        setHelloCommand(app);
+        // 获取环境列表
+        setEnvCommand(app);
+        // 密码修改
+        setPasswordCommand(app);
+
+        new SocketModeApp(app).start();
+    }
+
+    private static void setHelloCommand(App app) {
+        app.command("/gb-hello", (req, ctx) -> {
+            final String text = req.getPayload().getText();
+            return ctx.ack(":wave: gb bot Hello!" + text);
+        });
+    }
+
+    private static void setEnvCommand(App app) {
+        app.command("/gb-env", (req, ctx) -> {
+            if (StrUtil.equals("test", req.getPayload().getText())) {
+                return ctx.ack(
+                        "运营端: https://test.gobrand.top:19980/#/login\n" +
+                                "B端: https://test.gobrand.top:19990/#/login\n" +
+                                "C端：https://test.gobrand.top:20000/home/homePage");
+            } else if (StrUtil.equals("stage", req.getPayload().getText())) {
+                return ctx.ack(
+                        "运营端: http://opt.staging.gobrand.top/#/login \n" +
+                                "B端: http://cpn.staging.gobrand.top/#/login\n" +
+                                "C端：http://c.staging.gobrand.top/home/homePage");
+            }
+            return ctx.ack("command ilegal");
+        });
+    }
+
+    private static void setPasswordCommand(App app) {
+        app.command("/gb-password", (req, ctx) -> {
+            final String[] params = StrUtil.split(req.getPayload().getText()," ");
+            if (params.length == 0) {
+                // dev 环境 client,business,opt环境都刷成123456b
+                SQLUtil.resetPassword();
+            } else if (params.length == 1) {
+                final String env = params[0];
+                SQLUtil.resetPassword(env);
+            }
+            return ctx.ack(":wave: reset password success!");
+        });
+    }
+}
+
+public class SQLUtil {
+    public static final String devURL = "jdbc:mysql://gobrand-local-dev:3306/gobrand-platform?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=true";
+    public static final String testURL = "jdbc:mysql://gobrand-local-dev:3306/gobrand-platform-test?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=true";
+    public static final String username = "root";
+    private static final String password = "yaXxCg86Kx";
+    /**
+     * 123456b的编码
+     */
+    private static final String userEncodePassword = "bHUxNVJZeUxZUlMyYVJHbldCNEsxaVlDNmMwb08ya1BWTG4vcWIxcThXUT0=$rwvW0VbQm3tcjJC9sQgynCpYK8KxJ+4m";
+
+    public static final void resetPassword(String env) {
+        Executors.newSingleThreadExecutor().submit(()->{
+            String url = null;
+            if (StrUtil.equals(env, "test")) {
+                url = testURL;
+            } else if (StrUtil.equals(env, "dev")) {
+                url = devURL;
+            }else {
+                throw new RuntimeException("env param error");
+            }
+            try {
+                final String client = "UPDATE t_client_user set `password`='%s'";
+                final String business = "UPDATE t_business_user set `password` = '%s'";
+                final String opt = "UPDATE t_platform_operator set `password` = '%s'";
+
+                final Connection connection = DriverManager.getConnection(url, username, password);
+                connection.createStatement().execute(String.format(client, userEncodePassword));
+                connection.createStatement().execute(String.format(business, userEncodePassword));
+                connection.createStatement().execute(String.format(opt, userEncodePassword));
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+    }
+
+    public static final void resetPassword(){
+        resetPassword("dev");
+    }
+}
+
+#+END_SRC
