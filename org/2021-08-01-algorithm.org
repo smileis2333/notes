@@ -1,6 +1,6 @@
 #+TITLE: algorithm
 #+STARTUP: indent
-* sort
+* sort algorithm
 ** bubble sort
 O(n^2)
 每次冒一个最大或者最小(这里以最大为例)
@@ -140,3 +140,10 @@ public void insertSort(int[] input) {
 #+begin_src java
 
 #+end_src
+* boyer-moor algorithm
+* fenwick tree(bit)
+- 每个节点存储部分和
+- 查询时把同高的节点加起来，i-=lowbit(i)
+- 更新时从叶子节点传播到父级节点，i+=lowbit(i)
+
+

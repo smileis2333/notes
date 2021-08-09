@@ -220,3 +220,16 @@ mapping转换机制，位数的最大值在+1，即-125，数值部分01111101反转10000010在加1即10
 以电路来变更门的状态，进而实现对应的算术逻辑
 [[file:~/study-record/img/8080_cpu.png][8080 cpu]]
 可以看到A0~A15是作为地址总线来输入，而D0~D7则是作为双向数据流，根据地址总线触发内存，输出的8bit，或者反过来写回去，内部的结构根据
+* file system
+** CP/M
+- each allocation block containe 8 sectors
+- first two block is directory, containe name and crucial information
+directory entry
+| Bytes     | Meaning               |
+| 0         | Usually set to 0      |
+| 1–8       | Filename              | 8字符文件名
+| 9–11      | File type             | 文件类型
+| 12 	   | File extent           |
+| 13–14	 | Reserved (set to 0)   |
+| 15	    | Sectors in last block |
+| 16–31	 | Disk map              |
