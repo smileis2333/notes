@@ -3,8 +3,32 @@
 * ITEM 1: CONSIDER STATIC FACTORY METHODS INSTEAD OF CONSTRUCTORS
 ** advantage
 1. 表意清晰(场景1，参数签名无法尽可能对返回值做出解释，BigInteger(int, int, Random)逐渐过渡为BigInteger.probablePrime，场景2，签名参数类型个数对等，如均需要3string+2int，由于参数签名的限制，只能采用调转顺序，容易导致混乱)
-2. they are not required to create a new object each time they’re invoked(主要针对的是instance-controlled class)，更极端点，可以创建都不用，如Boolean直接预创建了TRUE和FALSE
-3. hiding implemenration, return subtype of their return typex
+2. 缓存刚创建的对象(涉及到具体的初始化逻辑，取决于内部实现者，可以单例也可能是别的形式)/直接传回不可变对象(Boolean预设了Boolean.TRUE/FALSE)
+3. 隐藏实现，根据情况下返回具体子类/实现(常见做法，Type 变成 Types --> Java 提供的 Colletions 提供了对于 Colletion(有超过45个实现) 各类包装，如不可变，subrange等)
+4. 可以视为3的结果，即迭代时，可以使 client 不受影响的进行拓展
+5. 写的时候可以不用实例化，体现在 SPI 类似的机制如 JDBC (JDBC 比 ServiceLoader 早)
+*** 命名范式
+- from
+单参数
+Date d = Date.from(instant);
+- of
+多参数
+Set<Rank> faceCards = EnumSet.of(JACK, QUEEN, KING);
+- valueOf
+单/多参数替代物
+BigInteger prime = BigInteger.valueOf(Integer.MAX_VALUE);
+- instance or getInstance
+StackWalker luke = StackWalker.getInstance(options);
+- create or newInstance
+等价于上述，但是要求多实例
+Object newArray = Array.newInstance(classObject, arrayLen);
+- getType
+使用在非类自己本身的时候
+FileStore fs = Files.getFileStore(path);
+- newType
+同上，多了一个语义上的区别
+- type
+List<Complaint> litany = Collections.list(legacyLitany);
 * ITEM 2: CONSIDER A BUILDER WHEN FACED WITH MANY CONSTRUCTOR PARAMETERS
 ** advantage
 1. 解决长参数可读性

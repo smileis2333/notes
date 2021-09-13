@@ -415,5 +415,12 @@ per sender per group, receiver specifies the address of a  group address and a s
 toggle: 0, constant: 1
 * ref
 [[https://learning.oreilly.com/library/view/head-first-networking/9780596804398/][Head First Networking]]
+-- 介绍了常用的网络设备和基本概念，相对简陋易读
+
 [[https://learning.oreilly.com/library/view/tcpip-illustrated-volume/9780132808200/][TCP/IP Illustrated, Volume 1: The Protocols(second edition)]]
+-- 适当参考，文笔和排版有问题，难读，删除了第一版中的应用协议和路由协议，并加了新增协议，可以用于补充DHCP，NAT，TCP，VPN(IPsec)部分，IPv6部分，抓包从tcpdump变成了wireshark
+
 [[https://learning.oreilly.com/library/view/tcpip-illustrated-volume/0201633469/][TCP/IP Illustrated, Volume 1: The Protocols(first edition)]]
+-- 存在废弃协议的部分，很流畅
+
+CCNA, CCNP, CCIE 思科三项(CCIE因为可以直接考，已经掉价了)
