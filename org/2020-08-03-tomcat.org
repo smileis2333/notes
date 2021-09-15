@@ -10,7 +10,7 @@
 ****** Acceptor
 用于端口监听的thread，收到之后给endpoint让其，注册进poller的selector中
 ****** Poller
-对具体的注册行为和属性进行处理，然后找一波/创建worder thread, 丢给worker thread进行处理
+       对具体的注册行为和属性进行处理，然后找一波/创建worder thread, 丢给worker thread进行处理
 ****** Worker
 *** engine
 List<Host>

@@ -1,0 +1,6 @@
+#+TITLE: udp
+#+STARTUP: indent
+#+FILETAGS: :network
+* 注意事项
+tcp和udp，是可以占用同一个端口的，只是不常见，因为本质上从ip层demultiplex的过程根据ip header和协议和端口，所以是可以完全端口并不是完全的标识符
+

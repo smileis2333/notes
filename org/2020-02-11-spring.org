@@ -109,3 +109,4 @@ s
 
 * 值得注意
 https://spring.io/blog/2020/06/08/migrating-spring-boot-s-build-to-gradle
+https://juejin.cn/post/6930904292958142478#heading-5 解决循环依赖及代理对象
