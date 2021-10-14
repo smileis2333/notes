@@ -1,7 +1,7 @@
 #+TITLE: network(ip) layer
 #+STARTUP: indent
 * ipv4
-[[file:~/Desktop/personal/study/img/ipv4_format.gif][ipv4 format]]
+[[file:../img/ipv4_format.gif][RFC 791]]
 ** header
 -----
 第一个是版本号(4bit)，指定小版本的差异，决定处理方式
@@ -30,6 +30,19 @@ data
 ** CIDR
 1. 与classful network一样，是一种分配方法
 2. 取代classful network，为了更加方便的进行地址分配与aggregate route
+** checksum
+Internet Protocol Version 4, Src: 27.151.12.70, Dst: 192.168.0.6
+
+# wireshark
+0000   45 00 00 28 25 7c 40 00 37 06 35 c9 1b 97 0c 46
+0010   c0 a8 00 06
+
+4500+0028+257c+4000+3706+0000(checksum itself is been ignore)+1b97+0c46+c0a8+0006 = 1 CA35
+
+CA35 + 1 = CA36
+
+^CA36 = 35c9
+
 * icmp
 ** formar
 [[file:~/Desktop/personal/study/img/icmp_encap_within_ip_datagram.gif][ICMP messages encapsulated within an IP datagram]]
@@ -55,3 +68,6 @@ identifier用于区别process，如多个tty开多个ping
 sequence number用于区分第一个包，区分发送的echo request
 * CIDR
 start from c class address --> apply for all address
+* ref
+RFC 894 --> ethernet
+RFC 1042 --> 802 networks

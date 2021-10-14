@@ -1,6 +1,12 @@
 #+TITLE: gentoo
 #+STARTUP: indent
-* install 
+* install
+网络处理，有线直接插，默认全走通
+
+无线可以用wpa_supplicant
+wpa_supplicant -i [ip addr看到的无线网卡名称] -c /etc/wpa_supplicant.conf(wifi账号密码)
+然后dhcpcd
+
 ** legacy bios
 #+BEGIN_SRC bash
 rc-service sshd start
@@ -71,6 +77,7 @@ umount -l /mnt/gentoo/dev{/shm,/pts,}
 umount -R /mnt/gentoo
 #+END_SRC
 ** uefi bios + nvme
+
 #+BEGIN_SRC bash
 rc-service sshd start
 
@@ -127,19 +134,39 @@ emerge --config sys-libs/timezone-data
 # 国际化
 env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
 
+
+# 防止不兼容，导致其他package冲突
+emerge --ask --verbose --update --deep --newuse @world 
+
 emerge --ask sys-kernel/gentoo-sources
 emerge --ask sys-kernel/genkernel
+
 nano -w /etc/fstab
 /dev/nvme0n1p2	/boot	vfat	defaults	0 2
-genkernel --makeopts=-j7 all
 
-grub-install --target=x86_64-efi --efi-directory=/boot --removable # 有些主板限制，如b460m
+# compile kernell mannually or genkernel
+cd /usr/src/linux
 
+1. genkernel --makeopts=-j7 all
+2. cd /usr/src/linux
+   make menuconfig
+   make && make modules_install
+   make install
+
+
+emerge --ask --verbose sys-boot/grub:2
+
+# 有些主板限制，如b460m
+grub-install --target=x86_64-efi --efi-directory=/boot --removable 
 grub-mkconfig -o /boot/grub/grub.cfg
 
 
-# 确认能启动后最好update world
-emerge --ask --verbose --update --deep --newuse @world
+exit
+cd
+umount -l /mnt/gentoo/dev{/shm,/pts,}
+umount -R /mnt/gentoo
+reboot
+
 #+END_SRC
 * dispatch-conf
 genkernel就会导致该问题
@@ -247,3 +274,5 @@ VIDEO_CARDS="nouveau"
 USE="xft pulseaudio"
 MAKEOPTS="-j5"
 GENTOO_MIRRORS="https://mirrors.163.com/gentoo/"
+     
+     

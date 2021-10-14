@@ -3,4 +3,14 @@
 * user account
 带账号密码，可登录，用途:
 1. 主要通行于各个谷歌客户端服务，如keep，drive,gmail
-2. 作为各个GCP infru的父级账号(如GA)，和GCP的服务账号(绑定对于用户信息的读取和具体诸如GA账号的信息读取，用于GCP部署权限的细化)
+2. 作为各个GCP infra的父级账号(如GA)，和GCP的服务账号(绑定对于用户信息的读取和具体诸如GA账号的信息读取，用于GCP部署权限的细化)
+* recaptcha
+v2通常不会出问题
+** keycloak demo
+- 关闭部分安全性检测
+Realm Settings --> Security Defenses
+X-Frame-Options: ALLOW-FROM https://www.google.com
+Content-Security-Policy: frame-src 'self' https://www.google.com https://www.recaptcha.net; frame-ancestors 'self'; object-src 'none';
+- 配置secret
+Authentication --> Registration --> Recaptcha --> config --> 配置sitekey和secret
+- 改host后访问http://ssomytest.com:8080/auth/realms/test/account/#/

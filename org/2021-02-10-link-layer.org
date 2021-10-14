@@ -1,30 +1,73 @@
 #+TITLE: link layer
 #+STARTUP: indent
 * ethernet
-[[file:~/Desktop/personal/study/img/frame_format_RFC1042_RFC894.gif][RFC 894 and RFC 1042]]
-** RFC 894
+[[file:~/study-record/img/frame_format_RFC1042_RFC894.gif][RFC 894 and RFC 1042]]
+- 两者定义性冲突，后者标准定义的较晚
+- 因为存在介质传输的问题，因为两者存在最小帧的问题，最小值为两者的data最小值+其他的必要字段头
+** RFC 894(ethernet)
 DST(6 byte)--SRC(6 byte)--type(2 byte)--data(46-1500byte)--CRC(4 byte)
-** RFC1042
-DST(6 byte)--SRC(6 byte)--length(2 byte)--LLC(3 byte)--SNAP(5 byte)--type(2 byte)--data(46-1500)--CRC(4 byte)
+** RFC 1042(802 networks)
+DST(6 byte)--SRC(6 byte)--length(2 byte)--LLC(3 byte)--SNAP(5 byte)--type(2 byte)--data(38-1500)--CRC(4 byte)
 - 为了加入LLC，和SNAP的功能
 - 为了保持兼容，因为已存在的type没有超过某个阈值，所以将type重载成length，用于标识data长度
 - data(38) = old data(46)-LLC(3 byte)-SNAP(5 byte)-type(2 byte)
 * SLIP(Serial Line IP)
 END (0xc0)--IP datagram--END (0xc0)
-[[file:~/Desktop/personal/study/img/slip_encapsulation.gif][SLIP encapsulation]]
+[[file:~/study-record/img/slip_encapsulation.gif][RFC 1055]]
 特点
-1. 不带任何所谓的MAC地址，具体通讯由上层协议(IP)决定，即通讯双方必须实现知道对方的IP
+1. 不带任何所谓的MAC地址，具体通讯由上层协议(IP，也只能跑IP)决定，即通讯双方必须实现知道对方的IP
 2. 完全不兼容其他link layer协议
 3. 不带CRC，即数据包的破损，只能由上层协议自己进行确认
 ** CSLIP Compressed SLIP
+SLIP主要是用于交互性操作，如RLogin/Telent，而对一个byte，传输时的包装格式涉及40bytes，CSLIP维持了SLIP的TCP链接，将40降到了3-5来节省传输开销
 * PPP(Point-to-Point Protocol)
-[[file:~/Desktop/personal/study/img/ppp_frame.gif][Format of PPP frames]]
+跟SLIP一样跑在串口上
+[[file:~/study-record/img/ppp_frame.gif][RFC 1548]]
 1. 一样不带MAC，带type field，所以支持多种协议的datagram
 2. 支持连通后设置压缩选项，即常量消除，type filed压成一个，即传输可视为3byte(SLIP 2byte)
 escae:
 0x7e --> 0x7d, 0x5e
 0x7d --> 0x7d, 0x5d
+** compression
+- 规范性的常量被忽略，协议字段2bytes --> 1byte
+- IP层和TCP层和CSLIP压缩类似
+* loopback
+[[file:~/study-record/img/Processing of IP datagrams by loopback interface.gif][Processing of IP datagrams by loopback interface]]
+
+从IP层往下传的三条规则(并非从传输层作隔断)
+1. 是127.0.0.1传给loopback driver
+2. 是广播或多播裂成两份，一份给loopback driver(广播一定包含自己，由定义所决定)，一份往正常ethernet传
+3. 地址非127.0.0.1，但是地址与ethernet配备的地址一致，往loopback传(有些卡，没法传出去的时候还读回来)
 * MTU
-data部分占用的最大byte，影响上层协议如何传输，如果在IP层需要传输的IP数据包(加上IP header)超过MTU，会进行拆分为最大上限的MTU
-* path MTU
-从一侧到另一侧的MTU的最小值，带方向，因为数据包传输路由并非一定固定
+data部分占用的最大byte，影响上层协议如何传输，如果在IP层需要传输的IP数据包(加上IP header)超过MTU，会进行拆分为link layer允许最大上限的MTU
+
+802是1492
+ethernet是1500
+** path MTU
+同网络下的MTU是一致的
+跨越路由器到达终点时，如果联通的两台主机也可能同处于一致的link layer如ethernet，MTU也一致，但
+中途可能存在link layer不一致的情况，其中最小的MTU将会导致IP fragment出现，该MTU称为Path MTU(带方向，因为数据包传输路由并非一定固定，路由也是)
+* arp
+** format
+[[file:../img/arp_frame_format.gif][ARP format]]
+frame type --> 0x0806
+hard type --> 1
+prot type --> 0x0800
+hard size --> 6
+prot size --> 4
+op --> 1(request),2(reply),3(rarp request), 4(rarp reply)
+** flow
+请求者广播 --> 接收者直接传输(非广播)
+          --> 不存在，重试
+** [[file:../img/proxy_arp.gif][proxy arp]]
+可以看到netb和sun中间是通过slip链接，此时，加入.1的网络要访问到sun，因为根本就不存在ethernet addr，所以此处netb充当了接受arp解析的proxy agent，即把要到sun的包都获取到，然后在通过串口驱动发过去(不涉及硬件地址)
+
+大部分情况不推荐，可能出现在为了兼容老旧设备的情况下
+** gratuitous arp
+每台机子启动时会发出arp，who has [my ip], tell [my ip]
+目的有二:
+1. 确认是否ip重复被占用
+2. 如果把换了张网卡，该广播可以及时更新到内网的主机arp cache(arp协议自己设计的功能，收到时即可以知道sender的ip和ethernet addr作为entry存进来)
+* rarp
+** format
+frame type --> 0x0805

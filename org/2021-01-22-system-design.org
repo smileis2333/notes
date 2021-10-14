@@ -1,7 +1,5 @@
 #+TITLE: system design
 #+STARTUP: indent
-* stackoverflow series
-https://nickcraver.com/blog/2016/02/03/stack-overflow-a-technical-deconstruction/
 * log
 用户操作日志: https://www.zhihu.com/question/26848331/answer/34261466
 日志聚合: https://www.jianshu.com/p/bcf0445a1b8f
@@ -15,9 +13,34 @@ https://nickcraver.com/blog/2016/02/03/stack-overflow-a-technical-deconstruction
 https://medium.com/@jayphelps/backpressure-explained-the-flow-of-data-through-software-2350b3e77ce7
 * oop model
 https://kb.cnblogs.com/page/520743/
-* step
+* 操作流
 ** 快速原型
 ** 中间层抽象
 ** 各类指标
 ** 稳定业务
 ** 模块拆分
+* steps
+** 需求确认
+** 容量估计(带宽和数据)
+DAU，数值大小，操作比例
+** 系统API设计
+** High level system design
+1. figure to show op flow
+2. 确认可能出现的问题，提出每个solution(fan in/out write/read)的cons/pros
+
+** Data Storage
+结构设计
+*** SQL
+表设计
+*** NoSQL
+*** File system
+** Scalability
+- Data sharding
+- Load balancing
+- Data Cache
+* ref
+** huahua
+https://www.bilibili.com/video/BV1Sf4y1e7wc?spm_id_from=333.999.0.0
+https://www.bilibili.com/video/BV1s5411p7dR
+** stackoverflow series
+https://nickcraver.com/blog/2016/02/03/stack-overflow-a-technical-deconstruction/
