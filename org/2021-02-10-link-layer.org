@@ -7,7 +7,7 @@
 ** RFC 894(ethernet)
 DST(6 byte)--SRC(6 byte)--type(2 byte)--data(46-1500byte)--CRC(4 byte)
 ** RFC 1042(802 networks)
-DST(6 byte)--SRC(6 byte)--length(2 byte)--LLC(3 byte)--SNAP(5 byte)--type(2 byte)--data(38-1500)--CRC(4 byte)
+DST(6 byte)--SRC(6 byte)--length(2 byte)--LLC(3 byte)--SNAP(5 byte)--type(2 byte)--data(38-1492)--CRC(4 byte)
 - 为了加入LLC，和SNAP的功能
 - 为了保持兼容，因为已存在的type没有超过某个阈值，所以将type重载成length，用于标识data长度
 - data(38) = old data(46)-LLC(3 byte)-SNAP(5 byte)-type(2 byte)

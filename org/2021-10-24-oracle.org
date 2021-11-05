@@ -1,0 +1,18 @@
+#+TITLE: oracle
+#+STARTUP: indent
+* docker
+docker pull store/oracle/database-enterprise:12.2.0.1
+
+docker run -d -it --name oracle store/oracle/database-enterprise:12.2.0.1
+
+# within the container
+docker exec -it oracle bash -c "source /home/oracle/.bashrc; sqlplus /nolog"
+
+# bash connect
+docker exec -it oracle bash
+sqlplus sys/Oradoc_db1@ORCLCDB as sysdba
+* config
+** allow remote access
+cho $TNS_ADMIN
+** ref
+https://hub.docker.com/u/smile2333/content/sub-c211d781-30b7-48be-887f-0a292b90228b

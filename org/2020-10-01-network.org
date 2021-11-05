@@ -421,6 +421,6 @@ toggle: 0, constant: 1
 -- 适当参考，文笔和排版有问题，难读，删除了第一版中的应用协议和路由协议，并加了新增协议，可以用于补充CIDR，DHCP，NAT，TCP，VPN(IPsec)部分，IPv6部分，抓包从tcpdump变成了wireshark
 
 [[https://learning.oreilly.com/library/view/tcpip-illustrated-volume/0201633469/][TCP/IP Illustrated, Volume 1: The Protocols(first edition)]]
--- 存在废弃协议的部分，很流畅，必读
+-- 存在废弃协议的部分，很流畅，必读，https://github.com/smileis2333/tiiv1-for-linux 参考程序
 
-CCNA, CCNP, CCIE 思科三项(CCIE因为可以直接考，已经掉价)
+CCNA, CCNP, CCIE 思科三项(CCIE因为可以直接考，已经掉价，等价于设备实操手册，提供相对广泛的网络概念)

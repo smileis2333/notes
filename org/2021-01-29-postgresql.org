@@ -79,6 +79,11 @@ EXPLAIN SELECT * FROM t_user tu WHERE user_identity  = 'BUSINESS' AND username =
 tr.education_infos->-1
 * È«ÎÄË÷Òý
 https://www.jianshu.com/p/0dc2a8bf9631
+* config
+** remote access
+echo listen_addresses = \'*\' >> postgresql.conf
+echo -e "host\tall\tall\t0.0.0.0/0\ttrust" >> pg_hba.conf
+
 * ref
 https://dba.stackexchange.com/questions/129924/how-to-disable-the-logging-of-parameter-values-in-postgresql
 

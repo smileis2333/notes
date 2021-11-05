@@ -35,5 +35,10 @@ ssh -p 1993 root@[middleHost]
 *** dynamic forward
 ssh -Nf -D 1080 root@[host]
 走sock5
+* config
+sshd默认为no，强制交互式输入密码，进行输入加密
+
+# /etc/ssh/sshd_config, 开了xshell的保存密码才能直接连，否则要交互式输入，非安全性要求的情况下可以直接开
+PasswordAuthentication yes
 * ref
 https://www.yanxurui.cc/posts/tool/2017-07-14-ssh-port-forward/

@@ -1,0 +1,56 @@
+#+TITLE: tcp
+#+STARTUP: indent
+* state transition
+[[file:../img/tcp_state_transition.gif][tcp state transition]]
+** Establishment
+收到ack才会导致seq = seq +1，因此，如果telnet连上立刻关，client建立连接的ack，与fin的seq一致，因为three way handshake服务端不用ack
+** Termination
+* format
+[[file:../img/tcp_format.gif][tcp format]]
+** mss(max segment size)
+avoid ip fragment
+** win
+
+* about application
+应用程序永远只能拿到three way handshake完成后的链接，每个listen endpoint的backlog队列里
+
+* data flow
+** interactive data flow
+*** Nagle algorithm
+在收到ack前，累积传输的数据，收到之后一次性传过去，交互性系统不可使用，如
+- X window
+- 交互性的远程shell，如tab能补全
+- LAN不建议，因为RTT低，人工输入频率远低于传输效率
+*** delayed acknowledgments
+ack在200ms(即区间为1-200ms，200ms为kernel timer，所以delay ack只能保证回传ack的上界)如果有数据，就一起传回去
+** bulk data flow
+*** sliding windows protocol
+[[file:../img/sliding_window.gif][client caculate windows]]
+*** slow start
+cwnd(congestion window)
+sender初始化1 segment，每收到前一个segment的ack(一个ack可以ack多个)，windows+1，在全部不丢失且全部按序的情况下，呈指数级增长
+* timer
+** connection
+*** retransmission
+**** RTT
+每次RTT一直在变，因为ack一个可能对应sender发的多个segment，另一点则是WAN的传输情况是可以发送变化的，重传取决于RTT
+
+基本的倍率计算:
+R <-- αR + (1-a)M  (R是上一次的RTT，M是当次测出来的值，α=10%)
+RTO = Rβ (超时重传，β=2)
+
+基于方差:
+Err = M - A
+A <-- A + gErr
+D <-- D + h(|Err| - D)
+RTO = A + 4D
+**** Karn's Algorithm
+
+
+*** persist
+window size update
+*** keepalive
+detect idle connection
+*** 2MSL
+本质为通讯双方，最后一个收到信息的可以直接确定状态终结，而发送方无法直接确认
+client收到fin开始计时

@@ -131,7 +131,80 @@ xxx.sh -b 0.0.0.0
     }
 
 #+END_SRC
+* spring session
+接入后无法back channel logout
+原因:
+url mapping是以Valve形式注入Tomcat，而Spring Session的替换是在后面的Filter
+
+解决方式(将Valve的Session管理注入Redis，一起删除),下述为步骤:
+1. 自定义新的Custominzer将Redis管理注入Valve，改写删除Session的逻辑
+1. 默认的KeycloakAutoConfiguration下的Customize没设置Order(Spring逻辑为最小)，而注入Valve的Customizer必须在最后生效，因此，需要DestructionAwareBeanPostProcessor将默认的级别调高，确保自定义的在最后生效
+
+#+begin_src java
+@Slf4j
+@Component
+public class BeanFactoryOrderWrapper implements DestructionAwareBeanPostProcessor {
+    @Override
+    public void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException {
+
+    }
+
+    @Override
+    public boolean requiresDestruction(Object bean) {
+        return true;
+    }
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        if (beanName.equals("getKeycloakContainerCustomizer")) {
+            Object wrapRes = this.wrapOrder(bean);
+            return wrapRes;
+        }
+        return bean;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
+
+    private Object wrapOrder(Object bean) {
+        log.info("rewrite keycloak auto config customizer Order for next custom");
+        final WebServerFactoryCustomizer origin = (WebServerFactoryCustomizer) bean;
+        return new KeycloakContainerCustomizerWithOrder(origin);
+    }
+}
+
+class KeycloakContainerCustomizerWithOrder implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>, Ordered {
+
+    private final WebServerFactoryCustomizer origin;
+
+    public KeycloakContainerCustomizerWithOrder(WebServerFactoryCustomizer origin) {
+        this.origin = origin;
+    }
+
+    @Override
+    public void customize(ConfigurableServletWebServerFactory factory) {
+        origin.customize(factory);
+    }
+
+    @Override
+    public int getOrder() {
+        return Ordered.LOWEST_PRECEDENCE - 1; // 调高一点优先级，确保调用顺序，自定义的Custominzer可以不用加Order，反正默认直接最低了
+    }
+}
+#+end_src
+* token
+SSO Session Max  --> 控制过期和刷新时间的最大边界
+
+Access Token Lifespan  --> 过期时间
+
+SSO Session Idle --> 刷新时间
 * ref
+# recaptcha
+https://github.com/raptor-group/keycloak-login-recaptcha
+
+
 https://www.cnblogs.com/Zhang-Xiang/p/14777202.html?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+cnblogs%2FwhQe+%28%E5%8D%9A%E5%AE%A2%E5%9B%AD_%E9%A6%96%E9%A1%B5%29 
 ** backend
 https://blog.csdn.net/little_kelvin/article/details/111239241
@@ -155,9 +228,3 @@ https://zhuanlan.zhihu.com/p/360846976
 https://www.keycloak.org/docs/12.0/server_development/index.html
 ** keycloak self security
 https://stackoverflow.com/questions/54482881/keycloak-custom-spi-rest-endpoint-with-authorization custom rest api with permission
-* token
-SSO Session Max  --> 控制过期和刷新时间的最大边界
-
-Access Token Lifespan  --> 过期时间
-
-SSO Session Idle --> 刷新时间

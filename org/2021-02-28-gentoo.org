@@ -1,13 +1,21 @@
 #+TITLE: gentoo
 #+STARTUP: indent
-* install
-网络处理，有线直接插，默认全走通
-
-无线可以用wpa_supplicant
+* install record
+** 网络处理
+- 有线直接插，默认全走通(最方便)
+- 无线可以用wpa_supplicant(因为默认没字体，先在一台可用的宿主机把配置文件写好)
 wpa_supplicant -i [ip addr看到的无线网卡名称] -c /etc/wpa_supplicant.conf(wifi账号密码)
 然后dhcpcd
+*** 开机自启wifi
+Gentoo handbool的network关于wpa_supplicant的配置无法生效，只能将wpa_supplicant和dhcpcd以rc脚本启动才能正常用
+rc-update add wpa_supplicant default
+rc-update add dhcpcd default
 
-** legacy bios
+# /etc/conf.d/wpa_supplicant
+wpa_supplicant_args="-B -M -c/etc/wpa_supplicant/wpa_supplicant.conf"
+
+
+** legacy bios(incomplete)
 #+BEGIN_SRC bash
 rc-service sshd start
 
@@ -105,8 +113,8 @@ swapon /dev/nvme0n1p3
 ntpd -q -g
 mount /dev/nvme0n1p4 /mnt/gentoo
 tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
-echo MAKEOPTS="-j7" >> /mnt/gentoo/etc/portage/make.conf # 一般为核心数+1
-mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf # 阿里的或者163
+echo MAKEOPTS=\"-j7\" >> /mnt/gentoo/etc/portage/make.conf # 一般为核心数+1
+mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf # 阿里的或者163(建议163)
 mkdir --parents /mnt/gentoo/etc/portage/repos.conf
 cp /mnt/gentoo/usr/share/portage/config/repos.conf /mnt/gentoo/etc/portage/repos.conf/gentoo.conf
 
@@ -138,11 +146,16 @@ env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
 # 防止不兼容，导致其他package冲突
 emerge --ask --verbose --update --deep --newuse @world 
 
-emerge --ask sys-kernel/gentoo-sources
-emerge --ask sys-kernel/genkernel
+
+# 处理license
+echo "sys-kernel/linux-firmware @BINARY-REDISTRIBUTABLE" | tee -a /etc/portage/package.license 
+emerge --ask sys-kernel/gentoo-sources sys-kernel/genkernel
+emerge --ask net-wireless/wpa_supplicant net-misc/dhcpcd
 
 nano -w /etc/fstab
-/dev/nvme0n1p2	/boot	vfat	defaults	0 2
+/dev/nvme0n1p2   /boot        ext4    defaults,noatime     0 2
+/dev/nvme0n1p3   none         swap    sw                   0 0
+/dev/nvme0n1p4   /            ext4    noatime              0 1
 
 # compile kernell mannually or genkernel
 cd /usr/src/linux
@@ -168,13 +181,12 @@ umount -R /mnt/gentoo
 reboot
 
 #+END_SRC
-* dispatch-conf
-genkernel就会导致该问题
-设软件包A有如下USE：use1,use2,use3;
-你的全局USE以及包A的单独USE都没有use2;
-你想安装软件包B，而B依赖于A，且要求A必须使用use2;
-这时系统就会在/etc/portage/package.use文件中替你记录A使用use2;
-然后你需要运行dispatch-conf(etc-update没用过),然后系统会列出需要改变的地方让你确认，同意系统所做的修改就按u，不同意就按z
+* script
+emerge --update --deep --with-bdeps=y --newuse @world #更新系统
+
+emerge --ask --autounmask-write =xorg-server-1.11.99.2 # 取消对xx，比如~amd64的mask，自动写入package.accept
+
+echo "category/packagename **" >> /etc/portage/package.accept_keywords
 * tool
 ** host
 sys-apps/pciutils
@@ -188,12 +200,19 @@ vim
 nginx
 docker
 git
-* network
-** wireless
+** dispatch-conf
+genkernel就会导致该问题
+设软件包A有如下USE：use1,use2,use3;
+你的全局USE以及包A的单独USE都没有use2;
+你想安装软件包B，而B依赖于A，且要求A必须使用use2;
+这时系统就会在/etc/portage/package.use文件中替你记录A使用use2;
+然后你需要运行dispatch-conf(etc-update没用过),然后系统会列出需要改变的地方让你确认，同意系统所做的修改就按u，不同意就按z
+** network
+*** wireless
 //wpa_supplicant，只是相当于插了网线，还需要dhcpclient，Gentoo推荐dhcpcd
 https://pluhuxc.github.io/2018/08/19/use-wpa_supplicant-connect-wifi.html
 https://wiki.gentoo.org/wiki/Network_management_using_DHCPCD#Setup
-*** /etc/wpa_supplicant/wpa_supplicant.conf
+**** /etc/wpa_supplicant/wpa_supplicant.conf
 # 连接配置
 # Allow users in the 'wheel' group to control wpa_supplicant
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=wheel
@@ -206,19 +225,15 @@ network={
         #psk="00001111"
         psk=bb939e2d790316f5f1085c3ce044d171a4d01988797b2366ac1fabb6b41b0677
 }
-*** /etc/conf.d/wpa_supplicant
+**** /etc/conf.d/wpa_supplicant
 wpa_supplicant_args="-B -M -c/etc/wpa_supplicant/wpa_supplicant.conf"
 rc启动参数
-*** dhcp
+**** dhcp
 rc-update add dhcpcd default # 让dhcp客户端开机启动
-*** /etc/conf.d/net
+**** /etc/conf.d/net
 # Gentoo net.* scripts
 modules_wlp1s0="wpa_supplicant"
 config_wlp1s0="dhcp"
-* portage
-/var/lib/portage/world # 用户自己安装的package
-* font
-https://gist.github.com/kidlj/f30e82c2c6f064990596
 * config
 ** ebuild repo location
 /var/db/pkg + 种类+具体应用-xx版本
@@ -229,21 +244,8 @@ https://gist.github.com/kidlj/f30e82c2c6f064990596
 =x11-libs/gtk+-2* doc
 # Unmask mysql support for QT
 x11-libs/qt -mysql
-* general
-emerge --update --deep --with-bdeps=y --newuse @world #更新系统
-
-
-emerge --ask --autounmask-write =xorg-server-1.11.99.2 # 取消对xx，比如~amd64的mask，自动写入package.accept
-
-echo "category/packagename **" >> /etc/portage/package.accept_keywords
-* other
-** java
-/etc/portage/profile/package.use.mask
-dev-java/openjdk -gentoo-vm
-dev-java/openjdk-bin -gentoo-vm
-* compile
-https://github.com/distcc/distcc distcc
-* my world
+** my world
+*** kde desktop
 app-editors/emacs
 app-editors/vim
 app-i18n/kcm-fcitx
@@ -267,12 +269,30 @@ sys-kernel/gentoo-sources
 www-client/firefox-bin
 www-client/google-chrome
 www-servers/nginx
+*** minimal
+app-editors/emacs
+app-editors/vim
+sys-kernel/gentoo-sources
+app-portage/gentoolkit
+app-shells/bash-completion
+dev-vcs/git
+media-fonts/wqy-zenhei
+net-misc/aria2
+sys-apps/mlocate
+www-servers/nginx
+** java
+/etc/portage/profile/package.use.mask
+dev-java/openjdk -gentoo-vm
+dev-java/openjdk-bin -gentoo-vm
+* openrc
+/etc/runlevels/[阶段]下的脚本默认按照字母启动，除非有声明依赖
 
-USE
-INPUT_DEVICES="libinput"
-VIDEO_CARDS="nouveau"
-USE="xft pulseaudio"
-MAKEOPTS="-j5"
-GENTOO_MIRRORS="https://mirrors.163.com/gentoo/"
-     
-     
+boot --> default 
+
+
+* ref
+# 字体处理分析
+https://gist.github.com/kidlj/f30e82c2c6f064990596
+
+# distrubute compile
+https://github.com/distcc/distcc 

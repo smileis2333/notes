@@ -42,12 +42,33 @@ Internet Protocol Version 4, Src: 27.151.12.70, Dst: 192.168.0.6
 CA35 + 1 = CA36
 
 ^CA36 = 35c9
+** optiom
+*** RR(record route)
+简陋版的路由发现，只能放9个
+* CIDR
+本质为减少route entry的大小，形式上体现为消除分类地址，原理
+- 控制IP块的区域分配(同样的思想在ipv6也是存在对应的做法)
+- 允许在位占满的情况下进行route合并
+eg:
+200.0.255.0/24
+200.0.254.0/24
+
+
+11001000 00000000 11111111 00000000/24
+11001000 00000000 11111110 00000000/24
+
+可汇总为
+11001000 00000000 11111110 00000000/23
+
+200.0.254.0/23(如果还有别的地址，可以接着汇总)
+
+各区域只要在分配网络块的时候保持块分配尽可能处于同一区域(人民币玩家论外)，即可逐层汇总route
 
 * icmp
 ** formar
-[[file:~/Desktop/personal/study/img/icmp_encap_within_ip_datagram.gif][ICMP messages encapsulated within an IP datagram]]
-[[file:~/Desktop/personal/study/img/icmp_format.gif][ICMP message format]]
-[[file:~/Desktop/personal/study/img/icmp_message_type.gif][ICMP Message Types]]
+[[file:../img/icmp_encap_within_ip_datagram.gif][ICMP messages encapsulated within an IP datagram]]
+[[file:../img/icmp_format.gif][ICMP message format]]
+[[file:../img/icmp_message_type.gif][ICMP Message Types]]
 *** type
 15
 *** code
@@ -58,16 +79,103 @@ specific condition
 - link layer广播
 - fragment
 ** 种类
-*** address mask request and reply
-拿address mask
-*** timestamp request and reply
-*** port unreachable
+*** address mask request and reply(query)
+用于无盘系统拿address mask
+*** timestamp request and reply(query)
+hostA --> hostB
+
+A根据rtt和hostB填充的时间，算出两主机的时间diff
+*** port unreachable(error)
+如用
+端口没开
 *** echo request and reply
 基本在ping上使用，大部分的系统
 identifier用于区别process，如多个tty开多个ping
 sequence number用于区分第一个包，区分发送的echo request
-* CIDR
-start from c class address --> apply for all address
-* ref
-RFC 894 --> ethernet
-RFC 1042 --> 802 networks
+*** redirect
+用于处理从router进行route分发的，处理LAN下的route知识分发
+
+router触发条件
+router check:
+1. 从哪来往哪去，接口来回需要一致
+2. 发送的redirect地址不能是别的redirect生成出来的(来源只能是静态或者route protocol自己交换出来的)
+3. 不能发送者自己路由自己
+4. 系统开启redirect
+
+host改动条件:
+1. redirect的router必须直连
+2. 必须从默认网关发出来的(防止篡改)
+3. 发送信息的网关不能声明自己是目标(等价于无效校验，自己声明自己)
+4. redirect route不能是直连范围
+*** solicitation/advertisement
+开机时候获取gateway router
+
+[[file:../img/icmp_advetisement.png][icmp advertisement]]
+* tool
+** ping
+echo request
+** traceroute
+用UDP报文配合TTL，分两类处理    :
+- TTL终止得到time exceed，确定路由
+- 到达终点,port unreachable，确定结束
+用来确认整个route的轨迹，不能保证准确，因为route可以发生变化
+* ip fragment
+广播不能fragment
+[[file:../img/fragment_packet.gif][fragment packet]]
+** demo
+./sock -u -i -n1 -w1471 192.168.0.6 15550
+./sock -u -i -n1 -w1472 192.168.0.6 15550
+./sock -u -i -n1 -w1473 192.168.0.6 15550
+./sock -u -i -n1 -w1474 192.168.0.6 15550
+
+tcpdump -i wlp1s0 udp and src 192.168.0.4
+** header
+*** 3-bit flags
+一位用于指定是否还有额外的 fragment(中间路由器可以接着分)，让接收者能够确定是否接受完毕
+一位用于是否开启 fragment
+*** offset
+从小到大排，再用flag bits中的一位确定终止，然后开始 reassemble
+** flow
+*** 中间路由器
+- 如果没开DF，fragment超过MTU就接着分
+- 如果开了，返回ICMP Unreachable Error (Fragmentation Required)，根据系统支持程度可能返回下一跳的MTU
+*** sender
+- 确认自己的网卡MTU，进行fragment
+- 如果开着DF，拿返回的icmp提示下一跳的MTU(有具体值/0)，前者以该值作为新的fragment标准，后者由Host自己猜(基本比较鸡肋，至少要多次才能确定，所以标准要求尽可能满足前者)
+*** receiver
+收到一个fragments中的第一个(其他不行，其他缺了udp的header)开始计时(根据id)，超时后丢弃全部，并返回icmp提示合并失败(取决于系统支持)
+* endpoint format
+| Local Address | Foreign Address | Description                                              |
+|---------------+-----------------+----------------------------------------------------------|
+| localIP.lport | foreignIP.fport | restricted to one client                                 |
+| localIP.lport | *.*             | restricted to datagram arriving on one interface:localIP |
+| *.lport       | *.*             | receives all datagram send to lport                      |
+
+* route policy(route protocol)
+** IGP
+*** RIPv1/v2
+*** OSPF
+** EGP
+*** EGP
+*** BGP
+* packet/ip datagram
+an IP datagram is the unit of end-to-end transmission at the IP layer (before fragmentation and after reassembly), and a packet is the unit of data passed between the IP layer and the link layer. A packet can be a complete IP datagram or a fragment of an IP datagram.
+* special address
+** Limited Broadcast
+# 第一张卡的广播地址，非RFC强制，所以可能存在全部卡都发
+255.255.255.255
+** Net-directed Broadcast
+mask完后面的host bit全1
+对应卡的发广播
+** multicast address
+# all systems on this subnet
+224.0.0.1
+
+# all routers on this subnet
+224.0.0.2
+
+# NTP
+224.0.1.1
+
+# RIP-2
+224.0.0.2

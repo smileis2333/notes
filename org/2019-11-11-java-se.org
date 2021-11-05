@@ -1448,7 +1448,7 @@ public class Main {
 #+END_SRC
 *** generate
 ** network
-*** Socker
+*** Socket
 *** ServerSocket
 #+BEGIN_SRC java
 var s = new ServerSocket(8189);

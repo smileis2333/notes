@@ -1,47 +1,12 @@
 #+TITLE:  MySQL
 #+STARTUP: indent
-* B+ tree
 * structure
 ** page
 *** page directory
 **** slot
 *** user records
-* trick
-** ID
-InnoDB对于最大主键的记录是不做处理的，如果产生空洞了，默认主键从空洞处开始算
-MyISAM则是会记录当前最大的主键
-** enable cache
-$r=mysql_query(xxx);
-** intersect and except
-mysql没有提供支持，需要使用in/not in自己处理
-* 存储引擎
-可以具体到每张表的存储引擎不同，所以也称为表类型，常用的有innodb与myisam
-** innodb
-支持表级锁，行级锁，支持事务，支持外检，不支持全文索引，表空间文件相对较大。
-** myisam
-支持表级锁，不支持行级锁，不支持事务，不支持外键约束，支持全文索引，表空间文件相对小。
-** CSV
-将CSV文件（以逗号分隔字段的文本文件）作为MySQL表文件
-** MRG_MYISAM
-此引擎也被称为MERGE存储引擎，如果一些myisam表的表结构完全相同，可以将这些MyISAM表合并成的一张MRG_MYISAM虚拟表
-** BLACKHOLE
-类似于/dev/null，不真正存储数据
-** MEMORY
-内存存储引擎，速度快，但是一旦断电数据将会丢失，支持hash索引，支持表级锁，常用于临时表
-** PERFORMANCE_SCHEMA
-从mysql5.5之后，多出了PERFORMANCE_SCHEMA数据库，PERFORMANCE_SCHEMA数据库中的表的表类型均为PERFORMANCE_SCHEMA，此数据库用于存储与数据库的性能相关的信息，用户无法创建使用这种存储引擎的表，但是dba可以通过PERFORMANCE_SCHEMA数据库中的信息进行性能分析，PERFORMANCE_SCHEMA数据库服务启动后此库中将不断的收集数据，mysql停机后此库中的表将不存在数据，类似于linux中的/proc
-** FEDERATED
-用于访问其它远程MySQL服务器上表的存储引擎接口
-** ARCHIVE
-见名知义，创建此种表类型的表往往用于存储归档信息、安全审计信息、历史信息等，创建数据仓库时，可能会用到此种表类型，使用archive表类型的表只支持select和insert操作，不能更新和删除操作，支持行级锁
-** FEDERATED
-利用federated引擎可将本地数据表映射至远程 MySQL 数据表，从而就可以解决应用程序中繁多的跨机器连接数据库问题，其实federated相当于一个访问其他远程mysql server的代理接口，它通过创建一个到远程mysql server的客户端连接，通过FEDERATED引擎创建的表只是在本地有表定义文件，数据文件则存在于远程数据库中
--- 设置存储引擎
-create table test11(id int,name varchar(10)) engine=innodb;
-
--- 改引擎，一般情况等于作死
-alter table test11 engine=myisam;
-* 查询缓存
+** B+ tree
+** 查询缓存
 query_cache_type的值可以设置为：ON、OFF、DEMAND，分别表示已启用、已禁用、按需缓存，设置在my.cnf中即可。
 
 have_query_cache的值为yes，表示当前数据库支持缓存功能
@@ -65,44 +30,117 @@ select sql_no_cache name from stu;
 
 -- 缓存白名单(推荐)
 select sql_cache name from stu;
-* 系统管理语句
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'yaXxCg86Kx';
-* console
-** Start Service
-*** 包管理器安装
-**** redhat系(npm)
-service mysqld start
-service mysqld stop
-*** 直接装
-- 启动
-/usr/bin/mysqld_safe &
-- 关闭
-以下命令是root用户还不存在密码的情况下
-mysqladmin -uroot shutdown
-如果root用户已经设置了密码
-mysqladmin -uroot shutdown -p
-** Connect Server
-mysql -u root -p (打开buffer，接收密码(非回显))
-mysql -u root -p123 (root是账户，123就是密码)
-mysql -u root -D test -p123 (-D指定指定数据库)
-mysql -u root -p -S /var/lib/mysql.sock (-S指定套接字文件)
-mysql -u root -p -h 192.168.1.103 -P 3306 (-h指定host,-P指定服务端口)
-mysql -u root -p123 -e 'use mysql; select user,host,password from user;'
-mysql -uroot -p123123 -e 'create database if not exists testdb;show databases;'
-连接数据库的常用选项
---host=host_name, -h host_name：服务端地址；
---user=user_name, -u user_name：用户名；
---port=port_num, -P port_num：服务端端口；
---socket=path, -S path
---database=db_name, -D db_name：
---compress, -C：数据压缩传输
---execute=statement, -e statement：非交互模式执行SQL语句；
---vertical, -E：查询结果纵向显示；
---protocol={TCP|SOCKET|PIPE|MEMORY}：
-** Help
-help获取帮助信息
-help content 获取分类的信息
-help command(command代表具体指令，如create)
+** engin
+可以具体到每张表的存储引擎不同，所以也称为表类型，常用的有innodb与myisam
+*** innodb
+支持表级锁，行级锁，支持事务，支持外检，不支持全文索引，表空间文件相对较大。
+*** myisam
+支持表级锁，不支持行级锁，不支持事务，不支持外键约束，支持全文索引，表空间文件相对小。
+*** CSV
+将CSV文件（以逗号分隔字段的文本文件）作为MySQL表文件
+*** MRG_MYISAM
+此引擎也被称为MERGE存储引擎，如果一些myisam表的表结构完全相同，可以将这些MyISAM表合并成的一张MRG_MYISAM虚拟表
+*** BLACKHOLE
+类似于/dev/null，不真正存储数据
+*** MEMORY
+内存存储引擎，速度快，但是一旦断电数据将会丢失，支持hash索引，支持表级锁，常用于临时表
+*** PERFORMANCE_SCHEMA
+从mysql5.5之后，多出了PERFORMANCE_SCHEMA数据库，PERFORMANCE_SCHEMA数据库中的表的表类型均为PERFORMANCE_SCHEMA，此数据库用于存储与数据库的性能相关的信息，用户无法创建使用这种存储引擎的表，但是dba可以通过PERFORMANCE_SCHEMA数据库中的信息进行性能分析，PERFORMANCE_SCHEMA数据库服务启动后此库中将不断的收集数据，mysql停机后此库中的表将不存在数据，类似于linux中的/proc
+*** FEDERATED
+用于访问其它远程MySQL服务器上表的存储引擎接口
+*** ARCHIVE
+见名知义，创建此种表类型的表往往用于存储归档信息、安全审计信息、历史信息等，创建数据仓库时，可能会用到此种表类型，使用archive表类型的表只支持select和insert操作，不能更新和删除操作，支持行级锁
+*** FEDERATED
+利用federated引擎可将本地数据表映射至远程 MySQL 数据表，从而就可以解决应用程序中繁多的跨机器连接数据库问题，其实federated相当于一个访问其他远程mysql server的代理接口，它通过创建一个到远程mysql server的客户端连接，通过FEDERATED引擎创建的表只是在本地有表定义文件，数据文件则存在于远程数据库中
+-- 设置存储引擎
+create table test11(id int,name varchar(10)) engine=innodb;
+
+-- 改引擎，一般情况等于作死
+alter table test11 engine=myisam;
+** log manage
+*** 错误日志
+- mysql执行过程中的错误信息
+- mysql执行过程中的警告信息、
+- event scheduler运行时所产生的信息
+- mysql启动和停止过程中的输出信息，未必是错误信息
+- 主从复制结构中，从服务器IO复制线程的启动信息
+
+log_warnings控制记录级别
+- log_warnings用于标识警告信息是否一并记录到错误日志中。
+- log_warnings的值为0，表示不记录警告信息。
+- log_warnings的值为1，表示警告信息一并记录到错误日志中。
+- log_warnings的值大于1，表示"失败的连接"的信息和创建新连接时"拒绝访问"类的错误信息也会被记录到错误日志中。
+
+my.cnf-->log_warnings=2
+*** 查询日志
+记录SQL语句操作
+general_log:表示查询日志是否开启，ON表示开启，OFF表示未开启，默认为OFF
+
+log_output:表示当查询日志开启以后，以哪种方式存放，log_output可以设置为4种值，"FILE"、"TABLE"、"FILE,TABLE"、"NONE"。此值为"FILE"表示存放于指定的文件中，此值为"TABLE"表示存放于mysql库的general_log表中，此值为"FILE,TABLE"表示将查询日志同时存放于指定的文件与general_log表中，一般不会进行这样的设置，因为这样会徒增很多IO压力，如果开启，建议设置为"table",此值为"NONE"时表示不记录查询日志，即使general_log设置为ON，如果log_output设置为NONE，也不会记录查询日志，其实，log_output不止用户控制查询日志的输出，慢查询日志的输出也是由此参数进行控制，也就是说，log_output设置为file，就表示查询日志和慢查询日志都存放到对应的文件中，设置为table，查询日志和慢查询日志就都存放在对应的数据库表中。
+
+general_log_file： 表示当log_output的值设置为"FILE"或者"FILE,TABLE"时，将查询日志存放于哪个日志文件中，换句话说，就是通过此参数指定查询日志的文件，默认情况下，此文件名于主机名相同，而且使用了相对路径，默认位置为datadir变量所对应的目录位置，一般为/var/lib/mysql目录下
+
+docker exec mysql-dev tail -n 0 -f /var/lib/mysql/51ba6e3e8d58.log
+*** 慢查询日志
+mysqldumpslow用于分析文件的慢查询记录，如果存储为表，则无法使用
+
+mysqldumpslow -s
+c: 执行计数
+l: 锁定时间
+r: 返回记录
+t: 执行时间
+al:平均锁定时间
+ar:平均返回记录数
+
+at:平均执行时间
+对于过慢的SQL执行，记录到慢查询日志中
+*** 二进制日志
+**** 概念
+记录导致数据变更的sql语句/数据变更记录(语句与逐条数据的查别)，用于在全量备份的情况下，倒放该记录文件恢复特定时间点的文件
+***** statement模式
+只记录语句，但是某些情况下不一定生效，如使用了内置的函数，但是函数本身依存于当前的数据情况
+***** row模式
+记录对数据库做出修改的语句所影响到的数据行以及这些行的修改，比如，update A set test='test'，如果使用row模式，那么这条update语句所影响到的行所对应的修改，将会记录到binlog中，比如，A表中有1000条数据，那么当执行这条update语句以后，由于1000条数据都会被修改，所以会有1000行数据被记录到二进制日志中，以及它们是怎样被修改的，使用row模式时，优点是能够完全的还原或者复制日志被记录时的操作，缺点是记录日志量较大，IO压力大，性能消耗较大。
+***** mixed模式
+混合使用上述两种模式，一般的语句使用statment方式进行保存，如果遇到一些特殊的函数，则使用row模式进行记录，这种记录方式被称之为mixed，看上去这种方式似乎比较美好，但是在生产环境中，为了保险起见，一般会使用row模式。
+**** 相关参数
+- log_bin
+- sql_log_bin 当前session的sql操作是否记录
+- binlog_format 此变量的值可以设置为statement、row、mixed
+- max_binlog_size 设置单个二进制日志文件的最大大小，以字节为单位，超过此值大小，则二进制日志文件会自动滚动，比如设置为500M为524288000
+- sync_binlog 是否每次提交都从内存把操作刷出到文件，可能会浪费性能
+
+查看二进制日志文件列表
+show master logs;
+show binary logs;
+
+查看当前正在使用的二进制日志文件
+show master status;
+
+查看二进制日志文件中的事件（查看binlog内容），可以使用如下语句，如果不明白如下语句的含义，可以对照上文中的示例查看，此处只用于总结。
+
+show binlog events
+show binlog events in 'mybinlog.000001'
+show binlog events in 'mybinlog.000001'from 245
+show binlog events in 'mybinlog.000001'limit 3
+show binlog events in 'mybinlog.000001'limit 2,5
+show binlog events in 'mybinlog.000001'from 245 limit 10
+show binlog events in 'mybinlog.000001'from 245 limit 4,20
+
+mysqlbinlog命令
+我们也可以使用如下命令从指定位置开始查看二进制日志。
+mysqlbinlog --start-position 415 mybinlog.000001
+
+或者指定，从哪个位置开始，到那个位置结束，查看这之间的二进制日志文件。
+mysqlbinlog --start-position 317 --stop-position 442 mybinlog.000001
+
+还可以从指定的时间开始查看，比如，查看2017年3月4日10点40以后的日志。
+mysqlbinlog --start-datetime "2017-3-4 10:40:00" mybinlog.000001;
+
+当然，也可以指定结束时间，比如
+mysqlbinlog --start-datetime "2017-3-4 10:40:00" --stop-datetime "2017-3-4 10:55:00" mybinlog.000001;
+*** 中继日志
+*** innodb存储引擎级别的事务日志
 * backup
 ** 概念
 *** 全量备份
@@ -170,90 +208,9 @@ load data infile "/testdir/a.backup" into table b;
 ** 恢复
 mysql > use [dbName]
 mysql > source [file]
-* log manage
-** 错误日志
-- mysql执行过程中的错误信息
-- mysql执行过程中的警告信息、
-- event scheduler运行时所产生的信息
-- mysql启动和停止过程中的输出信息，未必是错误信息
-- 主从复制结构中，从服务器IO复制线程的启动信息
-
-log_warnings控制记录级别
-- log_warnings用于标识警告信息是否一并记录到错误日志中。
-- log_warnings的值为0，表示不记录警告信息。
-- log_warnings的值为1，表示警告信息一并记录到错误日志中。
-- log_warnings的值大于1，表示"失败的连接"的信息和创建新连接时"拒绝访问"类的错误信息也会被记录到错误日志中。
-
-my.cnf-->log_warnings=2
-** 查询日志
-记录SQL语句操作
-general_log:表示查询日志是否开启，ON表示开启，OFF表示未开启，默认为OFF
-
-log_output:表示当查询日志开启以后，以哪种方式存放，log_output可以设置为4种值，"FILE"、"TABLE"、"FILE,TABLE"、"NONE"。此值为"FILE"表示存放于指定的文件中，此值为"TABLE"表示存放于mysql库的general_log表中，此值为"FILE,TABLE"表示将查询日志同时存放于指定的文件与general_log表中，一般不会进行这样的设置，因为这样会徒增很多IO压力，如果开启，建议设置为"table",此值为"NONE"时表示不记录查询日志，即使general_log设置为ON，如果log_output设置为NONE，也不会记录查询日志，其实，log_output不止用户控制查询日志的输出，慢查询日志的输出也是由此参数进行控制，也就是说，log_output设置为file，就表示查询日志和慢查询日志都存放到对应的文件中，设置为table，查询日志和慢查询日志就都存放在对应的数据库表中。
-
-general_log_file： 表示当log_output的值设置为"FILE"或者"FILE,TABLE"时，将查询日志存放于哪个日志文件中，换句话说，就是通过此参数指定查询日志的文件，默认情况下，此文件名于主机名相同，而且使用了相对路径，默认位置为datadir变量所对应的目录位置，一般为/var/lib/mysql目录下
-
-docker exec mysql-dev tail -n 0 -f /var/lib/mysql/51ba6e3e8d58.log
-** 慢查询日志
-mysqldumpslow用于分析文件的慢查询记录，如果存储为表，则无法使用
-
-mysqldumpslow -s
-c: 执行计数
-l: 锁定时间
-r: 返回记录
-t: 执行时间
-al:平均锁定时间
-ar:平均返回记录数
-
-at:平均执行时间
-对于过慢的SQL执行，记录到慢查询日志中
-** 二进制日志
-*** 概念
-记录导致数据变更的sql语句/数据变更记录(语句与逐条数据的查别)，用于在全量备份的情况下，倒放该记录文件恢复特定时间点的文件
-**** statement模式
-只记录语句，但是某些情况下不一定生效，如使用了内置的函数，但是函数本身依存于当前的数据情况
-**** row模式
-记录对数据库做出修改的语句所影响到的数据行以及这些行的修改，比如，update A set test='test'，如果使用row模式，那么这条update语句所影响到的行所对应的修改，将会记录到binlog中，比如，A表中有1000条数据，那么当执行这条update语句以后，由于1000条数据都会被修改，所以会有1000行数据被记录到二进制日志中，以及它们是怎样被修改的，使用row模式时，优点是能够完全的还原或者复制日志被记录时的操作，缺点是记录日志量较大，IO压力大，性能消耗较大。
-**** mixed模式
-混合使用上述两种模式，一般的语句使用statment方式进行保存，如果遇到一些特殊的函数，则使用row模式进行记录，这种记录方式被称之为mixed，看上去这种方式似乎比较美好，但是在生产环境中，为了保险起见，一般会使用row模式。
-*** 相关参数
-- log_bin
-- sql_log_bin 当前session的sql操作是否记录
-- binlog_format 此变量的值可以设置为statement、row、mixed
-- max_binlog_size 设置单个二进制日志文件的最大大小，以字节为单位，超过此值大小，则二进制日志文件会自动滚动，比如设置为500M为524288000
-- sync_binlog 是否每次提交都从内存把操作刷出到文件，可能会浪费性能
-
-查看二进制日志文件列表
-show master logs;
-show binary logs;
-
-查看当前正在使用的二进制日志文件
-show master status;
-
-查看二进制日志文件中的事件（查看binlog内容），可以使用如下语句，如果不明白如下语句的含义，可以对照上文中的示例查看，此处只用于总结。
-
-show binlog events
-show binlog events in 'mybinlog.000001'
-show binlog events in 'mybinlog.000001'from 245
-show binlog events in 'mybinlog.000001'limit 3
-show binlog events in 'mybinlog.000001'limit 2,5
-show binlog events in 'mybinlog.000001'from 245 limit 10
-show binlog events in 'mybinlog.000001'from 245 limit 4,20
-
-mysqlbinlog命令
-我们也可以使用如下命令从指定位置开始查看二进制日志。
-mysqlbinlog --start-position 415 mybinlog.000001
-
-或者指定，从哪个位置开始，到那个位置结束，查看这之间的二进制日志文件。
-mysqlbinlog --start-position 317 --stop-position 442 mybinlog.000001
-
-还可以从指定的时间开始查看，比如，查看2017年3月4日10点40以后的日志。
-mysqlbinlog --start-datetime "2017-3-4 10:40:00" mybinlog.000001;
-
-当然，也可以指定结束时间，比如
-mysqlbinlog --start-datetime "2017-3-4 10:40:00" --stop-datetime "2017-3-4 10:55:00" mybinlog.000001;
-** 中继日志
-** innodb存储引擎级别的事务日志
+* vcs
+** flyway
+** mibatis migration
 * procedure
 DROP PROCEDURE IF EXISTS `gobrand-platform-questionnaire-dev`.presetuser;
 
@@ -269,27 +226,104 @@ begin
 end$$
 DELIMITER ;
 call presetuser();
-* ref
-https://www.cnblogs.com/yuwensong/p/3955834.html export
-** index
-https://stackoverflow.com/questions/4691799/why-does-mysql-not-use-an-index-for-a-greater-than-comparison/4691996
-** remote connect
-*** mysql8
-CREATE USER 'root'@'%' IDENTIFIED BY 'yaXxCg86Kx';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  WITH GRANT OPTION;
-FLUSH PRIVILEGES;
-* log
-#+BEGIN_SRC sql
--- bin log
-show binary logs; -- 查看当天总数(rotate)
-show variables like 'log_bin'; -- 查看是否开启
-show variables like '%datadir%'; --  查看binlog位置
+* config
+** cluster
+*** docker
+默认ip是192.168.0.x系列，如果网卡跟本地ip冲突的话，需要处理两点
+- 网卡定义的net不要和本地已经使用的冲突
+- 进行配置文件的改动(最好从镜像里面拷贝出来改动，不然可能出现问题，如CLRF,如win10通过xftp传过去的时候导致解析失败，/etc下的mysql-cluster.cnf和my.cnf，用docker cp)
 
--- query log
-SET global general_log = 1;
-SHOW VARIABLES LIKE '%general%';
-#+END_SRC
-* general
+
+docker network create cluster --subnet=192.168.4.0/24
+
+# 管理节点
+docker run -d --net=cluster --name=management1 --ip=192.168.4.2 -v ~/mysql-cluster.cnf:/etc/mysql-cluster.cnf -v ~/my.cnf:/etc/my.cnf mysql/mysql-cluster ndb_mgmd
+# 两个数据节点
+docker run -d --net=cluster --name=ndb1 --ip=192.168.4.3 -v ~/mysql-cluster.cnf:/etc/mysql-cluster.cnf -v ~/my.cnf:/etc/my.cnf mysql/mysql-cluster ndbd
+docker run -d --net=cluster --name=ndb2 --ip=192.168.4.4 -v ~/mysql-cluster.cnf:/etc/mysql-cluster.cnf -v ~/my.cnf:/etc/my.cnf mysql/mysql-cluster ndbd
+# 两个mysql节点
+docker run -d --net=cluster --name=mysql1 --ip=192.168.4.10 -v ~/mysql-cluster.cnf:/etc/mysql-cluster.cnf -v ~/my.cnf:/etc/my.cnf -e MYSQL_RANDOM_ROOT_PASSWORD=true mysql/mysql-cluster mysqld
+docker run -d --net=cluster --name=mysql2 --ip=192.168.4.11 -v ~/mysql-cluster.cnf:/etc/mysql-cluster.cnf -v ~/my.cnf:/etc/my.cnf -e MYSQL_RANDOM_ROOT_PASSWORD=true mysql/mysql-cluster mysqld
+
+
+# 改密码
+docker logs mysql1 2>&1 | grep PASSWORD
+docker exec -it mysql1 mysql -uroot -p
+ALTER USER 'root'@'localhost' IDENTIFIED BY '123';
+
+**** cli tool
+# 检测启动状况
+docker run -it --rm -v ~/mysql-cluster.cnf:/etc/mysql-cluster.cnf -v ~/my.cnf:/etc/my.cnf --net=cluster mysql/mysql-cluster ndb_mgm
+** master/slave
+# mysql-master.cnf
+[mysqld]
+pid-file        = /var/run/mysqld/mysqld.pid
+socket          = /var/run/mysqld/mysqld.sock
+datadir         = /var/lib/mysql
+secure-file-priv= NULL
+
+# Custom config should go here
+!includedir /etc/mysql/conf.d/
+
+server_id=1
+binlog_format=ROW
+gtid_mode=ON
+enforce-gtid-consistency=true
+
+# mysql-slave-1.cnf
+[mysqld]
+pid-file        = /var/run/mysqld/mysqld.pid
+socket          = /var/run/mysqld/mysqld.sock
+datadir         = /var/lib/mysql
+secure-file-priv= NULL
+
+# Custom config should go here
+!includedir /etc/mysql/conf.d/
+
+server_id=2
+binlog_format=ROW
+gtid_mode=ON
+enforce-gtid-consistency=true
+read_only=ON
+
+docker run -d --name mysql-master \
+  -e MYSQL_USER=my_user \
+  -e MYSQL_DATABASE=testmasterslave \
+  -e MYSQL_PASSWORD=my_database_password \
+  -e MYSQL_ROOT_PASSWORD=123 \
+  -p 3307:3306 \
+  -v ~/mysql-master.cnf:/etc/mysql/my.cnf \
+  mysql:8.0 \
+  --log-bin=my
+
+docker exec -it mysql-master mysql -u root -p
+show variables like '%gtid%';
+CREATE USER 'repl'@'%' IDENTIFIED BY 'password';
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
+
+
+docker run -d --name mysql-slave-1 \
+  -e MYSQL_ROOT_PASSWORD=123 \
+  -p 3308:3306 \
+  -v ~/mysql-slave-1.cnf:/etc/mysql/my.cnf \
+  mysql:8.0 \
+  --skip-log-bin \
+  --skip-log-slave-updates \
+  --skip-slave-start
+
+
+docker exec -it mysql-slave-1 mysql -u root -p
+CHANGE MASTER TO 
+  MASTER_HOST='192.168.0.4',
+  MASTER_PORT=3307,
+  MASTER_USER='repl',
+  MASTER_PASSWORD='password',
+  GET_MASTER_PUBLIC_KEY=1,
+  MASTER_AUTO_POSITION=1;
+START SLAVE;
+
+* script
+** general
 mysql -uroot -pyaXxCg86Kx -h 192.168.51.39 -P 3306
 
 #+BEGIN_SRC sql
@@ -307,4 +341,86 @@ FROM
 	(SELECT * from t_questionnaire_info where status = 'INVALID') t
 
 #+END_SRC
+** log
+#+BEGIN_SRC sql
+-- bin log
+show binary logs; -- 查看当天总数(rotate)
+show variables like 'log_bin'; -- 查看是否开启
+show variables like '%datadir%'; --  查看binlog位置
 
+-- query log
+SET global general_log = 1;
+SHOW VARIABLES LIKE '%general%';
+#+END_SRC
+** system admin
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'yaXxCg86Kx';
+
+** remote connect
+*** mysql8
+CREATE USER 'root'@'%' IDENTIFIED BY 'yaXxCg86Kx';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+# comment
+# bind-address                                  = 127.0.0.1
+# in 50-distro-server.cnf
+# then restart mysql server
+# the client may be require to allowPublicKeyRetrieval=true(default is false)
+** console
+*** Start Service
+**** 包管理器安装
+***** redhat系(npm)
+service mysqld start
+service mysqld stop
+**** 直接装
+- 启动
+/usr/bin/mysqld_safe &
+- 关闭
+以下命令是root用户还不存在密码的情况下
+mysqladmin -uroot shutdown
+如果root用户已经设置了密码
+mysqladmin -uroot shutdown -p
+*** Connect Server
+mysql -u root -p (打开buffer，接收密码(非回显))
+mysql -u root -p123 (root是账户，123就是密码)
+mysql -u root -D test -p123 (-D指定指定数据库)
+mysql -u root -p -S /var/lib/mysql.sock (-S指定套接字文件)
+mysql -u root -p -h 192.168.1.103 -P 3306 (-h指定host,-P指定服务端口)
+mysql -u root -p123 -e 'use mysql; select user,host,password from user;'
+mysql -uroot -p123123 -e 'create database if not exists testdb;show databases;'
+连接数据库的常用选项
+--host=host_name, -h host_name：服务端地址；
+--user=user_name, -u user_name：用户名；
+--port=port_num, -P port_num：服务端端口；
+--socket=path, -S path
+--database=db_name, -D db_name：
+--compress, -C：数据压缩传输
+--execute=statement, -e statement：非交互模式执行SQL语句；
+--vertical, -E：查询结果纵向显示；
+--protocol={TCP|SOCKET|PIPE|MEMORY}：
+*** Help
+help获取帮助信息
+help content 获取分类的信息
+help command(command代表具体指令，如create)
+* 注意事项
+** ID
+InnoDB对于最大主键的记录是不做处理的，如果产生空洞了，默认主键从空洞处开始算
+MyISAM则是会记录当前最大的主键
+** enable cache
+$r=mysql_query(xxx);
+** intersect and except
+mysql没有提供支持，需要使用in/not in自己处理
+* ref
+#  cluster
+https://www.cnblogs.com/byxxw/p/11433571.html  配置有误，需要my.cnf改动为包含conf.d,否则无法生效
+https://hub.docker.com/r/mysql/mysql-cluster/
+
+# master/slave
+https://chanjarster.github.io/post/mysql-master-slave-docker-example/
+
+
+# export file
+https://www.cnblogs.com/yuwensong/p/3955834.html
+
+# about index
+https://stackoverflow.com/questions/4691799/why-does-mysql-not-use-an-index-for-a-greater-than-comparison/4691996

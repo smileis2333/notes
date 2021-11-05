@@ -684,7 +684,14 @@ docker run --publish 8080:80 --name hello-world [image]
 docker update --restart=always mongo-dev
 docker --tail 100 [pid/pname]
 docker logs -f [pid/name] //all logs
-docker run -it --rm  top.gobrad/questionnaire /bin/bash # 跑完就删除
+# 跑完就删除
+docker run -it --rm  top.gobrad/questionnaire /bin/bash 
 docker image build --tag qqqq .
-* docker-compose
 
+# 删除全部
+docker rm -f $(docker ps -aq)
+
+docker container ls -a
+
+docker cp 
+* docker-compose

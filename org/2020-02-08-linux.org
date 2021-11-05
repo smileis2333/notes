@@ -54,6 +54,9 @@ https://www.cnblogs.com/hw-1015/articles/5910969.html
 * ref
 https://tieba.baidu.com/p/4809205799?red_tag=1697252423 lfs
 https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf fhs
+* log
+** sysklogd
+http://www.jinbuguo.com/linux/sysklogd.html
 * script
 #+BEGIN_SRC bash
 
