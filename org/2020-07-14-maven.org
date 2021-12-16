@@ -103,3 +103,5 @@ properties定义属性xxx，version处使用${xxx}
     <module>[path]</module>
   </modules>
 #+END_SRC
+* 注意事项
+maven3.6之后不支持http，如果私服是http，需要手动下载降级maven

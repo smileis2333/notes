@@ -131,7 +131,10 @@ git push -u origin master
 git rm -r --cached .gradle 
 
 #统计代码增减数量
-git log --author="huangjie" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s, removed lines: %s, total lines: %s\n", add, subs, loc }' - 
+git log --author="huangjie" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s, removed lines: %s, total lines: %s\n", add, subs, loc }' -
+
+# 全部统计
+git log --format='%aN' | sort -u | while read name; do printf '%-14s\t' "$name"; git log --author="$name" --pretty=tformat: --numstat | awk '{add += $1; subs += $2; loc += $1 - $2} END {printf "added lines: %-15s removed lines: %-15s total lines: %-15s\r\n", add, subs, loc}' -; done
 
 #统计实际代码行数，需要cloc插件
 git ls-files | xargs cloc 

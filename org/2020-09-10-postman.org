@@ -24,4 +24,15 @@ https://blog.csdn.net/u013613428/article/details/82120152
 3. 无法建立服务器初始化的oauth2产生的连接(目前)，可以做到直接连接认证中心的那种回调回应用
 * trick
 基于OIDC的服务器初始化，可以通过Multiple chain认证来实现，即支持Session，也支持Access Token方法两段式来避免认证Flow的疯狂跳转和脚本撰写
-
+** json with comment
+# strip comnent when send json payload
+#+begin_src javascript
+const rawData = pm.request.body.toString();
+if(rawData.length!=0){
+    const strippedData = rawData.replace(
+        /\\"|"(?:\\"|[^"])*"|(\/\/.*|\/\*[\s\S]*?\*\/)/g,
+        (m, g) => g ? "" : m
+    );
+    pm.request.body.update(JSON.stringify(JSON.parse(strippedData)));
+}
+#+end_src
