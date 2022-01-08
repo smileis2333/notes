@@ -1,0 +1,67 @@
+#+TITLE:  java se
+#+STARTUP: indent
+* data lab
+* bomb lab
+* attack lab
+** 计算指针
+ lea    (%rdi,%rsi,1),%rax
+** construct path
+
+
+00000000004019a7 <addval_219>:
+  4019a7:	8d 87 51 73 58 90    	lea    -0x6fa78caf(%rdi),%eax
+  4019ad:	c3                   	retq
+
+4019ab: pop %rax
+
+0000000000401a03 <addval_190>:
+  401a03:	8d 87 41 48 89 e0    	lea    -0x1f76b7bf(%rdi),%eax
+  401a09:	c3                   	retq
+401a06: 48 89 e0 /* mov %rsp,%rax */
+
+64 bit
+00000000004019a0 <addval_273>:
+  4019a0:	8d 87 48 89 c7 c3    	lea    -0x3c3876b8(%rdi),%eax
+  4019a6:	c3                   	retq
+4019a2: 48 89 c7 c3 /* mov %rax, %rdi */
+
+32bit
+00000000004019db <getval_481>:
+  4019db:	b8 5c 89 c2 90       	mov    $0x90c2895c,%eax
+  4019e0:	c3                   	retq
+4019dd: 89 c2 c3 /* mov %eax,%edx */
+
+0000000000401a11 <addval_436>:
+  401a11:	8d 87 89 ce 90 90    	lea    -0x6f6f3177(%rdi),%eax
+  401a17:	c3                   	retq
+401a13: 89 ce 90 90 c3 /* mov %ecx,%esi */
+
+0000000000401a68 <getval_311>:
+  401a68:	b8 89 d1 08 db       	mov    $0xdb08d189,%eax
+  401a6d:	c3                   	retq
+401a69: 89 d1 /* mov %edx,%ecx */
+
+
+
+4019a2 可以传%rax到%rdi
+
+4019dd
+401a69
+401a13
+组合可以传输%rax到%rsi
+
+
+
+
+
+*** 64 bit find expression
+48 89 c0|48 89 c1|48 89 c2|48 89 c3|48 89 c4|48 89 c5|48 89 c6|48 89 c7|48 89 ce|48 89 cf|48 89 d6|48 89 d7|48 89 de|48 89 df|48 89 e6|48 89 e7|48 89 ee|48 89 ef|48 89 f6|48 89 f7|48 89 fe|48 89 ff
+*** 32 bit find expression
+89 c0|89 c1|89 c2|89 c3|89 c4|89 c5|89 c6|89 c7|89 ce|89 cf|89 d6|89 d7|89 de|89 df|89 e6|89 e7|89 ee|89 ef|89 f6|89 f7|89 fe|89 ff|
+* arch lab
+sudo apt-get install tcl-dev
+sudo apt-get install tk-dev
+
+* ref
+http://csapp.cs.cmu.edu/3e/attacklab.pdf
+https://www.jianshu.com/p/db731ca57342

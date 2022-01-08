@@ -36,9 +36,16 @@ ssh -p 1993 root@[middleHost]
 ssh -Nf -D 1080 root@[host]
 走sock5
 * config
+** server
 sshd默认为no，强制交互式输入密码，进行输入加密
 
 # /etc/ssh/sshd_config, 开了xshell的保存密码才能直接连，否则要交互式输入，非安全性要求的情况下可以直接开
 PasswordAuthentication yes
+
+# 某些版本如centos7，连接会停顿几秒后才能连接
+
+# 服务器会先根据客户端的 IP地址进行 DNS PTR反向查询出客户端的主机名，然后根据查询出的客户端主机名进行DNS正向A记录查询，并验证是否与原始 IP地址一致，通过此种措施来防止客户端欺骗
+UseDNS = no
+GSSAPIAuthentication = no
 * ref
 https://www.yanxurui.cc/posts/tool/2017-07-14-ssh-port-forward/

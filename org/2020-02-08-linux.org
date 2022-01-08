@@ -68,3 +68,6 @@ tail -F -n 0 access.log(³¢ÊÔ´ò¿ª)
 tail ---disable-inotify -f -n 0 postgresql-2021-06-24_141528.log
 
 #+END_SRC
+* centos
+card auto up
+/etc/sysconfig/network-scripts/

@@ -330,6 +330,8 @@ mysql -uroot -pyaXxCg86Kx -h 192.168.51.39 -P 3306
 show full processlist;
 show  VARIABLES like '%timeout%';
 
+select concat('kill ',ID,';') from information_schema.processlist where db  = 'rbp';
+
 -- 生成行数用于抽取位置
 SELECT
 	@rownum := @rownum + 1 row_num,
@@ -424,3 +426,7 @@ https://www.cnblogs.com/yuwensong/p/3955834.html
 
 # about index
 https://stackoverflow.com/questions/4691799/why-does-mysql-not-use-an-index-for-a-greater-than-comparison/4691996
+* debug
+-- 8.0
+-- row lock check
+SELECT * from performance_schema.data_locks;
