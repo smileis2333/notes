@@ -7,5 +7,5 @@ bash startup.sh -m standalone
 ** 读网卡没处理，直接按序读网卡(可能会读到虚拟网卡)
 手动配置网卡和ip，傻逼社区没人修
 * 从本地读取配置
-spring.cloud.bootstrap.location=file:///C:/Users/Administrator.DESKTOP-RL96PC3/Desktop/bootstrap.yml
-spring.cloud.nacos.config.enabled=false
+spring.cloud.bootstrap.location = file:///C:/Users/Administrator.DESKTOP-RL96PC3/Desktop/bootstrap.yml
+spring.cloud.nacos.config.enabled = false

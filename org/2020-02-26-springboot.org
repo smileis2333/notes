@@ -16,3 +16,49 @@ https://github.com/spring-projects/spring-boot/issues/13772
 https://www.baeldung.com/spring-boot-thin-jar
 * general
 java -jar xx.jar --server.port=8080
+* exclue config
+@Configuration
+@EnableAutoConfiguration(exclude = {
+        DiskSpaceHealthIndicatorAutoConfiguration.class,
+        EurekaClientAutoConfiguration.class,
+        FeignAutoConfiguration.class,
+        GsonAutoConfiguration.class,
+        HealthEndpointAutoConfiguration.class,
+        ArchaiusAutoConfiguration.class,
+        AuditEventsEndpointAutoConfiguration.class,
+        AuditAutoConfiguration.class,
+        BusRefreshAutoConfiguration.class,
+        DataSourceHealthIndicatorAutoConfiguration.class,
+        FeignRibbonClientAutoConfiguration.class,
+        EurekaDiscoveryClientConfiguration.class,
+        HystrixAutoConfiguration.class,
+        KafkaMetricsAutoConfiguration.class,
+        LoadBalancerAutoConfiguration.class,
+        RibbonAutoConfiguration.class,
+        SamplerAutoConfiguration.class,
+        SleuthAnnotationAutoConfiguration.class,
+        SystemMetricsAutoConfiguration.class,
+        ValidationAutoConfiguration.class,
+})
+@ComponentScan(basePackages = "com.regent.rbp.**.**",
+        excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.REGEX, pattern = {
+                "com.regent.rbp.bill.*",
+//                "com.regent.rbp.information.*",
+                "com.regent.rbp.promotioncenter.*",
+                "com.regent.rbp.system.*",
+                "com.regent.rbp.finance.*",
+                "com.regent.rbp.common.*(?<!DbServiceImpl)(?<!UserCache)(?<!SystemCommonServiceImpl)$",
+                "com.regent.rbp.member.*",
+                "com.regent.rbp.activiti.*",
+                "com.regent.rbp.demo.*",
+                "com.regent.rbp.report.*",
+                "com.regent.rbp.file.*",
+                "com.regent.rbp.job.*",
+                "com.regent.rbp.task.*"
+        }),
+}
+
+)
+public class ExcludeConfig {
+}

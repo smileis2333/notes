@@ -51,7 +51,10 @@ compose 对请求编辑后在发出
 ** Remote
 重定向到指定host:port，在将已上线的web前端，完全从本地服务器取数据时有用
 ** Locale
-重定向到本地文件，针对单个部分的显示效果，多用于做数据mock
+重定向到本地文件，针对单个部分的显示效果，多用于做数据mock，可能需要rewrite，不然无法进行CORS
+
+access-control-allow-credentials: true
+access-control-allow-origin: //allow domain
 ** Breakpoint
 拦截请求与响应，可修改请求与响应
 * program

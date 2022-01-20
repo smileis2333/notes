@@ -1,4 +1,4 @@
-#+TITLE:  java 面试题
+#+TITLE:  java interview questions
 #+STARTUP: indent
 * 代码块初始化顺序
 父类(静态变量、静态语句块)
@@ -7,6 +7,59 @@
 父类(构造函数)
 子类(实例变量、普通语句块)
 子类(构造函数)
+#+begin_src java
+public class Parent {
+    static {
+        System.out.println("parent static block");
+        System.out.println(Parent.a);
+    }
+
+    public Parent() {
+        // it always has value wherever this constructor put
+        System.out.println("constructor time: " + b);
+        System.out.println("parent constructor");
+    }
+
+    static String a = "parent static variable";
+
+    //first instance variable, then instance block(because there limit forward reference), then constructor
+
+    String b = "parent instance variable";
+
+    {
+        System.out.println(b);
+    }
+
+
+}
+
+class Child extends Parent {
+
+    static {
+        System.out.println("child static block");
+        System.out.println(Child.a);
+    }
+
+    // change order can observe the second code print its value
+    static String a = "child static variable";
+
+    String b = "child instance variable";
+
+    {
+        System.out.println(b);
+    }
+
+    public Child() {
+        System.out.println("child constructor");
+    }
+}
+
+class Main {
+    public static void main(String[] args) {
+        new Child();
+    }
+}
+#+end_src
 * a = a + b 与 a += b 的区别
 直接加会先提升到int在加和
 +=会在提升的基础上进行一次类型转化
@@ -14,5 +67,33 @@
 finally不管有没有异常都要处理
 当try和catch中有return时，finally仍然会执行，finally比return先执行
 不管有木有异常抛出, finally在return返回前执行 finally是在return后面的表达式运算后执行的(此时并没有返回运算后的值，而是先把要返回的值保存起来，管finally中的代码怎么样，返回的值都不会改变，仍然是之前保存的值)，所以函数返回值是在finally执行前确定的
+* 泛型上下限
+public class  Stack<E>{
+    public Stack();
+    public void push(E e):
+    public E pop();
+    public boolean isEmpty();
+    public void pushAll(Iterable<E> src){ // ×，E为Number时无法处理Iterable<Long>
+      for(E e : src)
+        push(e)
+    }
+    public void pushAll(Iterable<? extends E> src){ // √
+      for (E e: src)
+        push(e);
+    }
+    
+    public void popAll(Collection<E> dst){ // ×
+      if(!isEmpty()){
+        dst.add(pop());
+      }
+    }
+    public void popAll(Collection<? super E> dst){ // ×
+      if(!isEmpty()){
+        dst.add(pop());
+      }
+    }
+
+}
+https://www.cnblogs.com/dldrjyy13102/p/8297045.html
 * Fail fast机制
 每次设置modCount，并在每次迭代时确认值是否变更，用于在并发情况下快速失败

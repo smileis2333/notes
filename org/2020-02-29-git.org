@@ -126,6 +126,7 @@ git push -u origin master
 *** 哈希码
 标识每个git对象
 * genral
+** statics
 #+BEGIN_SRC bash
 #剔除被误加入VCS的文件，-r递归
 git rm -r --cached .gradle 
@@ -140,3 +141,8 @@ git log --format='%aN' | sort -u | while read name; do printf '%-14s\t' "$name";
 git ls-files | xargs cloc 
 
 #+END_SRC
+** local untrack file
+git update-index --assume-unchanged build/conf/a.conf
+git update-index --assume-unchanged build/conf/b.conf
+git ls-files -v | grep -e "^[hsmrck]"
+https://stackoverflow.com/questions/10879783/git-doesnt-ignore-2-specifically-named-files

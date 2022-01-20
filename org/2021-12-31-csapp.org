@@ -61,6 +61,14 @@
 * arch lab
 sudo apt-get install tcl-dev
 sudo apt-get install tk-dev
+** partA
+cd misc
+./yas  sum.ys && ./yis sum.yo
+./yas rsum.ys && ./yis  rsum.yo
+./yas  copy.ys && ./yis  copy.yo
+
+
+
 
 * ref
 http://csapp.cs.cmu.edu/3e/attacklab.pdf

@@ -93,3 +93,6 @@ C-c \ 用tag构造稀疏树
 [fn:1]  https://www.cnblogs.com/Open_Source/archive/2011/07/17/2108747.html#sec-2
 * 测试
 哈哈
+* 注意事项
+<s tab补全代码块，快捷键默认已经无效
+C-c C-, 从选项中获取
