@@ -1,0 +1,59 @@
+#+TITLE: jsr303
+#+STARTUP: indent
+: Jakarta Bean Validation 2.0
+
+* composite
+
+** attr
+Payload和Group从FrenchZipCode获取，并分发给该注解下的复合成分如@Size
+
+** 报错
+@ReportAsSingleViolation 如果全错，只报错一个信息first fail
+** 外置复合元素的参数
+默认情况下的指定是固定的，既 @Size(min = 5, max = 5)是不可变的
+
+通过重新声明即可动态将内部复合的部分所需部分进行设置
+@OverridesAttribute(constraint = Size.class, name = "min")
+int min() default 5;
+
+@OverridesAttribute(constraint = Size.class, name = "max")
+int max() default 5;
+*** index
+如果复合了两个同样的，字段需要声明index，如复合了两个@Pattern
+@OverridesAttribute(constraint = Pattern.class, name = "message", constraintIndex = 0)
+String emailMessage() default "Not an email";
+
+@OverridesAttribute(constraint = Pattern.class, name = "message", constraintIndex = 1)
+String emmanuelMessage() default "Not Emmanuel";
+
+** ie:
+ @Pattern(regexp = "[0-9]*")
+ @Size(min = 5, max = 5)
+ @ReportAsSingleViolation
+ @Constraint(validatedBy = FrenchZipCodeValidator.class)
+ @Documented
+ @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+ @Retention(RUNTIME)
+ public @interface FrenchZipCode {
+
+     String message() default "Wrong zip code";
+
+     Class<?>[] groups() default {};
+
+     Class<? extends Payload>[] payload() default {};
+
+     @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+     @Retention(RUNTIME)
+     @Documented
+     @interface List {
+         FrenchZipCode[] value();
+     }
+ }
+* 注意事项
+1. 重复声明的一类注解，使用内嵌类@List统一处理，建议重复声明统一注解
+2. jsr303不允许出现side effect
+
+
+
+* ref
+https://beanvalidation.org/specification/
