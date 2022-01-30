@@ -1,19 +1,19 @@
 #+TITLE: spring-framework
-* ·ÖÎö
-ÖÁ¶¥ÏòÏÂ
-SpringMVC¿ªÊ¼
-servlet¹æ·¶
-web.xmlÖĞµÄ¼ÓÔØË³Ğò£ºcontext-param -> listener -> filter -> servlet
-ServletContextListenerÎªtomcat¶ÔÍâÌá¹©µÄ½Ó¿Ú£¬ÈİÆ÷Æô¶¯Ê±£¬»á¶Ô×¢²áÔÚweb.xmlµÄ¸Ã½Ó¿ÚµÄÊµÏÖÀà·¢ËÍServletContextEvent£¬¶øSpringÆä¶ÔÓ¦ÊµÏÖÔòÎªContextLoaderListener
+* åˆ†æ
+è‡³é¡¶å‘ä¸‹
+SpringMVCå¼€å§‹
+servletè§„èŒƒ
+web.xmlä¸­çš„åŠ è½½é¡ºåºï¼šcontext-param -> listener -> filter -> servlet
+ServletContextListenerä¸ºtomcatå¯¹å¤–æä¾›çš„æ¥å£ï¼Œå®¹å™¨å¯åŠ¨æ—¶ï¼Œä¼šå¯¹æ³¨å†Œåœ¨web.xmlçš„è¯¥æ¥å£çš„å®ç°ç±»å‘é€ServletContextEventï¼Œè€ŒSpringå…¶å¯¹åº”å®ç°åˆ™ä¸ºContextLoaderListener
 #+BEGIN_SRC xml
-<!--ÅäÖÃContextLoaderListenerµÄ¼ÓÔØ£¬²»ÅäÒ²ĞĞ£¬ÅäÖÃÎÄ¼şÓĞ¶ÔÓ¦µÄÄ¬ÈÏ¼ÓÔØÂ·¾¶ºÍÄ¬ÈÏÃû(·ûºÏ¾ÍÄÜÕıÈ·¼ÓÔØ)-->
+<!--é…ç½®ContextLoaderListenerçš„åŠ è½½ï¼Œä¸é…ä¹Ÿè¡Œï¼Œé…ç½®æ–‡ä»¶æœ‰å¯¹åº”çš„é»˜è®¤åŠ è½½è·¯å¾„å’Œé»˜è®¤å(ç¬¦åˆå°±èƒ½æ­£ç¡®åŠ è½½)-->
 <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 </listener>
-<!-- ĞŞ¸ÄÅäÖÃÎÄ¼şÂ·¾¶ -->
+<!-- ä¿®æ”¹é…ç½®æ–‡ä»¶è·¯å¾„ -->
 <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:spring/applicationContext.xml</param-value>
 </context-param>
 #+END_SRC
-ContextLoaderListener¼ÓÔØºó²úÉúµÄWebApplicationContextÊÇ¹²ÓĞµÄ£¬¶øµ¥¸öservletËù²úÉúµÄWebApplicationContext¿ÉÄÜ²»ÊÇ¹²ÓĞµÄ
+ContextLoaderListeneråŠ è½½åäº§ç”Ÿçš„WebApplicationContextæ˜¯å…±æœ‰çš„ï¼Œè€Œå•ä¸ªservletæ‰€äº§ç”Ÿçš„WebApplicationContextå¯èƒ½ä¸æ˜¯å…±æœ‰çš„

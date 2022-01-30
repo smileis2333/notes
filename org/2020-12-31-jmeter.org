@@ -3,7 +3,7 @@
 * quick start
 https://zhuanlan.zhihu.com/p/36526346
 
-ÉèÖÃÍÌÍÂÁ¿
+è®¾ç½®åžåé‡
 https://blog.51cto.com/ydhome/1869970
 * record request
 File --> Templates --> Recording

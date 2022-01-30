@@ -1,93 +1,93 @@
-#+TITLE: ����ϵͳ
+#+TITLE: 操作系统
 #+STARTUP: indent
-* �ں˷���
+* 内核分类
 ** hrbrid
 *** Darwin-XNU
 *** NT
-** ���ں�
+** 宏内核
 Linux
-** ΢�ں�
-�������ں˱��־��������ı�Ҫģ���ֶ�����ȥ��ͨ����Ϣ��ʵ�ֵ���
-* �ڴ�����ݻ�
-�������� --> ֱ�ӷ���
+** 微内核
+尽可能内核保持精简，其他的必要模块拆分独立出去，通过消息来实现调用
+* 内存管理演化
+单道程序 --> 直接访问
 
-������� --> ����򲢷���Ϊ���ó���ֱ�ӷ��ʵ������ڴ����˵�˴���ɳ�ͻ����Ҫ��һ�����
-** ��ҳģ��
-�����ַ���ܶ��Ӧ������ַ���ܶ�ڳ�������ʱ����
+多道程序 --> 多程序并发，为了让程序不直接访问到物理内存或者说彼此造成冲突，需要做一层隔离
+** 分页模型
+虚拟地址的总额对应物理地址的总额，在程序链接时产生
 
-1. ��һ��һ�ĵ�ַӳ�������������������ַ��Ϊ������ַ�������Ҿ����������ַ���������ڴ���Ϊһ���������飬����ÿ��Ԫ�ش����һ����Ӧ��������ַ�������ַ����������ַ�����������ַ��Ӧ���±�����ӳ��
-�����У���Ϊ�ڴ��Ѿ���ȫ����Ϊ��ַת����ϵ�������ˣ���Ϊ����̫С
-2. ����ù�����������С���أ��ֿ飬��ӳ�䶼�ǻ���һ��һ�飬��ôֻҪ�����ַ��������ַ�Ŀ��Сһ���������ĵ�ַ��һ���Ϳ��Զ�Ӧһ��ӳ���ϵ(��ҳģ��)
+1. 以一对一的地址映射来做，假设以虚拟地址作为物理地址索引来找具体的物理地址，即物理内存作为一个超大数组，里面每个元素存放了一个对应的物理地址，虚拟地址换成物理地址就是以虚拟地址对应的下标来做映射
+不可行，因为内存已经完全被作为地址转换关系表用完了，因为粒度太小
+2. 如果让关联表尽可能小点呢，分块，让映射都是基于一块一块，那么只要虚拟地址和物理地址的块大小一样，关联的地址，一个就可以对应一坨映射关系(分页模型)
 
-[[file:~/study-record/img/mmu.png][mmu]] ͼʾ
-*** MMUҳ��
-�������ڴ��У�
-һ������ҳĿ¼������м�ҳĿ¼��������ҳ��
-�������ַ���չ淶��ÿһ�����Ϣ��Ϊ��Ӧ�Ĳ�ѯλ��
-[[file:~/study-record/img/mmu_page_table.png][mmuҳ��]]
-**** TODO ԭ��
+[[file:~/study-record/img/mmu.png][mmu]] 图示
+*** MMU页表
+存在与内存中，
+一个顶级页目录，多个中级页目录，最后才是页表
+而虚拟地址按照规范，每一块的信息作为对应的查询位置
+[[file:~/study-record/img/mmu_page_table.png][mmu页表]]
+**** TODO 原因
 * Cache
-1. ����CPU���ڴ��������칤�յ����������
-2. �����Ƕ��ڳ������й��ɵ�һ�ּ��裬������ľֲ���ԭ��
+1. 缓解CPU与内存由于制造工艺导致量级差距
+2. 本质是对于程序运行规律的一种假设，即程序的局部性原理
 ** level
-*** 1������
-   ����ר������Ϊ ָ��Cache �� ����Cache
-*** 2������
-����ר��
-*** 3������
-ȫ���Ĺ���
+*** 1级缓存
+   核心专属，分为 指令Cache 和 数据Cache
+*** 2级缓存
+核心专属
+*** 3级缓存
+全核心共享
 ** protocol
-*** MESI Э��
+*** MESI 协议
 [[file:~/study-record/img/os_cache_modify.png][(M)odify]]
 [[file:~/study-record/img/os_cache_exclusive.png][(E)xclusive]]
 [[file:~/study-record/img/os_cache_share.png][(S)hare]]
 (I)nvalid
-* ͬ��ԭ��
-** ԭ�ӱ���
-** ���ж�
-��ֹ�������;����ϣ�����CPU������ô��
-*** v1 ��Ƕ�״���
-ֱ�ӿ����жϼ���
-*** v2 ѹջȷ���Ƿ���
-��������һ��ſ��Գɹ������жϣ���ֹ����㿪�����µ���Ϣ��һ��
-** ������
-��Ӳ���ṩ���������ԭ��ָ�����ȷ����ȡ�������Ĺ�������ԭ���Ե�
+* 同步原语
+** 原子变量
+** 关中断
+防止断码块中途被打断，单核CPU可以这么搞
+*** v1 非嵌套代码
+直接开关中断即可
+*** v2 压栈确认是否开启
+即到最外一层才可以成功开启中断，防止内外层开启导致的信息不一致
+** 自旋锁
+由硬件提供了最基本的原子指令，用于确保读取锁变量的过程中是原子性的
 
 
-���һ��CPU��ȡ�����������жϣ��жϴ�����Ҳ���Ի�ȡ����������ô��������Զ���ᱻ�ͷţ�����������
+如果一个CPU获取自旋锁后发生中断，中断代码里也尝试获取自旋锁，那么自旋锁永远不会被释放，发生死锁。
 [[file:~/study-record/img/spinlock_flow.png][spin lock flow]]
-** �ź���
-* �������
-HelloWorld.c     -->    HelloWorld.i --> HelloWorld.s   -->    HelloWorld.o     -->      HelloWorld��ִ���ļ�
-                                                               ������Ŀ�
-            (GCCԤ������)         (GCC������)          ��GCC�������            (GCC������)
-* ��չ����
-** ͼ���
-���޳���ֽ�����������������ӣ������Ͽ��Դ洢��Ϣ
-��ͷ�������ƶ�����ȡֽ���������ݣ��������ݵ��������������������ĸ����ӣ�ǰ������ 1����3���� + �ţ�����+��ʱ�򣬾Ͱ�ǰ��������ŵ����ĸ�����
-** ��ŵ������ϵ�ṹ
-* ���
-call����תǰ�ڵ�ǰIP�Ĵ����ĵ�ַѹ��ջ����ret��ʱ�����³�ջ����ִ��
+** 信号量
+* 编译过程
+HelloWorld.c     -->    HelloWorld.i --> HelloWorld.s   -->    HelloWorld.o     -->      HelloWorld可执行文件
+                                                               其他别的库
+            (GCC预处理器)         (GCC编译器)          （GCC汇编器）            (GCC链接器)
+* 发展过程
+** 图灵机
+无限长的纸带，上面有无数格子，格子上可以存储信息
+读头，可以移动，读取纸带格子内容，根据内容的类型做处理，如现有四个格子，前两个是 1，第3个是 + 号，读到+的时候，就把前两个加完放到第四个格子
+** 冯诺依曼体系结构
+* 汇编
+call在跳转前在当前IP寄存器的地址压入栈，在ret的时候重新出栈接着执行
 * bootloader
 ** grub
 ** grub2
-* �Կ�
+* 显卡
 ** VESA
-����Ļ��24�У�ÿ��80���ַ������������λ��ӳ�䵽0xb8000 ��ַ��ʼ���ڴ��У������ֽڶ�Ӧ��һ���ַ�����һ����ASCII�룬�ڶ�������ɫֵ
-�ؼ���
-1. �����߲����Կ�����Ĺ���ϸ�ڣ��������ṩ���ݣ������Կ��ڲ�ת�����������Ļ������������źŵĵ�����ȫ���Կ���������ת��
-2. ��ģʽּ���ṩ����������ʾЧ����������
-* CPUģʽ
-** ʵģʽ
-��ʵָ���ʵ��ַ
+把屏幕分24行，每行80个字符，把其各个的位置映射到0xb8000 地址开始的内存中，两个字节对应的一个字符，第一个是ASCII码，第二个是颜色值
+关键：
+1. 开发者不必显卡具体的工作细节，开发者提供数据，经由显卡内部转换，最后在屏幕，控制输出的信号的点阵完全由显卡自身进行转换
+2. 该模式旨在提供最低情况的显示效果，即亮机
+* CPU模式
+** 实模式
+真实指令，真实地址
 
-�����ڴ�
-CS�μĴ���
+访问内存
+CS段寄存器
 
-** ����ģʽ
-** ��ģʽ
+** 保护模式
+** 长模式
 * login gate
-�������ͨ�����ƵĹ������ϵ��ӣ��γ�3-input AND(Or) gate
+输入可以通过类似的构造往上叠加，形成3-input AND(Or) gate
 ** and gate
 [[file:~/study-record/img/and_gate.png][and gate]] ==> [[file:~/study-record/img/and_gate_symbol.jpg][symbol]]
 
@@ -103,12 +103,12 @@ CS�μĴ���
 [[file:~/study-record/img/inverter.png][inverter]] ==> [[file:~/study-record/img/inverter_symbol.jpg][symbol]]
 ** buffer
 [[file:~/study-record/img/buffer_circuit.png][buffer]] ==> [[file:~/study-record/img/buffer_circuit_symbol.jpg][symbol]]
-����:
-- �Ŵ���Ϣ
-- �ӳ�
+作用:
+- 放大信息
+- 延迟
 ** 2-Line-to-4-Line Decoder
 [[file:~/study-record/img/dream_kitty.png][input device]]
-(N x ((M x (W + T)) + (F x (1 �C W)))) + B
+(N x ((M x (W + T)) + (F x (1 – W)))) + B
 
 [[file:~/study-record/img/w_signal.jpg][w output]]
 [[file:~/study-record/img/b_signal.jpg][b output]]
@@ -117,59 +117,59 @@ CS�μĴ���
 
 [[file:~/study-record/img/wbto_combine.png][combine all to become 2-line-to-4-line-decoder]]
 
-��ֵ��
+真值表
 | A1 | A2 | w | b | t | o |
 |  0 |  0 | 1 | 0 | 0 | 0 |
 |  0 |  1 | 0 | 0 | 1 | 0 |
 |  1 |  0 | 0 | 1 | 0 | 0 |
 |  1 |  1 | 0 | 0 | 0 | 1 |
 
-decode�����ֵ�ǵ�λ������ʵ�Ͽ���ͨ��������䲻�Ե�λ�������ʽ����
-** ת��(De Morgan��s Laws)
+decode后的真值是单位矩阵，事实上可以通过设计让其不以单位矩阵的形式呈现
+** 转换(De Morgan’s Laws)
 [[file:~/study-record/img/de_morgan_formula.jpg][formula]] ==> [[file:~/study-record/img/de_morgan_formula_1.jpg][circuit1]], [[file:~/study-record/img/de_morgan_formula_2.jpg][circuit2]]
-* �ӷ����ݻ�˼·
-** ���ӷ���(��ֵ���������������ֵ�޷�ȷ��)
-ȫ��λ�����ڱ�ʾ��ֵ����4bit���Դ���16�����֣�ԭ���Ǵ����������룬������һλ���ޣ���һ��bit���ڲ����ڣ�����Ĭ��Ϊ��
-** �ܼ��ܼ���(�������ֶ���������A>B���ڼ�һ��������Ϣ��ʾ�ӻ��Ǽ���)
+* 加法机演化思路
+** 纯加法机(数值均是正数，溢出数值无法确认)
+全部位置用于表示数值，如4bit可以代表16个数字，原理是处理三个输入，并往上一位套娃，第一个bit由于不存在，所以默认为空
+** 能加能减机(两个数字都是正数且A>B，在加一个输入信息表示加还是减法)
 
-����:
-- 8bit�ӷ���
-- A>B��A=253��B=176
+条件:
+- 8bit加法机
+- A>B，A=253，B=176
 
-ԭ����
-1. ������λ(xor gate)��������ʹ�ô��ӷ���
-2. �����ĵھŸ���λ������ֱ�ӷ���,��ΪA>B��A������0~2^8������������ֵһ�����ڷ�Χ��
-3. ���ӷ����ĵ�һbit�ô��������ź�������
+原理：
+1. 消除借位(xor gate)，即可以使用纯加法机
+2. 带来的第九个进位，可以直接废弃,因为A>B且A均属于0~2^8，所以最终数值一定还在范围内
+3. 纯加法机的第一bit用处理符号信号来输入
 
 
-10����
+10进制
 253-176 ==> 253-176+1000-1000 ==> 253-176+999-999 ==> 253+(999-176)-999
-2����
+2进制
 11111101-10110000
 ==> 
 11111101-10110000+11111111+1-100000000
 ==>
 11111101+(11111111-10110000)(inverter)+1-100000000
 ==>
-(11111101+01001111+1)(�ӷ���һ�����λ����λ��ȥ��underflow����Ϣ����sub��xor gate���������������൱��-100000000���Բ�����)
-** �ӷ���(��ֵ���ڷ��ţ��ɵ�һλȷ��)
-***  ten��s complement
-�������ķ�Χ�ڵ�������ȫ��Ӧ�ϣ�����λ����ֱ������
+(11111101+01001111+1)(加法机一定会进位，进位拿去当underflow的信息，与sub作xor gate，拿来作报警，相当于-100000000可以不用算)
+** 加法机(数值存在符号，由第一位确定)
+***  ten’s complement
+该做法的范围内的语义完全对应上，而进位可以直接无视
 
-���д������Ϊ499$,���Ϊ-500$�����������ʹ�÷���λ���޶�����λ��������500~999��-500~-1��ӳ��
-�C500 �C499 �C498 �� �C4 �C3 �C2 �C1 0 1 2 3 4 �� 497 498 499
+银行存款上限为499$,最低为-500$，所以如果不使用符号位，限定三个位，可以以500~999作-500~-1的映射
+–500 –499 –498 … –4 –3 –2 –1 0 1 2 3 4 … 497 498 499
 ==>
-500 501 502 �� 996 997 998 999 000 001 002 003 004 �� 497 498 499
+500 501 502 … 996 997 998 999 000 001 002 003 004 … 497 498 499
 
 -1=999
 1=1
-999+1=1000������3λ�Ŀ������ӣ�����-1+1=0��
-ͬ����
+999+1=1000，大于3位的可以无视，所以-1+1=0，
+同理，
 -499+2=501+002=503 ==> -497
 
-mappingת�����ƣ�λ�������ֵ��+1����-1ת��Ϊ -1+999+1
-*** two��s complement
-����ֵ�ϱ����˷���λ(����������ʽ�����ҿ���ֱ�ӱ�����ڼ����Ĵ���)
+mapping转换机制，位数的最大值在+1，即-1转换为 -1+999+1
+*** two’s complement
+从数值上避免了符号位(以隐含的形式，并且可以直接避免对于减法的处理)
 
 8bit
 |   binaty | decimal |
@@ -190,36 +190,36 @@ mappingת�����ƣ�λ�������ֵ��+1����-1ת��Ϊ -1+999+1
 | 01111110 |     126 |
 | 01111111 |     127 |
 
-�ȷ�ת��+1��������ֱ�Ӵ�ò���
-10000001+01111100=11111101��ʵ��ֵΪ-3
+先反转在+1，二进制直接存该补码
+10000001+01111100=11111101，实际值为-3
 
-mappingת�����ƣ�λ�������ֵ��+1����-125����ֵ����01111101��ת10000010�ڼ�1��10000011
+mapping转换机制，位数的最大值在+1，即-125，数值部分01111101反转10000010在加1即10000011
 
-ע��:
-10000011+10000011=100000110 ��λ��
+注意:
+10000011+10000011=100000110 进位了
 01111101+01111101=11111101 
-������������������Թ۲쵽ͨ�õĲ��ּ����ű�ζ����ˣ�������Դ���λ�������ź�������ս�����źţ������������ͬ���������ս���͸÷��Ų�ͬ��������Խ��(��ͬ����һ��������bit�����ڣ���-1+127=11111111+01111111=101111110��ȥ����λ��Ϊ126)
-* �ڴ�
-��flip-flopΪ����
+上述都属于溢出，可以观察到通用的部分即符号变味，因此，以输入源最高位的两个信号配合最终结果的信号，如果两个输入同符号且最终结果和该符号不同，即代表越界(不同符号一定是落在bit区间内，如-1+127=11111111+01111111=101111110，去掉进位即为126)
+* 内存
+以flip-flop为核心
 
-��һ����һ��flip-flop������(����)�󣬲���ǰ�õ�·�����󣬿��Ա��һ��latch���洢һ��bit
+第一步，一个flip-flop处理后(剪线)后，并在前置电路处理后，可以变成一个latch，存储一个bit
 [[file:~/study-record/img/flip_flop_latch.png][latch circuit]] --> [[file:~/study-record/img/flip_flop_latch_short.jpg][symbol]]
 
-�ڶ�������һ��write�źſ��ƶ��latch
+第二步，让一个write信号控制多个latch
 [[file:~/study-record/img/eight_latch_with_same_latch.png][eight latch box circuit]] --> [[file:~/study-record/img/eight_latch_with_same_latch_symbol.png][symbol]]
 
-�������������ַ�ĸ���
-�Դ���65536(2^16)��latch������£�����ֻ��һ��bit�ߵ��������ô������Ҫһ���ⲿ�����źţ��������յ�����ź����ĸ�latch�ģ����Ը������Ҫ16����(��ַ��)��ÿ������һ����ַ�������õ���Ӧ��latch��bit��Ŀ
+第三步，引入地址的概念
+以存在65536(2^16)个latch的情况下，假设只有一个bit线的输出，那么就是需要一个外部控制信号，决定最终的输出信号是哪个latch的，所以该情况需要16根线(地址线)，每次输入一个地址，可以拿到对应的latch的bit数目
 
-���Ĳ�����չλ��
-��һ��ֻ������1bit�����Ҫ����8bit���Լ򵥵�˼��ʵ�����������latch������Ϊһ���·���ӣ�ʹ��8����ӣ���һһ��Ӧ������£���ַ�ߴ�ÿ�ΰ��ӵĶ�Ӧ��ȡ��һ��bit���ܼ�8bit=1byte
+第四步，拓展位宽
+上一步只能输入1bit，如果要输入8bit，以简单的思想实验就是上述的latch集合作为一块电路板子，使用8块板子，在一一对应的情况下，地址线从每次板子的对应处取出一个bit，总计8bit=1byte
 
-���岽����չ����
-���������Ĳ�����Щ�����Ѿ������ԣ������8bit����̶�����ô����ͨ������±�����Ϣ�Ĵ�Сȡ���ڰ���latch����Ŀ(��ַ����ȡ������Ҫ���Ƶ���latch)�������ſ�������λ������ôƽ���žͿ��ܽ���latch���ӵ�����(�߼�����)
-* ָ�
-�Ե�·������ŵ�״̬������ʵ�ֶ�Ӧ�������߼�
+第五步，拓展容量
+在上述第四步，有些东西已经很明显，即如果8bit输出固定，那么能在通电情况下保存信息的大小取决于板子latch的数目(地址总数取决于需要控制的总latch)，竖着排可以增加位宽，那么平着排就可能进行latch板子的扩大(逻辑概念)
+* 指令集
+以电路来变更门的状态，进而实现对应的算术逻辑
 [[file:~/study-record/img/8080_cpu.png][8080 cpu]]
-���Կ���A0~A15����Ϊ��ַ���������룬��D0~D7������Ϊ˫�������������ݵ�ַ���ߴ����ڴ棬�����8bit�����߷�����д��ȥ���ڲ��Ľṹ����
+可以看到A0~A15是作为地址总线来输入，而D0~D7则是作为双向数据流，根据地址总线触发内存，输出的8bit，或者反过来写回去，内部的结构根据
 * file system
 ** CP/M
 - each allocation block containe 8 sectors
@@ -227,9 +227,9 @@ mappingת�����ƣ�λ�������ֵ��+1����-125����ֵ����01111101��ת10000010�ڼ�1��10
 directory entry
 | Bytes     | Meaning               |
 | 0         | Usually set to 0      |
-| 1�C8       | Filename              | 8�ַ��ļ���
-| 9�C11      | File type             | �ļ�����
+| 1–8       | Filename              | 8字符文件名
+| 9–11      | File type             | 文件类型
 | 12 	   | File extent           |
-| 13�C14	 | Reserved (set to 0)   |
+| 13–14	 | Reserved (set to 0)   |
 | 15	    | Sectors in last block |
-| 16�C31	 | Disk map              |
+| 16–31	 | Disk map              |

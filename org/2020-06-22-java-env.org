@@ -1,10 +1,10 @@
-#+TITLE:java×é¼ş
+#+TITLE:javaç»„ä»¶
 #+STARTUP: indent
 * lombok
 ** @Data
-@Data ×¢½â»áÎªÀàµÄËùÓĞÊôĞÔ×Ô¶¯Éú³Ésetter/getter¡¢equals¡¢canEqual¡¢hashCode¡¢toString·½·¨£¬ÈçÎªfinalÊôĞÔ£¬Ôò²»»áÎª¸ÃÊôĞÔÉú³Ésetter·½·¨¡£
+@Data æ³¨è§£ä¼šä¸ºç±»çš„æ‰€æœ‰å±æ€§è‡ªåŠ¨ç”Ÿæˆsetter/getterã€equalsã€canEqualã€hashCodeã€toStringæ–¹æ³•ï¼Œå¦‚ä¸ºfinalå±æ€§ï¼Œåˆ™ä¸ä¼šä¸ºè¯¥å±æ€§ç”Ÿæˆsetteræ–¹æ³•ã€‚
 ** @AllArgsConstructor/@NoArgsConstructor
-·Ö±ğÌá¹©È«²Î¹¹Ôì·½·¨ºÍÎŞ²Î¹¹Ôì·½·¨
+åˆ†åˆ«æä¾›å…¨å‚æ„é€ æ–¹æ³•å’Œæ— å‚æ„é€ æ–¹æ³•
 ** @Builder
 #+BEGIN_SRC java
 @Builder
@@ -94,8 +94,8 @@ public class MailConfig {
 ** poi
 https://www.tutorialspoint.com/apache_poi/apache_poi_overview.htm#:~:text=Apache%20POI%20is%20a%20popular,Office%20files%20using%20Java%20program.
 * Metrics 
-²âÁ¿ÓÃ¹¤¾ß¿â
-** ¶ÈÁ¿ÀàĞÍ
+æµ‹é‡ç”¨å·¥å…·åº“
+** åº¦é‡ç±»å‹
 *** Meters
 *** Gauges
 *** Counters

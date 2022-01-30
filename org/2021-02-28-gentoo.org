@@ -1,13 +1,13 @@
 #+TITLE: gentoo
 #+STARTUP: indent
 * install record
-** ÍøÂç´¦Àí
-- ÓĞÏßÖ±½Ó²å£¬Ä¬ÈÏÈ«×ßÍ¨(×î·½±ã)
-- ÎŞÏß¿ÉÒÔÓÃwpa_supplicant(ÒòÎªÄ¬ÈÏÃ»×ÖÌå£¬ÏÈÔÚÒ»Ì¨¿ÉÓÃµÄËŞÖ÷»ú°ÑÅäÖÃÎÄ¼şĞ´ºÃ)
-wpa_supplicant -i [ip addr¿´µ½µÄÎŞÏßÍø¿¨Ãû³Æ] -c /etc/wpa_supplicant.conf(wifiÕËºÅÃÜÂë)
-È»ºódhcpcd
-*** ¿ª»ú×ÔÆôwifi
-Gentoo handboolµÄnetwork¹ØÓÚwpa_supplicantµÄÅäÖÃÎŞ·¨ÉúĞ§£¬Ö»ÄÜ½«wpa_supplicantºÍdhcpcdÒÔrc½Å±¾Æô¶¯²ÅÄÜÕı³£ÓÃ
+** ç½‘ç»œå¤„ç†
+- æœ‰çº¿ç›´æ¥æ’ï¼Œé»˜è®¤å…¨èµ°é€š(æœ€æ–¹ä¾¿)
+- æ— çº¿å¯ä»¥ç”¨wpa_supplicant(å› ä¸ºé»˜è®¤æ²¡å­—ä½“ï¼Œå…ˆåœ¨ä¸€å°å¯ç”¨çš„å®¿ä¸»æœºæŠŠé…ç½®æ–‡ä»¶å†™å¥½)
+wpa_supplicant -i [ip addrçœ‹åˆ°çš„æ— çº¿ç½‘å¡åç§°] -c /etc/wpa_supplicant.conf(wifiè´¦å·å¯†ç )
+ç„¶ådhcpcd
+*** å¼€æœºè‡ªå¯wifi
+Gentoo handboolçš„networkå…³äºwpa_supplicantçš„é…ç½®æ— æ³•ç”Ÿæ•ˆï¼Œåªèƒ½å°†wpa_supplicantå’Œdhcpcdä»¥rcè„šæœ¬å¯åŠ¨æ‰èƒ½æ­£å¸¸ç”¨
 rc-update add wpa_supplicant default
 rc-update add dhcpcd default
 
@@ -19,7 +19,7 @@ wpa_supplicant_args="-B -M -c/etc/wpa_supplicant/wpa_supplicant.conf"
 #+BEGIN_SRC bash
 rc-service sshd start
 
-# ·ÖÇø+ÉèÖÃÎÄ¼şÏµÍ³
+# åˆ†åŒº+è®¾ç½®æ–‡ä»¶ç³»ç»Ÿ
 parted -a optimal /dev/sda
 mklabel gpt
 unit mib
@@ -39,16 +39,16 @@ mkfs.ext4 /dev/sda4
 mkswap /dev/sda3
 swapon /dev/sda3
 
-# ¹ÒÔØrootfs²¢ÉèÖÃÏµÍ³Ïà¹ØÉèÖÃ£¬ÈçmirrorºÍuserºÍ±àÒëÑ¡ÏîµÈ
+# æŒ‚è½½rootfså¹¶è®¾ç½®ç³»ç»Ÿç›¸å…³è®¾ç½®ï¼Œå¦‚mirrorå’Œuserå’Œç¼–è¯‘é€‰é¡¹ç­‰
 ntpd -q -g
 mount /dev/sda4 /mnt/gentoo
 tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
-echo MAKEOPTS="-j4" >> /mnt/gentoo/etc/portage/make.conf # Ò»°ãÎªºËĞÄÊı+1
-mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf # °¢ÀïµÄ»òÕß163
+echo MAKEOPTS="-j4" >> /mnt/gentoo/etc/portage/make.conf # ä¸€èˆ¬ä¸ºæ ¸å¿ƒæ•°+1
+mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf # é˜¿é‡Œçš„æˆ–è€…163
 mkdir --parents /mnt/gentoo/etc/portage/repos.conf
 cp /mnt/gentoo/usr/share/portage/config/repos.conf /mnt/gentoo/etc/portage/repos.conf/gentoo.conf
 
-# °ÑÒıÓÃ¹Ò½øÈ¥£¬chroot½øÈ¥
+# æŠŠå¼•ç”¨æŒ‚è¿›å»ï¼Œchrootè¿›å»
 cp --dereference /etc/resolv.conf /mnt/gentoo/etc/
 mount --types proc /proc /mnt/gentoo/proc
 mount --rbind /sys /mnt/gentoo/sys
@@ -58,18 +58,18 @@ mount --make-rslave /mnt/gentoo/dev
 chroot /mnt/gentoo /bin/bash
 source /etc/profile
 export PS1="(chroot) ${PS1}"
-mount /dev/sda2 /boot # ¹Òsda2¹Ò½øÀ´
+mount /dev/sda2 /boot # æŒ‚sda2æŒ‚è¿›æ¥
 
 emerge-webrsync
 
-# Ñ¡profile
-# ¸üĞÂ
+# é€‰profile
+# æ›´æ–°
 
-# Ê±ÇøÅäÖÃ
+# æ—¶åŒºé…ç½®
 echo "Asia/Shanghai" > /etc/timezone
 emerge --config sys-libs/timezone-data
 
-# ¹ú¼Ê»¯
+# å›½é™…åŒ–
 env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
 
 emerge --ask sys-kernel/gentoo-sources
@@ -89,7 +89,7 @@ umount -R /mnt/gentoo
 #+BEGIN_SRC bash
 rc-service sshd start
 
-# ·ÖÇø+ÉèÖÃÎÄ¼şÏµÍ³
+# åˆ†åŒº+è®¾ç½®æ–‡ä»¶ç³»ç»Ÿ
 parted -a optimal /dev/nvme0n1
 mklabel gpt
 unit mib
@@ -109,16 +109,16 @@ mkfs.ext4 /dev/nvme0n1p4
 mkswap /dev/nvme0n1p3
 swapon /dev/nvme0n1p3
 
-# ¹ÒÔØrootfs²¢ÉèÖÃÏµÍ³Ïà¹ØÉèÖÃ£¬ÈçmirrorºÍuserºÍ±àÒëÑ¡ÏîµÈ
+# æŒ‚è½½rootfså¹¶è®¾ç½®ç³»ç»Ÿç›¸å…³è®¾ç½®ï¼Œå¦‚mirrorå’Œuserå’Œç¼–è¯‘é€‰é¡¹ç­‰
 ntpd -q -g
 mount /dev/nvme0n1p4 /mnt/gentoo
 tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
-echo MAKEOPTS=\"-j7\" >> /mnt/gentoo/etc/portage/make.conf # Ò»°ãÎªºËĞÄÊı+1
-mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf # °¢ÀïµÄ»òÕß163(½¨Òé163)
+echo MAKEOPTS=\"-j7\" >> /mnt/gentoo/etc/portage/make.conf # ä¸€èˆ¬ä¸ºæ ¸å¿ƒæ•°+1
+mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf # é˜¿é‡Œçš„æˆ–è€…163(å»ºè®®163)
 mkdir --parents /mnt/gentoo/etc/portage/repos.conf
 cp /mnt/gentoo/usr/share/portage/config/repos.conf /mnt/gentoo/etc/portage/repos.conf/gentoo.conf
 
-# °ÑÒıÓÃ¹Ò½øÈ¥£¬chroot½øÈ¥
+# æŠŠå¼•ç”¨æŒ‚è¿›å»ï¼Œchrootè¿›å»
 cp --dereference /etc/resolv.conf /mnt/gentoo/etc/
 mount --types proc /proc /mnt/gentoo/proc
 mount --rbind /sys /mnt/gentoo/sys
@@ -128,26 +128,26 @@ mount --make-rslave /mnt/gentoo/dev
 chroot /mnt/gentoo /bin/bash
 source /etc/profile
 export PS1="(chroot) ${PS1}"
-mount /dev/nvme0n1p2 /boot # ¹Òsda2¹Ò½øÀ´
+mount /dev/nvme0n1p2 /boot # æŒ‚sda2æŒ‚è¿›æ¥
 
 emerge-webrsync
 
-# Ñ¡profile
-# ¸üĞÂ
+# é€‰profile
+# æ›´æ–°
 
-# Ê±ÇøÅäÖÃ
+# æ—¶åŒºé…ç½®
 echo "Asia/Shanghai" > /etc/timezone
 emerge --config sys-libs/timezone-data
 
-# ¹ú¼Ê»¯
+# å›½é™…åŒ–
 env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
 
 
-# ·ÀÖ¹²»¼æÈİ£¬µ¼ÖÂÆäËûpackage³åÍ»
+# é˜²æ­¢ä¸å…¼å®¹ï¼Œå¯¼è‡´å…¶ä»–packageå†²çª
 emerge --ask --verbose --update --deep --newuse @world 
 
 
-# ´¦Àílicense
+# å¤„ç†license
 echo "sys-kernel/linux-firmware @BINARY-REDISTRIBUTABLE" | tee -a /etc/portage/package.license 
 emerge --ask sys-kernel/gentoo-sources sys-kernel/genkernel
 emerge --ask net-wireless/wpa_supplicant net-misc/dhcpcd
@@ -169,7 +169,7 @@ cd /usr/src/linux
 
 emerge --ask --verbose sys-boot/grub:2
 
-# ÓĞĞ©Ö÷°åÏŞÖÆ£¬Èçb460m
+# æœ‰äº›ä¸»æ¿é™åˆ¶ï¼Œå¦‚b460m
 grub-install --target=x86_64-efi --efi-directory=/boot --removable 
 grub-mkconfig -o /boot/grub/grub.cfg
 
@@ -182,9 +182,9 @@ reboot
 
 #+END_SRC
 * script
-emerge --update --deep --with-bdeps=y --newuse @world #¸üĞÂÏµÍ³
+emerge --update --deep --with-bdeps=y --newuse @world #æ›´æ–°ç³»ç»Ÿ
 
-emerge --ask --autounmask-write =xorg-server-1.11.99.2 # È¡Ïû¶Ôxx£¬±ÈÈç~amd64µÄmask£¬×Ô¶¯Ğ´Èëpackage.accept
+emerge --ask --autounmask-write =xorg-server-1.11.99.2 # å–æ¶ˆå¯¹xxï¼Œæ¯”å¦‚~amd64çš„maskï¼Œè‡ªåŠ¨å†™å…¥package.accept
 
 echo "category/packagename **" >> /etc/portage/package.accept_keywords
 * tool
@@ -201,19 +201,19 @@ nginx
 docker
 git
 ** dispatch-conf
-genkernel¾Í»áµ¼ÖÂ¸ÃÎÊÌâ
-ÉèÈí¼ş°üAÓĞÈçÏÂUSE£ºuse1,use2,use3;
-ÄãµÄÈ«¾ÖUSEÒÔ¼°°üAµÄµ¥¶ÀUSE¶¼Ã»ÓĞuse2;
-ÄãÏë°²×°Èí¼ş°üB£¬¶øBÒÀÀµÓÚA£¬ÇÒÒªÇóA±ØĞëÊ¹ÓÃuse2;
-ÕâÊ±ÏµÍ³¾Í»áÔÚ/etc/portage/package.useÎÄ¼şÖĞÌæÄã¼ÇÂ¼AÊ¹ÓÃuse2;
-È»ºóÄãĞèÒªÔËĞĞdispatch-conf(etc-updateÃ»ÓÃ¹ı),È»ºóÏµÍ³»áÁĞ³öĞèÒª¸Ä±äµÄµØ·½ÈÃÄãÈ·ÈÏ£¬Í¬ÒâÏµÍ³Ëù×öµÄĞŞ¸Ä¾Í°´u£¬²»Í¬Òâ¾Í°´z
+genkernelå°±ä¼šå¯¼è‡´è¯¥é—®é¢˜
+è®¾è½¯ä»¶åŒ…Aæœ‰å¦‚ä¸‹USEï¼šuse1,use2,use3;
+ä½ çš„å…¨å±€USEä»¥åŠåŒ…Açš„å•ç‹¬USEéƒ½æ²¡æœ‰use2;
+ä½ æƒ³å®‰è£…è½¯ä»¶åŒ…Bï¼Œè€ŒBä¾èµ–äºAï¼Œä¸”è¦æ±‚Aå¿…é¡»ä½¿ç”¨use2;
+è¿™æ—¶ç³»ç»Ÿå°±ä¼šåœ¨/etc/portage/package.useæ–‡ä»¶ä¸­æ›¿ä½ è®°å½•Aä½¿ç”¨use2;
+ç„¶åä½ éœ€è¦è¿è¡Œdispatch-conf(etc-updateæ²¡ç”¨è¿‡),ç„¶åç³»ç»Ÿä¼šåˆ—å‡ºéœ€è¦æ”¹å˜çš„åœ°æ–¹è®©ä½ ç¡®è®¤ï¼ŒåŒæ„ç³»ç»Ÿæ‰€åšçš„ä¿®æ”¹å°±æŒ‰uï¼Œä¸åŒæ„å°±æŒ‰z
 ** network
 *** wireless
-//wpa_supplicant£¬Ö»ÊÇÏàµ±ÓÚ²åÁËÍøÏß£¬»¹ĞèÒªdhcpclient£¬GentooÍÆ¼ödhcpcd
+//wpa_supplicantï¼Œåªæ˜¯ç›¸å½“äºæ’äº†ç½‘çº¿ï¼Œè¿˜éœ€è¦dhcpclientï¼ŒGentooæ¨èdhcpcd
 https://pluhuxc.github.io/2018/08/19/use-wpa_supplicant-connect-wifi.html
 https://wiki.gentoo.org/wiki/Network_management_using_DHCPCD#Setup
 **** /etc/wpa_supplicant/wpa_supplicant.conf
-# Á¬½ÓÅäÖÃ
+# è¿æ¥é…ç½®
 # Allow users in the 'wheel' group to control wpa_supplicant
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=wheel
 
@@ -221,22 +221,22 @@ ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=wheel
 update_config=1
 
 network={
-        ssid="302ÈıÈË"
+        ssid="302ä¸‰äºº"
         #psk="00001111"
         psk=bb939e2d790316f5f1085c3ce044d171a4d01988797b2366ac1fabb6b41b0677
 }
 **** /etc/conf.d/wpa_supplicant
 wpa_supplicant_args="-B -M -c/etc/wpa_supplicant/wpa_supplicant.conf"
-rcÆô¶¯²ÎÊı
+rcå¯åŠ¨å‚æ•°
 **** dhcp
-rc-update add dhcpcd default # ÈÃdhcp¿Í»§¶Ë¿ª»úÆô¶¯
+rc-update add dhcpcd default # è®©dhcpå®¢æˆ·ç«¯å¼€æœºå¯åŠ¨
 **** /etc/conf.d/net
 # Gentoo net.* scripts
 modules_wlp1s0="wpa_supplicant"
 config_wlp1s0="dhcp"
 * config
 ** ebuild repo location
-/var/db/pkg + ÖÖÀà+¾ßÌåÓ¦ÓÃ-xx°æ±¾
+/var/db/pkg + ç§ç±»+å…·ä½“åº”ç”¨-xxç‰ˆæœ¬
 ** unmask
 /etc/portage/profile/package.use.mask
 
@@ -285,13 +285,13 @@ www-servers/nginx
 dev-java/openjdk -gentoo-vm
 dev-java/openjdk-bin -gentoo-vm
 * openrc
-/etc/runlevels/[½×¶Î]ÏÂµÄ½Å±¾Ä¬ÈÏ°´ÕÕ×ÖÄ¸Æô¶¯£¬³ı·ÇÓĞÉùÃ÷ÒÀÀµ
+/etc/runlevels/[é˜¶æ®µ]ä¸‹çš„è„šæœ¬é»˜è®¤æŒ‰ç…§å­—æ¯å¯åŠ¨ï¼Œé™¤éæœ‰å£°æ˜ä¾èµ–
 
 boot --> default 
 
 
 * ref
-# ×ÖÌå´¦Àí·ÖÎö
+# å­—ä½“å¤„ç†åˆ†æ
 https://gist.github.com/kidlj/f30e82c2c6f064990596
 
 # distrubute compile

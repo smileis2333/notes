@@ -1,8 +1,8 @@
 #+TITLE: GA
 #+STARTUP: indent
-½¨Á¢µÄ·ÖÎöÕËºÅÁ¥ÊôÓÚÓÃ»§ÕËºÅ
-ÔÚ¸ú¾ßÌåµÄ·şÎñÕËºÅ½øĞĞ¹ØÁª(·şÎñÕËºÅÒ²Á¥ÊôÓëÓÃ»§ÕËºÅ)
-·ÖÎöÕËºÅ-->Ã½Ìå×ÊÔ´-->Êı¾İÊÓÍ¼
+å»ºç«‹çš„åˆ†æè´¦å·éš¶å±äºç”¨æˆ·è´¦å·
+åœ¨è·Ÿå…·ä½“çš„æœåŠ¡è´¦å·è¿›è¡Œå…³è”(æœåŠ¡è´¦å·ä¹Ÿéš¶å±ä¸ç”¨æˆ·è´¦å·)
+åˆ†æè´¦å·-->åª’ä½“èµ„æº-->æ•°æ®è§†å›¾
 
 GA admin
 https://analytics.google.com/analytics/web
@@ -13,28 +13,28 @@ https://console.cloud.google.com/projectselector2/iam-admin/serviceaccounts?supp
 API
 https://developers.google.com/analytics/devguides/reporting/core/v4/quickstart/service-java
 
-ÔÚÏßRest²éÑ¯Ãæ°å
+åœ¨çº¿RestæŸ¥è¯¢é¢æ¿
 https://ga-dev-tools.appspot.com/query-explorer/
 * flow
-´´½¨Ã½Ìå×ÊÔ´
+åˆ›å»ºåª’ä½“èµ„æº
 
-Ã½Ìå×ÊÔ´ÉèÖÃ-->´´½¨ Universal Analytics Ã½Ìå×ÊÔ´-->ÌîÈëÕ¾µãµØÖ·
+åª’ä½“èµ„æºè®¾ç½®-->åˆ›å»º Universal Analytics åª’ä½“èµ„æº-->å¡«å…¥ç«™ç‚¹åœ°å€
 
-Êı¾İÊÓÍ¼·ÃÎÊÈ¨ÏŞ¹ÜÀí-->ÊÚÈ¨ÌØ¶¨google service accountÈ¨ÏŞ
+æ•°æ®è§†å›¾è®¿é—®æƒé™ç®¡ç†-->æˆæƒç‰¹å®šgoogle service accountæƒé™
 
-ÍøÕ¾Ö²Èëga½Å±¾
+ç½‘ç«™æ¤å…¥gaè„šæœ¬
 
-1. ´ÓGAÕ¾µã»ñÈ¡ÊµÊ±Êı¾İ(Ã»ÓĞ¿ª·Å½Ó¿Ú)
-2. Ê¹ÓÃ´úÂë»ñÈ¡GA·ÖÎö±¨¸æ£¬·ÇÊµÊ±(ÇÒÊµ¼ÊÊı¾İÔÚµÚÒ»Ìì»òÕßÅ¼¶û»á¶ªÊ§²¿·ÖÊı¾İ)
+1. ä»GAç«™ç‚¹è·å–å®æ—¶æ•°æ®(æ²¡æœ‰å¼€æ”¾æ¥å£)
+2. ä½¿ç”¨ä»£ç è·å–GAåˆ†ææŠ¥å‘Šï¼Œéå®æ—¶(ä¸”å®é™…æ•°æ®åœ¨ç¬¬ä¸€å¤©æˆ–è€…å¶å°”ä¼šä¸¢å¤±éƒ¨åˆ†æ•°æ®)
 ** demo
 #+BEGIN_SRC java
 public class HelloAnalyticsReporting {
     private static final String APPLICATION_NAME = "Hello Analytics Reporting";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    // µÇÂ¼ÕËºÅµÄsecret£¬Ò»°ãÓÃGoogle service accountÀ´µÇÂ¼
+    // ç™»å½•è´¦å·çš„secretï¼Œä¸€èˆ¬ç”¨Google service accountæ¥ç™»å½•
     private static final String KEY_FILE_LOCATION = "C:\\Users\\admin\\Desktop\\gb-project-302509-bcb654fb5a26.json";
 
-    // ¶ÔÓ¦µÄÊı¾İÊÓÍ¼
+    // å¯¹åº”çš„æ•°æ®è§†å›¾
     private static final String VIEW_ID = "ga:246349053";
     public static void main(String[] args) {
         try {

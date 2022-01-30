@@ -1,10 +1,10 @@
 #+TITLE: freemarker
 #+STARTUP: indent
-* Ä£°å¿ª·¢
-** Ä£°åÓï·¨
+* æ¨¡æ¿å¼€å‘
+** æ¨¡æ¿è¯­æ³•
 ${}
-** Ö¸Áî
-*** Ìõ¼ş
+** æŒ‡ä»¤
+*** æ¡ä»¶
 <#if user == "Big Joe">, our beloved leader</#if>!
 
 <#if animals.python.price < animals.elephant.price>
@@ -20,12 +20,12 @@ ${}
 <#else>
   Elephants and pythons cost the same today.
 </#if>
-*** ÁĞ±í
+*** åˆ—è¡¨
 <#list animals as animal>
     <tr><td>${animal.name}<td>${animal.price} Euros
 </#list>
 
-±ÜÃâÍâ²ã¿Õul
+é¿å…å¤–å±‚ç©ºul
 <#list misc.fruits>
   <ul>
     <#items as fruit>
@@ -34,10 +34,10 @@ ${}
   </ul>
 </#list>
 
-·Ö¸ô·û.
+åˆ†éš”ç¬¦.
 <p>Fruits: <#list misc.fruits as fruit>${fruit}<#sep>,</#sep> </#list>
 <p>Fruits: orange, banan
-*** ×éºÏ
+*** ç»„åˆ
 **** include
 #+BEGIN_SRC html
 <hr>
@@ -59,39 +59,39 @@ All Rights Reserved.
 </body>
 </html>
 #+END_SRC
-*** ÄÚ½¨º¯Êı
-ÊÇFreeMarker»ùÓÚÊıÖµÉÏÌí¼ÓµÄÌØĞÔ£¬ĞèÒª?½øĞĞ·ÃÎÊ£¬ÓĞĞ©¿ÉÄÜĞèÒª¶îÍâ²ÎÊıÉèÖÃ£¬Ö§³ÖÒ»Ö±Á¬½ÓÏÂÈ¥µÄ´¦Àí£¬Èçuser?upper_case?html
+*** å†…å»ºå‡½æ•°
+æ˜¯FreeMarkeråŸºäºæ•°å€¼ä¸Šæ·»åŠ çš„ç‰¹æ€§ï¼Œéœ€è¦?è¿›è¡Œè®¿é—®ï¼Œæœ‰äº›å¯èƒ½éœ€è¦é¢å¤–å‚æ•°è®¾ç½®ï¼Œæ”¯æŒä¸€ç›´è¿æ¥ä¸‹å»çš„å¤„ç†ï¼Œå¦‚user?upper_case?html
 **** html
-×ªÒå
+è½¬ä¹‰
 **** upper_case
 **** cap_first
-Ê××ÖÄ¸´óĞ´
+é¦–å­—æ¯å¤§å†™
 **** length
 **** size
 **** string("Y", "N")
-animal.protected?string("Y", "N") »ùÓÚ animal.protected µÄ²¼¶ûÖµÀ´·µ»Ø×Ö·û´® "Y" »ò "N
+animal.protected?string("Y", "N") åŸºäº animal.protected çš„å¸ƒå°”å€¼æ¥è¿”å›å­—ç¬¦ä¸² "Y" æˆ– "N
 **** fruits?join(", ")
 **** user?starts_with("J")
-*** ´¦Àí¿ÕÖµ
-**** Ä¬ÈÏÖµ
+*** å¤„ç†ç©ºå€¼
+**** é»˜è®¤å€¼
 <h1>Welcome ${user!"visitor"}!</h1>
-**** ÅĞ¶Ï¶ÔÏóÊÇ·ñÎª¿Õ
+**** åˆ¤æ–­å¯¹è±¡æ˜¯å¦ä¸ºç©º
 <#if user??><h1>Welcome ${user}!</h1></#if>
-**** ¶à¼¶·ÃÎÊµÄÉèÖÃ
-(animals.python.price)!0 //ÉèÖÃÄ¬ÈÏÖµ
-(animals.python.price)?? // ÅĞ¿Õ
+**** å¤šçº§è®¿é—®çš„è®¾ç½®
+(animals.python.price)!0 //è®¾ç½®é»˜è®¤å€¼
+(animals.python.price)?? // åˆ¤ç©º
 *** assign
 
-** ×¢ÊÍ
+** æ³¨é‡Š
 <#-- and -->
-* ³ÌĞò¿ª·¢
-** ´´½¨ConfigurationÊµÀı
+* ç¨‹åºå¼€å‘
+** åˆ›å»ºConfigurationå®ä¾‹
 Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);
-//¶ÁÈ¡Ä¿Â¼£¬Ïàµ±ÓÚÉèÖÃÁË¿ì½İ·½Ê½
+//è¯»å–ç›®å½•ï¼Œç›¸å½“äºè®¾ç½®äº†å¿«æ·æ–¹å¼
 cfg.setDirectoryForTemplateLoading(new File("/where/you/store/templates"));
 cfg.setDefaultEncoding("UTF-8");
 cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-** ×¼±¸Êı¾İÄ£ĞÍ
+** å‡†å¤‡æ•°æ®æ¨¡å‹
 #+BEGIN_SRC java
 Map<String, Object> root = new HashMap<>();
 root.put("user", "Big Joe");
@@ -103,12 +103,12 @@ root.put("latestProduct", latest);
 latest.put("url", "products/greenmouse.html");
 latest.put("name", "green mouse");
 #+END_SRC
-** »ñÈ¡Ä£°å
+** è·å–æ¨¡æ¿
 Template temp = cfg.getTemplate("test.ftl");
-** ºÏ²¢Êı¾İÓëÄ£°å
+** åˆå¹¶æ•°æ®ä¸æ¨¡æ¿
 Writer out = new OutputStreamWriter(System.out);
 temp.process(root, out);
 * principle
-Ã¿ÖÖÀàĞÍ¶ÔÓ¦µÄÒ»¸ö¶ÔÓ¦µÄ°ü×°Àà£¬°üÀ¨»ù±¾ÀàĞÍ£¬¶ÔÏó£¬·½·¨£¬Ö¸ÁîµÈ
+æ¯ç§ç±»å‹å¯¹åº”çš„ä¸€ä¸ªå¯¹åº”çš„åŒ…è£…ç±»ï¼ŒåŒ…æ‹¬åŸºæœ¬ç±»å‹ï¼Œå¯¹è±¡ï¼Œæ–¹æ³•ï¼ŒæŒ‡ä»¤ç­‰
 * ref
 http://freemarker.foofun.cn/dgui_quickstart_basics.html

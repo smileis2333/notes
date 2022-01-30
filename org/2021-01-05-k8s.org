@@ -1,88 +1,88 @@
 #+TITLE: spring flux
 #+STARTUP: indent
 #+BEGIN_SRC bash
-# ²é¿´ËùÓĞ pod ÁĞ±í,  -n ºó¸ú namespace, ²é¿´Ö¸¶¨µÄÃüÃû¿Õ¼ä
+# æŸ¥çœ‹æ‰€æœ‰ pod åˆ—è¡¨,  -n åè·Ÿ namespace, æŸ¥çœ‹æŒ‡å®šçš„å‘½åç©ºé—´
 kubectl get pod
 kubectl get pod -n kube  
 kubectl get pod -o wide
 
 
-# ²é¿´ RC ºÍ service ÁĞ±í£¬ -o wide ²é¿´ÏêÏ¸ĞÅÏ¢
+# æŸ¥çœ‹ RC å’Œ service åˆ—è¡¨ï¼Œ -o wide æŸ¥çœ‹è¯¦ç»†ä¿¡æ¯
 kubectl get rc,svc
 kubectl get pod,svc -o wide  
 kubectl get pod <pod-name> -o yaml
 
 
-# ÏÔÊ¾ Node µÄÏêÏ¸ĞÅÏ¢
+# æ˜¾ç¤º Node çš„è¯¦ç»†ä¿¡æ¯
 kubectl describe node 192.168.0.212
 
 
-# ÏÔÊ¾ Pod µÄÏêÏ¸ĞÅÏ¢, ÌØ±ğÊÇ²é¿´ pod ÎŞ·¨´´½¨µÄÊ±ºòµÄÈÕÖ¾
+# æ˜¾ç¤º Pod çš„è¯¦ç»†ä¿¡æ¯, ç‰¹åˆ«æ˜¯æŸ¥çœ‹ pod æ— æ³•åˆ›å»ºçš„æ—¶å€™çš„æ—¥å¿—
 kubectl describe pod <pod-name>
 eg:
 kubectl describe pod redis-master-tqds9
 
 
-# ¸ù¾İ yaml ´´½¨×ÊÔ´, apply ¿ÉÒÔÖØ¸´Ö´ĞĞ£¬create ²»ĞĞ
+# æ ¹æ® yaml åˆ›å»ºèµ„æº, apply å¯ä»¥é‡å¤æ‰§è¡Œï¼Œcreate ä¸è¡Œ
 kubectl create -f pod.yaml
 kubectl apply -f pod.yaml
 
 
-# »ùÓÚ pod.yaml ¶¨ÒåµÄÃû³ÆÉ¾³ı pod 
+# åŸºäº pod.yaml å®šä¹‰çš„åç§°åˆ é™¤ pod 
 kubectl delete -f pod.yaml 
 
 
-# É¾³ıËùÓĞ°üº¬Ä³¸ö label µÄpod ºÍ service
+# åˆ é™¤æ‰€æœ‰åŒ…å«æŸä¸ª label çš„pod å’Œ service
 kubectl delete pod,svc -l name=<label-name>
 
 
-# É¾³ıËùÓĞ Pod
+# åˆ é™¤æ‰€æœ‰ Pod
 kubectl delete pod --all
 
 
-# ²é¿´ endpoint ÁĞ±í
+# æŸ¥çœ‹ endpoint åˆ—è¡¨
 kubectl get endpoints
 
 
-# Ö´ĞĞ pod µÄ date ÃüÁî
+# æ‰§è¡Œ pod çš„ date å‘½ä»¤
 kubectl exec <pod-name> -- date
 kubectl exec <pod-name> -- bash
 kubectl exec <pod-name> -- ping 10.24.51.9
 
 
-# Í¨¹ıbash»ñµÃ pod ÖĞÄ³¸öÈİÆ÷µÄTTY£¬Ïàµ±ÓÚµÇÂ¼ÈİÆ÷
+# é€šè¿‡bashè·å¾— pod ä¸­æŸä¸ªå®¹å™¨çš„TTYï¼Œç›¸å½“äºç™»å½•å®¹å™¨
 kubectl exec -it <pod-name> -c <container-name> -- bash
 eg:
 kubectl exec -it redis-master-cln81 -- bash
 
 
-# ²é¿´ÈİÆ÷µÄÈÕÖ¾
+# æŸ¥çœ‹å®¹å™¨çš„æ—¥å¿—
 kubectl logs <pod-name>
-kubectl logs -f <pod-name> # ÊµÊ±²é¿´ÈÕÖ¾
-kubectl log  <pod-name>  -c <container_name> # Èô pod Ö»ÓĞÒ»¸öÈİÆ÷£¬¿ÉÒÔ²»¼Ó -c 
+kubectl logs -f <pod-name> # å®æ—¶æŸ¥çœ‹æ—¥å¿—
+kubectl log  <pod-name>  -c <container_name> # è‹¥ pod åªæœ‰ä¸€ä¸ªå®¹å™¨ï¼Œå¯ä»¥ä¸åŠ  -c 
 
-kubectl logs -l app=frontend # ·µ»ØËùÓĞ±ê¼ÇÎª app=frontend µÄ pod µÄºÏ²¢ÈÕÖ¾¡£
+kubectl logs -l app=frontend # è¿”å›æ‰€æœ‰æ ‡è®°ä¸º app=frontend çš„ pod çš„åˆå¹¶æ—¥å¿—ã€‚
 
 
-# ²é¿´×¢ÊÍ
+# æŸ¥çœ‹æ³¨é‡Š
 kubectl explain pod
 kubectl explain pod.apiVersion
 
-# ²é¿´½Úµã labels
+# æŸ¥çœ‹èŠ‚ç‚¹ labels
 kubectl get node --show-labels
 
-# ÖØÆô pod
-kubectl get pod <PODÃû³Æ> -n <NAMESPACEÃû³Æ> -o yaml | kubectl replace --force -f -
+# é‡å¯ pod
+kubectl get pod <PODåç§°> -n <NAMESPACEåç§°> -o yaml | kubectl replace --force -f -
 
-# ĞŞ¸ÄÍøÂçÀàĞÍ
+# ä¿®æ”¹ç½‘ç»œç±»å‹
 kubectl patch service istio-ingressgateway -n istio-system -p '{"spec":{"type":"NodePort"}}'
 
-# ÉìËõ pod ¸±±¾
-# ¿ÉÓÃÓÚ½«Deployment¼°ÆäPodËõĞ¡ÎªÁã¸ö¸±±¾£¬Êµ¼ÊÉÏÉ±ËÀÁËËùÓĞ¸±±¾¡£µ±Äú½«ÆäËõ·Å»Ø1/1Ê±£¬½«´´½¨Ò»¸öĞÂµÄPod£¬ÖØĞÂÆô¶¯ÄúµÄÓ¦ÓÃ³ÌĞò¡£
+# ä¼¸ç¼© pod å‰¯æœ¬
+# å¯ç”¨äºå°†DeploymentåŠå…¶Podç¼©å°ä¸ºé›¶ä¸ªå‰¯æœ¬ï¼Œå®é™…ä¸Šæ€æ­»äº†æ‰€æœ‰å‰¯æœ¬ã€‚å½“æ‚¨å°†å…¶ç¼©æ”¾å›1/1æ—¶ï¼Œå°†åˆ›å»ºä¸€ä¸ªæ–°çš„Podï¼Œé‡æ–°å¯åŠ¨æ‚¨çš„åº”ç”¨ç¨‹åºã€‚
 kubectl scale deploy/nginx-1 --replicas=0
 kubectl scale deploy/nginx-1 --replicas=1
 
-# ²é¿´Ç°Ò»¸ö pod µÄÈÕÖ¾£¬logs -p Ñ¡Ïî 
+# æŸ¥çœ‹å‰ä¸€ä¸ª pod çš„æ—¥å¿—ï¼Œlogs -p é€‰é¡¹ 
 kubectl logs --tail 100 -p user-klvchen-v1.0-6f67dcc46b-5b4qb > pre.log
 
 #+END_SRC

@@ -1,12 +1,12 @@
 #+TITLE:  java poi
 #+STARTUP: indent
-* HSSF´¦Àí
-** ÑùÊ½
-*** ÑÕÉ«
+* HSSFå¤„ç†
+** æ ·å¼
+*** é¢œè‰²
 #+BEGIN_SRC java
 final HSSFWorkbook primitiveWorkBook = (HSSFWorkbook) workbook;
 final HSSFPalette customPalette = primitiveWorkBook.getCustomPalette();
-// ÑÕÉ«Ë÷ÒıÔÚ0-56Ö®¼ä£¬Ïàµ±ÓÚÈ¡´úÁËÄ¬ÈÏµÄÈ¡É«ÅÌ
+// é¢œè‰²ç´¢å¼•åœ¨0-56ä¹‹é—´ï¼Œç›¸å½“äºå–ä»£äº†é»˜è®¤çš„å–è‰²ç›˜
 customPalette.setColorAtIndex((short) 50,(byte) 66, (byte) 215, (byte) 187);
 customPalette.setColorAtIndex((short) 51,(byte) 246, (byte) 175, (byte) 70);
 customPalette.setColorAtIndex((short) 52,(byte) 136, (byte) 146, (byte) 161);
@@ -14,9 +14,9 @@ customPalette.setColorAtIndex((short) 52,(byte) 136, (byte) 146, (byte) 161);
 
 final HSSFCellStyle HAS_NOT_STARTED_COLOR = primitiveWorkBook.createCellStyle();
 HAS_NOT_STARTED_COLOR.setFillForegroundColor((short) 50);
-HAS_NOT_STARTED_COLOR.setFillPattern(FillPatternType.SOLID_FOREGROUND); // ÉèÖÃ±³¾°É«
+HAS_NOT_STARTED_COLOR.setFillPattern(FillPatternType.SOLID_FOREGROUND); // è®¾ç½®èƒŒæ™¯è‰²
 #+END_SRC
-* XSSF´¦Àí
+* XSSFå¤„ç†
 #+BEGIN_SRC java
 XSSFWorkbook workbook = new XSSFWorkbook();
 
@@ -34,13 +34,13 @@ XSSFCellStyle tableHeaderOneColOneStyle = workbook.createCellStyle();
         tableHeaderOneColOneStyle = alignCenter( tableHeaderOneColOneStyle );
 #+END_SRC
 * trick
-** ¸ÊÌØÍ¼
+** ç”˜ç‰¹å›¾
 #+BEGIN_SRC java
  @Override
     public void projectArrangeExport(ProjectArrangeSearchBO search, HttpServletResponse response) {
         search.setPageSize(1000);
         PageR<ProjectArrangeItemVo> itemVOS = getProjectArrangeList(search);
-        ProjectBaseInfoEntity baseInfo = projectBaseInfoRepository.findById(search.getProjectId()).orElseThrow(() -> new CommonException("¸ÃÏîÄ¿²»´æÔÚ"));
+        ProjectBaseInfoEntity baseInfo = projectBaseInfoRepository.findById(search.getProjectId()).orElseThrow(() -> new CommonException("è¯¥é¡¹ç›®ä¸å­˜åœ¨"));
         String date = DateUtil.parseDateToStr(new Date(), "yyyy-MM-dd");
         try {
             List<ProjectArrangeExportExcelDTO> exportDTOs = TypeConverter.convertListWithBiConsumer(itemVOS.getPageData(), ProjectArrangeExportExcelDTO.class, (s, r) -> {
@@ -59,10 +59,10 @@ XSSFCellStyle tableHeaderOneColOneStyle = workbook.createCellStyle();
                 leftCursor = Instant.ofEpochMilli(exportDTOs.get(0).getStartTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
                 rightCursor = Instant.ofEpochMilli(exportDTOs.get(0).getEndTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
             } else if (exportDTOs.size()>=2){
-                // ÅÅ½áÊøÊ±¼ä£¬Ô½Íí½áÊøÔ½ÏÈ
+                // æ’ç»“æŸæ—¶é—´ï¼Œè¶Šæ™šç»“æŸè¶Šå…ˆ
                 exportDTOs.sort((a,b)->{ return b.getEndTime().compareTo(a.getEndTime());});
                 rightCursor = Instant.ofEpochMilli(exportDTOs.get(0).getEndTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-                // °´¿ªÊ¼Ê±¼ä£¬Ô½Ôç¿ªÊ¼Ô½ÏÈ
+                // æŒ‰å¼€å§‹æ—¶é—´ï¼Œè¶Šæ—©å¼€å§‹è¶Šå…ˆ
                 exportDTOs.sort((a,b)->{ return a.getStartTime().compareTo(b.getStartTime());});
                 leftCursor = Instant.ofEpochMilli(exportDTOs.get(0).getStartTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
             }
@@ -72,7 +72,7 @@ XSSFCellStyle tableHeaderOneColOneStyle = workbook.createCellStyle();
                 int endDay;
             }
 
-            // °´ÔÂ·Ö¿éÇĞ¿ªÇø¼ä
+            // æŒ‰æœˆåˆ†å—åˆ‡å¼€åŒºé—´
             TreeMap<LocalDate, Range> monthSpanRows = new TreeMap<>();
             while (!(leftCursor.getYear()==rightCursor.getYear()&&leftCursor.getMonth()==rightCursor.getMonth())){
                 final Range range = new Range();
@@ -91,7 +91,7 @@ XSSFCellStyle tableHeaderOneColOneStyle = workbook.createCellStyle();
             int defaultFieldOffset = 8;
             int leftFieldOffset = defaultFieldOffset;
 
-            Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams("ÏîÄ¿ÅÅÆÚ", "ÏîÄ¿ÅÅÆÚ"), ProjectArrangeExportExcelDTO.class, new ArrayList<>(exportDTOs));
+            Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams("é¡¹ç›®æ’æœŸ", "é¡¹ç›®æ’æœŸ"), ProjectArrangeExportExcelDTO.class, new ArrayList<>(exportDTOs));
 
             final CellStyle alignStyle = workbook.createCellStyle();
             alignStyle.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -122,7 +122,7 @@ XSSFCellStyle tableHeaderOneColOneStyle = workbook.createCellStyle();
                 Sheet sheet = workbook.getSheetAt(0);
                 for (Row row : sheet) {
                     if (i==0){
-                        // ´´½¨ÄêÔÂ·İÈç2020Äê7ÔÂ£¬2020Äê8ÔÂ
+                        // åˆ›å»ºå¹´æœˆä»½å¦‚2020å¹´7æœˆï¼Œ2020å¹´8æœˆ
                         for (Map.Entry<LocalDate, Range> entry : monthSpanRows.entrySet()) {
                             final Range range = entry.getValue();
                             int rowStart=0,rowEnd=0;
@@ -132,12 +132,12 @@ XSSFCellStyle tableHeaderOneColOneStyle = workbook.createCellStyle();
                             }
                             final Cell cell = row.createCell(leftFieldOffset);
                             final LocalDate yearMonth = entry.getKey();
-                            cell.setCellValue(String.format("%sÄê-%sÔÂ", yearMonth.getYear(), yearMonth.getMonth().getValue()));
+                            cell.setCellValue(String.format("%så¹´-%sæœˆ", yearMonth.getYear(), yearMonth.getMonth().getValue()));
                             cell.setCellStyle(alignStyle);
                             leftFieldOffset += range.endDay -range.startDay+1;
                         }
                     }else if (i==1){
-                        //´´½¨ÔÂÄÚÌìÊıÑ­»·Èç1,2,3,..28,1,2,3,..30,ÓëÔÂ·İ¶ÔÓ¦
+                        //åˆ›å»ºæœˆå†…å¤©æ•°å¾ªç¯å¦‚1,2,3,..28,1,2,3,..30,ä¸æœˆä»½å¯¹åº”
                         for (Map.Entry<LocalDate, Range> entry : monthSpanRows.entrySet()) {
                             final Range range = entry.getValue();
                             for (int dayOfMonth = range.startDay, index = 0; dayOfMonth<= range.endDay; ++dayOfMonth,++index){
@@ -148,7 +148,7 @@ XSSFCellStyle tableHeaderOneColOneStyle = workbook.createCellStyle();
                             leftFieldOffset += range.endDay -range.startDay+1;
                         }
                     }else {
-                        // ´´½¨Ã¿¸öÏîÄ¿ÅÅÆÚµÄ¸ÊÌØÍ¼Ê±¼ä¿ç¶È
+                        // åˆ›å»ºæ¯ä¸ªé¡¹ç›®æ’æœŸçš„ç”˜ç‰¹å›¾æ—¶é—´è·¨åº¦
 
                         leftCursor = Instant.ofEpochMilli(exportDTOs.get(0).getStartTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
                         final ProjectArrangeExportExcelDTO currenData = exportDTOs.get(i - 2);
@@ -176,10 +176,10 @@ XSSFCellStyle tableHeaderOneColOneStyle = workbook.createCellStyle();
                 }
             }
 
-            ExcelUtils.downLoadExcel(baseInfo.getName() + "-ÏîÄ¿ÅÅÆÚ" + "(" + date + ")", response, workbook);
+            ExcelUtils.downLoadExcel(baseInfo.getName() + "-é¡¹ç›®æ’æœŸ" + "(" + date + ")", response, workbook);
 
         } catch (Exception e) {
-            throw new CommonException("µ¼³öexcel´íÎó...");
+            throw new CommonException("å¯¼å‡ºexcelé”™è¯¯...");
         }
 
     }

@@ -25,9 +25,9 @@ such as context swicth, synchronized code block
 ** invarient
 mean some condition that must been true at running for proving the state of application is valid
 ** postcondition
-ÔÚÄ³¸ö²Ù×÷£¬»òÕßÒ»ÏµÁĞ²Ù×÷ºó£¬¸ÃÌõ¼ş±ØĞëÎªtrue£¬ÓÃÓÚÖ¤Ã÷ÏÈÇ°µÄ´úÂëÖ´ĞĞ³É¹¦ÁË
+åœ¨æŸä¸ªæ“ä½œï¼Œæˆ–è€…ä¸€ç³»åˆ—æ“ä½œåï¼Œè¯¥æ¡ä»¶å¿…é¡»ä¸ºtrueï¼Œç”¨äºè¯æ˜å…ˆå‰çš„ä»£ç æ‰§è¡ŒæˆåŠŸäº†
 ** precondition
-±ÈÈçJDK¼¯ºÏµÄ²Ù×÷Èçremove/addµÈ²Ù×÷£¬È¡¾öÓÚÄÚ²¿ÊµÏÖµÄ×´Ì¬
+æ¯”å¦‚JDKé›†åˆçš„æ“ä½œå¦‚remove/addç­‰æ“ä½œï¼Œå–å†³äºå†…éƒ¨å®ç°çš„çŠ¶æ€
 * key
 ** Thread safe class
 it is running correctly in single thread program, and behaves correctly when used by mutiple thread
@@ -37,7 +37,7 @@ it is running correctly in single thread program, and behaves correctly when use
 - Identify the invariants that constrain the state variables;
 - Establish a policy for managing concurrent access to the object's state.
 *** INSTANCE CONFINEMENT
-°Ñ¶ÔÏó×éºÏ½øÀ´£¬×Ô¼ºÖ¸¶¨¶ÔÓ¦µÄÍ¬²½²ßÂÔ
+æŠŠå¯¹è±¡ç»„åˆè¿›æ¥ï¼Œè‡ªå·±æŒ‡å®šå¯¹åº”çš„åŒæ­¥ç­–ç•¥
 #+BEGIN_SRC java
 class PersonSet{
     @GuaryBy("this")
@@ -98,12 +98,12 @@ class NumberRange{
 2. there is no prohibited state transitions for any of its operation
 correct demo's listeners are state dependent, so it's safe to public the two listeners
 *** ADDING FUNCTIONALITY TO EXISTING THREAD-SAFE CLASSES
-**** ¸ÄÔ´Âë
-×î°²È«£¬ÇÒÄÜ±£³ÖÍ¬²½²ßÂÔÒ»ÖÂ£¬µ«ÊÇ¶ÔÇ°ÌáÒªÇó¸ß£¬±ÈÈçÀà¿â£¬»òÕßµÚÈı·½¿ò¼ÜÒ»°ã¸ù±¾¸Ä²»ÁË(Õı³£Ê¹ÓÃÇé¿öÏÂ)
+**** æ”¹æºç 
+æœ€å®‰å…¨ï¼Œä¸”èƒ½ä¿æŒåŒæ­¥ç­–ç•¥ä¸€è‡´ï¼Œä½†æ˜¯å¯¹å‰æè¦æ±‚é«˜ï¼Œæ¯”å¦‚ç±»åº“ï¼Œæˆ–è€…ç¬¬ä¸‰æ–¹æ¡†æ¶ä¸€èˆ¬æ ¹æœ¬æ”¹ä¸äº†(æ­£å¸¸ä½¿ç”¨æƒ…å†µä¸‹)
 **** extends
-1. È¡¾öÓÚÄÚ²¿ÉùÃ÷µÄÍ¬²½²ßÂÔ
-2. ¸ÃÀàÊÇ·ñ°ÑÓÃÓÚÉèÖÃÍ¬²½µÄ×´Ì¬µÄ±©Â¶³öÀ´(±ÈÈçµ±ËûÊ¹ÓÃµÄÊÇprivate new Object()×÷ÎªËøÊ±£¬ÇÒÃ»ÓĞÌá¹©getter£¬×ÓÀà¸ù±¾ÎŞ·¨±£³ÖÒ»ÖÂµÄÍ¬²½²ßÂÔ)
-ÊÇ·ñÊ¹ÓÃÒª¿´ÊµÏÖÕßÊÇ·ñ°ÑÍ¬²½²ßÂÔÎÄµµ»¯
+1. å–å†³äºå†…éƒ¨å£°æ˜çš„åŒæ­¥ç­–ç•¥
+2. è¯¥ç±»æ˜¯å¦æŠŠç”¨äºè®¾ç½®åŒæ­¥çš„çŠ¶æ€çš„æš´éœ²å‡ºæ¥(æ¯”å¦‚å½“ä»–ä½¿ç”¨çš„æ˜¯private new Object()ä½œä¸ºé”æ—¶ï¼Œä¸”æ²¡æœ‰æä¾›getterï¼Œå­ç±»æ ¹æœ¬æ— æ³•ä¿æŒä¸€è‡´çš„åŒæ­¥ç­–ç•¥)
+æ˜¯å¦ä½¿ç”¨è¦çœ‹å®ç°è€…æ˜¯å¦æŠŠåŒæ­¥ç­–ç•¥æ–‡æ¡£åŒ–
 #+BEGIN_SRC java
 class BetterVector<E>extends Vector<E>{
     public synchronized boolean putIfAbsent(E x){
@@ -116,7 +116,7 @@ class BetterVector<E>extends Vector<E>{
 #+END_SRC
 **** client-side lock
 #+BEGIN_SRC java
-// 100%´í£¬ÒòÎªËøµÄ¶¼²»ÊÇÍ¬¸ö¶«Î÷£¬Ö»ÓĞsyncrhonized(list)²ÅÄÜ±£³ÖËøÒ»ÖÂ
+// 100%é”™ï¼Œå› ä¸ºé”çš„éƒ½ä¸æ˜¯åŒä¸ªä¸œè¥¿ï¼Œåªæœ‰syncrhonized(list)æ‰èƒ½ä¿æŒé”ä¸€è‡´
 class ListHelper <E>{
     public List<E>list = Collections.synchronizedList(new ArrayList<E>());
     public synchronized boolean putIfAbsent(E x){
@@ -128,7 +128,7 @@ class ListHelper <E>{
 }
 #+END_SRC
 **** Composition
-Ó¦¸Ã¹éÀàÎªdecorator
+åº”è¯¥å½’ç±»ä¸ºdecorator
 #+BEGIN_SRC java
 class ImprovedList<T> implements List<T>{
     private final List<T>list;
@@ -146,11 +146,11 @@ class ImprovedList<T> implements List<T>{
 }
 #+END_SRC
 *** document synchronized policies
-²Â¹æ·¶µÄÒªÇóĞÔ£¬×îÖØÒªµÄÊÇÕ¾ÔÚÈçºÎÊµÏÖµÄ½Ç¶ÈÀ´¿´
+çŒœè§„èŒƒçš„è¦æ±‚æ€§ï¼Œæœ€é‡è¦çš„æ˜¯ç«™åœ¨å¦‚ä½•å®ç°çš„è§’åº¦æ¥çœ‹
 ** Reentrancy
 lock held by thread no invocation, the thread held lock can access other code block that required the same lock
 ** visibility
-Ò»¸öÏß³Ì¸ÄÁË¹²Ïí×´Ì¬ºóÆäËûÏß³ÌÊÇ·ñ¿É¼û£¬¿ÉÒÔÊ¹ÓÃ synchronized£¬»òÕßvolatileµ¥´¿ÊµÏÖ¿É¼ûĞÔ
+ä¸€ä¸ªçº¿ç¨‹æ”¹äº†å…±äº«çŠ¶æ€åå…¶ä»–çº¿ç¨‹æ˜¯å¦å¯è§ï¼Œå¯ä»¥ä½¿ç”¨ synchronizedï¼Œæˆ–è€…volatileå•çº¯å®ç°å¯è§æ€§
 *** error demo
 #+BEGIN_SRC java
 public class NoVisibility {
@@ -176,27 +176,27 @@ public class NoVisibility {
 
 #+END_SRC
 ** atomic operation
-Ò»×é²Ù×÷ÄÜ·ñÊÓÎªÔ­×Ó²Ù×÷
+ä¸€ç»„æ“ä½œèƒ½å¦è§†ä¸ºåŸå­æ“ä½œ
 ** publication and escape
 *** escape
 **** from consructor
-Ò»¸ö¶ÔÏóÖ»ÓĞÔÚÍê³É¹¹ÔìÍê²ÅÄÜËãÎªÓĞĞ§×´Ì¬
-1. ½¨ÁËThread£¬²¢ÇÒÆô¶¯ÁË£¬(²»Æô¶¯¾Í²»Ëã)
-2. ½¨Á¢ÄÚ²¿Àà£¬°Ñ×Ô¼ºµÄthisµÄ±©Â¶³öÈ¥ÁË
+ä¸€ä¸ªå¯¹è±¡åªæœ‰åœ¨å®Œæˆæ„é€ å®Œæ‰èƒ½ç®—ä¸ºæœ‰æ•ˆçŠ¶æ€
+1. å»ºäº†Threadï¼Œå¹¶ä¸”å¯åŠ¨äº†ï¼Œ(ä¸å¯åŠ¨å°±ä¸ç®—)
+2. å»ºç«‹å†…éƒ¨ç±»ï¼ŒæŠŠè‡ªå·±çš„thisçš„æš´éœ²å‡ºå»äº†
 **** from method
 return the reference of object whether safety depend if it is immutable object
 *** safe publication
-ÔÚ±ØĞëÊ¹ÓÃ¹²Ïí¶ÔÏóµÄ»·¾³ÏÂ£¬²»×ñÊØ¹æÔòµÄ·¢²¼¶ÔÏó¿ÉÄÜµ¼ÖÂÊ¹ÓÃÕß¶ÁÈ¡µ½¶ÔÏó²»Ò»ÖÂµÄÇé¿ö
+åœ¨å¿…é¡»ä½¿ç”¨å…±äº«å¯¹è±¡çš„ç¯å¢ƒä¸‹ï¼Œä¸éµå®ˆè§„åˆ™çš„å‘å¸ƒå¯¹è±¡å¯èƒ½å¯¼è‡´ä½¿ç”¨è€…è¯»å–åˆ°å¯¹è±¡ä¸ä¸€è‡´çš„æƒ…å†µ
 1. Initializing an object reference from a static initializer(such as `public static Holder holder = new Holder(42);`)
 2. Storing a reference to it into a volatile field or AtomicReference
 3. Storing a reference to it into a final field of a properly constructed object
-4. Storing a reference to it into a field that is properly guarded by a lock(¶ªµ½thread safe collectionÀ´½øĞĞÍ¬²½Î¬»¤)
+4. Storing a reference to it into a field that is properly guarded by a lock(ä¸¢åˆ°thread safe collectionæ¥è¿›è¡ŒåŒæ­¥ç»´æŠ¤)
 **** n!=n
-»ù±¾ºÜÄÑ×öµ½ÖØÏÖ
+åŸºæœ¬å¾ˆéš¾åšåˆ°é‡ç°
 https://stackoverflow.com/questions/1621435/not-thread-safe-object-publishing
 #+BEGIN_SRC java
 public class Holder {
-    private int n; // ¼Ófinal£¬JVM»áÇ¿ÖÆ½øĞĞ³õÊ¼»¯°²È«¿ØÖÆ
+    private int n; // åŠ finalï¼ŒJVMä¼šå¼ºåˆ¶è¿›è¡Œåˆå§‹åŒ–å®‰å…¨æ§åˆ¶
 
     public Holder(int n) {
         this.n = n;
@@ -220,20 +220,20 @@ h.assertSanity();
 #+END_SRC
 ** policies
 *** Thread-confined
-Ö»ÄÜ·½·¨ÓÃ£¬²»ÔÊĞíÌÓÒİ
+åªèƒ½æ–¹æ³•ç”¨ï¼Œä¸å…è®¸é€ƒé€¸
 *** Shared read-only
-¿ÉÒÔ¶à¸ö¶Á£¬Ò»¸öĞ´(¿ÉÒÔÓÃvolatileÀ´×ö)
+å¯ä»¥å¤šä¸ªè¯»ï¼Œä¸€ä¸ªå†™(å¯ä»¥ç”¨volatileæ¥åš)
 *** Shared thread-safe
-¿ÉÒÔ¶ÁĞ´£¬²¢ÇÒ²»ĞèÒªÓÃµ½Í¬²½£¬°²È«ĞÔÓÉÀà×ÔÉíÌá¹©
+å¯ä»¥è¯»å†™ï¼Œå¹¶ä¸”ä¸éœ€è¦ç”¨åˆ°åŒæ­¥ï¼Œå®‰å…¨æ€§ç”±ç±»è‡ªèº«æä¾›
 *** Guarded
-Ê¹ÓÃÊ±£¬±ØĞëÓÃ¶ÔÓ¦µÄËøÀ´ÏŞ¶¨·ÃÎÊ
+ä½¿ç”¨æ—¶ï¼Œå¿…é¡»ç”¨å¯¹åº”çš„é”æ¥é™å®šè®¿é—®
 ** thread confinement
 *** Ad-hoc thread confinement
-Ç¿µ÷ÀàÌá¹©ÕßÃ»ÓĞ½øĞĞÏß³Ì°²È«µÄ´¦Àí£¬µ«ÊÇÌá¹©ÕßÌá¹©ÁË¶ÔÓ¦µÄÎÄµµ»¯×ÊÁÏ½øĞĞËµÃ÷Ê¹ÓÃ³¡¾°£¬ÊÇ·ñÕæµÄ°²È«È¡¾öÓÚÊ¹ÓÃÕßÊÇ·ñ×ñÊØÎÄµµÒÔ¼°ÈçºÎÊ¹ÓÃ¸ÃÀà
+å¼ºè°ƒç±»æä¾›è€…æ²¡æœ‰è¿›è¡Œçº¿ç¨‹å®‰å…¨çš„å¤„ç†ï¼Œä½†æ˜¯æä¾›è€…æä¾›äº†å¯¹åº”çš„æ–‡æ¡£åŒ–èµ„æ–™è¿›è¡Œè¯´æ˜ä½¿ç”¨åœºæ™¯ï¼Œæ˜¯å¦çœŸçš„å®‰å…¨å–å†³äºä½¿ç”¨è€…æ˜¯å¦éµå®ˆæ–‡æ¡£ä»¥åŠå¦‚ä½•ä½¿ç”¨è¯¥ç±»
 *** Stack Confinement
-per thread per stack£¬ÔÚ×´Ì¬ÔÚÎ´ÌÓÒİµÄÇé¿öÏÂ£¬¸÷¸öÕ»±Ë´ËÖ®¼äµÄ±äÁ¿ÊÇ»¥Ïà¸ôÀëµÄ
+per thread per stackï¼Œåœ¨çŠ¶æ€åœ¨æœªé€ƒé€¸çš„æƒ…å†µä¸‹ï¼Œå„ä¸ªæ ˆå½¼æ­¤ä¹‹é—´çš„å˜é‡æ˜¯äº’ç›¸éš”ç¦»çš„
 *** ThreadLocal
-½«Ò»¸ö±äÁ¿×÷ÎªÒ»¸öÒÔthreadÎª¼üµÄMap£¬¿ÉÒÔ±£Ö¤¸÷¸öthreadÄÃµ½µÄÊÇËùÊôµÄ×¨Êô±äÁ¿£¬Ê¹ÓÃ³¡¾°ÓĞÁ½Àà£¬Ò»ÊÇ¾ÉÊ½µÄÏµÍ³½øĞĞ¶àÏß³ÌµÄÖØ¹¹Ê±£¬¶şÊÇ¸÷Àà¿ò¼ÜÔÚÄ³ÀàÇé¿öÏÂÓÃÓÚ¼ò»¯ÏµÍ³µÄÊµÏÖ£¬Ò»°ã£¬²»½¨ÒéÓ¦ÓÃ¼¶±ğµÄÈ¥½øĞĞÊ¹ÓÃ
+å°†ä¸€ä¸ªå˜é‡ä½œä¸ºä¸€ä¸ªä»¥threadä¸ºé”®çš„Mapï¼Œå¯ä»¥ä¿è¯å„ä¸ªthreadæ‹¿åˆ°çš„æ˜¯æ‰€å±çš„ä¸“å±å˜é‡ï¼Œä½¿ç”¨åœºæ™¯æœ‰ä¸¤ç±»ï¼Œä¸€æ˜¯æ—§å¼çš„ç³»ç»Ÿè¿›è¡Œå¤šçº¿ç¨‹çš„é‡æ„æ—¶ï¼ŒäºŒæ˜¯å„ç±»æ¡†æ¶åœ¨æŸç±»æƒ…å†µä¸‹ç”¨äºç®€åŒ–ç³»ç»Ÿçš„å®ç°ï¼Œä¸€èˆ¬ï¼Œä¸å»ºè®®åº”ç”¨çº§åˆ«çš„å»è¿›è¡Œä½¿ç”¨
 #+BEGIN_SRC java
 private static ThreadLocal<Connection>connectionHolder = new ThreadLocal<>(){
     @Override
@@ -242,15 +242,22 @@ private static ThreadLocal<Connection>connectionHolder = new ThreadLocal<>(){
     }
 };
 #+END_SRC
-**** Ô­Àí
-Ã¿¸öthreadÄÚÖÃThreadLocalMap£¬ÆäÄÚ²¿µÄentryÊÇÈõÒıÓÃ£¬ÒÔthreadLocal×÷key£¬¶ÔÓ¦µÄthread´æµÄÖµÎªvalue£¬ÔÚ
+InheritableThreadLocalå­çº¿ç¨‹è¯»å–çˆ¶çº¿ç¨‹çš„ThreadLocal
+
+**** åŸç†
+1. æ¯ä¸ªthreadåœ¨åˆ›å»ºæ—¶åˆ›å»ºå…¶å¯¹åº”çš„ThreadLocalMap
+2. æ¯ä¸ªä½¿ç”¨åˆ°ThreadLocalçš„ç±»ï¼ŒThreadLocalä½œä¸ºThreadè°ƒç”¨çš„ThreadLocalMapçš„Entryçš„Key
+
+å¼ºå¼•ç”¨: ThreadLocalä½¿ç”¨åç½®ä¸ºnull(å•æ¬¡ç”¨æ³•), å‡å¦‚Enrtyå¯¹äºkeyå’Œvalueéƒ½æ˜¯å¼ºå¼•ç”¨, æ— æ³•å›æ”¶Entryï¼Œå†…å­˜æ³„æ¼
+å¼±å¼•ç”¨: ThreadLocalä½¿ç”¨åç½®ä¸ºnull(å•æ¬¡ç”¨æ³•), å‡å¦‚Enrtyå¯¹äºkeyæ˜¯å¼±å¼•ç”¨ï¼Œvalueæ˜¯å¼ºå¼•ç”¨ï¼ŒEntryä¸­Keyä¼šè¢«å›æ”¶ï¼Œkeyå˜æˆnull; valueä¸å˜ï¼Œæ‰€ä»¥ä»ç„¶å­˜åœ¨å†…å­˜æ³„éœ²çš„é£é™©ï¼Œä½†æ˜¯åŒä¸€çº¿ç¨‹çš„å…¶ä»–ThreadLocalå‡å¦‚ä½¿ç”¨äº†set(key,value)ï¼ŒThreadLocalMapå¯ä»¥åˆ¤å®škey=nullçš„Entryä¸ºæ— æ•ˆæ•°æ®ï¼ŒreplaceStaleEntry(key, value, i)å°†æ–°çš„æ•°æ®æŠŠåŸæœ¬çš„Entryä½ç½®å æ‰ï¼Œä»è€Œä½¿(null,value)ï¼Œåœ¨åç»­ä¸­å¯ä»¥è¢«GCå›æ”¶
+
 ** IMMUTABILITY
 *** effect
-1. ÔÚÄ³Ğ©Çé¿öÏÂ(¶à¸ö±äÁ¿×é³Éinvariant£¬³éÀë³öÀ´)£¬¿ÉÒÔÅäºÏvolatile½øĞĞ¼òÒ×µÄatomic´¦Àí
+1. åœ¨æŸäº›æƒ…å†µä¸‹(å¤šä¸ªå˜é‡ç»„æˆinvariantï¼ŒæŠ½ç¦»å‡ºæ¥)ï¼Œå¯ä»¥é…åˆvolatileè¿›è¡Œç®€æ˜“çš„atomicå¤„ç†
 2. inherent thread safe
 *** condition
 1. Its state cannot be modified after construction
-2. All its field are final(ÀíÂÛÉÏ¿ÉÒÔ²»±Ø£¬µ«ÊÇÕâÊÇÒ»°ã¹æ·¶)
+2. All its field are final(ç†è®ºä¸Šå¯ä»¥ä¸å¿…ï¼Œä½†æ˜¯è¿™æ˜¯ä¸€èˆ¬è§„èŒƒ)
 3. It is properly constructed(the this reference does not escape during construction)
 ** InterruptedException
 *** deal
@@ -259,20 +266,20 @@ private static ThreadLocal<Connection>connectionHolder = new ThreadLocal<>(){
 Thread.currenThread.interrupt()
 ** Task Execution
 *** execute in thread
-ÕâÒ»¿éÒâÎ¶×ÅÊ¹ÓÃÔ­Ê¼API½øĞĞ´¦Àí·Ö·¢£¬È±·¦¹ÜÀí²ßÂÔ
+è¿™ä¸€å—æ„å‘³ç€ä½¿ç”¨åŸå§‹APIè¿›è¡Œå¤„ç†åˆ†å‘ï¼Œç¼ºä¹ç®¡ç†ç­–ç•¥
 **** consequence
-1. ÈÎÎñ´ÓÖ÷Ïß³ÌÒÆ³öµ½ĞÂµÄÏß³Ì£¬Ö÷Ïß³Ì²»×èÈû(»»µ½ĞÂµÄÏß³Ì×èÈû£¬ËùÒÔÄ¿Ç°µÄcontainerÕæÕıµÄ×ö·¨ÊÇÅäºÏNIO£¬ÔÚÖ÷Ïß³ÌµÃµ½Êı¾İSelectionKey.OP_READºó£¬ÔÚ°ÑÁ¬½Ó¶ªµ½Ïß³Ì·Ö·¢£¬ÕâÑù¿ÉÒÔÍêÈ«Ïû³ıÁ¬½ÓºóµÄÊı¾İ·¢ËÍÑÓÊ±µ¼ÖÂµÄ×èÈûÊ±¼äÀË·Ñ)£¬¿ÉÒÔ½ÓÊÕĞÂµÄÇëÇó
-2. ²¢ĞĞ»¯´¦Àí£¬ÀûÓÃ¶àºËĞÔÄÜ
-3. Thread task±ØĞëÏß³Ì°²È«
+1. ä»»åŠ¡ä»ä¸»çº¿ç¨‹ç§»å‡ºåˆ°æ–°çš„çº¿ç¨‹ï¼Œä¸»çº¿ç¨‹ä¸é˜»å¡(æ¢åˆ°æ–°çš„çº¿ç¨‹é˜»å¡ï¼Œæ‰€ä»¥ç›®å‰çš„containerçœŸæ­£çš„åšæ³•æ˜¯é…åˆNIOï¼Œåœ¨ä¸»çº¿ç¨‹å¾—åˆ°æ•°æ®SelectionKey.OP_READåï¼Œåœ¨æŠŠè¿æ¥ä¸¢åˆ°çº¿ç¨‹åˆ†å‘ï¼Œè¿™æ ·å¯ä»¥å®Œå…¨æ¶ˆé™¤è¿æ¥åçš„æ•°æ®å‘é€å»¶æ—¶å¯¼è‡´çš„é˜»å¡æ—¶é—´æµªè´¹)ï¼Œå¯ä»¥æ¥æ”¶æ–°çš„è¯·æ±‚
+2. å¹¶è¡ŒåŒ–å¤„ç†ï¼Œåˆ©ç”¨å¤šæ ¸æ€§èƒ½
+3. Thread taskå¿…é¡»çº¿ç¨‹å®‰å…¨
 **** disadvantage
-1. ÂãÂ¶APIµÄÊ¹ÓÃ£¬ÎŞ·¨Ö§³Ö¸÷ÖÖ¹ÜÀí²ßÂÔ£¬±ÈÈçFIFO
-2. ²»¹ÜÀíµÄÇé¿öÏÂ£¬¼«ÓĞ¿ÉÄÜµ½´ïÉÏÏß(OSÏà¹Ø)£¬»òÕßÀË·Ñ×ÊÔ´(´´½¨ÓëÏú»ÙµÄ¿ªÏú)
+1. è£¸éœ²APIçš„ä½¿ç”¨ï¼Œæ— æ³•æ”¯æŒå„ç§ç®¡ç†ç­–ç•¥ï¼Œæ¯”å¦‚FIFO
+2. ä¸ç®¡ç†çš„æƒ…å†µä¸‹ï¼Œææœ‰å¯èƒ½åˆ°è¾¾ä¸Šçº¿(OSç›¸å…³)ï¼Œæˆ–è€…æµªè´¹èµ„æº(åˆ›å»ºä¸é”€æ¯çš„å¼€é”€)
 ***** Thread lifecycle overhead
 ***** Resource consumption
 ***** Stability
 *** EXECUTOR FRAMEWORK
 **** Executor
-×î´óµÄÒâÒåÔÚÓÚÇĞ·ÖÁËÈÎÎñµÄÌá½»ºÍÖ´ĞĞ(Ìá½»²»Ò»¶¨Á¢¿Ì±»Ö´ĞĞ)
+æœ€å¤§çš„æ„ä¹‰åœ¨äºåˆ‡åˆ†äº†ä»»åŠ¡çš„æäº¤å’Œæ‰§è¡Œ(æäº¤ä¸ä¸€å®šç«‹åˆ»è¢«æ‰§è¡Œ)
 #+BEGIN_SRC java
 public interface Executor{
   void execute(Runnable command);
@@ -290,23 +297,23 @@ newCachedThreadPool
 newSingleThreadExecutor
 newScheduledThreadPool
 **** lifecycle
-ExecutorÌá¹©ÁËÖ°ÔğÇĞ·Ö£¬ExecutorServiceÌá¹©ÁËexecutionµÄlifeCycle£¬·Ö±ğÎªrunning, shutting down, and terminated
+Executoræä¾›äº†èŒè´£åˆ‡åˆ†ï¼ŒExecutorServiceæä¾›äº†executionçš„lifeCycleï¼Œåˆ†åˆ«ä¸ºrunning, shutting down, and terminated
 #+BEGIN_SRC java
 public interface ExecutorService{
-  void shutdown(); // ĞÂÌá½»µÄtask²»ÔÙ½ÓÊÜ£¬ÆäËûÒÑ´æµÄtaskÖ´ĞĞÍê²Å¹Ø±Õ
-  List<Runnable>shutdownNow(); // abrupt shutdown£¬ÔËĞĞÖĞµÄ³¢ÊÔÈ¡Ïûµô£¬Î´Ö´ĞĞµÄÖ±½Ó·ÅÆú
+  void shutdown(); // æ–°æäº¤çš„taskä¸å†æ¥å—ï¼Œå…¶ä»–å·²å­˜çš„taskæ‰§è¡Œå®Œæ‰å…³é—­
+  List<Runnable>shutdownNow(); // abrupt shutdownï¼Œè¿è¡Œä¸­çš„å°è¯•å–æ¶ˆæ‰ï¼Œæœªæ‰§è¡Œçš„ç›´æ¥æ”¾å¼ƒ
   boolean isShutdown();
   boolean isTerminated();
-  boolean awaitTerminated(); // ×èÈûµ½×´Ì¬ÇĞ»»Íê±Ï
+  boolean awaitTerminated(); // é˜»å¡åˆ°çŠ¶æ€åˆ‡æ¢å®Œæ¯•
 }
 #+END_SRC
 **** task
 ***** Runnable
 ***** Callable
-Ìá¹©ÁËÀàËÆRunnableµÄÂß¼­µ¥Ôª£¬µ«ÊÇ¿ÉÒÔ´ø·µ»ØÖµ(Ã»·µ»ØÖµµÄ¿ÉÒÔÓÃCallable(Void))
+æä¾›äº†ç±»ä¼¼Runnableçš„é€»è¾‘å•å…ƒï¼Œä½†æ˜¯å¯ä»¥å¸¦è¿”å›å€¼(æ²¡è¿”å›å€¼çš„å¯ä»¥ç”¨Callable(Void))
 ***** Future
 ****** definiton
-ExecutorServiceÌá¹©ÁËexecutionµÄÉúÃüÖÜÆÚ£¬FutureÌá¹©ÁËtaskµÄÉúÃüÖÜÆÚ
+ExecutorServiceæä¾›äº†executionçš„ç”Ÿå‘½å‘¨æœŸï¼ŒFutureæä¾›äº†taskçš„ç”Ÿå‘½å‘¨æœŸ
 #+BEGIN_SRC java
 public interface Future<V> {
     boolean cancel(boolean mayInterruptIfRunning);
@@ -320,22 +327,22 @@ public interface Future<V> {
 ****** from
 ******* ExecutorService
 invoke submit
-´Ójava6¿ªÊ¼£¬¿ÉÒÔÖØĞ´AbstractExecutorServiceµÄnewTaskFor(Callable<T>task)À´½øĞĞ×Ô¶¨ÒåFuture wrapperÉè¶¨
+ä»java6å¼€å§‹ï¼Œå¯ä»¥é‡å†™AbstractExecutorServiceçš„newTaskFor(Callable<T>task)æ¥è¿›è¡Œè‡ªå®šä¹‰Future wrapperè®¾å®š
 ******* FutureTask
 instantiate a FutureTask for a given Runnable or Callable, then commit it to Executor for execution
 **** CompletionService
-ÊµÏÖÀàExecutorCompletionServices
-³¡¾°: Èç¹û´æÔÚn¸öÈÎÎñ£¬ĞèÒª½øĞĞ¹ÜÀíÊ±£¬Èç¹ûÊÖ¶¯¹ÜÀí£¬ÔòĞèÒª´´½¨ÈİÆ÷£¬È»ºóÓÃgetÀ´×èÈû/ÂÖÑ¯×´Ì¬½øĞĞ´¦Àí
-¸ÃÀàÔ­Àí£º
-1. CompletionServiceÀàËÆÒ»¸ö¹ÜÀí¹¤¾ß£¬½ÓÈëÒ»¸öExecutor£¬È»ºóÔÚ½ÓÊÕµ½taskµÄÊ±ºò½øĞĞwrapper£¬È»ºóÎ¯ÅÉ¸øExecutor½øĞĞ´¦Àí
-2. 1ÖĞwrapperµÄ´¦ÀíÎªÖØĞ´done()£¬ÔÚExecutorÖ´ĞĞtaskÍê±Ïºó£¬»á×Ô¶¯½«wrapper¼ÓÈë¸ÃÀàÎ¬»¤µÄBlockQueueÖĞ
-3. Íâ²¿Ö±½Ó´Ó¸ÃÀà»ñÈ¡Ò»ÏµÁĞÍê³ÉµÄFuture
+å®ç°ç±»ExecutorCompletionServices
+åœºæ™¯: å¦‚æœå­˜åœ¨nä¸ªä»»åŠ¡ï¼Œéœ€è¦è¿›è¡Œç®¡ç†æ—¶ï¼Œå¦‚æœæ‰‹åŠ¨ç®¡ç†ï¼Œåˆ™éœ€è¦åˆ›å»ºå®¹å™¨ï¼Œç„¶åç”¨getæ¥é˜»å¡/è½®è¯¢çŠ¶æ€è¿›è¡Œå¤„ç†
+è¯¥ç±»åŸç†ï¼š
+1. CompletionServiceç±»ä¼¼ä¸€ä¸ªç®¡ç†å·¥å…·ï¼Œæ¥å…¥ä¸€ä¸ªExecutorï¼Œç„¶ååœ¨æ¥æ”¶åˆ°taskçš„æ—¶å€™è¿›è¡Œwrapperï¼Œç„¶åå§”æ´¾ç»™Executorè¿›è¡Œå¤„ç†
+2. 1ä¸­wrapperçš„å¤„ç†ä¸ºé‡å†™done()ï¼Œåœ¨Executoræ‰§è¡Œtaskå®Œæ¯•åï¼Œä¼šè‡ªåŠ¨å°†wrapperåŠ å…¥è¯¥ç±»ç»´æŠ¤çš„BlockQueueä¸­
+3. å¤–éƒ¨ç›´æ¥ä»è¯¥ç±»è·å–ä¸€ç³»åˆ—å®Œæˆçš„Future
 **** time limit
-1. ¶ÔÓÚµ¥¸öÈÎÎñÊÇÏŞÊ±µÄ³¡¾°£¬¿ÉÒÔÖ±½ÓÓÃFutureµÄV get(long timeout, TimeUnit unit)·½·¨£¬Èç¹û³¬Ê±£¬Ôò»áÅ×³öÒì³£
-2. ¶ÔÓÚ¶à¸öÈÎÎñÏà¹Ø»ã×ÜÏŞÊ±µÄ³¡¾°£¬Ò»ÖÖÊÇ×Ô¼º¼ÆÊ±£¬ÊµÏÖ£¬ÁíÒ»ÖÖÊÇµ÷ÓÃExecutorServiceµÄinvokeAll
+1. å¯¹äºå•ä¸ªä»»åŠ¡æ˜¯é™æ—¶çš„åœºæ™¯ï¼Œå¯ä»¥ç›´æ¥ç”¨Futureçš„V get(long timeout, TimeUnit unit)æ–¹æ³•ï¼Œå¦‚æœè¶…æ—¶ï¼Œåˆ™ä¼šæŠ›å‡ºå¼‚å¸¸
+2. å¯¹äºå¤šä¸ªä»»åŠ¡ç›¸å…³æ±‡æ€»é™æ—¶çš„åœºæ™¯ï¼Œä¸€ç§æ˜¯è‡ªå·±è®¡æ—¶ï¼Œå®ç°ï¼Œå¦ä¸€ç§æ˜¯è°ƒç”¨ExecutorServiceçš„invokeAll
 ** cancellation and shutdown
-*** ·Ç×èÈû·½·¨
-¿ÉÒÔÓÃÖ±½ÓÒ»Ğ©volatileÊôĞÔ½øĞĞÅĞ¶Ï¿ØÖÆ
+*** éé˜»å¡æ–¹æ³•
+å¯ä»¥ç”¨ç›´æ¥ä¸€äº›volatileå±æ€§è¿›è¡Œåˆ¤æ–­æ§åˆ¶
 #+BEGIN_SRC java
 class PrimeGenerator implements Runnable{
     private volatile  boolean cancelled;
@@ -351,24 +358,24 @@ class PrimeGenerator implements Runnable{
     }
 }
 #+END_SRC
-*** ×èÈûµÄ·½·¨
-**** Ö§³ÖÅ×³öInterruptedExceptionµÄ·½·¨
-³£¼ûÓÚ¼¯ºÏ²Ù×÷ÒÔ¼°Thread.sleep£¬Object.waitµÈ£¬»á¼àÌıÏß³Ì×´Ì¬£¬ÔÚ±»ÖÃÎªinterruptionÖ®Àà£¬È¡Ïû±êÖÃ£¬Å×³öInterruptedException£¬¿ÉÒÔÓÃÏß³ÌÖĞ¶ÏÖ±½Ó´¥·¢Òì³£Å×³ö(×¢Òâ£¬Å×³öºóÏß³ÌµÄÖĞ¶Ï×´Ì¬»á±»È¡Ïû)
+*** é˜»å¡çš„æ–¹æ³•
+**** æ”¯æŒæŠ›å‡ºInterruptedExceptionçš„æ–¹æ³•
+å¸¸è§äºé›†åˆæ“ä½œä»¥åŠThread.sleepï¼ŒObject.waitç­‰ï¼Œä¼šç›‘å¬çº¿ç¨‹çŠ¶æ€ï¼Œåœ¨è¢«ç½®ä¸ºinterruptionä¹‹ç±»ï¼Œå–æ¶ˆæ ‡ç½®ï¼ŒæŠ›å‡ºInterruptedExceptionï¼Œå¯ä»¥ç”¨çº¿ç¨‹ä¸­æ–­ç›´æ¥è§¦å‘å¼‚å¸¸æŠ›å‡º(æ³¨æ„ï¼ŒæŠ›å‡ºåçº¿ç¨‹çš„ä¸­æ–­çŠ¶æ€ä¼šè¢«å–æ¶ˆ)
 ***** interrupt
 ****** Thread.interrupt
-ÉèÖÃThreadÄÚ²¿ÖĞ¶Ï×´Ì¬±äÁ¿
+è®¾ç½®Threadå†…éƒ¨ä¸­æ–­çŠ¶æ€å˜é‡
 ****** Thread.isInterrupted
-ÅĞ¶Ï
+åˆ¤æ–­
 ****** static Thread.interrupted
-È¡ÏûThreadµÄÄÚ²¿ÖĞ¶Ï×´Ì¬
-**** ²»Ö§³ÖµÄ
-¹Ø¼üÔÚÓÚÆä²»¶ÔÏß³ÌµÄ×´Ì¬½øĞĞÅĞ¶¨£¬µ«ÊÇ»á´æÔÚÒ»Ğ©·½·¨£¬¿ÉÒÔÇ¿ĞĞ´¥·¢Òì³£·¢Éú£¬¸ù¾İÀàĞÍ½øĞĞÒì³£Å×³öÀ´½øĞĞ×èÈûµÄÖĞÖ¹£¬´Ó¶øÊµÏÖÏß³Ì/ÈÎÎñµÄÈ¡Ïû
+å–æ¶ˆThreadçš„å†…éƒ¨ä¸­æ–­çŠ¶æ€
+**** ä¸æ”¯æŒçš„
+å…³é”®åœ¨äºå…¶ä¸å¯¹çº¿ç¨‹çš„çŠ¶æ€è¿›è¡Œåˆ¤å®šï¼Œä½†æ˜¯ä¼šå­˜åœ¨ä¸€äº›æ–¹æ³•ï¼Œå¯ä»¥å¼ºè¡Œè§¦å‘å¼‚å¸¸å‘ç”Ÿï¼Œæ ¹æ®ç±»å‹è¿›è¡Œå¼‚å¸¸æŠ›å‡ºæ¥è¿›è¡Œé˜»å¡çš„ä¸­æ­¢ï¼Œä»è€Œå®ç°çº¿ç¨‹/ä»»åŠ¡çš„å–æ¶ˆ
 - Synchronous socket I/O in java.io
 - Synchronous I/O in java.nio
 - Asynchronous I/O with Selector
 - Lock acquisition
 ***** custom
-****** ¾ÉÊ½×ö·¨
+****** æ—§å¼åšæ³•
 #+BEGIN_SRC java
 class ReadThread extends Thread{
     private final Socket socket;
@@ -379,7 +386,7 @@ class ReadThread extends Thread{
         this.in = in;
     }
 
-    // Í¨¹ıÒì³£´¥·¢Ö±½ÓÖÕÖ¹×èÈû£¬²¢ÉèÖÃÏß³ÌµÄ×´Ì¬ÒÑÈ¡ÏûÀ´Íê³É¿â·½·¨ÖĞ£¬½ö×èÈû¶ø²»¶ÔÖĞ¶Ï×ö´¦ÀíµÄ·½·¨
+    // é€šè¿‡å¼‚å¸¸è§¦å‘ç›´æ¥ç»ˆæ­¢é˜»å¡ï¼Œå¹¶è®¾ç½®çº¿ç¨‹çš„çŠ¶æ€å·²å–æ¶ˆæ¥å®Œæˆåº“æ–¹æ³•ä¸­ï¼Œä»…é˜»å¡è€Œä¸å¯¹ä¸­æ–­åšå¤„ç†çš„æ–¹æ³•
     public void interrupt(){
         try {
             socket.close();
@@ -407,7 +414,7 @@ class ReadThread extends Thread{
     }
 }
 #+END_SRC
-****** ĞÂÊ½×ö·¨(»ùÓÚExecutorService)
+****** æ–°å¼åšæ³•(åŸºäºExecutorService)
 #+BEGIN_SRC java
 public abstract class SocketUsingTask <T> implements CancellableTask<T> {
     @GuardedBy("this") private Socket socket;
@@ -473,9 +480,9 @@ class CancellingExecutor extends ThreadPoolExecutor {
 #+END_SRC
 *** cancellation
 **** intterupt
-1. ½øĞĞÖĞ¶ÏÊ±£¬ÄÄÅÂ×Ô¼ºµÄÈÎÎñ½øĞĞÁËÖĞ¶Ï´¦Àí£¬Ò²²»Ò»¶¨ÄÜ³ÆÎªÁ¼ºÃÉè¼Æ£¬ÒòÎª¿ÉÄÜ²úÉú¸±×÷ÓÃ£¬±ÈÈçÖ´ĞĞÓÃµÄÏß³ÌÊÇÏß³Ì³ØÕû³öÀ´£¬´¥·¢ÖĞ¶ÏÊ±£¬×Ô¼ºÉèÖÃµÄTask¿ÉÒÔ½ÓÊÕµ½ÖĞ¶ÏÒì³££¬½øĞĞ´¦Àí£¬µ«Í¬Ê±£¬Ò²¿ÉÄÜ´¥·¢Ïß³Ì×ÔÉíµÄÖĞ¶ÏÒì³£´¦Àí»úÖÆ£¬µ«ÊÇ¶îÍâµÄĞ§¹û·¢Éú£¬±ÈÈçwork threadËÀµô£¬ÎŞ·¨¸´ÓÃ¡£
-2. ³ı·ÇÏß³ÌµÄÆô¶¯Âß¼­ÍêÈ«ÓÉ×Ô¼ºÈ·ÈÏ(×Ô¼º´´½¨£¬×Ô¼ºÆô¶¯£¬ËùÓĞÈ¨¹é×Ô¼º)£¬»òÕßÔÚÍêÈ«È·ÈÏÍêµÚÈı·¢ÄÇ¸öÖĞ¶Ï´¦ÀíÂß¼­µÄÇé¿öÏÂ£¬²ÅÔÊĞíÓÃÖĞ¶ÏÀ´½øĞĞËùÎ½cancel
-3. ÖĞ¶ÏµÄ±¾ÖÊÎªÉèÖÃThreadÄÚ²¿µÄÊôĞÔ×´Ì¬£¬¶ø²»ÊÇÇ¿ÖÆÍ£Ö¹(¾ÉÊ½µÄÇ¿ÖÆÍ£Ö¹ÒÑ±»Deprecated)
+1. è¿›è¡Œä¸­æ–­æ—¶ï¼Œå“ªæ€•è‡ªå·±çš„ä»»åŠ¡è¿›è¡Œäº†ä¸­æ–­å¤„ç†ï¼Œä¹Ÿä¸ä¸€å®šèƒ½ç§°ä¸ºè‰¯å¥½è®¾è®¡ï¼Œå› ä¸ºå¯èƒ½äº§ç”Ÿå‰¯ä½œç”¨ï¼Œæ¯”å¦‚æ‰§è¡Œç”¨çš„çº¿ç¨‹æ˜¯çº¿ç¨‹æ± æ•´å‡ºæ¥ï¼Œè§¦å‘ä¸­æ–­æ—¶ï¼Œè‡ªå·±è®¾ç½®çš„Taskå¯ä»¥æ¥æ”¶åˆ°ä¸­æ–­å¼‚å¸¸ï¼Œè¿›è¡Œå¤„ç†ï¼Œä½†åŒæ—¶ï¼Œä¹Ÿå¯èƒ½è§¦å‘çº¿ç¨‹è‡ªèº«çš„ä¸­æ–­å¼‚å¸¸å¤„ç†æœºåˆ¶ï¼Œä½†æ˜¯é¢å¤–çš„æ•ˆæœå‘ç”Ÿï¼Œæ¯”å¦‚work threadæ­»æ‰ï¼Œæ— æ³•å¤ç”¨ã€‚
+2. é™¤éçº¿ç¨‹çš„å¯åŠ¨é€»è¾‘å®Œå…¨ç”±è‡ªå·±ç¡®è®¤(è‡ªå·±åˆ›å»ºï¼Œè‡ªå·±å¯åŠ¨ï¼Œæ‰€æœ‰æƒå½’è‡ªå·±)ï¼Œæˆ–è€…åœ¨å®Œå…¨ç¡®è®¤å®Œç¬¬ä¸‰å‘é‚£ä¸ªä¸­æ–­å¤„ç†é€»è¾‘çš„æƒ…å†µä¸‹ï¼Œæ‰å…è®¸ç”¨ä¸­æ–­æ¥è¿›è¡Œæ‰€è°“cancel
+3. ä¸­æ–­çš„æœ¬è´¨ä¸ºè®¾ç½®Threadå†…éƒ¨çš„å±æ€§çŠ¶æ€ï¼Œè€Œä¸æ˜¯å¼ºåˆ¶åœæ­¢(æ—§å¼çš„å¼ºåˆ¶åœæ­¢å·²è¢«Deprecated)
 **** policy
 - how to cancel
 - when the task check
@@ -507,24 +514,24 @@ class PrimeProducer extends Thread{
 }
 #+END_SRC
 **** poison pill
-¶¾Íè²ßÂÔĞèÒªÔÚÒÑÖªÉú²úÕß£¬Ïû·ÑÕßµÄÇé¿öÏÂ²ÅÊ¹ÓÃ
-1. 1¶Ô1µÄÇé¿öÏÂ£¬¶ªÒ»¸ö¶¾Íè¾ÍĞĞ
-2. n¶ÔmµÄÇé¿öÏÂ£¬Ã¿¸öÉú²úÕßĞèÒª¶ªm¸ö(ÔÚ¶àµÄÊ±¼ä£¬»áÔì³É¶ÓÁĞ×ÊÔ´ÀË·Ñ)
-**** »ñÈ¡Ïß³ÌÄÚ²¿Òì³£×´Ì¬
-***** ²»×ö´¦ÀíÊ±²»¿É¼û
+æ¯’ä¸¸ç­–ç•¥éœ€è¦åœ¨å·²çŸ¥ç”Ÿäº§è€…ï¼Œæ¶ˆè´¹è€…çš„æƒ…å†µä¸‹æ‰ä½¿ç”¨
+1. 1å¯¹1çš„æƒ…å†µä¸‹ï¼Œä¸¢ä¸€ä¸ªæ¯’ä¸¸å°±è¡Œ
+2. nå¯¹mçš„æƒ…å†µä¸‹ï¼Œæ¯ä¸ªç”Ÿäº§è€…éœ€è¦ä¸¢mä¸ª(åœ¨å¤šçš„æ—¶é—´ï¼Œä¼šé€ æˆé˜Ÿåˆ—èµ„æºæµªè´¹)
+**** è·å–çº¿ç¨‹å†…éƒ¨å¼‚å¸¸çŠ¶æ€
+***** ä¸åšå¤„ç†æ—¶ä¸å¯è§
 #+BEGIN_SRC java
 PrimeGenerator generator = new PrimeGenerator();
 new Thread(generator).start();
-// ÅÜÒ»Ãëºó£¬Í£µô£¬Èç¹ûÏß³ÌÖ´ĞĞÊ±ÔÚÒ»Ãë½áÊøÇ°Òì³£·¢Éú£¬ÎŞ·¨µÃµ½¶ÔÓ¦µÄÒì³£ĞÅÏ¢
+// è·‘ä¸€ç§’åï¼Œåœæ‰ï¼Œå¦‚æœçº¿ç¨‹æ‰§è¡Œæ—¶åœ¨ä¸€ç§’ç»“æŸå‰å¼‚å¸¸å‘ç”Ÿï¼Œæ— æ³•å¾—åˆ°å¯¹åº”çš„å¼‚å¸¸ä¿¡æ¯
 try{
    SECONDS.sleep(1);
 }finally{
    generator.cancel();
 }
 #+END_SRC
-***** ×öÍ¨ÓÃ´¦ÀíÊ±£¬Î¥±³ÁË´úÂë²»ÄÜ¶ÔÖ´ĞĞÏß³Ì×ö¼ÙÉèµÄÇ°Ìá
+***** åšé€šç”¨å¤„ç†æ—¶ï¼Œè¿èƒŒäº†ä»£ç ä¸èƒ½å¯¹æ‰§è¡Œçº¿ç¨‹åšå‡è®¾çš„å‰æ
 #+BEGIN_SRC java
-// Õâ¸ö·½·¨£¬¿ÉÒÔ¶ªµ½ÈÎÒâÏß³ÌÖ´ĞĞ£¬µ«ÊÇ...Õâ¸ö·½·¨²»ÄÜÈ·¶¨ÆäÖ´ĞĞÏß³Ì£¬¾¿¾¹ÊÇÄÄ¸öÏß³ÌÔÚ´¦Àí£¬Òò´ËÖĞ¶Ïµ½µ×±»Ë­ÏÈ²¶»ñ£¬ÊÇ·ñÔì³É¸±×÷ÓÃ£¬ÍêÈ«ÎŞ·¨È·ÈÏ£¬Òò´Ë²»Ó¦¸ÃÕâÃ´ÊµÏÖ
+// è¿™ä¸ªæ–¹æ³•ï¼Œå¯ä»¥ä¸¢åˆ°ä»»æ„çº¿ç¨‹æ‰§è¡Œï¼Œä½†æ˜¯...è¿™ä¸ªæ–¹æ³•ä¸èƒ½ç¡®å®šå…¶æ‰§è¡Œçº¿ç¨‹ï¼Œç©¶ç«Ÿæ˜¯å“ªä¸ªçº¿ç¨‹åœ¨å¤„ç†ï¼Œå› æ­¤ä¸­æ–­åˆ°åº•è¢«è°å…ˆæ•è·ï¼Œæ˜¯å¦é€ æˆå‰¯ä½œç”¨ï¼Œå®Œå…¨æ— æ³•ç¡®è®¤ï¼Œå› æ­¤ä¸åº”è¯¥è¿™ä¹ˆå®ç°
 public static void timeRun(Runnable r,long timeout,TimeUnit unit){
   final Thread taskThread = Thread.currentThread();
   cancelExec.schedule(new Runnable(){
@@ -535,7 +542,7 @@ public static void timeRun(Runnable r,long timeout,TimeUnit unit){
 }
 r.run()
 #+END_SRC
-***** ×Ô¼ºÊµÏÖRunnable½Ó¿Ú£¬ÄÚ²¿½øĞĞÒì³£²¶×½£¬È»ºó¶¨Ê±ÈÎÎñÏß³Ì´ò¶Ï£¬×îºóThread.joinÁ¬½á¿ØÖÆË³Ğò
+***** è‡ªå·±å®ç°Runnableæ¥å£ï¼Œå†…éƒ¨è¿›è¡Œå¼‚å¸¸æ•æ‰ï¼Œç„¶åå®šæ—¶ä»»åŠ¡çº¿ç¨‹æ‰“æ–­ï¼Œæœ€åThread.joinè¿ç»“æ§åˆ¶é¡ºåº
 #+BEGIN_SRC java
 public static void timeRun(final Runnable r,long timeout,Timeunit unit) throws InterruptedException{
   class RethrowableTask implements Runnable{
@@ -565,7 +572,7 @@ public static void timeRun(final Runnable r,long timeout,Timeunit unit) throws I
   task.rethrow();
 }
 #+END_SRC
-***** ÓÃFutureÀ´½øĞĞÈÎÎñµÄÈ¡Ïû
+***** ç”¨Futureæ¥è¿›è¡Œä»»åŠ¡çš„å–æ¶ˆ
 #+BEGIN_SRC java
 public static void timeRun(Runnable r, long timeout, TimeUnit unit){
     final Future<?> task = taskExec.submit(r);
@@ -583,29 +590,29 @@ public static void timeRun(Runnable r, long timeout, TimeUnit unit){
     }
 }
 #+END_SRC
-*** Ïß³Ì³ØshutdownNowÊ±×´Ì¬±£´æ
-Ò»°ãÇé¿öÏÂ£¬»á·µ»ØÎ´Íê³ÉµÄÈÎÎñ¼¯ºÏ(ÔËĞĞÖĞµÄºÍ´ıÔËĞĞµÄ¼ÓÆğÀ´)
-1. ÈÎÎñÊµÌå×Ô¼ºµÄ´øÁËÅĞ±ğÊôĞÔ
-2. ×Ô¶¨ÒåExecutorService£¬²¢×¥µ½Òì³£Ê±½øĞĞ±£´æ
+*** çº¿ç¨‹æ± shutdownNowæ—¶çŠ¶æ€ä¿å­˜
+ä¸€èˆ¬æƒ…å†µä¸‹ï¼Œä¼šè¿”å›æœªå®Œæˆçš„ä»»åŠ¡é›†åˆ(è¿è¡Œä¸­çš„å’Œå¾…è¿è¡Œçš„åŠ èµ·æ¥)
+1. ä»»åŠ¡å®ä½“è‡ªå·±çš„å¸¦äº†åˆ¤åˆ«å±æ€§
+2. è‡ªå®šä¹‰ExecutorServiceï¼Œå¹¶æŠ“åˆ°å¼‚å¸¸æ—¶è¿›è¡Œä¿å­˜
 *** deal with abnormal thread
-**** Òì³£È«×¥
-Èç¹ûÏß³Ìµ÷ÓÃµÄÊÇÍâ²¿´úÂë£¬±ÈÈçSwingµÄevent dispatch thread/Ïß³Ì³Ø£¬Ó¦¸ÃÈ«²¿×¥Throwable
+**** å¼‚å¸¸å…¨æŠ“
+å¦‚æœçº¿ç¨‹è°ƒç”¨çš„æ˜¯å¤–éƒ¨ä»£ç ï¼Œæ¯”å¦‚Swingçš„event dispatch thread/çº¿ç¨‹æ± ï¼Œåº”è¯¥å…¨éƒ¨æŠ“Throwable
 **** exception handler
-1. Èç¹ûÃ»ÅäÖÃ£¬×¥²»µ½µÄÒì³£×îÖÕ»á½øĞĞ´òÓ¡
-2. ¶ÔÓÚExecutorÏµÁĞ£¬Ö»ÓĞexecuteµÄÉúĞ§£¬µ÷submitÉú³Éfuture£¬Òì³£È«²¿¶¼»á±»wrapper³ÉExecutionException
+1. å¦‚æœæ²¡é…ç½®ï¼ŒæŠ“ä¸åˆ°çš„å¼‚å¸¸æœ€ç»ˆä¼šè¿›è¡Œæ‰“å°
+2. å¯¹äºExecutorç³»åˆ—ï¼Œåªæœ‰executeçš„ç”Ÿæ•ˆï¼Œè°ƒsubmitç”Ÿæˆfutureï¼Œå¼‚å¸¸å…¨éƒ¨éƒ½ä¼šè¢«wrapperæˆExecutionException
 ***** Thread.setUncaughtExceptionHandler
-Ò»¸öÏß³ÌÒ»¸öÅäÖÃ
+ä¸€ä¸ªçº¿ç¨‹ä¸€ä¸ªé…ç½®
 ***** static Thread setDefaultUncaughtExceptionHandler
-È«²¿Ïß³ÌÓÃÒ»¸ö
+å…¨éƒ¨çº¿ç¨‹ç”¨ä¸€ä¸ª
 *** JVM shutdown
 **** shutdown hook
-1. ¿ÉÒÔÄÃÀ´É¾ÁÙÊ±ÎÄ¼ş
-2. ¿ÉÒÔÄÃÀ´¹Ø±ÕÆäËûÏß³Ì£¬Í¨¹ı´¥·¢ÖĞ¶Ï
-3. È·±£×ÊÔ´ÎÄ¼ş³É¹¦·µ»¹£¬Èç¹Ø±ÕÎÄ¼ş
+1. å¯ä»¥æ‹¿æ¥åˆ ä¸´æ—¶æ–‡ä»¶
+2. å¯ä»¥æ‹¿æ¥å…³é—­å…¶ä»–çº¿ç¨‹ï¼Œé€šè¿‡è§¦å‘ä¸­æ–­
+3. ç¡®ä¿èµ„æºæ–‡ä»¶æˆåŠŸè¿”è¿˜ï¼Œå¦‚å…³é—­æ–‡ä»¶
 Runtime.addShutdownHook
 **** Daemon threads
-ÄÃÀ´É¾»º´æ
-²»»áµ¼ÖÂJVMÎŞ·¨ÍË³ö
+æ‹¿æ¥åˆ ç¼“å­˜
+ä¸ä¼šå¯¼è‡´JVMæ— æ³•é€€å‡º
 **** Finalizers
 ** Thread pool tuning
 *** implicit coupling between task and execution policy
@@ -614,9 +621,9 @@ task that exploit thread confinement
 response-time-sensitive task
 task that use threadlocal
 *** pool size calculate
-È·ÈÏÈÎÎñÀàĞÍÊÇCPUÃÜ¼¯ĞÍ»¹ÊÇÏ¡È±×ÊÔ´ÃÜ¼¯ĞÍ
-Ç°ÕßÊ¹ÓÃN+1(NÎªCPUºËĞÄÊı)
-ºóÕßÎª(ºËĞÄÊı*CPUÀûÓÃÂÊ*Ã¿¸ö×ÊÔ´¿¨¿ÇÊ±¼äÕ¼×ÜÊ±³¤Õ¼±È)
+ç¡®è®¤ä»»åŠ¡ç±»å‹æ˜¯CPUå¯†é›†å‹è¿˜æ˜¯ç¨€ç¼ºèµ„æºå¯†é›†å‹
+å‰è€…ä½¿ç”¨N+1(Nä¸ºCPUæ ¸å¿ƒæ•°)
+åè€…ä¸º(æ ¸å¿ƒæ•°*CPUåˆ©ç”¨ç‡*æ¯ä¸ªèµ„æºå¡å£³æ—¶é—´å æ€»æ—¶é•¿å æ¯”)
 *** config
 **** option
 ***** corePoolSize
@@ -627,10 +634,10 @@ task that use threadlocal
 ***** threadFactory
 ***** rejectHandler
 **** warn
-1. threadpoolexecutorºËĞÄÊı²»Ó¦¸ÃÉèÎª0(ÓĞĞ©ÈËÄÃÀ´·ÀÖ¹ÍË³öÊ±£¬·ÀÖ¹¿¨×¡JVM)£¬µ«ÊÇÕâÑù»áµ¼ÖÂÒ»¸öÎÊÌâ£¬ÒòÎª·ÇºËĞÄÊıÄ¿µÄÏß³ÌÊÇÔÚworkQueueÂúÁËÖ®ºó£¬²ÅÈ¥´´½¨µÄ£¬ËùÒÔ×î¿ªÊ¼Ìá½»µÄÊ±ºò¸ù±¾ÎŞ·¨Ö´ĞĞ¡£
-1.6ÓĞ·½·¨¿ÉÒÔÍê³ÉÉÏÊö×ö·¨(ÒÀÈ»²»ÄÜÉèÖÃmax)£¬¶øÊÇÉèÖÃºËĞÄÊıÖ®ºó£¬ÉèÖÃallowCoreThreadTimeOutÎªtrue£¬ÕâÑùµÄºÃ´¦ÊÇµ±¿ÕÖÃÖ®ºó£¬ºËĞÄÏß³ÌÒ²»á±»»ØÊÕ
-2. Éú²úÖĞ£¬Èç¹û´æÔÚ´ó²¢·¢Á¿µÄÊ±ºò²»ÔÊĞíÊ¹ÓÃExecutorsµÄ¹¤³§º¯Êı£¬ÒòÎªfixºÍsingleÓÃµÄworkQueue¶¼ÊÇÎŞ½çµÄ£¬¶øcacheµÃpoolSizeÊÇÎŞ½çµÄ£¬Ç°Õß±à³ÌÈËÔ±¿ÉÄÜ»áÍü¼Ç¿ØÖÆ±¥ºÍ²ßÂÔ(ĞèÒªÇ¿×ª¼ÓÉèÖÃ±¥ºÍ²ßÂÔ)£¬Á½Õß¶¼¿ÉÄÜ³ÔÂúÏß³Ì£¬ĞèÒª¸ù¾İÉú²ú»·¾³½øĞĞÍâ²¿µ÷Õû
-ÈıÀàÄ¬ÈÏµÄ±È¶Ô¹ØÏµ£¬±ÈÈçworkQueueµÄpool
+1. threadpoolexecutoræ ¸å¿ƒæ•°ä¸åº”è¯¥è®¾ä¸º0(æœ‰äº›äººæ‹¿æ¥é˜²æ­¢é€€å‡ºæ—¶ï¼Œé˜²æ­¢å¡ä½JVM)ï¼Œä½†æ˜¯è¿™æ ·ä¼šå¯¼è‡´ä¸€ä¸ªé—®é¢˜ï¼Œå› ä¸ºéæ ¸å¿ƒæ•°ç›®çš„çº¿ç¨‹æ˜¯åœ¨workQueueæ»¡äº†ä¹‹åï¼Œæ‰å»åˆ›å»ºçš„ï¼Œæ‰€ä»¥æœ€å¼€å§‹æäº¤çš„æ—¶å€™æ ¹æœ¬æ— æ³•æ‰§è¡Œã€‚
+1.6æœ‰æ–¹æ³•å¯ä»¥å®Œæˆä¸Šè¿°åšæ³•(ä¾ç„¶ä¸èƒ½è®¾ç½®max)ï¼Œè€Œæ˜¯è®¾ç½®æ ¸å¿ƒæ•°ä¹‹åï¼Œè®¾ç½®allowCoreThreadTimeOutä¸ºtrueï¼Œè¿™æ ·çš„å¥½å¤„æ˜¯å½“ç©ºç½®ä¹‹åï¼Œæ ¸å¿ƒçº¿ç¨‹ä¹Ÿä¼šè¢«å›æ”¶
+2. ç”Ÿäº§ä¸­ï¼Œå¦‚æœå­˜åœ¨å¤§å¹¶å‘é‡çš„æ—¶å€™ä¸å…è®¸ä½¿ç”¨Executorsçš„å·¥å‚å‡½æ•°ï¼Œå› ä¸ºfixå’Œsingleç”¨çš„workQueueéƒ½æ˜¯æ— ç•Œçš„ï¼Œè€Œcacheå¾—poolSizeæ˜¯æ— ç•Œçš„ï¼Œå‰è€…ç¼–ç¨‹äººå‘˜å¯èƒ½ä¼šå¿˜è®°æ§åˆ¶é¥±å’Œç­–ç•¥(éœ€è¦å¼ºè½¬åŠ è®¾ç½®é¥±å’Œç­–ç•¥)ï¼Œä¸¤è€…éƒ½å¯èƒ½åƒæ»¡çº¿ç¨‹ï¼Œéœ€è¦æ ¹æ®ç”Ÿäº§ç¯å¢ƒè¿›è¡Œå¤–éƒ¨è°ƒæ•´
+ä¸‰ç±»é»˜è®¤çš„æ¯”å¯¹å…³ç³»ï¼Œæ¯”å¦‚workQueueçš„pool
 **** workQueue
 ***** type
 ****** bound
@@ -642,51 +649,51 @@ SynchronousQueue, used innewCachedThreadPool
 ***** Saturation Policies
 ****** type
 ******* AbortPolicy
-¶ªÁË£¬²¢ÇÒÅÜÒ»¸öÒì³£
+ä¸¢äº†ï¼Œå¹¶ä¸”è·‘ä¸€ä¸ªå¼‚å¸¸
 ******* CallerRunsPolicy
-Ö±½ÓÄÃµ±Ç°Ïß³ÌÀ´ÅÜ(²»½»¸øÏß³Ì³Ø)
+ç›´æ¥æ‹¿å½“å‰çº¿ç¨‹æ¥è·‘(ä¸äº¤ç»™çº¿ç¨‹æ± )
 ******* DiscardPolicy
-Ö±½ÓÍÌµô£¬²»·µ»ØÒì³£
+ç›´æ¥åæ‰ï¼Œä¸è¿”å›å¼‚å¸¸
 ******* DiscardOldestPolicy
-¶ªµ½ÁôÔÚworkQueue×îÀÏµÄÄÇ¸ö
+ä¸¢åˆ°ç•™åœ¨workQueueæœ€è€çš„é‚£ä¸ª
 ****** trick
-²»¹ÜworkQueueÊÇ·ñÓĞ½ç£¬²ßÂÔ²»Ö§³Ö×èÈû£¬µ«ÊÇ¿ÉÒÔÍ¨¹ıSemaphoreÀ´×öµ½ÀàËÆµÄ´¦Àí
+ä¸ç®¡workQueueæ˜¯å¦æœ‰ç•Œï¼Œç­–ç•¥ä¸æ”¯æŒé˜»å¡ï¼Œä½†æ˜¯å¯ä»¥é€šè¿‡Semaphoreæ¥åšåˆ°ç±»ä¼¼çš„å¤„ç†
 **** pool
 **** Thread Factories
-¸øÏß³Ì³ØÓÃÓÚÉú³Éthread£¬ÓÃÓÚ¶¨ÒåthreadµÄ¸÷ÀàĞĞÎª£¬±ÈÈçUncaughtExceptionHandler£¬»òÕßÈÕÖ¾·ÖÎö 
+ç»™çº¿ç¨‹æ± ç”¨äºç”Ÿæˆthreadï¼Œç”¨äºå®šä¹‰threadçš„å„ç±»è¡Œä¸ºï¼Œæ¯”å¦‚UncaughtExceptionHandlerï¼Œæˆ–è€…æ—¥å¿—åˆ†æ 
 **** Executors
 ***** newXXXThreadPool
 ***** unconfigurableExecutorService
-½«thread pool½øĞĞwrap£¬·ÀÖ¹Íâ²¿×ª»»Îª½øĞĞÊôĞÔĞŞ¸Ä
+å°†thread poolè¿›è¡Œwrapï¼Œé˜²æ­¢å¤–éƒ¨è½¬æ¢ä¸ºè¿›è¡Œå±æ€§ä¿®æ”¹
 **** EXTENDING THREADPOOLEXECUTOR
 ***** beforeExecute
-Ã¿¸öÈÎÎñÖ´ĞĞÖ®Ç°£¬Èç¹ûÊ§°ÜÁËtask²»»áÖ´ĞĞ
+æ¯ä¸ªä»»åŠ¡æ‰§è¡Œä¹‹å‰ï¼Œå¦‚æœå¤±è´¥äº†taskä¸ä¼šæ‰§è¡Œ
 ***** afterExecute
-Ã¿¸öÈÎÎñÖ´ĞĞÖ®ºó
+æ¯ä¸ªä»»åŠ¡æ‰§è¡Œä¹‹å
 ***** terminated
-Ïß³Ì³ØÖÕÖ¹µÄÊ±ºò
+çº¿ç¨‹æ± ç»ˆæ­¢çš„æ—¶å€™
 **** PARALLELIZING RECURSIVE ALGORITHMS
-1. ¶ÔÓ¦µÄÏà»¥¶ÀÁ¢£¬¿ÉÒÔÊ¹ÓÃ²¢ĞĞ»¯½øĞĞÌá¸ßĞ§ÂÊ£¬»áÓÉÉî¶ÈËÑË÷±äÎª¹ã¶ÈËÑË÷
-2. ¶ÔÓÚÇó½â´ğ°¸Ò»¶¨´æÔÚµÄÇé¿öÏÂ£¬ÓĞÆæĞ§£¬ÇÒ²»ÓÃ×öÈÎºÎ¶îÍâµÄ´¦Àí(ÈÔĞèÒªÔÚÕÒµ½µÄÊ±ºò½øĞĞÖÕÖ¹)£¬µ«ÊÇ¶ÔÓÚÇó½â´ğ°¸£¬ÎŞ·¨È·¶¨»òÕß²»´æÔÚµÄÇé¿ö£¬±ØĞëÕë¶Ô½â¿Õ¼äºÄ¾¡µÄÊ±¼ä½øĞĞ´¦Àí£¬·ñÔò»áµ¼ÖÂÈ¡½á¹ûÊ±×èÈû(ÔÚÃ¿¸öÈÎÎñÌá½»µÄÊ±ºò£¬½øĞĞÈÎÎñ¼ÆÊı£¬ÔÚ×îÖÕµÄÈÎÎñÖ´ĞĞÍê±ÏÊ±£¬½øĞĞÈÎÎñÊıÈ·ÈÏ£¬ÉèÖÃ×îÖÕµÄ½â¾ö·½°¸Îªnull£¬´¥·¢Çó½â×èÈûÏûÊ§£¬¾ßÌå¿É²Î¿¼java concurrency in practice List8.18)
+1. å¯¹åº”çš„ç›¸äº’ç‹¬ç«‹ï¼Œå¯ä»¥ä½¿ç”¨å¹¶è¡ŒåŒ–è¿›è¡Œæé«˜æ•ˆç‡ï¼Œä¼šç”±æ·±åº¦æœç´¢å˜ä¸ºå¹¿åº¦æœç´¢
+2. å¯¹äºæ±‚è§£ç­”æ¡ˆä¸€å®šå­˜åœ¨çš„æƒ…å†µä¸‹ï¼Œæœ‰å¥‡æ•ˆï¼Œä¸”ä¸ç”¨åšä»»ä½•é¢å¤–çš„å¤„ç†(ä»éœ€è¦åœ¨æ‰¾åˆ°çš„æ—¶å€™è¿›è¡Œç»ˆæ­¢)ï¼Œä½†æ˜¯å¯¹äºæ±‚è§£ç­”æ¡ˆï¼Œæ— æ³•ç¡®å®šæˆ–è€…ä¸å­˜åœ¨çš„æƒ…å†µï¼Œå¿…é¡»é’ˆå¯¹è§£ç©ºé—´è€—å°½çš„æ—¶é—´è¿›è¡Œå¤„ç†ï¼Œå¦åˆ™ä¼šå¯¼è‡´å–ç»“æœæ—¶é˜»å¡(åœ¨æ¯ä¸ªä»»åŠ¡æäº¤çš„æ—¶å€™ï¼Œè¿›è¡Œä»»åŠ¡è®¡æ•°ï¼Œåœ¨æœ€ç»ˆçš„ä»»åŠ¡æ‰§è¡Œå®Œæ¯•æ—¶ï¼Œè¿›è¡Œä»»åŠ¡æ•°ç¡®è®¤ï¼Œè®¾ç½®æœ€ç»ˆçš„è§£å†³æ–¹æ¡ˆä¸ºnullï¼Œè§¦å‘æ±‚è§£é˜»å¡æ¶ˆå¤±ï¼Œå…·ä½“å¯å‚è€ƒjava concurrency in practice List8.18)
 * Liveness Hazards
 ** deadlock
 *** lock-ordering deadlocks
-ÏÔÊ¾µÄ·½·¨Ëø¶à¸ö¶ÔÏó£¬²¢ÇÒ¿ÉÄÜ²úÉúËøË³Ğò²»Ò»ÖÂ£¬ĞÎ³ÉÁË»·Â·£¬±ÈÈç×ªÕË
+æ˜¾ç¤ºçš„æ–¹æ³•é”å¤šä¸ªå¯¹è±¡ï¼Œå¹¶ä¸”å¯èƒ½äº§ç”Ÿé”é¡ºåºä¸ä¸€è‡´ï¼Œå½¢æˆäº†ç¯è·¯ï¼Œæ¯”å¦‚è½¬è´¦
 *** invoke alien method that acquire multiple lock
 such as Executor framework
 *** resource deadlock
-±ÈÈçÁ½ÕßConnectionµÄÏß³Ì³Ø£¬ThreadAÉêÇëC1+C2£¬ThreadBÉêÇëC2+C1
+æ¯”å¦‚ä¸¤è€…Connectionçš„çº¿ç¨‹æ± ï¼ŒThreadAç”³è¯·C1+C2ï¼ŒThreadBç”³è¯·C2+C1
 *** solution
-1. ÉèÖÃ¹æ·¶ÔÚËø¶¨Ê±£¬°´ĞòËø£¬±ÈÈç¶ÁÈ¡¶ÔÏóµÄhash/ÉèÖÃÄÚ²¿µÄÅÅĞò¼¶×÷ÎªËøµÄË³Ğò
-2. Ê¹ÓÃLock½øĞĞ³¬Ê±ÉèÖÃ
-3. ¾¡¿ÉÄÜÊ¹ÓÃopencall(the method with no locks)
-4. Thread Dumps·ÖÎöºóÖØÉè´úÂë
+1. è®¾ç½®è§„èŒƒåœ¨é”å®šæ—¶ï¼ŒæŒ‰åºé”ï¼Œæ¯”å¦‚è¯»å–å¯¹è±¡çš„hash/è®¾ç½®å†…éƒ¨çš„æ’åºçº§ä½œä¸ºé”çš„é¡ºåº
+2. ä½¿ç”¨Lockè¿›è¡Œè¶…æ—¶è®¾ç½®
+3. å°½å¯èƒ½ä½¿ç”¨opencall(the method with no locks)
+4. Thread Dumpsåˆ†æåé‡è®¾ä»£ç 
 ** Starvation
-1. Ïß³ÌµÃ²»µ½Ö´ĞĞµÄÊ±¼ä£¬±ÈÈçpriorities/Executor Single
-2. Ò»¸öÏß³Ì³ÖÓĞËø£¬µ«ÊÇÒ»Ö±²»ÊÍ·Å(ÉêÇëÁËËøÖ®ºó×ßÁËËÀÑ­»·)
+1. çº¿ç¨‹å¾—ä¸åˆ°æ‰§è¡Œçš„æ—¶é—´ï¼Œæ¯”å¦‚priorities/Executor Single
+2. ä¸€ä¸ªçº¿ç¨‹æŒæœ‰é”ï¼Œä½†æ˜¯ä¸€ç›´ä¸é‡Šæ”¾(ç”³è¯·äº†é”ä¹‹åèµ°äº†æ­»å¾ªç¯)
 ** livelock 
-1. ±ÈÈç´¦ÀíÒ»¸öÈÎÎñÊ§°ÜÁË·Å»Øqueue£¬È»ºóÖ®ºóÓÖÄÃ³öÀ´ÖØÊÔ£¬È»ºóÒ»Ö±ÖØ¸´Ê§°Ü(¿ÉÄÜÊÇ´úÂëÃ»¶Ô²»¿ÉĞŞ¸´µÄ´íÎó×ö´¦Àí)
-2. ±ÈÈçÖØÊÔµÄÖÜÆÚ¹ıÓÚÒ»ÖÂ£¬ÀàËÆ¾ÉÊ½ÍøÂçµÄĞÅºÅ³åÍ»£¬±ØĞëÒıÈë¸üËæ»úµÄÖØÊÔ»úÖÆÀ´Íê³É
+1. æ¯”å¦‚å¤„ç†ä¸€ä¸ªä»»åŠ¡å¤±è´¥äº†æ”¾å›queueï¼Œç„¶åä¹‹ååˆæ‹¿å‡ºæ¥é‡è¯•ï¼Œç„¶åä¸€ç›´é‡å¤å¤±è´¥(å¯èƒ½æ˜¯ä»£ç æ²¡å¯¹ä¸å¯ä¿®å¤çš„é”™è¯¯åšå¤„ç†)
+2. æ¯”å¦‚é‡è¯•çš„å‘¨æœŸè¿‡äºä¸€è‡´ï¼Œç±»ä¼¼æ—§å¼ç½‘ç»œçš„ä¿¡å·å†²çªï¼Œå¿…é¡»å¼•å…¥æ›´éšæœºçš„é‡è¯•æœºåˆ¶æ¥å®Œæˆ
 * performance and scalability
 ** thinking about performance
 *** resources
@@ -696,143 +703,143 @@ such as Executor framework
 **** coordinating between threads
 locking, signaling, and memory synchronization
 **** context switching
-°üÀ¨ÇĞ»»Ê±½«»·¾³±£´æÓë»Ö¸´
+åŒ…æ‹¬åˆ‡æ¢æ—¶å°†ç¯å¢ƒä¿å­˜ä¸æ¢å¤
 **** thread creation and teardown
-¿ÉÒÔ²ÉÓÃÏß³Ì³Ø¸´ÓÃ½â¾öÒ»²¿·Ö
+å¯ä»¥é‡‡ç”¨çº¿ç¨‹æ± å¤ç”¨è§£å†³ä¸€éƒ¨åˆ†
 **** scheduling overhead
-Ô½¶àÊ±¼äÆ¬£¬¾Í·ÖµÃÔ½¶Ì
+è¶Šå¤šæ—¶é—´ç‰‡ï¼Œå°±åˆ†å¾—è¶ŠçŸ­
 *** metrics
-**** how fast(Õë¶Ôµ¥¸öÈÎÎñµÄ´¦Àí)
+**** how fast(é’ˆå¯¹å•ä¸ªä»»åŠ¡çš„å¤„ç†)
 - service time
 - latency
-**** how much(Õë¶Ô¸ø¶¨Ê±¼ä¶ÎÄÜ´¦ÀíµÄÈÎÎñ×ÜÊı£¬¶à£¬²»ÒâÎ¶×Åµ¥¸öÈÎÎñ¾Í¿ì£¬ÒòÎª´æÔÚ·Ö²¼ÏµÍ³Ö®ºó£¬×îµÍ×îµÍµÄÍøÂç¿ªÏúÒ²²»¿É±ÜÃâ£¬¶øÊÇ·Ö²¼Ö®ºó£¬¿ÉÒÔÓÃ¹ı¼Ó»úÆ÷À´Ôö¼ÓÍÌÍÂÁ¿)
+**** how much(é’ˆå¯¹ç»™å®šæ—¶é—´æ®µèƒ½å¤„ç†çš„ä»»åŠ¡æ€»æ•°ï¼Œå¤šï¼Œä¸æ„å‘³ç€å•ä¸ªä»»åŠ¡å°±å¿«ï¼Œå› ä¸ºå­˜åœ¨åˆ†å¸ƒç³»ç»Ÿä¹‹åï¼Œæœ€ä½æœ€ä½çš„ç½‘ç»œå¼€é”€ä¹Ÿä¸å¯é¿å…ï¼Œè€Œæ˜¯åˆ†å¸ƒä¹‹åï¼Œå¯ä»¥ç”¨è¿‡åŠ æœºå™¨æ¥å¢åŠ ååé‡)
 **** Scalability
-¼Ó»úÆ÷½â¾öÍÌÍÂÁ¿µÄÄÜÁ¦
+åŠ æœºå™¨è§£å†³ååé‡çš„èƒ½åŠ›
 *** tuning
-1. ±ØĞëÔÚÃ÷È·Êı¾İ¹æÄ£Óë³¡¾°µÄÇé¿öÏÂ£¬²»½¨Òé¿ª¾Ö¾ÍÓÅ»¯
-2. ±ØĞë½øĞĞÊı¾İ²âÁ¿ºó£¬ÃûÈ·ÓÅ»¯µÄÄ¿±ê
-3. µ¥¸öÈÎÎñµÄÖ´ĞĞĞÔÄÜÓëÍØÕ¹ĞÔÍùÍùÊÇ»¥³âµÄ
+1. å¿…é¡»åœ¨æ˜ç¡®æ•°æ®è§„æ¨¡ä¸åœºæ™¯çš„æƒ…å†µä¸‹ï¼Œä¸å»ºè®®å¼€å±€å°±ä¼˜åŒ–
+2. å¿…é¡»è¿›è¡Œæ•°æ®æµ‹é‡åï¼Œåç¡®ä¼˜åŒ–çš„ç›®æ ‡
+3. å•ä¸ªä»»åŠ¡çš„æ‰§è¡Œæ€§èƒ½ä¸æ‹“å±•æ€§å¾€å¾€æ˜¯äº’æ–¥çš„
 ** Amdahl's law
 speedup<=1/(F+(1-F)/N)
 ** serialize
-Ïß³Ì²»°²È«µÄ¼¯ºÏÖ®ËùÒÔ²»°²È«ÊÇÓÉÓÚ²¢·¢·ÃÎÊ¿ÉÄÜ»áÆÆ»µÊı¾İ½á¹¹£¬±ÈÈç²ÉÓÃÁ´±íÏà¹ØµÄÄÚ²¿ÊµÏÖµÄ¿ÉÄÜ»áµ¼ÖÂÊı¾İ¶ªÊ§(Á¬½Ó¹ı³ÌÖĞ)£¬¶ø²ÉÓÃÊı×éÏà¹ØµÄ£¬Ôò»áÔÚÀ©ÈİÊ±£¬µ¼ÖÂ³åÍ»·¢Éú
-1. ¹²ÏíÊı¾İ±ÈÈçqueue(synchronized LinkedListµÄÃ¿¸ö·½·¨µ÷ÓÃ¶¼ÊÇ´®ĞĞ»¯µÄ£¬ConcurrentLinkedQueueÖ»ÓĞÔÚ¸üĞÂµÄÊ±ºò²Å´®ĞĞ»¯)
+çº¿ç¨‹ä¸å®‰å…¨çš„é›†åˆä¹‹æ‰€ä»¥ä¸å®‰å…¨æ˜¯ç”±äºå¹¶å‘è®¿é—®å¯èƒ½ä¼šç ´åæ•°æ®ç»“æ„ï¼Œæ¯”å¦‚é‡‡ç”¨é“¾è¡¨ç›¸å…³çš„å†…éƒ¨å®ç°çš„å¯èƒ½ä¼šå¯¼è‡´æ•°æ®ä¸¢å¤±(è¿æ¥è¿‡ç¨‹ä¸­)ï¼Œè€Œé‡‡ç”¨æ•°ç»„ç›¸å…³çš„ï¼Œåˆ™ä¼šåœ¨æ‰©å®¹æ—¶ï¼Œå¯¼è‡´å†²çªå‘ç”Ÿ
+1. å…±äº«æ•°æ®æ¯”å¦‚queue(synchronized LinkedListçš„æ¯ä¸ªæ–¹æ³•è°ƒç”¨éƒ½æ˜¯ä¸²è¡ŒåŒ–çš„ï¼ŒConcurrentLinkedQueueåªæœ‰åœ¨æ›´æ–°çš„æ—¶å€™æ‰ä¸²è¡ŒåŒ–)
 2. result handling/side effect
 3. log file/container
 ** cost
 Context Switching
-µ±Ö»ÓĞÒ»¸öµÄÊ±ºò£¬²»´æÔÚµ÷¶ÈÎÊÌâ£¬ÔÚ´óÁ¿ÏÖ³ÉµÄÊ±ºò£¬´ÓÖĞµ÷Ò»¸ö/±£´æ/»Ö¸´µÈ¶¼³ÆÎªcontext switching
+å½“åªæœ‰ä¸€ä¸ªçš„æ—¶å€™ï¼Œä¸å­˜åœ¨è°ƒåº¦é—®é¢˜ï¼Œåœ¨å¤§é‡ç°æˆçš„æ—¶å€™ï¼Œä»ä¸­è°ƒä¸€ä¸ª/ä¿å­˜/æ¢å¤ç­‰éƒ½ç§°ä¸ºcontext switching
 ** Memory Synchronization
 *** synchronized
 *** volatile
 *** Blocking
 ** REDUCING LOCK CONTENTION
 *** Reduce the duration for which locks are held
-**** Narrowing Lock Scope (¡°Get in, Get Out¡±)
-Ö÷ÒªÕë¶ÔµÄÊÇ³¤ÔËËãÂß¼­µÄÒÆ³ı£¬Í¬Ò»¸öËø²ğµÄÌ«Ğ¡·´¶ø»áÓ°Ïì(È¡¾öÓÚJVMÊÇ·ñ½øĞĞÁËËø´Ö»¯)
+**** Narrowing Lock Scope (â€œGet in, Get Outâ€)
+ä¸»è¦é’ˆå¯¹çš„æ˜¯é•¿è¿ç®—é€»è¾‘çš„ç§»é™¤ï¼ŒåŒä¸€ä¸ªé”æ‹†çš„å¤ªå°åè€Œä¼šå½±å“(å–å†³äºJVMæ˜¯å¦è¿›è¡Œäº†é”ç²—åŒ–)
 *** Reduce the frequency with which locks are requested; or
 **** lock splitting
-ÈÃ×´Ì¬¶ÀÁ¢µÄ£¬ÇÒÔÚÖĞµÈ¸ºÔØµÄÊ±ºò£¬ÎªÆä¸÷×ÔÊ¹ÓÃ¶ÀÁ¢µÄËø
+è®©çŠ¶æ€ç‹¬ç«‹çš„ï¼Œä¸”åœ¨ä¸­ç­‰è´Ÿè½½çš„æ—¶å€™ï¼Œä¸ºå…¶å„è‡ªä½¿ç”¨ç‹¬ç«‹çš„é”
 **** lock striping
-Ö÷ÒªÊÇ¼¯ºÏµÄ·Ö¿éËø£¬±ÈÈçConcurrentHashMap£¬Ò»¸öËø¶ÔÒ»¸öbucket£¬ÔÚ·Ç²¢·¢³¡¾°µÄÊ¹ÓÃÏÂ£¬¿ªÏúºÜ´ó£¬±ÈÈçÍØÈİµÄÊ±ºò£¬Ê÷»¯£¬Á´±í»¯µÄÊ±ºò
+ä¸»è¦æ˜¯é›†åˆçš„åˆ†å—é”ï¼Œæ¯”å¦‚ConcurrentHashMapï¼Œä¸€ä¸ªé”å¯¹ä¸€ä¸ªbucketï¼Œåœ¨éå¹¶å‘åœºæ™¯çš„ä½¿ç”¨ä¸‹ï¼Œå¼€é”€å¾ˆå¤§ï¼Œæ¯”å¦‚æ‹“å®¹çš„æ—¶å€™ï¼Œæ ‘åŒ–ï¼Œé“¾è¡¨åŒ–çš„æ—¶å€™
 **** Avoiding Hot Fields
-¼õÉÙÈÈµãµÄÊı¾İ·ÃÎÊ£¬µäĞÍµÄ±ÈÈç¼¯ºÏµÄsize£¬Èç¹ûÊ¹ÓÃµ¥Ò»±äÁ¿½øĞĞ±£´æ£¬ÔòÔÚ¸üĞÂµÄÊ±ºò»áµ¼ÖÂËø¾ºÕù²úÉú¼Ó¾ç£¬Òò´ËÊ¹ÓÃµ½lock stripingµÄ±ÈÈçConcurrentHashMapdµÄ×ö·¨ÊÇ£¬Ã¿¸öËø´¦ÀíÒ»²¿·Ö´æ´¢£¬µ±¸üĞÂÊ±£¬Ò²Ö»ÊÇ¸üĞÂµ½sizeµÄÒ»²¿·Ö£¬×îºóÔÚ½øĞĞ»ã×Ü¼ÆËã£¬²úÉúµÄ½á¹û¾ÍÊÇsizeÖ»ÄÜ×÷Îª¹ÀËãÖµ£¬¶ø²»¿ÉÒÔ×÷Îª¼´Ê±µÄ¾«È·Öµ
+å‡å°‘çƒ­ç‚¹çš„æ•°æ®è®¿é—®ï¼Œå…¸å‹çš„æ¯”å¦‚é›†åˆçš„sizeï¼Œå¦‚æœä½¿ç”¨å•ä¸€å˜é‡è¿›è¡Œä¿å­˜ï¼Œåˆ™åœ¨æ›´æ–°çš„æ—¶å€™ä¼šå¯¼è‡´é”ç«äº‰äº§ç”ŸåŠ å‰§ï¼Œå› æ­¤ä½¿ç”¨åˆ°lock stripingçš„æ¯”å¦‚ConcurrentHashMapdçš„åšæ³•æ˜¯ï¼Œæ¯ä¸ªé”å¤„ç†ä¸€éƒ¨åˆ†å­˜å‚¨ï¼Œå½“æ›´æ–°æ—¶ï¼Œä¹Ÿåªæ˜¯æ›´æ–°åˆ°sizeçš„ä¸€éƒ¨åˆ†ï¼Œæœ€ååœ¨è¿›è¡Œæ±‡æ€»è®¡ç®—ï¼Œäº§ç”Ÿçš„ç»“æœå°±æ˜¯sizeåªèƒ½ä½œä¸ºä¼°ç®—å€¼ï¼Œè€Œä¸å¯ä»¥ä½œä¸ºå³æ—¶çš„ç²¾ç¡®å€¼
 *** Replace exclusive locks with coordination mechanisms that permit greater concurrency
-Õë¶ÔµÄÖ÷ÒªÊÇÓ¦ÓÃ²ãÃæµÄËµ·¨£¬±ÈÈç¼õÉÙExclusive lockµÄÊ¹ÓÃ£¬×ª¶øÊ¹ÓÃThread-safe collections£¬»òÕß¸ù¾İÇé¿öÑ¡Ôñ¶ÔÓ¦µÄÀà¿â»úÖÆ£¬±ÈÈçReadWriteLock£¬AtomicXXXÀ´½øĞĞ×´Ì¬µÄ¹ÜÀí
+é’ˆå¯¹çš„ä¸»è¦æ˜¯åº”ç”¨å±‚é¢çš„è¯´æ³•ï¼Œæ¯”å¦‚å‡å°‘Exclusive lockçš„ä½¿ç”¨ï¼Œè½¬è€Œä½¿ç”¨Thread-safe collectionsï¼Œæˆ–è€…æ ¹æ®æƒ…å†µé€‰æ‹©å¯¹åº”çš„ç±»åº“æœºåˆ¶ï¼Œæ¯”å¦‚ReadWriteLockï¼ŒAtomicXXXæ¥è¿›è¡ŒçŠ¶æ€çš„ç®¡ç†
 ** Reducing context switch overhead
-±ÈÈç¸÷ÖÖÈÕÖ¾¿ò¼Ü¶ÔÓÚ¼ÇÂ¼µÄ´¦Àí£¬Êµ¼ÊÉÏÊÇ½«IO-boundµÄ³åÍ»£¬×ª¶ø±äÎª¶ÔQueue(³åÍ»²»¿É±ÜÃâ£¬Ö»ÊÇ³åÍ»µÄ¸ÅÂÊ/ºó¹û/³É±¾ÓĞËù²»Í¬£¬¼ÇÂ¼Èë¶ÓÓë×èÈûIOÏà±È³É±¾µÍÁ®)µÄ³åÍ»£¬ÔÚ×¨ÓÃÏß³Ì½øĞĞÈÕÖ¾´òÓ¡£¬Ïû³ı×î´óµÄÒ»²¿·ÖÓ°Ïì£¬IO-bound
+æ¯”å¦‚å„ç§æ—¥å¿—æ¡†æ¶å¯¹äºè®°å½•çš„å¤„ç†ï¼Œå®é™…ä¸Šæ˜¯å°†IO-boundçš„å†²çªï¼Œè½¬è€Œå˜ä¸ºå¯¹Queue(å†²çªä¸å¯é¿å…ï¼Œåªæ˜¯å†²çªçš„æ¦‚ç‡/åæœ/æˆæœ¬æœ‰æ‰€ä¸åŒï¼Œè®°å½•å…¥é˜Ÿä¸é˜»å¡IOç›¸æ¯”æˆæœ¬ä½å»‰)çš„å†²çªï¼Œåœ¨ä¸“ç”¨çº¿ç¨‹è¿›è¡Œæ—¥å¿—æ‰“å°ï¼Œæ¶ˆé™¤æœ€å¤§çš„ä¸€éƒ¨åˆ†å½±å“ï¼ŒIO-bound
 * language feature
 ** volatile
-1. ±£³Ö¿É¼ûĞÔ
-2. ·ÀÖ¹Ö¸ÁîÖØÅÅ
+1. ä¿æŒå¯è§æ€§
+2. é˜²æ­¢æŒ‡ä»¤é‡æ’
 ** synchronized
 *** effect
-1. ±£³Ö¿É¼ûĞÔ
-2. ·ÀÖ¹Ö¸ÁîÖØÅÅ
-3. ±£³Ö´úÂë¿éÔ­×ÓĞÔ
+1. ä¿æŒå¯è§æ€§
+2. é˜²æ­¢æŒ‡ä»¤é‡æ’
+3. ä¿æŒä»£ç å—åŸå­æ€§
 *** principle
-Í¬²½¿éÊ¹ÓÃµÄ×÷·¨Îªmutux£¬»¥³â£¬¼´µ±Ò»¸öÏß³Ì½øÈëÊ±£¬ÆäËûÏß³ÌÒªµÈ´ı
+åŒæ­¥å—ä½¿ç”¨çš„ä½œæ³•ä¸ºmutuxï¼Œäº’æ–¥ï¼Œå³å½“ä¸€ä¸ªçº¿ç¨‹è¿›å…¥æ—¶ï¼Œå…¶ä»–çº¿ç¨‹è¦ç­‰å¾…
 the bytecode instructions for entering and exiting a synchronized block are even called monitorenter and monitorexit
 ** build lock library
 *** collection
 *** Lock
 * test
 ** test for safety
-Ö÷Ïß³ÌÍ¨¹ıÄ³ÖÖ»úÖÆ½»»»ĞÅÏ¢£¬±ÈÈçThread.join£¬È»ºóÔÚwork threadµÈ´ıÊ±¼äÃ÷ÏÔ³¬¹ıĞèÇóÊ±£¬¶îÍâÏß³Ì(¿ÉÒÔÊÇÖ÷Ïß³Ì)½øĞĞÖĞ¶Ï£¬È»ºó¼ì²â¹¤×÷Ïß³Ì
+ä¸»çº¿ç¨‹é€šè¿‡æŸç§æœºåˆ¶äº¤æ¢ä¿¡æ¯ï¼Œæ¯”å¦‚Thread.joinï¼Œç„¶ååœ¨work threadç­‰å¾…æ—¶é—´æ˜æ˜¾è¶…è¿‡éœ€æ±‚æ—¶ï¼Œé¢å¤–çº¿ç¨‹(å¯ä»¥æ˜¯ä¸»çº¿ç¨‹)è¿›è¡Œä¸­æ–­ï¼Œç„¶åæ£€æµ‹å·¥ä½œçº¿ç¨‹
 ** test for performance
-ÀûÓÃAQSµÄÊµÏÖÀ´½øĞĞ¼ÆËãÓëÏß³ÌµÄÆô¶¯¿ØÖÆ£¬±ÈÈçCountDownLatch»òÕßCyclicBarrier
+åˆ©ç”¨AQSçš„å®ç°æ¥è¿›è¡Œè®¡ç®—ä¸çº¿ç¨‹çš„å¯åŠ¨æ§åˆ¶ï¼Œæ¯”å¦‚CountDownLatchæˆ–è€…CyclicBarrier
 * built-in mechanisms
 ** non-intrinsic
-Ìá¹©µÄËø²»Ö§³Ö×Ô¶¯ÊÍ·Å(synchronizedÊÇÓÉJVM¹ÜÀíÊÍ·Å),ĞèÒªÊÖ¶¯¹ÜÀí
+æä¾›çš„é”ä¸æ”¯æŒè‡ªåŠ¨é‡Šæ”¾(synchronizedæ˜¯ç”±JVMç®¡ç†é‡Šæ”¾),éœ€è¦æ‰‹åŠ¨ç®¡ç†
 *** Lock
-Õë¶ÔÊÇµÄÊÇlock·½·¨. The polled tryLock always barges, even for fair locks.
+é’ˆå¯¹æ˜¯çš„æ˜¯lockæ–¹æ³•. The polled tryLock always barges, even for fair locks.
 **** multiple condition queue
 **** support interruption
-Ö§³ÖÖĞ¶Ï»úÖÆ(¿ÉÓÃÓÚÈ¡ÏûÈÎÎñ)£¬»ñÈ¡Ê±Ò²ĞèÒª½â¾öÖĞ¶ÏÒì³£
+æ”¯æŒä¸­æ–­æœºåˆ¶(å¯ç”¨äºå–æ¶ˆä»»åŠ¡)ï¼Œè·å–æ—¶ä¹Ÿéœ€è¦è§£å†³ä¸­æ–­å¼‚å¸¸
 **** no block lock acquisition
 tryLock
 **** manage no-block code path
-ÔÚÓÚ¿ÉÒÔ¸ù¾İ½á¹¹¹ÜÀí·Ç¿é×´´úÂë
+åœ¨äºå¯ä»¥æ ¹æ®ç»“æ„ç®¡ç†éå—çŠ¶ä»£ç 
 *** ReentrantLock
 **** FAIRNESS
 ***** fair
-»ñÈ¡ËøµÄË³ĞòÓëÉêÇëË³ĞòÒ»ÖÂ(ÉêÇëµÄÈë¶Ó)
-***** nonfair(ReentrantLockÄ¬ÈÏ²ÎÊı)
-ÔÊĞíÔÚ¸ÕÊÍ·ÅÓëÉêÇë½Ó½ü£¬Ö±½Ó²å¶Ó
+è·å–é”çš„é¡ºåºä¸ç”³è¯·é¡ºåºä¸€è‡´(ç”³è¯·çš„å…¥é˜Ÿ)
+***** nonfair(ReentrantLocké»˜è®¤å‚æ•°)
+å…è®¸åœ¨åˆšé‡Šæ”¾ä¸ç”³è¯·æ¥è¿‘ï¼Œç›´æ¥æ’é˜Ÿ
 *** ReadWriteLock
 its implements have ReentrantReadWriteLock
 **** FAIRNESS
 ***** fair
-ÅÅ¶Ó£¬Ïà¶ÔÓÚ¿ÉÒÔÒ»´ÎĞÔÏû·Ñ¶à¸öreader£¬µ«ÊÇÈç¹ûwriterÉêÇëÖ®ºó£¬»¹ÓĞreaderÉêÇë£¬Ö»ÄÜµÈwriterÍê³Éºó²ÅÂÖµÃµ½
+æ’é˜Ÿï¼Œç›¸å¯¹äºå¯ä»¥ä¸€æ¬¡æ€§æ¶ˆè´¹å¤šä¸ªreaderï¼Œä½†æ˜¯å¦‚æœwriterç”³è¯·ä¹‹åï¼Œè¿˜æœ‰readerç”³è¯·ï¼Œåªèƒ½ç­‰writerå®Œæˆåæ‰è½®å¾—åˆ°
 1. downgrading from writer to reader is permitted
 2. upgrading from reader to write is not allow
 ***** nofair
-ÀàËÆReentrantLock
+ç±»ä¼¼ReentrantLock
 ** intrinsic
 *** synchronized
 ** building block
 *** synchronized collections
 - Vector and Hashtable
 - Collections.synchronizedXxx
-ÕâÖÖµÄÌØµãÎª²¢·¢·ÃÎÊÊ±£¬µü´úÆ÷»áÊ§Ğ§(¿ÉÄÜĞÔ£¬ÓĞ¿ÉÄÜ²»¿É¼ûĞÔµ¼ÖÂ³É¹¦£¬µ«ÊÇÎª¾ÉÊı¾İ)£¬µ¼ÖÂµü´úÆ÷Ê§Ğ§Ê±Å×³öConcurrentModificationExceptions£¬¸Ã×ö·¨³ÆÎªfail-fast
-Ê§Ğ§µÄ¿ÉÄÜĞÔºÜÄÑ×·Ëİ£¬±ÈÈçÔöÇ¿forÑ­»·½øĞĞÁË±ä¸ü²Ù×÷£¬±ÈÈçÍü¼Çµü´úÊ±Í¬²½µÈ
+è¿™ç§çš„ç‰¹ç‚¹ä¸ºå¹¶å‘è®¿é—®æ—¶ï¼Œè¿­ä»£å™¨ä¼šå¤±æ•ˆ(å¯èƒ½æ€§ï¼Œæœ‰å¯èƒ½ä¸å¯è§æ€§å¯¼è‡´æˆåŠŸï¼Œä½†æ˜¯ä¸ºæ—§æ•°æ®)ï¼Œå¯¼è‡´è¿­ä»£å™¨å¤±æ•ˆæ—¶æŠ›å‡ºConcurrentModificationExceptionsï¼Œè¯¥åšæ³•ç§°ä¸ºfail-fast
+å¤±æ•ˆçš„å¯èƒ½æ€§å¾ˆéš¾è¿½æº¯ï¼Œæ¯”å¦‚å¢å¼ºforå¾ªç¯è¿›è¡Œäº†å˜æ›´æ“ä½œï¼Œæ¯”å¦‚å¿˜è®°è¿­ä»£æ—¶åŒæ­¥ç­‰
 **** hidden iterator
-- ÔöÇ¿forÑ­»·
+- å¢å¼ºforå¾ªç¯
 - toString
 - compare
 - hashCode
 *** CONCURRENT COLLECTIONS
-1. Ïû³ıÁËConcurrentModificationExceptionµÄÅ×³ö
-2. ±£³ÖÁËÒ»ÖÖËùÎ½µÄweakly consistentµÄ×´Ì¬(±ÈÈçsize£¬Ö»ÄÜ×÷ÎªÒ»¸öÔ¤¹À£¬¶øµü´úÆ÷ÔÚÊ¹ÓÃ¹ı³ÌÖĞ»¹»á±ä¶¯µÈ)
-3. Í³Ò»Ôö¼ÓÁËÒ»Ğ©³£ÓÃµÄÖîÈçputIfAbsentµÈatomic operation
+1. æ¶ˆé™¤äº†ConcurrentModificationExceptionçš„æŠ›å‡º
+2. ä¿æŒäº†ä¸€ç§æ‰€è°“çš„weakly consistentçš„çŠ¶æ€(æ¯”å¦‚sizeï¼Œåªèƒ½ä½œä¸ºä¸€ä¸ªé¢„ä¼°ï¼Œè€Œè¿­ä»£å™¨åœ¨ä½¿ç”¨è¿‡ç¨‹ä¸­è¿˜ä¼šå˜åŠ¨ç­‰)
+3. ç»Ÿä¸€å¢åŠ äº†ä¸€äº›å¸¸ç”¨çš„è¯¸å¦‚putIfAbsentç­‰atomic operation
 **** ConcurrentMap
 ***** ConcurrentHashMap
-ÔÚhashMapµÄ»ù´¡ÉÏÊ¹ÓÃÁËÒ»ÖÖlock striping(Ò»¶ÎÒ»¶ÎËø£¬¶ø²»ÊÇÈ«¾ÖËøµÄÍ¬²½»úÖÆ)µÄ¼¼Êõ
+åœ¨hashMapçš„åŸºç¡€ä¸Šä½¿ç”¨äº†ä¸€ç§lock striping(ä¸€æ®µä¸€æ®µé”ï¼Œè€Œä¸æ˜¯å…¨å±€é”çš„åŒæ­¥æœºåˆ¶)çš„æŠ€æœ¯
 replacement for hashMap
 ***** ConcurrentSkipListMap
 replacement for SortedMap
 **** ConcurrentSkipListSet
 **** CopyOnWriteArrayList
-¶Á¶àĞ´ÉÙµÄ³¡¾°£¬Ğ´µÄÊ±ºòÄÚ²¿Êı×é»á½øĞĞclone
+è¯»å¤šå†™å°‘çš„åœºæ™¯ï¼Œå†™çš„æ—¶å€™å†…éƒ¨æ•°ç»„ä¼šè¿›è¡Œclone
 **** BlockingQueue
 put/take(block opeation)
 offer/poll(return operation status, mainly for custom flexible policies)
 ***** LinkedBlockingQueue
-ÄÚ²¿ÊµÏÖÎªÁ´±í
+å†…éƒ¨å®ç°ä¸ºé“¾è¡¨
 ***** ArrayBlockingQueue
-ÄÚ²¿ÊµÏÖÎªÊı×é
+å†…éƒ¨å®ç°ä¸ºæ•°ç»„
 ***** PriorityBlockingQueue
-´øÓÅÏÈ¼¶µÄ
+å¸¦ä¼˜å…ˆçº§çš„
 ***** SynchronousQueue
-×îÌØÊâµÄÒ»ÖÖ£¬ÄÚ²¿Ã»ÓĞ¿Õ¼ä´æÔÚ£¬put and take will block unless another thread is already waiting to participate in the handoff
+æœ€ç‰¹æ®Šçš„ä¸€ç§ï¼Œå†…éƒ¨æ²¡æœ‰ç©ºé—´å­˜åœ¨ï¼Œput and take will block unless another thread is already waiting to participate in the handoff
 *** SYNCHRONIZERS
 A synchronizer is any object that coordinates the control flow of threads based on its state
-BlockQueue¾ÍÊÇÆäÖĞÒ»ÖÖ(Ö»ÊÇÕâ¸ö»¹ÄÜË³±ãµ±×÷ÈİÆ÷)
+BlockQueueå°±æ˜¯å…¶ä¸­ä¸€ç§(åªæ˜¯è¿™ä¸ªè¿˜èƒ½é¡ºä¾¿å½“ä½œå®¹å™¨)
 **** Latches
-¿ªÁËÖ®ºó¾Í²»ÄÜÔÙ¹Ø,³¡¾°Ö÷Òª°üÀ¨
-1. ×ÊÔ´ÒªÇó£¬±ÈÈçXX±ØĞëµÈµ½resource R¼ÓÔØÍê³É
-2. ·şÎñ¼ä»¥Ïà´æÔÚÒÀÀµ
-3. Æ½¼¶·şÎñÖ®¼ä£¬±ÈÈçÍõÕßÈÙÒ«ÓÎÏ·ĞèÒª¼ÓÔØ5¸öÈË²ÅÄÜ½ø(³ı·Ç¶ÏÏß)
+å¼€äº†ä¹‹åå°±ä¸èƒ½å†å…³,åœºæ™¯ä¸»è¦åŒ…æ‹¬
+1. èµ„æºè¦æ±‚ï¼Œæ¯”å¦‚XXå¿…é¡»ç­‰åˆ°resource RåŠ è½½å®Œæˆ
+2. æœåŠ¡é—´äº’ç›¸å­˜åœ¨ä¾èµ–
+3. å¹³çº§æœåŠ¡ä¹‹é—´ï¼Œæ¯”å¦‚ç‹è€…è£è€€æ¸¸æˆéœ€è¦åŠ è½½5ä¸ªäººæ‰èƒ½è¿›(é™¤éæ–­çº¿)
 #+BEGIN_SRC java
 public class Main {
     public static void main(String[] args) throws InterruptedException {
@@ -863,7 +870,7 @@ public class Main {
 **** FutureTask
 FutureTask is used by the Executor framework to represent asynchronous tasks
 #+BEGIN_SRC java
-// ¿ÉÒÔÓÃÓÚ±íÊ¾Ò»ÖÖÔËĞĞ×´Ì¬µÄÖµwrapper£¬¿ÉÓÃÓÚcacheÊµÏÖ
+// å¯ä»¥ç”¨äºè¡¨ç¤ºä¸€ç§è¿è¡ŒçŠ¶æ€çš„å€¼wrapperï¼Œå¯ç”¨äºcacheå®ç°
 public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         FutureTask<String> hello = new FutureTask<>(new Callable<String>() {
@@ -873,13 +880,13 @@ public class Main {
                 return "kk";
             }
         });
-        hello.run(); // Èç¹û·ÇÒªÓÃµÄÇé¿öÏÂ£¬Ò»°ãÓÃÓÚ¶ªÔÚĞÂ½¨Ïß³ÌÅÜ
-        hello.get(); // ÄÃ²»µ½µÄÇé¿öÏÂ£¬block
+        hello.run(); // å¦‚æœéè¦ç”¨çš„æƒ…å†µä¸‹ï¼Œä¸€èˆ¬ç”¨äºä¸¢åœ¨æ–°å»ºçº¿ç¨‹è·‘
+        hello.get(); // æ‹¿ä¸åˆ°çš„æƒ…å†µä¸‹ï¼Œblock
     }
 }
 #+END_SRC
 **** Semaphores
-¸úiptableµÄÁîÅÆÏŞÖÆºÜÏñ£¬ÄÃµÃµ½¾ÍÍùÏÂ×ß
+è·Ÿiptableçš„ä»¤ç‰Œé™åˆ¶å¾ˆåƒï¼Œæ‹¿å¾—åˆ°å°±å¾€ä¸‹èµ°
 #+BEGIN_SRC java
 class BoundedHashSet<T>{
     private final Set<T> set;
@@ -914,11 +921,11 @@ class BoundedHashSet<T>{
 #+END_SRC
 **** Barriers
 #+BEGIN_SRC java
-// ÓëlatchºÜÀàËÆ£¬µ«ÊÇµ½´ïÖ®ºó»áreset£¬Ïàµ±ÓÚÏÈ¿ªºó¹Ø(Ä¬ÈÏÎª¹Ø×ÅµÄ)
+// ä¸latchå¾ˆç±»ä¼¼ï¼Œä½†æ˜¯åˆ°è¾¾ä¹‹åä¼šresetï¼Œç›¸å½“äºå…ˆå¼€åå…³(é»˜è®¤ä¸ºå…³ç€çš„)
 public class Main {
     public static void main(String[] args) {
         CyclicBarrier cyclicBarrier = new CyclicBarrier(5,()->{
-            System.out.println("ÅÜÍêÒ»´Î");
+            System.out.println("è·‘å®Œä¸€æ¬¡");
         });
 
         for (int i=0;i<10;++i){
@@ -937,44 +944,44 @@ public class Main {
 }
 #+END_SRC
 ** condition queue
-condition queueÖ÷Òª²ÎÓëµÄ¹ØÓÚ±äÁ¿µÄÌõ¼şÅĞ¶Ï£¬ÒòÎª£¬ĞèÒªÔÚ½øĞĞÌõ¼şÅĞ¶¨Ö®Ç°»ñÈ¡¸ÃËø£¬¼´ËøÓëcondition queueµÄ¶ÔÏóÓ¦¸ÃÊÇÒ»ÖÂµÄ,ÎŞÂÛÊÇObject.wait/Condition.await£¬¶¼ĞèÒªÔÚÑ­»·ÖĞ½øĞĞÌõ¼şµÄÅĞ¶¨
-1. ÓÃÓÚ±£³Ö×´Ì¬µÄintrinsic lock
-2. ÅĞ¶Ï×´Ì¬±äÁ¿¶ÔÓ¦µÄcondition predicate
-3. ¶ÔÓ¦µÄintrinsic lockµÄ¶ÔÏó½øĞĞwait
+condition queueä¸»è¦å‚ä¸çš„å…³äºå˜é‡çš„æ¡ä»¶åˆ¤æ–­ï¼Œå› ä¸ºï¼Œéœ€è¦åœ¨è¿›è¡Œæ¡ä»¶åˆ¤å®šä¹‹å‰è·å–è¯¥é”ï¼Œå³é”ä¸condition queueçš„å¯¹è±¡åº”è¯¥æ˜¯ä¸€è‡´çš„,æ— è®ºæ˜¯Object.wait/Condition.awaitï¼Œéƒ½éœ€è¦åœ¨å¾ªç¯ä¸­è¿›è¡Œæ¡ä»¶çš„åˆ¤å®š
+1. ç”¨äºä¿æŒçŠ¶æ€çš„intrinsic lock
+2. åˆ¤æ–­çŠ¶æ€å˜é‡å¯¹åº”çš„condition predicate
+3. å¯¹åº”çš„intrinsic lockçš„å¯¹è±¡è¿›è¡Œwait
 *** Missed Signals
-1. ÓÉÓÚÌõ¼şÅĞ¶¨µÄ´úÂë´íÎó£¬µ¼ÖÂwaitÎŞ·¨ÕıÈ·µØÔÚÍ¨Öª·¢ÉúºóĞÑÀ´
-2. notify£¬»½ĞÑ·ÇÍ¬ÖÊ»¯µÄcondition queue£¬±ÈÈçproducer/consumerÄ£Ê½(¼ÙÉè²ÉÓÃnotifyµÄ×ö·¨£¬ÔòÈôÆäÖĞÒ»¸öproducerÔÚ¶ÓÁĞÂúºó£¬½øÈëÁËblock£¬¶øÆäËûµÄproducer/consumerÕı³£¹¤×÷£¬ÔÚ×î²îµÄÇé¿öÏÂ£¬Ã¿´Îproducer»½ĞÑµÄ¶¼ÊÇproducer£¬¶øÎŞ·¨»½ĞÑconsumer£¬ÔÚ×îºóproducerÒçÂúÊ±£¬ĞÅºÅ³¹µ×¶ªÊ§)
+1. ç”±äºæ¡ä»¶åˆ¤å®šçš„ä»£ç é”™è¯¯ï¼Œå¯¼è‡´waitæ— æ³•æ­£ç¡®åœ°åœ¨é€šçŸ¥å‘ç”Ÿåé†’æ¥
+2. notifyï¼Œå”¤é†’éåŒè´¨åŒ–çš„condition queueï¼Œæ¯”å¦‚producer/consumeræ¨¡å¼(å‡è®¾é‡‡ç”¨notifyçš„åšæ³•ï¼Œåˆ™è‹¥å…¶ä¸­ä¸€ä¸ªproduceråœ¨é˜Ÿåˆ—æ»¡åï¼Œè¿›å…¥äº†blockï¼Œè€Œå…¶ä»–çš„producer/consumeræ­£å¸¸å·¥ä½œï¼Œåœ¨æœ€å·®çš„æƒ…å†µä¸‹ï¼Œæ¯æ¬¡producerå”¤é†’çš„éƒ½æ˜¯producerï¼Œè€Œæ— æ³•å”¤é†’consumerï¼Œåœ¨æœ€åproduceræº¢æ»¡æ—¶ï¼Œä¿¡å·å½»åº•ä¸¢å¤±)
 *** Object.wait
-ÕùÓÃËøÊ±ÊÇ·Ç¹«Æ½µÄ
+äº‰ç”¨é”æ—¶æ˜¯éå…¬å¹³çš„
 per condition queue per intrinsic lock
 notify,notifyAll,wait
 **** notify
-notify¿ÉÔÚÂú×ãÏÂÊöÌõ¼şÏÂÊ¹ÓÃ(Ò»°ã»¹ÊÇÊ¹ÓÃnotifyAll)£º
-1. Uniform waiters£¬Ò»¸ö×´Ì¬Ö»ÓÃÓÚÒ»¸öcondition queue
+notifyå¯åœ¨æ»¡è¶³ä¸‹è¿°æ¡ä»¶ä¸‹ä½¿ç”¨(ä¸€èˆ¬è¿˜æ˜¯ä½¿ç”¨notifyAll)ï¼š
+1. Uniform waitersï¼Œä¸€ä¸ªçŠ¶æ€åªç”¨äºä¸€ä¸ªcondition queue
 2. One-in, one-out. A notification on the condition variable enables at most one thread to proceed
 *** Condition Lock.newCondition
-ÕùÓÃËøµÄ¼Ì³ĞÁË´ÓLockÅÉÉú³öÀ´µÄfairÌØĞÔ
+äº‰ç”¨é”çš„ç»§æ‰¿äº†ä»Lockæ´¾ç”Ÿå‡ºæ¥çš„fairç‰¹æ€§
 multiple condition queue per intrinsic lock
 signal,signalAll,await
 * AQS
-Ò»¸ö¼¯³ÉÁË¸÷ÖÖÓï¾³ÏÂµÄ¹¦ÄÜº¯ÊıµÄ³éÏóÀà£¬Ö÷Òª°üÀ¨Á½Àà´¦ÀíÄ£Ê½
+ä¸€ä¸ªé›†æˆäº†å„ç§è¯­å¢ƒä¸‹çš„åŠŸèƒ½å‡½æ•°çš„æŠ½è±¡ç±»ï¼Œä¸»è¦åŒ…æ‹¬ä¸¤ç±»å¤„ç†æ¨¡å¼
 1. exclusive
-Í¨¹ı¿ª·ÅtryAcquire£¬tryRelease£¬isHeldExclusivelyÀ´½øĞĞ±íÊ¾
+é€šè¿‡å¼€æ”¾tryAcquireï¼ŒtryReleaseï¼ŒisHeldExclusivelyæ¥è¿›è¡Œè¡¨ç¤º
 2. share
-Í¨¹ı¿ª·ÅtryAcquireShared£¬tryReleaseSharedÀ´½øĞĞ±íÊ¾
+é€šè¿‡å¼€æ”¾tryAcquireSharedï¼ŒtryReleaseSharedæ¥è¿›è¡Œè¡¨ç¤º
 * CAS
 ** Atomic classes
 *** scalars
 AtomicInteger, AtomicLong, AtomicBoolean, and AtomicReference
 To simulate atomic variables of other primitive types, you can cast short or byte values to and from int, and use floatToIntBits or doubleToLongBits for floating-point numbers
 
-ÊÊÓÃÓÚµÍµ½ÖĞµÈ³ÌĞòµÄ¸ºÔØ
-Atomic»¹¿ÉÒÔÖ±½ÓÓÃÓÚ´æ´¢±ÈÈç»ùÓÚÁ´±íµÄ¸÷ÏîÊı¾İ½á¹¹£¬±ÈÈçStack£¬QueueµÈ(ĞèÒªÊ¹ÓÃÒ»Ğ©Ïà¶Ô¸´ÔÓµÄËã·¨À´½øĞĞÊı¾İ½á¹¹µÄÉè¼Æ)
+é€‚ç”¨äºä½åˆ°ä¸­ç­‰ç¨‹åºçš„è´Ÿè½½
+Atomicè¿˜å¯ä»¥ç›´æ¥ç”¨äºå­˜å‚¨æ¯”å¦‚åŸºäºé“¾è¡¨çš„å„é¡¹æ•°æ®ç»“æ„ï¼Œæ¯”å¦‚Stackï¼ŒQueueç­‰(éœ€è¦ä½¿ç”¨ä¸€äº›ç›¸å¯¹å¤æ‚çš„ç®—æ³•æ¥è¿›è¡Œæ•°æ®ç»“æ„çš„è®¾è®¡)
 *** field updaters
 *** arrays
 *** compound variables
 ** ABA problem
-ÔÚÊ¹ÓÃCASÊ±£¬Êı¾İÓë¾ÉÊı¾İÒ»ÖÂ£¬µ«ÊÇÖĞÍ¾ÊÇ·¢Éú¹ı±ä»¯ºó²ÅÇĞ»»»ØÀ´µÄ£¬¿ÉÒÔÍ¨¹ı¼ÓÊ±¼ä´ÁÀ´½â¾ö
+åœ¨ä½¿ç”¨CASæ—¶ï¼Œæ•°æ®ä¸æ—§æ•°æ®ä¸€è‡´ï¼Œä½†æ˜¯ä¸­é€”æ˜¯å‘ç”Ÿè¿‡å˜åŒ–åæ‰åˆ‡æ¢å›æ¥çš„ï¼Œå¯ä»¥é€šè¿‡åŠ æ—¶é—´æˆ³æ¥è§£å†³
 AtomicStampedReference (and its cousin AtomicMarkableReference)
 * JMM
 * backpressure

@@ -5,21 +5,21 @@
 * composite
 
 ** attr
-PayloadºÍGroup´ÓFrenchZipCode»ñÈ¡£¬²¢·Ö·¢¸ø¸Ã×¢½âÏÂµÄ¸´ºÏ³É·ÖÈç@Size
+Payloadå’ŒGroupä»FrenchZipCodeè·å–ï¼Œå¹¶åˆ†å‘ç»™è¯¥æ³¨è§£ä¸‹çš„å¤åˆæˆåˆ†å¦‚@Size
 
-** ±¨´í
-@ReportAsSingleViolation Èç¹ûÈ«´í£¬Ö»±¨´íÒ»¸öĞÅÏ¢first fail
-** ÍâÖÃ¸´ºÏÔªËØµÄ²ÎÊı
-Ä¬ÈÏÇé¿öÏÂµÄÖ¸¶¨ÊÇ¹Ì¶¨µÄ£¬¼È @Size(min = 5, max = 5)ÊÇ²»¿É±äµÄ
+** æŠ¥é”™
+@ReportAsSingleViolation å¦‚æœå…¨é”™ï¼ŒåªæŠ¥é”™ä¸€ä¸ªä¿¡æ¯first fail
+** å¤–ç½®å¤åˆå…ƒç´ çš„å‚æ•°
+é»˜è®¤æƒ…å†µä¸‹çš„æŒ‡å®šæ˜¯å›ºå®šçš„ï¼Œæ—¢ @Size(min = 5, max = 5)æ˜¯ä¸å¯å˜çš„
 
-Í¨¹ıÖØĞÂÉùÃ÷¼´¿É¶¯Ì¬½«ÄÚ²¿¸´ºÏµÄ²¿·ÖËùĞè²¿·Ö½øĞĞÉèÖÃ
+é€šè¿‡é‡æ–°å£°æ˜å³å¯åŠ¨æ€å°†å†…éƒ¨å¤åˆçš„éƒ¨åˆ†æ‰€éœ€éƒ¨åˆ†è¿›è¡Œè®¾ç½®
 @OverridesAttribute(constraint = Size.class, name = "min")
 int min() default 5;
 
 @OverridesAttribute(constraint = Size.class, name = "max")
 int max() default 5;
 *** index
-Èç¹û¸´ºÏÁËÁ½¸öÍ¬ÑùµÄ£¬×Ö¶ÎĞèÒªÉùÃ÷index£¬Èç¸´ºÏÁËÁ½¸ö@Pattern
+å¦‚æœå¤åˆäº†ä¸¤ä¸ªåŒæ ·çš„ï¼Œå­—æ®µéœ€è¦å£°æ˜indexï¼Œå¦‚å¤åˆäº†ä¸¤ä¸ª@Pattern
 @OverridesAttribute(constraint = Pattern.class, name = "message", constraintIndex = 0)
 String emailMessage() default "Not an email";
 
@@ -49,9 +49,9 @@ String emmanuelMessage() default "Not Emmanuel";
          FrenchZipCode[] value();
      }
  }
-* ×¢ÒâÊÂÏî
-1. ÖØ¸´ÉùÃ÷µÄÒ»Àà×¢½â£¬Ê¹ÓÃÄÚÇ¶Àà@ListÍ³Ò»´¦Àí£¬½¨ÒéÖØ¸´ÉùÃ÷Í³Ò»×¢½â
-2. jsr303²»ÔÊĞí³öÏÖside effect
+* æ³¨æ„äº‹é¡¹
+1. é‡å¤å£°æ˜çš„ä¸€ç±»æ³¨è§£ï¼Œä½¿ç”¨å†…åµŒç±»@Listç»Ÿä¸€å¤„ç†ï¼Œå»ºè®®é‡å¤å£°æ˜ç»Ÿä¸€æ³¨è§£
+2. jsr303ä¸å…è®¸å‡ºç°side effect
 
 
 

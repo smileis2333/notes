@@ -1,30 +1,30 @@
 #+TITLE: keycloak
 #+STARTUP: indent
 * keycloak
-redhatµÄ¿ªÔ´ÈÏÖ¤·½°¸£¬Ö§³Ö¶àÖÖÈÏÖ¤Ä£ÐÍ£¬»ùÓÚ½ÇÉ«Permission£¬ºÍÏ¸Á£¶ÈPermission
+redhatçš„å¼€æºè®¤è¯æ–¹æ¡ˆï¼Œæ”¯æŒå¤šç§è®¤è¯æ¨¡åž‹ï¼ŒåŸºäºŽè§’è‰²Permissionï¼Œå’Œç»†ç²’åº¦Permission
 docker run -d -p 8080:8080 --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:12.0.4
 ** provider
 *** user storage provider(federation)
 **** kerboro
 **** LDAP
 **** custom
-Ä¬ÈÏÖ»Ö§³ÖkeboroºÍLDAP£¬Èç¹ûÒª×Ô¼º½ÓÈë£¬Òª×Ô¶¨ÒåProvider½øÐÐ´ò°ü£¬´æÔÚÁ½ÖÖ²¿ÊðµÄ×ö·¨
-1. Keycloak Deployer£¬Ö±½Ó¶ª½ø/opt/jboss/keycloak/standalone/deployments£¬jBoss»á×Ô¶¯½â°ü(ÀàËÆTomcat)
-2. Éæ¼°×Ô¶¨ÒåµÄSPI£¬Register a provider using Modules
+é»˜è®¤åªæ”¯æŒkeboroå’ŒLDAPï¼Œå¦‚æžœè¦è‡ªå·±æŽ¥å…¥ï¼Œè¦è‡ªå®šä¹‰Providerè¿›è¡Œæ‰“åŒ…ï¼Œå­˜åœ¨ä¸¤ç§éƒ¨ç½²çš„åšæ³•
+1. Keycloak Deployerï¼Œç›´æŽ¥ä¸¢è¿›/opt/jboss/keycloak/standalone/deploymentsï¼ŒjBossä¼šè‡ªåŠ¨è§£åŒ…(ç±»ä¼¼Tomcat)
+2. æ¶‰åŠè‡ªå®šä¹‰çš„SPIï¼ŒRegister a provider using Modules
 https://www.baeldung.com/java-keycloak-custom-user-providers
 https://www.keycloak.org/docs/latest/server_development/#_providers
 
-³£¹æÇé¿öÏÂ£¬Ê¹ÓÃµÚÒ»ÖÖ£¬¿ÉÒÔÓÃÄÚÇ¶keycloakÔÚJUnit¶Ôprovider½øÐÐ²âÊÔ£¬Ö®ºó´ò°ü²¿Êð¼´¿É(12.0.4 embbeddedÆô¶¯ÓÐÎÊÌâ£¬´ý´¦Àí)
+å¸¸è§„æƒ…å†µä¸‹ï¼Œä½¿ç”¨ç¬¬ä¸€ç§ï¼Œå¯ä»¥ç”¨å†…åµŒkeycloakåœ¨JUnitå¯¹providerè¿›è¡Œæµ‹è¯•ï¼Œä¹‹åŽæ‰“åŒ…éƒ¨ç½²å³å¯(12.0.4 embbeddedå¯åŠ¨æœ‰é—®é¢˜ï¼Œå¾…å¤„ç†)
 ** realm
-¶à¸ö¹²ÏíÕË»§µÄÓò£¬ÓÃÓÚÇø·Ö¶à¸öÕËºÅÌåÏµ
+å¤šä¸ªå…±äº«è´¦æˆ·çš„åŸŸï¼Œç”¨äºŽåŒºåˆ†å¤šä¸ªè´¦å·ä½“ç³»
 ** client
-¶à¸ö½ÓÈëµÄapp
+å¤šä¸ªæŽ¥å…¥çš„app
 ** client code
-Ò»×éMapper£¬ÓÃÓÚÓ³Éä×Ö¶Î
+ä¸€ç»„Mapperï¼Œç”¨äºŽæ˜ å°„å­—æ®µ
 
-scopeÅäÖÃrole£¬ÃèÊö-->ÔÚµÇÂ½µÄÓÃ»§ÓµÓÐ¸Ã½ÇÉ«Ê±¸ÃscopeµÄMapper²ÅÉúÐ§£¬Ã»ÓÐÔò´ú±íÈ«²¿¶¼ÉúÐ§
+scopeé…ç½®roleï¼Œæè¿°-->åœ¨ç™»é™†çš„ç”¨æˆ·æ‹¥æœ‰è¯¥è§’è‰²æ—¶è¯¥scopeçš„Mapperæ‰ç”Ÿæ•ˆï¼Œæ²¡æœ‰åˆ™ä»£è¡¨å…¨éƒ¨éƒ½ç”Ÿæ•ˆ
 ** Roles
-´¿×Ö¶ÎÃèÊö
+çº¯å­—æ®µæè¿°
 ** mysql as db
 https://stackoverflow.com/questions/62107991/keycloak-in-docker-container-mysql-on-host-gives-org-keycloak-services-serv
 ** code demo
@@ -50,7 +50,7 @@ session.getKeycloakSessionFactory().getProviderFactories(UserStorageProvider.cla
 
         }
 
-// ÄÃ³ö¹¤³§
+// æ‹¿å‡ºå·¥åŽ‚
 session.getKeycloakSessionFactory().getProviderFactories(UserStorageProvider.class).stream().collect(Collectors.toMap(Object::getClass, Function.identity())).get(CustomUserStorageProviderFactory.class)
 
 ((DefaultKeycloakSession) session).context.getRealm().getUserStorageProviders()
@@ -60,33 +60,33 @@ https://stackoverflow.com/questions/52641379/keycloak-deploy-custom-theme-in-doc
 * debug
 https://groups.google.com/g/keycloak-user/c/4QMfloC9cho
 * admin rest api
-´æÔÚÁ½ÖÖµ÷ÓÃ·¨: 
-1. Ò»ÖÖ»ùÓÚÕËºÅÌåÏµ±¾ÉíÀïµÄÕËºÅ
-2. »ùÓÚservice account(¼´client_idºÍclient_secret»»tokenÀ´µ÷ÓÃ)
-* È¨ÏÞÏà¹Ø
-ÈçÊ¹ÓÃÒ»¸öÕËºÅ·ÃÎÊ×Ô¶¨ÒåµÄEndpoint Resource£¬
+å­˜åœ¨ä¸¤ç§è°ƒç”¨æ³•: 
+1. ä¸€ç§åŸºäºŽè´¦å·ä½“ç³»æœ¬èº«é‡Œçš„è´¦å·
+2. åŸºäºŽservice account(å³client_idå’Œclient_secretæ¢tokenæ¥è°ƒç”¨)
+* æƒé™ç›¸å…³
+å¦‚ä½¿ç”¨ä¸€ä¸ªè´¦å·è®¿é—®è‡ªå®šä¹‰çš„Endpoint Resourceï¼Œ
 Clients --> Admin-cli  --> Scope
 * provider
-³ý·Ç±ØÒª£¬·ñÔò²»½¨ÒéÄÃÀ´ÓÃ£¬°æ±¾Éý¼¶¿ÉÄÜ±»·ÏÆú
-** ³Ö¾Ã´æÔÚ
-Èç¹ûÒªÄÃ£¬¿ÉÒÔÖ±½ÓÒ»²½µ½Î»£¬Ö±½ÓÄÃprovider
+é™¤éžå¿…è¦ï¼Œå¦åˆ™ä¸å»ºè®®æ‹¿æ¥ç”¨ï¼Œç‰ˆæœ¬å‡çº§å¯èƒ½è¢«åºŸå¼ƒ
+** æŒä¹…å­˜åœ¨
+å¦‚æžœè¦æ‹¿ï¼Œå¯ä»¥ç›´æŽ¥ä¸€æ­¥åˆ°ä½ï¼Œç›´æŽ¥æ‹¿provider
 *** hostname
 *** event listener
 ** each request each instance(light-weight object)
-±È½ÏÏñEntityManagerºÍ¶ÔÓ¦µÄFactory
-ÄÃµÄÊ±ºòÖ»ÄÜÏÈÄÃ¹¤³§£¬ÔÚÄÃÈ¥½¨Provider
+æ¯”è¾ƒåƒEntityManagerå’Œå¯¹åº”çš„Factory
+æ‹¿çš„æ—¶å€™åªèƒ½å…ˆæ‹¿å·¥åŽ‚ï¼Œåœ¨æ‹¿åŽ»å»ºProvider
 *** Authenticator
 *** IDP provider
 * deploy
 1. Keycloak Deployer (most case)
-2. ÓÐ×Ô¼º¶¨ÖÆµÄSPIÐèÒª²¿Êð
+2. æœ‰è‡ªå·±å®šåˆ¶çš„SPIéœ€è¦éƒ¨ç½²
 * dependencies
-jboss-deployment-structure.xmlÓÃÍ¾
-1. ½«keycloak servicesµÄË½ÓÐÒÀÀµÌá¹©¸øÍØÕ¹°ü
-2. Ê¹ÓÃKeycloak RuntimeÒÑ¾­´æÔÚµÄ»·¾³ÒÀÀµ
+jboss-deployment-structure.xmlç”¨é€”
+1. å°†keycloak servicesçš„ç§æœ‰ä¾èµ–æä¾›ç»™æ‹“å±•åŒ…
+2. ä½¿ç”¨Keycloak Runtimeå·²ç»å­˜åœ¨çš„çŽ¯å¢ƒä¾èµ–
 * extenstion point
-1. ÏÖÓÐµÄSPIÈçUserStorageProviderFactory(Íâ²¿´æ´¢)£¬SocialIdentityProviderFactory(social login)
-2. ³éÏó³öÐÂµÄSPI
+1. çŽ°æœ‰çš„SPIå¦‚UserStorageProviderFactory(å¤–éƒ¨å­˜å‚¨)ï¼ŒSocialIdentityProviderFactory(social login)
+2. æŠ½è±¡å‡ºæ–°çš„SPI
 * flow
 ** subflow
 ** executions
@@ -96,9 +96,9 @@ jboss-deployment-structure.xmlÓÃÍ¾
 xxx.sh -b 0.0.0.0
 #+END_SRC
 * social account
-** µÇÂ¼µÄÇé¿öÏÂ°ó¶¨
+** ç™»å½•çš„æƒ…å†µä¸‹ç»‘å®š
 #+BEGIN_SRC java
-// ÐèÒª×÷ÅÐ¶¨´¦Àí£¬ÒòÎª»á»Øµ÷£¬·ñÔò»áËÀÑ­»·£¬¸Ã´¦ÉÙÅÐ¶Ï
+// éœ€è¦ä½œåˆ¤å®šå¤„ç†ï¼Œå› ä¸ºä¼šå›žè°ƒï¼Œå¦åˆ™ä¼šæ­»å¾ªçŽ¯ï¼Œè¯¥å¤„å°‘åˆ¤æ–­
     @GetMapping("wechat/link")
     public void wechatlink(@AuthenticationPrincipal KeycloakAuthenticationToken principle, HttpServletRequest request, HttpServletResponse response) {
         AccessToken token = principle.getAccount().getKeycloakSecurityContext().getToken();
@@ -132,13 +132,13 @@ xxx.sh -b 0.0.0.0
 
 #+END_SRC
 * spring session
-½ÓÈëºóÎÞ·¨back channel logout
-Ô­Òò:
-url mappingÊÇÒÔValveÐÎÊ½×¢ÈëTomcat£¬¶øSpring SessionµÄÌæ»»ÊÇÔÚºóÃæµÄFilter
+æŽ¥å…¥åŽæ— æ³•back channel logout
+åŽŸå› :
+url mappingæ˜¯ä»¥Valveå½¢å¼æ³¨å…¥Tomcatï¼Œè€ŒSpring Sessionçš„æ›¿æ¢æ˜¯åœ¨åŽé¢çš„Filter
 
-½â¾ö·½Ê½(½«ValveµÄSession¹ÜÀí×¢ÈëRedis£¬Ò»ÆðÉ¾³ý),ÏÂÊöÎª²½Öè:
-1. ×Ô¶¨ÒåÐÂµÄCustominzer½«Redis¹ÜÀí×¢ÈëValve£¬¸ÄÐ´É¾³ýSessionµÄÂß¼­
-1. Ä¬ÈÏµÄKeycloakAutoConfigurationÏÂµÄCustomizeÃ»ÉèÖÃOrder(SpringÂß¼­Îª×îÐ¡)£¬¶ø×¢ÈëValveµÄCustomizer±ØÐëÔÚ×îºóÉúÐ§£¬Òò´Ë£¬ÐèÒªDestructionAwareBeanPostProcessor½«Ä¬ÈÏµÄ¼¶±ðµ÷¸ß£¬È·±£×Ô¶¨ÒåµÄÔÚ×îºóÉúÐ§
+è§£å†³æ–¹å¼(å°†Valveçš„Sessionç®¡ç†æ³¨å…¥Redisï¼Œä¸€èµ·åˆ é™¤),ä¸‹è¿°ä¸ºæ­¥éª¤:
+1. è‡ªå®šä¹‰æ–°çš„Custominzerå°†Redisç®¡ç†æ³¨å…¥Valveï¼Œæ”¹å†™åˆ é™¤Sessionçš„é€»è¾‘
+1. é»˜è®¤çš„KeycloakAutoConfigurationä¸‹çš„Customizeæ²¡è®¾ç½®Order(Springé€»è¾‘ä¸ºæœ€å°)ï¼Œè€Œæ³¨å…¥Valveçš„Customizerå¿…é¡»åœ¨æœ€åŽç”Ÿæ•ˆï¼Œå› æ­¤ï¼Œéœ€è¦DestructionAwareBeanPostProcessorå°†é»˜è®¤çš„çº§åˆ«è°ƒé«˜ï¼Œç¡®ä¿è‡ªå®šä¹‰çš„åœ¨æœ€åŽç”Ÿæ•ˆ
 
 #+begin_src java
 @Slf4j
@@ -190,16 +190,16 @@ class KeycloakContainerCustomizerWithOrder implements WebServerFactoryCustomizer
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE - 1; // µ÷¸ßÒ»µãÓÅÏÈ¼¶£¬È·±£µ÷ÓÃË³Ðò£¬×Ô¶¨ÒåµÄCustominzer¿ÉÒÔ²»ÓÃ¼ÓOrder£¬·´ÕýÄ¬ÈÏÖ±½Ó×îµÍÁË
+        return Ordered.LOWEST_PRECEDENCE - 1; // è°ƒé«˜ä¸€ç‚¹ä¼˜å…ˆçº§ï¼Œç¡®ä¿è°ƒç”¨é¡ºåºï¼Œè‡ªå®šä¹‰çš„Custominzerå¯ä»¥ä¸ç”¨åŠ Orderï¼Œåæ­£é»˜è®¤ç›´æŽ¥æœ€ä½Žäº†
     }
 }
 #+end_src
 * token
-SSO Session Max  --> ¿ØÖÆ¹ýÆÚºÍË¢ÐÂÊ±¼äµÄ×î´ó±ß½ç
+SSO Session Max  --> æŽ§åˆ¶è¿‡æœŸå’Œåˆ·æ–°æ—¶é—´çš„æœ€å¤§è¾¹ç•Œ
 
-Access Token Lifespan  --> ¹ýÆÚÊ±¼ä
+Access Token Lifespan  --> è¿‡æœŸæ—¶é—´
 
-SSO Session Idle --> Ë¢ÐÂÊ±¼ä
+SSO Session Idle --> åˆ·æ–°æ—¶é—´
 * ref
 # recaptcha
 https://github.com/raptor-group/keycloak-login-recaptcha
@@ -222,7 +222,7 @@ https://lists.jboss.org/pipermail/keycloak-user/2017-September/011890.html
 ** link
 https://blog.csdn.net/zollty/article/details/111315146
 
-realmAµÇÂ¼realmB£¬µÈ¼ÛÓÚ×ÔÁ´½Ó
+realmAç™»å½•realmBï¼Œç­‰ä»·äºŽè‡ªé“¾æŽ¥
 https://zhuanlan.zhihu.com/p/360846976
 ** document
 https://www.keycloak.org/docs/12.0/server_development/index.html

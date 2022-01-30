@@ -5,7 +5,7 @@ The routing done by IP, when it searches the routing table and decides which int
 * routing policy
 a set of rules that decides which routes go into the routing table
 ** dynamic route(autoconfig)
-È¡´úÊÖ¹¤ÅäÖÃ£¬ÊµÏÖ×Ô¶¯ÅäÖÃIP routeµÄÐ­Òé
+å–ä»£æ‰‹å·¥é…ç½®ï¼Œå®žçŽ°è‡ªåŠ¨é…ç½®IP routeçš„åè®®
 *** IGP(in autonomous system)
 **** Hello
 **** RIP
@@ -13,33 +13,33 @@ run on udp
 [[file:~/Desktop/personal/study/img/rip_message.gif][rip message]]
 [[file:~/Desktop/personal/study/img/ripv2_message.gif][ripv2 message]]
 ***** v1
-×î´óµÄÈ±ÏÝ£¬ÎÞ·¨´øsubnet info£¬¼ÙÉè·ÖÀàÍøÂç(Deprecated)£¬Æä×÷ÄÚ²¿·Ö¸îÊ±£¬¼´subnetÊ±£¬¶à³öÀ´µÄsubnetÎÞ·¨ÓÃripv1´«²¥µ½Õû¸öAS
+æœ€å¤§çš„ç¼ºé™·ï¼Œæ— æ³•å¸¦subnet infoï¼Œå‡è®¾åˆ†ç±»ç½‘ç»œ(Deprecated)ï¼Œå…¶ä½œå†…éƒ¨åˆ†å‰²æ—¶ï¼Œå³subnetæ—¶ï¼Œå¤šå‡ºæ¥çš„subnetæ— æ³•ç”¨ripv1ä¼ æ’­åˆ°æ•´ä¸ªAS
 
 [[file:~/Desktop/personal/study/img/rip_format.gif][rip format]]
-Initialization --> µ±½ø³ÌÆô¶¯Ê±£¬·¢³öÇëÇó£¬ÒªÇó»ñµÃÕû¸öroute table
-Request received --> ÊÕµ½ÇëÇó£¬1. Òªroute table¾Í¸ø 2. ÆäËû¸ù¾Ý¾ßÌå³¡¾°×ö´¦Àí
-Response received --> ÊÕµ½ÏìÓ¦£¬¿ÉÒÔ¸Ä¶¯µ½route
-Regular routing updates --> 30s·¢Ò»´Î¹ã²¥route table
-Triggered updates --> Èç¹ûroute table±ä¶¯ÁË£¬¾Í·¢route table¹ã²¥(ÊÂ¼þ»úÖÆ)
+Initialization --> å½“è¿›ç¨‹å¯åŠ¨æ—¶ï¼Œå‘å‡ºè¯·æ±‚ï¼Œè¦æ±‚èŽ·å¾—æ•´ä¸ªroute table
+Request received --> æ”¶åˆ°è¯·æ±‚ï¼Œ1. è¦route tableå°±ç»™ 2. å…¶ä»–æ ¹æ®å…·ä½“åœºæ™¯åšå¤„ç†
+Response received --> æ”¶åˆ°å“åº”ï¼Œå¯ä»¥æ”¹åŠ¨åˆ°route
+Regular routing updates --> 30så‘ä¸€æ¬¡å¹¿æ’­route table
+Triggered updates --> å¦‚æžœroute tableå˜åŠ¨äº†ï¼Œå°±å‘route tableå¹¿æ’­(äº‹ä»¶æœºåˆ¶)
 
-Ã¿¸öroute entry°ó¶¨3m£¬Ïàµ±ÓÚÈç¹ûÈ±Ê§6´ÎÐÂµÄroute tableÐÅÏ¢£¬±ê¼ÇmetricÎª16ºó±»É¾µô£¬²¢ÑÓ³Ù60sÔÚ¹ã²¥
+æ¯ä¸ªroute entryç»‘å®š3mï¼Œç›¸å½“äºŽå¦‚æžœç¼ºå¤±6æ¬¡æ–°çš„route tableä¿¡æ¯ï¼Œæ ‡è®°metricä¸º16åŽè¢«åˆ æŽ‰ï¼Œå¹¶å»¶è¿Ÿ60såœ¨å¹¿æ’­
 ****** demo
 [[file:~/study-record/img/ripv1_simple.jpg][ripv1 demo]]
-³¡¾°:
+åœºæ™¯:
 router: R1, R2
 roure: N1, N2, N3, N4
 
 step1
-R1Í¨¹ýN1¶ÔÓ¦µÄ½Ó¿Ú°ÑN2¹ã²¥³öÈ¥£¬metricsÎª1
-R1Í¨¹ýN2¶ÔÓ¦µÄ½Ó¿Ú°ÑN1¹ã²¥³öÈ¥£¬metricsÎª1
-×¢Òâ:R1Á½Ìõ¶¼¹ã²¥Ã»ÓÐÈÎºÎÒâÒå(¼´N1Ò²Í¨¹ýN1¶ÔÓ¦½Ó¿Ú·¢Ã»ÓÐÈÎºÎÒâÒå£¬ÒòÎªÒÑ¾­´¦ÓÚÁÚ½ÓÂ·ÓÉÆ÷µÄÖªÊ¶µÄÒ»²¿·Ö)
-R2Í¬Àí
+R1é€šè¿‡N1å¯¹åº”çš„æŽ¥å£æŠŠN2å¹¿æ’­å‡ºåŽ»ï¼Œmetricsä¸º1
+R1é€šè¿‡N2å¯¹åº”çš„æŽ¥å£æŠŠN1å¹¿æ’­å‡ºåŽ»ï¼Œmetricsä¸º1
+æ³¨æ„:R1ä¸¤æ¡éƒ½å¹¿æ’­æ²¡æœ‰ä»»ä½•æ„ä¹‰(å³N1ä¹Ÿé€šè¿‡N1å¯¹åº”æŽ¥å£å‘æ²¡æœ‰ä»»ä½•æ„ä¹‰ï¼Œå› ä¸ºå·²ç»å¤„äºŽé‚»æŽ¥è·¯ç”±å™¨çš„çŸ¥è¯†çš„ä¸€éƒ¨åˆ†)
+R2åŒç†
 
 step2
-R1»ñµÃµÄN4ÊÇ1£¬ËùÒÔ+1=2
-¼´×îÖÕµÄÂ·ÓÉ±í
+R1èŽ·å¾—çš„N4æ˜¯1ï¼Œæ‰€ä»¥+1=2
+å³æœ€ç»ˆçš„è·¯ç”±è¡¨
 N1 1
-N2 1(ÁÚ½Ó½Ó¿ÚÃ»ÓÐÒâÒå)
+N2 1(é‚»æŽ¥æŽ¥å£æ²¡æœ‰æ„ä¹‰)
 N4 2
 
 ****** metrics
@@ -49,7 +49,7 @@ hop count
 *** EGP(between the routers in different autonomous systems)
 **** BGP
 *** IRDP
-ÓÃicmpÀ´×÷
+ç”¨icmpæ¥ä½œ
 ** static route
 mannual added or created by icmp redirect
 * tool
@@ -77,7 +77,7 @@ default           140.252.1.183      UG       1      2955      sl0
 U --> up
 G --> is a gateway
 H --> to a host
-D --> created by redirect£¬¼´IPºÍ¶ÔÓ¦µÄHOST²»ÊÇÒ»Ì¨
+D --> created by redirectï¼Œå³IPå’Œå¯¹åº”çš„HOSTä¸æ˜¯ä¸€å°
 M --> modified by redirect
 ** route
 route add default sun 1
@@ -85,7 +85,7 @@ route add slip bsdi 1
 ** routed
 ** gated
 * redirects
-Í¨¹ý½Ó¿ÚµÄÀ´Ô´·½Ïò£¬¾ö¶¨ÊÇ·ñÍù»Ø·¢ËÍÖØ¶¨Ïò£¬¼´ÊÕµ½±¨ÎÄºÍ»Ø´«±¨ÎÄµÄÎïÀí½Ó¿ÚÊÇÍ¬Ò»¸ö£¬ÄÇÃ´ºÜÏÔÈ»£¬ÆäÓ¦¸ÃÖ±½Ó·¢ËÍµ½Ä¿µÄµØ£¬¶ø²»ÊÇÔÚÁ´Â·²ã´«µ½µ±Ç°host
+é€šè¿‡æŽ¥å£çš„æ¥æºæ–¹å‘ï¼Œå†³å®šæ˜¯å¦å¾€å›žå‘é€é‡å®šå‘ï¼Œå³æ”¶åˆ°æŠ¥æ–‡å’Œå›žä¼ æŠ¥æ–‡çš„ç‰©ç†æŽ¥å£æ˜¯åŒä¸€ä¸ªï¼Œé‚£ä¹ˆå¾ˆæ˜¾ç„¶ï¼Œå…¶åº”è¯¥ç›´æŽ¥å‘é€åˆ°ç›®çš„åœ°ï¼Œè€Œä¸æ˜¯åœ¨é“¾è·¯å±‚ä¼ åˆ°å½“å‰host
 [[file:~/study-record/img/icmp_redirect.gif][icmp redirect]]
 * missing route
 - generated on this host --> "host unreachable" or "network unreachable."

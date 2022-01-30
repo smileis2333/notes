@@ -2,14 +2,14 @@
 #+STARTUP: indent
 * shortcut
 ctrl+alt+c == open console
-* ²ã¼¶
-Collection->folder->request£¬Ç°Á½¸ö¿ÉÒÔÖ¸¶¨pre script
+* å±‚çº§
+Collection->folder->requestï¼Œå‰ä¸¤ä¸ªå¯ä»¥æŒ‡å®špre script
 * eniroment
-´æ±äÁ¿£¬¹©scriptÓÃ
+å­˜å˜é‡ï¼Œä¾›scriptç”¨
 * script
 ** cookie
 #+BEGIN_SRC javascript
-// ÓÃeditthiscooki¸´ÖÆ³ösession id(¾ßÌå¸ù¾İApplication serverµÄÌåÏµ¾ö¶¨£¬±¾ÀıÓÃµÄJSESSIONID)
+// ç”¨editthiscookiå¤åˆ¶å‡ºsession id(å…·ä½“æ ¹æ®Application serverçš„ä½“ç³»å†³å®šï¼Œæœ¬ä¾‹ç”¨çš„JSESSIONID)
 // Cookie 45B01D5B9CC5A2AEBD46C226D824A86A
 
 var Header = require('postman-collection').Header
@@ -18,12 +18,12 @@ pm.request.headers.add(new Header("Cookie: JSESSIONID=" + pm.globals.get('Cookie
 * document
 https://blog.csdn.net/u013613428/article/details/82120152
 * oauth2
-Ä¿Â¼ --> ÅäÖÃClient id, Client secret, username, password, accessTokenUrl
-1. Ä¬ÈÏÒ»¶¨ÄÜÄÃµ½access token£¬ÒÔGithubÎªÀı£¬¿ÉÒÔÖ±½ÓÄÃµ½¶ÔÓ¦µÄaccessToken£¬Ö±½ÓÉêÇëGithubĞÅÏ¢
-2. Ö»ÄÜÕë¶Ô±ê×¼»¯ÇÒÄÜusernameºÍpasswordµÇÂ¼Oauth2ÊÚÈ¨£¬ÎŞ·¨½øĞĞÆäËû±äÖÖµÇÂ¼
-3. ÎŞ·¨½¨Á¢·şÎñÆ÷³õÊ¼»¯µÄoauth2²úÉúµÄÁ¬½Ó(Ä¿Ç°)£¬¿ÉÒÔ×öµ½Ö±½ÓÁ¬½ÓÈÏÖ¤ÖĞĞÄµÄÄÇÖÖ»Øµ÷»ØÓ¦ÓÃ
+ç›®å½• --> é…ç½®Client id, Client secret, username, password, accessTokenUrl
+1. é»˜è®¤ä¸€å®šèƒ½æ‹¿åˆ°access tokenï¼Œä»¥Githubä¸ºä¾‹ï¼Œå¯ä»¥ç›´æ¥æ‹¿åˆ°å¯¹åº”çš„accessTokenï¼Œç›´æ¥ç”³è¯·Githubä¿¡æ¯
+2. åªèƒ½é’ˆå¯¹æ ‡å‡†åŒ–ä¸”èƒ½usernameå’Œpasswordç™»å½•Oauth2æˆæƒï¼Œæ— æ³•è¿›è¡Œå…¶ä»–å˜ç§ç™»å½•
+3. æ— æ³•å»ºç«‹æœåŠ¡å™¨åˆå§‹åŒ–çš„oauth2äº§ç”Ÿçš„è¿æ¥(ç›®å‰)ï¼Œå¯ä»¥åšåˆ°ç›´æ¥è¿æ¥è®¤è¯ä¸­å¿ƒçš„é‚£ç§å›è°ƒå›åº”ç”¨
 * trick
-»ùÓÚOIDCµÄ·şÎñÆ÷³õÊ¼»¯£¬¿ÉÒÔÍ¨¹ıMultiple chainÈÏÖ¤À´ÊµÏÖ£¬¼´Ö§³ÖSession£¬Ò²Ö§³ÖAccess Token·½·¨Á½¶ÎÊ½À´±ÜÃâÈÏÖ¤FlowµÄ·è¿ñÌø×ªºÍ½Å±¾×«Ğ´
+åŸºäºOIDCçš„æœåŠ¡å™¨åˆå§‹åŒ–ï¼Œå¯ä»¥é€šè¿‡Multiple chainè®¤è¯æ¥å®ç°ï¼Œå³æ”¯æŒSessionï¼Œä¹Ÿæ”¯æŒAccess Tokenæ–¹æ³•ä¸¤æ®µå¼æ¥é¿å…è®¤è¯Flowçš„ç–¯ç‹‚è·³è½¬å’Œè„šæœ¬æ’°å†™
 ** json with comment
 # strip comnent when send json payload
 #+begin_src javascript

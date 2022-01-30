@@ -1,9 +1,9 @@
 #+TITLE: mongodb
 #+STARTUP: indent
 show dbs
-db.getCollection('company').update({},{$unset:{businesses:null}},{ multi: true}) //É¾×Ö¶Î
+db.getCollection('company').update({},{$unset:{businesses:null}},{ multi: true}) //åˆ å­—æ®µ
 
-// ×ªobjectId
+// è½¬objectId
 {
     $addFields: {
         "_positionId": {
@@ -15,7 +15,7 @@ db.getCollection('company').update({},{$unset:{businesses:null}},{ multi: true})
     }
 }
 
-//Á¬±í
+//è¿žè¡¨
 {
     $lookup: {
         from: 'position',

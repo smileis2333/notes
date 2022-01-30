@@ -2,40 +2,40 @@
 #+STARTUP: indent
 * ITEM 1: CONSIDER STATIC FACTORY METHODS INSTEAD OF CONSTRUCTORS
 ** advantage
-1. ±íÒâÇåÎú(³¡¾°1£¬²ÎÊıÇ©ÃûÎŞ·¨¾¡¿ÉÄÜ¶Ô·µ»ØÖµ×ö³ö½âÊÍ£¬BigInteger(int, int, Random)Öğ½¥¹ı¶ÉÎªBigInteger.probablePrime£¬³¡¾°2£¬Ç©Ãû²ÎÊıÀàĞÍ¸öÊı¶ÔµÈ£¬Èç¾ùĞèÒª3string+2int£¬ÓÉÓÚ²ÎÊıÇ©ÃûµÄÏŞÖÆ£¬Ö»ÄÜ²ÉÓÃµ÷×ªË³Ğò£¬ÈİÒ×µ¼ÖÂ»ìÂÒ)
-2. »º´æ¸Õ´´½¨µÄ¶ÔÏó(Éæ¼°µ½¾ßÌåµÄ³õÊ¼»¯Âß¼­£¬È¡¾öÓÚÄÚ²¿ÊµÏÖÕß£¬¿ÉÒÔµ¥ÀıÒ²¿ÉÄÜÊÇ±ğµÄĞÎÊ½)/Ö±½Ó´«»Ø²»¿É±ä¶ÔÏó(BooleanÔ¤ÉèÁËBoolean.TRUE/FALSE)
-3. Òş²ØÊµÏÖ£¬¸ù¾İÇé¿öÏÂ·µ»Ø¾ßÌå×ÓÀà/ÊµÏÖ(³£¼û×ö·¨£¬Type ±ä³É Types --> Java Ìá¹©µÄ Colletions Ìá¹©ÁË¶ÔÓÚ Colletion(ÓĞ³¬¹ı45¸öÊµÏÖ) ¸÷Àà°ü×°£¬Èç²»¿É±ä£¬subrangeµÈ)
-4. ¿ÉÒÔÊÓÎª3µÄ½á¹û£¬¼´µü´úÊ±£¬¿ÉÒÔÊ¹ client ²»ÊÜÓ°ÏìµÄ½øĞĞÍØÕ¹
-5. Ğ´µÄÊ±ºò¿ÉÒÔ²»ÓÃÊµÀı»¯£¬ÌåÏÖÔÚ SPI ÀàËÆµÄ»úÖÆÈç JDBC (JDBC ±È ServiceLoader Ôç)
-*** ÃüÃû·¶Ê½
+1. è¡¨æ„æ¸…æ™°(åœºæ™¯1ï¼Œå‚æ•°ç­¾åæ— æ³•å°½å¯èƒ½å¯¹è¿”å›å€¼åšå‡ºè§£é‡Šï¼ŒBigInteger(int, int, Random)é€æ¸è¿‡æ¸¡ä¸ºBigInteger.probablePrimeï¼Œåœºæ™¯2ï¼Œç­¾åå‚æ•°ç±»å‹ä¸ªæ•°å¯¹ç­‰ï¼Œå¦‚å‡éœ€è¦3string+2intï¼Œç”±äºå‚æ•°ç­¾åçš„é™åˆ¶ï¼Œåªèƒ½é‡‡ç”¨è°ƒè½¬é¡ºåºï¼Œå®¹æ˜“å¯¼è‡´æ··ä¹±)
+2. ç¼“å­˜åˆšåˆ›å»ºçš„å¯¹è±¡(æ¶‰åŠåˆ°å…·ä½“çš„åˆå§‹åŒ–é€»è¾‘ï¼Œå–å†³äºå†…éƒ¨å®ç°è€…ï¼Œå¯ä»¥å•ä¾‹ä¹Ÿå¯èƒ½æ˜¯åˆ«çš„å½¢å¼)/ç›´æ¥ä¼ å›ä¸å¯å˜å¯¹è±¡(Booleané¢„è®¾äº†Boolean.TRUE/FALSE)
+3. éšè—å®ç°ï¼Œæ ¹æ®æƒ…å†µä¸‹è¿”å›å…·ä½“å­ç±»/å®ç°(å¸¸è§åšæ³•ï¼ŒType å˜æˆ Types --> Java æä¾›çš„ Colletions æä¾›äº†å¯¹äº Colletion(æœ‰è¶…è¿‡45ä¸ªå®ç°) å„ç±»åŒ…è£…ï¼Œå¦‚ä¸å¯å˜ï¼Œsubrangeç­‰)
+4. å¯ä»¥è§†ä¸º3çš„ç»“æœï¼Œå³è¿­ä»£æ—¶ï¼Œå¯ä»¥ä½¿ client ä¸å—å½±å“çš„è¿›è¡Œæ‹“å±•
+5. å†™çš„æ—¶å€™å¯ä»¥ä¸ç”¨å®ä¾‹åŒ–ï¼Œä½“ç°åœ¨ SPI ç±»ä¼¼çš„æœºåˆ¶å¦‚ JDBC (JDBC æ¯” ServiceLoader æ—©)
+*** å‘½åèŒƒå¼
 - from
-µ¥²ÎÊı
+å•å‚æ•°
 Date d = Date.from(instant);
 - of
-¶à²ÎÊı
+å¤šå‚æ•°
 Set<Rank> faceCards = EnumSet.of(JACK, QUEEN, KING);
 - valueOf
-µ¥/¶à²ÎÊıÌæ´úÎï
+å•/å¤šå‚æ•°æ›¿ä»£ç‰©
 BigInteger prime = BigInteger.valueOf(Integer.MAX_VALUE);
 - instance or getInstance
 StackWalker luke = StackWalker.getInstance(options);
 - create or newInstance
-µÈ¼ÛÓÚÉÏÊö£¬µ«ÊÇÒªÇó¶àÊµÀı
+ç­‰ä»·äºä¸Šè¿°ï¼Œä½†æ˜¯è¦æ±‚å¤šå®ä¾‹
 Object newArray = Array.newInstance(classObject, arrayLen);
 - getType
-Ê¹ÓÃÔÚ·ÇÀà×Ô¼º±¾ÉíµÄÊ±ºò
+ä½¿ç”¨åœ¨éç±»è‡ªå·±æœ¬èº«çš„æ—¶å€™
 FileStore fs = Files.getFileStore(path);
 - newType
-Í¬ÉÏ£¬¶àÁËÒ»¸öÓïÒåÉÏµÄÇø±ğ
+åŒä¸Šï¼Œå¤šäº†ä¸€ä¸ªè¯­ä¹‰ä¸Šçš„åŒºåˆ«
 - type
 List<Complaint> litany = Collections.list(legacyLitany);
 * ITEM 2: CONSIDER A BUILDER WHEN FACED WITH MANY CONSTRUCTOR PARAMETERS
 ** advantage
-1. ½â¾ö³¤²ÎÊı¿É¶ÁĞÔ
-2. Ç¿ÖÆinstanceÊ¹ÓÃÇ°µÄÒ»ÖÂĞÔ
+1. è§£å†³é•¿å‚æ•°å¯è¯»æ€§
+2. å¼ºåˆ¶instanceä½¿ç”¨å‰çš„ä¸€è‡´æ€§
 ** disadvantage
-1. ²ÎÊı²»¶àÊ±£¬ÏÔµÃ¸üÈß³¤
-2. Ã¿¸öÊµÀı¶¼À´Ò»±ébuilderÊµÀı£¬ĞÔÄÜÓĞÏûºÄ
+1. å‚æ•°ä¸å¤šæ—¶ï¼Œæ˜¾å¾—æ›´å†—é•¿
+2. æ¯ä¸ªå®ä¾‹éƒ½æ¥ä¸€ébuilderå®ä¾‹ï¼Œæ€§èƒ½æœ‰æ¶ˆè€—
 * ITEM 3: ENFORCE THE SINGLETON PROPERTY WITH A PRIVATE CONSTRUCTOR OR AN ENUM TYPE
 #+BEGIN_SRC java
 
@@ -46,7 +46,7 @@ public class Elvis {
     public void leaveTheBuilding() { ... }
 }
 
-// Singleton with static factory£¬¿ÉÒÔ¿ØÖÆÊµÏÖÈçwrap»òÕßper instance per thread
+// Singleton with static factoryï¼Œå¯ä»¥æ§åˆ¶å®ç°å¦‚wrapæˆ–è€…per instance per thread
 public class Elvis {
     private static final Elvis INSTANCE = new Elvis();
     private Elvis() { ... }
@@ -54,14 +54,14 @@ public class Elvis {
     public void leaveTheBuilding() { ... }
 }
 
-// ĞòÁĞ»¯µ¥Àı×î¼òµ¥µÄÊµÏÖ£¬µ«ÊÇ²»Ì«ÊÊÓÃĞèÒªextendµÄ³¡¾°
+// åºåˆ—åŒ–å•ä¾‹æœ€ç®€å•çš„å®ç°ï¼Œä½†æ˜¯ä¸å¤ªé€‚ç”¨éœ€è¦extendçš„åœºæ™¯
 public enum Elvis {
     INSTANCE;
     public void leaveTheBuilding() { ... }
 }
 #+END_SRC
 * ITEM 4: ENFORCE NONINSTANTIABILITY WITH A PRIVATE CONSTRUCTOR
-¶ÔÓÚÄ¿µÄÓÃÓÚgroup functionµÄÀà£¬Ó¦½ûÖ¹ÊµÀı»¯£¬Í¨¹ıprivate constructorÊµÏÖ
+å¯¹äºç›®çš„ç”¨äºgroup functionçš„ç±»ï¼Œåº”ç¦æ­¢å®ä¾‹åŒ–ï¼Œé€šè¿‡private constructorå®ç°
 #+BEGIN_SRC java
 // Noninstantiable utility class
 public class UtilityClass {

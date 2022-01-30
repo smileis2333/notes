@@ -1,27 +1,27 @@
 #+TITLE: vue-router
 #+STARTUP: indent
-* Â·ÓÉ
+* è·¯ç”±
 ** router-view
 ** router-link
-*** ´ø²ÎÊıÌø×ª
+*** å¸¦å‚æ•°è·³è½¬
 #+BEGIN_SRC html
-<!--´ø²ÎÊıÌø×ª-->
+<!--å¸¦å‚æ•°è·³è½¬-->
 <router-link :to="{ name: 'question', params: { questionId: question.questionId }}" tag="div" class="question-content"> {{question.title}}
 </router-link>
   #+END_SRC
 
-** µ¥²¿¼ş
-{path: '/', component: customComponent} // µ¥¸öÕ¹Î»·û
+** å•éƒ¨ä»¶
+{path: '/', component: customComponent} // å•ä¸ªå±•ä½ç¬¦
 #+BEGIN_SRC html
 <router-view/>
 #+END_SRC
-** ÃüÃûÊÓÍ¼
+** å‘½åè§†å›¾
 {path: '/', components: {
     default: header,
     aside: aside,
     main: main
   }
-} //ÓÃÓÚÊµÏÖ¶àÕ¼Î»·ûÖÃ·Å(¿ÉÊµÏÖ¾­µä²¼¾ÖÈçheader,aside,main,footerÖ®Àà)
+} //ç”¨äºå®ç°å¤šå ä½ç¬¦ç½®æ”¾(å¯å®ç°ç»å…¸å¸ƒå±€å¦‚header,aside,main,footerä¹‹ç±»)
 #+BEGIN_SRC html
 <!--header-->
 <router-view/>
@@ -32,17 +32,17 @@
 <!--main-->
 <router-view name="main"/>
 #+END_SRC
-** Â·ÓÉÌø×ª
-*** ´«²Î
-**** ¸ù¾İÖ¸¶¨µÄnameÀ´È·¶¨
-***** ÅäÖÃ
+** è·¯ç”±è·³è½¬
+*** ä¼ å‚
+**** æ ¹æ®æŒ‡å®šçš„nameæ¥ç¡®å®š
+***** é…ç½®
 #+BEGIN_SRC javascript
 {
   name: '[name]'
   component: [whichComponent] //such as component: xxComponent
 }
 #+END_SRC
-***** ´«µİ
+***** ä¼ é€’
 #+BEGIN_SRC javascript
 this.$router.push({
   name: 'Describe',
@@ -51,51 +51,51 @@ this.$router.push({
   }
 })
 #+END_SRC
-***** »ñÈ¡
+***** è·å–
 this.$route.params.id
-**** restÀàĞÍ
-***** ÅäÖÃ
+**** restç±»å‹
+***** é…ç½®
 #+BEGIN_SRC javascript
 {
   path: '/[url]/[:paramName]', // such as path: '/xx/:id'
   component: [whichComponent] //such as component: xxComponent
 }
 #+END_SRC
-***** ´«µİ
+***** ä¼ é€’
 #+BEGIN_SRC javascript
 this.$router.push({
   path: `/xx/${id}`,
 })
 #+END_SRC
-***** »ñÈ¡
+***** è·å–
 #+BEGIN_SRC javascript
 this.$route.params.[paramName] // such as this.$route.params.id
 #+END_SRC
-**** pathÆ¥ÅäÂ·ÓÉ
-***** ÅäÖÃ
+**** pathåŒ¹é…è·¯ç”±
+***** é…ç½®
 {
   path: '/describe',
   name: 'Describe',
   component: Describe
 }
-***** ´«µİ
+***** ä¼ é€’
 this.$router.push({
   path: '/describe',
   query: {
     id: id
   }
 })
-***** »ñÈ¡
+***** è·å–
 this.$route.query.id
-*** Ìø×ª·½Ê½
+*** è·³è½¬æ–¹å¼
 **** 1
 #+BEGIN_SRC javascript
-// ´«²Î
+// ä¼ å‚
 this.$router.push({
   path: `/describe/${id}`,
 })
 
-// È¡²Î
+// å–å‚
 this.$route.params.id
 #+END_SRC
 **** 2
@@ -107,7 +107,7 @@ this.$router.push({
    }
 })
 
-//È¡²Î
+//å–å‚
 this.$route.params.id
 #+END_SRC
 **** 3
@@ -121,9 +121,9 @@ this.$router.push({
 
 this.$route.query.id
 #+END_SRC
-** Ç¶Ì×Â·ÓÉ
+** åµŒå¥—è·¯ç”±
 https://router.vuejs.org/zh/guide/essentials/nested-routes.#+BEGIN_HTML
 0
 #+END_HTML
 * ref
-https://www.cnblogs.com/hjptopshow/p/9202966.html queryÓëparam´«²ÎÇø±ğ
+https://www.cnblogs.com/hjptopshow/p/9202966.html queryä¸paramä¼ å‚åŒºåˆ«

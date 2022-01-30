@@ -81,7 +81,7 @@ int main(){
 #include <sys/wait.h>
 
 int main(){
-  int pid_status; //ÓÃbit´æ½á¹ûĞÅÏ¢,WEXITSTATUS()¿ÉÒÔ¼ì²â
+  int pid_status; //ç”¨bitå­˜ç»“æœä¿¡æ¯,WEXITSTATUS()å¯ä»¥æ£€æµ‹
 
   if(waitpid(pid,&pid_status,0)==-1){
     //error handle
@@ -90,19 +90,19 @@ int main(){
 #+END_SRC
 *** unistd.h
 **** dup2
-1. »»file descriptor¶ÔÓ¦µÄdata stream
-2. ÊµÏÖÀàËÆcommand lineÊÖ¶¯ÖØ¶¨ÏòµÄĞ§¹û
-3. ÊµÏÖ¸¸×Ó½ø³ÌÍ¨Ñ¶(ÅäºÏpipe())
+1. æ¢file descriptorå¯¹åº”çš„data stream
+2. å®ç°ç±»ä¼¼command lineæ‰‹åŠ¨é‡å®šå‘çš„æ•ˆæœ
+3. å®ç°çˆ¶å­è¿›ç¨‹é€šè®¯(é…åˆpipe())
 #+BEGIN_SRC c
 #include <stdio.h>
 #include <unistd.h>
 
 int main()
 {
-// ×îÖÕÎÄ¼şÊÇ3hoho£¬±íÏÖ³öĞ´»º´æ´æÔÚ
+// æœ€ç»ˆæ–‡ä»¶æ˜¯3hohoï¼Œè¡¨ç°å‡ºå†™ç¼“å­˜å­˜åœ¨
     FILE *my_file = fopen("test.txt", "w");
     int descriptor = fileno(my_file);
-    printf("%d", descriptor); //    fflush(stdout); ²Å¿ÉÒÔÊµÏÖfile descriptor´òÔÚÖÕ¶Ë£¬µÚ¶ş¸öÊä³ö´òÔÚÎÄ¼şÉÏ
+    printf("%d", descriptor); //    fflush(stdout); æ‰å¯ä»¥å®ç°file descriptoræ‰“åœ¨ç»ˆç«¯ï¼Œç¬¬äºŒä¸ªè¾“å‡ºæ‰“åœ¨æ–‡ä»¶ä¸Š
 
     if(dup2(descriptor,1)){
         printf("%s","hohoo");
@@ -154,16 +154,16 @@ int main(int argc,char *argv[]){ // argc is 5, argv is 'b c d e \0'
 #+END_SRC
 *** option
 getopt()
-1. ²»´ø:´ú±í¸Ãoption²»Ö§³Ö²ÎÊı
-2. ´ø:´ú±í±ØĞë´ø²ÎÊı£¬·ñÔò±¨´í(¿ÉÒÔspaceºó´ø£¬»òÕß²»ÓÃspaceÖ±½Ó¸úÔÚºóÃæ)
-3. ´ø::´ú±í¿ÉÑ¡²ÎÊı(µ«ÊÇ²ÎÊı±ØĞëÖ±½Ó¸úÔÚoption×ÖÄ¸ºóÃæ£¬²»ÄÜspace)
+1. ä¸å¸¦:ä»£è¡¨è¯¥optionä¸æ”¯æŒå‚æ•°
+2. å¸¦:ä»£è¡¨å¿…é¡»å¸¦å‚æ•°ï¼Œå¦åˆ™æŠ¥é”™(å¯ä»¥spaceåå¸¦ï¼Œæˆ–è€…ä¸ç”¨spaceç›´æ¥è·Ÿåœ¨åé¢)
+3. å¸¦::ä»£è¡¨å¯é€‰å‚æ•°(ä½†æ˜¯å‚æ•°å¿…é¡»ç›´æ¥è·Ÿåœ¨optionå­—æ¯åé¢ï¼Œä¸èƒ½space)
 #+BEGIN_SRC C
 #include <stdio.h>
 #include <unistd.h>
  
 int main(int argc, char *argv[]) {
     int o;
-    const char *optstring = "abc:"; // ÓĞÈı¸öÑ¡Ïî-abc£¬ÆäÖĞcÑ¡ÏîºóÓĞÃ°ºÅ£¬ËùÒÔºóÃæ±ØĞëÓĞ²ÎÊı
+    const char *optstring = "abc:"; // æœ‰ä¸‰ä¸ªé€‰é¡¹-abcï¼Œå…¶ä¸­cé€‰é¡¹åæœ‰å†’å·ï¼Œæ‰€ä»¥åé¢å¿…é¡»æœ‰å‚æ•°
     while ((o = getopt(argc, argv, optstring)) != -1) {
         switch (o) {
             case 'a':
@@ -219,16 +219,16 @@ handle out current process to new created process, it's useful for start script 
 | search the path      | p         |
 | enviroment vars      | e         |
 **** execl
-execl("/home/flynn/clu","/home/flynn/clu","pp","cc",NULL) //µÚÒ»¸öÖ¸¶¨ÁËprogramµÄloadingÂ·¾¶£¬µÚ¶ş¸ö²ÎÊıÊÇprocessµÄÓ¦ÓÃÃû£¬Í¨³£±£³ÖÒ»ÖÂ(ps auxµÃµ½µÄĞÅÏ¢)£¬´ÓµÚ¶ş¸ö²ÎÊıµ½NULLÖ®¼ä¶¼ÊÇ²ÎÊı
+execl("/home/flynn/clu","/home/flynn/clu","pp","cc",NULL) //ç¬¬ä¸€ä¸ªæŒ‡å®šäº†programçš„loadingè·¯å¾„ï¼Œç¬¬äºŒä¸ªå‚æ•°æ˜¯processçš„åº”ç”¨åï¼Œé€šå¸¸ä¿æŒä¸€è‡´(ps auxå¾—åˆ°çš„ä¿¡æ¯)ï¼Œä»ç¬¬äºŒä¸ªå‚æ•°åˆ°NULLä¹‹é—´éƒ½æ˜¯å‚æ•°
 **** execp
 **** execle
-execle("/home/flynn/clu","/home/flynn/clu","pp","cc",NULL,env_vars) //´ÓµÚ¶ş¸ö²ÎÊıµ½NULLÖ®¼ä¶¼ÊÇ²ÎÊı£¬×îºóµÄÊÇ»·¾³±äÁ¿
+execle("/home/flynn/clu","/home/flynn/clu","pp","cc",NULL,env_vars) //ä»ç¬¬äºŒä¸ªå‚æ•°åˆ°NULLä¹‹é—´éƒ½æ˜¯å‚æ•°ï¼Œæœ€åçš„æ˜¯ç¯å¢ƒå˜é‡
 **** execv
-execv("/home/flynn/clu",my_args) // my_argsÎª×Ö·û´®Êı×é
+execv("/home/flynn/clu",my_args) // my_argsä¸ºå­—ç¬¦ä¸²æ•°ç»„
 **** execvp
-execv("clu",my_args) // ´ÓPATHÕÒclueÆô¶¯
+execv("clu",my_args) // ä»PATHæ‰¾clueå¯åŠ¨
 *** fork
-pid_t pid = fork(); //pid_tÎªÕûÊı£¬¾ßÌåÀàĞÍÈ¡¾öÓÚ²Ù×÷ÏµÍ³£¬Òò´Ë£¬ĞèÒª±»³éÏó£¬child process ÄÃµ½pid=0
+pid_t pid = fork(); //pid_tä¸ºæ•´æ•°ï¼Œå…·ä½“ç±»å‹å–å†³äºæ“ä½œç³»ç»Ÿï¼Œå› æ­¤ï¼Œéœ€è¦è¢«æŠ½è±¡ï¼Œchild process æ‹¿åˆ°pid=0
 ** signal
 *** sigaction
 #+BEGIN_SRC c
@@ -263,9 +263,9 @@ int main(){
 #+END_SRC
 *** self emit signal
 #+BEGIN_SRC c
-raise(SIGTERM); // Ö÷ÒªÊÇÍ¨ÓÃ¿âµÄ·â×°£¬¸ù¾İ³¡¾°ĞèÒªÉèÖÃ
+raise(SIGTERM); // ä¸»è¦æ˜¯é€šç”¨åº“çš„å°è£…ï¼Œæ ¹æ®åœºæ™¯éœ€è¦è®¾ç½®
 
-alarm(120); //emie SIGALRM per 120 second, like timer when config handler£¬ºóµ÷ÓÃµÄalarm»áÇå¿ÕÇ°Ò»¸öµÄÊ±¼äÉèÖÃ
+alarm(120); //emie SIGALRM per 120 second, like timer when config handlerï¼Œåè°ƒç”¨çš„alarmä¼šæ¸…ç©ºå‰ä¸€ä¸ªçš„æ—¶é—´è®¾ç½®
 catch_signal(SIGTERM, SIG_DFL);
 #+END_SRC
 ** network
@@ -297,7 +297,7 @@ int main(){
         // error("Cann't bind a socket");
     }
 
-    // listen£¬µ÷²Î£¬queue 10¸ö
+    // listenï¼Œè°ƒå‚ï¼Œqueue 10ä¸ª
     if(listen(listener_d,10)==-1){ 
         // error("Cann't listen a socket");
     }
@@ -360,7 +360,7 @@ int main(){
         error("cann't create thread t1");
     }
 
-    // Èç¹û½ø³ÌËÀÁË£¬ÔòthreeaÒ»ÆğÉ±µô
+    // å¦‚æœè¿›ç¨‹æ­»äº†ï¼Œåˆ™threeaä¸€èµ·æ€æ‰
     void* result;
     if(pthread_join(t0,&result)==-1){
         error("cann't joint t0");
@@ -436,7 +436,7 @@ typedef struct {
 
 void happy_birthday(turtle *t)
 {
-  (*t).age = (*t).age + 1; //²»ÄÜ*t.age£¬ÒòÎª¼ÆËã»ú´ÓÓÒ¿ªÊ¼Ëã£¬¸ÃĞ´·¨Îª±íÊ¾¶ÔtµÄageÖ¸Õë½øĞĞ½âÒıÓÃ¡£ÕæÕıµÄ¼òĞ´Îªt->age
+  (*t).age = (*t).age + 1; //ä¸èƒ½*t.ageï¼Œå› ä¸ºè®¡ç®—æœºä»å³å¼€å§‹ç®—ï¼Œè¯¥å†™æ³•ä¸ºè¡¨ç¤ºå¯¹tçš„ageæŒ‡é’ˆè¿›è¡Œè§£å¼•ç”¨ã€‚çœŸæ­£çš„ç®€å†™ä¸ºt->age
   printf("Happy Birthday %s! You are now %i years old!\n",(*t).name, (*t).age);
 }
 
@@ -469,7 +469,7 @@ typedef struct{
 #+END_SRC
 ** union
 #+BEGIN_SRC c
-//´óĞ¡È¡¾öÓÚÆäÖĞÕ¼±È×î´óµÄÊôĞÔ
+//å¤§å°å–å†³äºå…¶ä¸­å æ¯”æœ€å¤§çš„å±æ€§
 typedef struct {
   short count;
   float weight;
@@ -477,9 +477,9 @@ typedef struct {
 } quantity;
 
 quantity q ={4}
-quantity q ={.weight=5} // ºó¸³ÖµµÄÊôĞÔ³åµôµÄÏÈÇ°µÄ¸³Öµ£¬ËùÒÔÈç¹û·ÃÎÊ·Ç¸³Öµ×Ö¶Î£¬µÃµ½µÄÊÇÎŞĞ§Êı¾İ
+quantity q ={.weight=5} // åèµ‹å€¼çš„å±æ€§å†²æ‰çš„å…ˆå‰çš„èµ‹å€¼ï¼Œæ‰€ä»¥å¦‚æœè®¿é—®éèµ‹å€¼å­—æ®µï¼Œå¾—åˆ°çš„æ˜¯æ— æ•ˆæ•°æ®
 
-//½â¾ö¶ÔÎŞĞ§Êı¾İµÄ·ÃÎÊÍ¨³£ÅäºÏenum½øĞĞÊ¹ÓÃ£¬¼´structÖĞÈûÈëunionºÍenum£¬¸ù¾İenum¾ö¶¨µ±Ç°unionÊÇÄÄ¸ö×Ö¶Î(ifÅĞ¶Ï)
+//è§£å†³å¯¹æ— æ•ˆæ•°æ®çš„è®¿é—®é€šå¸¸é…åˆenumè¿›è¡Œä½¿ç”¨ï¼Œå³structä¸­å¡å…¥unionå’Œenumï¼Œæ ¹æ®enumå†³å®šå½“å‰unionæ˜¯å“ªä¸ªå­—æ®µ(ifåˆ¤æ–­)
 typedef enum{
   COUNT,POUNDS,PINS
 }unit_of_measure;
@@ -515,12 +515,12 @@ typedef enum{
 ** gcc
 ** clang
 * header file
-1. C preprocessÓöµ½Î´declareµÄº¯Êı£¬Ä¬ÈÏÊÓÎªint£¬Èç¹û·µ»ØÖµ¶Ô²»ÉÏ£¬ÔòÖ±½Ó±¨´í
-2. ¶øÖ±½ÓÉùÃ÷ÇÒÊµÏÖ£¬Ôò¿ÉÄÜµ¼ÖÂµİ¹é(ÖÇÄÜ¶ÈµÍ/±£³Ö×îĞ¡×Ó¼¯´øÀ´µÄÕÏ°­)£¬Òò´Ë£¬ÔÚC´¦ÀíÖĞ£¬ÏÈÉùÃ÷ºóÊµÏÖÊÇ³£¼ûµÄ´¦ÀíÊÖ¶Î
-3. header fileµÄºËĞÄÎª³éÀë³öËùÓĞµÄº¯ÊıÉùÃ÷£¬ÔÚÖ÷Èë¿Ú#include£¬ÔÚpreprocessÊ±½øĞĞÈÚºÏ´¦Àí£¬ÁíÒ»¸öÖ÷ÒªÓÃÍ¾ÊÇ´úÂë¹²Ïí(Èç¹²Ïí¿â£¬ÏµÍ³¿âµÄ½Ó¿Ú±©Â¶ĞÅÏ¢£¬ÓÃÓÚlink½×¶ÎµÄÊ¹ÓÃ)
+1. C preprocessé‡åˆ°æœªdeclareçš„å‡½æ•°ï¼Œé»˜è®¤è§†ä¸ºintï¼Œå¦‚æœè¿”å›å€¼å¯¹ä¸ä¸Šï¼Œåˆ™ç›´æ¥æŠ¥é”™
+2. è€Œç›´æ¥å£°æ˜ä¸”å®ç°ï¼Œåˆ™å¯èƒ½å¯¼è‡´é€’å½’(æ™ºèƒ½åº¦ä½/ä¿æŒæœ€å°å­é›†å¸¦æ¥çš„éšœç¢)ï¼Œå› æ­¤ï¼Œåœ¨Cå¤„ç†ä¸­ï¼Œå…ˆå£°æ˜åå®ç°æ˜¯å¸¸è§çš„å¤„ç†æ‰‹æ®µ
+3. header fileçš„æ ¸å¿ƒä¸ºæŠ½ç¦»å‡ºæ‰€æœ‰çš„å‡½æ•°å£°æ˜ï¼Œåœ¨ä¸»å…¥å£#includeï¼Œåœ¨preprocessæ—¶è¿›è¡Œèåˆå¤„ç†ï¼Œå¦ä¸€ä¸ªä¸»è¦ç”¨é€”æ˜¯ä»£ç å…±äº«(å¦‚å…±äº«åº“ï¼Œç³»ç»Ÿåº“çš„æ¥å£æš´éœ²ä¿¡æ¯ï¼Œç”¨äºlinké˜¶æ®µçš„ä½¿ç”¨)
 eg:
-#include <stdio.h> //±ê×¼¿â
-#include "totaller.h" // ×Ô¶¨Òå
+#include <stdio.h> //æ ‡å‡†åº“
+#include "totaller.h" // è‡ªå®šä¹‰
 * compile
 source file
 ->preprocess
@@ -550,12 +550,12 @@ genric the process of generate for judging if need to recompile
 *** make
 - The dependencies
 - The recipe
-makeµÄÔ­ÀíÊÇ¸ĞÖªdepenecyÓëtargetµÄÊ±¼ä´ÁÏÈºóË³Ğò£¬È»ºóÈç¹ûtargetµÄÊ±¼äµÄÔçÓÚdependency£¬ÔòÓ¦ÓÃrule½øĞĞÖØĞÂÉú³É
+makeçš„åŸç†æ˜¯æ„ŸçŸ¥depenecyä¸targetçš„æ—¶é—´æˆ³å…ˆåé¡ºåºï¼Œç„¶åå¦‚æœtargetçš„æ—¶é—´çš„æ—©äºdependencyï¼Œåˆ™åº”ç”¨ruleè¿›è¡Œé‡æ–°ç”Ÿæˆ
 
 makefile:
 #+BEGIN_SRC cmake
-launch.o: launch.c launch.h thruster.h  # ÕâÀïĞèÒª¼ÓÈëheader file£¬Ô­ÒòÊÇÄÄÅÂlaunch.cÃ»±ä¹ı£¬ÔÚpreprocessÕ¹¿ªµÄÊ±ºòĞèÒªÒıÓÃheader file£¬¶øÖ»¼à¿Øc fileÊÇÎŞ·¨¸ĞÖªheader fileµÄ±ä»¯µÄ
-   gcc -c launch.c # ruleµÄbeginĞèÒªtab£¬ÔçÆÚÉè¼ÆÕßÊèºö
+launch.o: launch.c launch.h thruster.h  # è¿™é‡Œéœ€è¦åŠ å…¥header fileï¼ŒåŸå› æ˜¯å“ªæ€•launch.cæ²¡å˜è¿‡ï¼Œåœ¨preprocesså±•å¼€çš„æ—¶å€™éœ€è¦å¼•ç”¨header fileï¼Œè€Œåªç›‘æ§c fileæ˜¯æ— æ³•æ„ŸçŸ¥header fileçš„å˜åŒ–çš„
+   gcc -c launch.c # ruleçš„beginéœ€è¦tabï¼Œæ—©æœŸè®¾è®¡è€…ç–å¿½
 thruster.o: thruster.h thruster.c
    gcc -c thruster.c
 launch: launch.o thruster.o

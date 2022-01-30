@@ -1,60 +1,60 @@
 #+TITLE:  iptables
 #+STARTUP: indent
-* Á´
-PREROUTING      µÄ¹æÔò¿ÉÒÔ´æÔÚÓÚ£ºraw±í£¬mangle±í£¬nat±í¡£
+* é“¾
+PREROUTING      çš„è§„åˆ™å¯ä»¥å­˜åœ¨äºï¼šrawè¡¨ï¼Œmangleè¡¨ï¼Œnatè¡¨ã€‚
 
-INPUT          µÄ¹æÔò¿ÉÒÔ´æÔÚÓÚ£ºmangle±í£¬filter±í£¬£¨centos7ÖĞ»¹ÓĞnat±í£¬centos6ÖĞÃ»ÓĞ£©¡£
+INPUT          çš„è§„åˆ™å¯ä»¥å­˜åœ¨äºï¼šmangleè¡¨ï¼Œfilterè¡¨ï¼Œï¼ˆcentos7ä¸­è¿˜æœ‰natè¡¨ï¼Œcentos6ä¸­æ²¡æœ‰ï¼‰ã€‚
 
-FORWARD         µÄ¹æÔò¿ÉÒÔ´æÔÚÓÚ£ºmangle±í£¬filter±í¡£
+FORWARD         çš„è§„åˆ™å¯ä»¥å­˜åœ¨äºï¼šmangleè¡¨ï¼Œfilterè¡¨ã€‚
 
-OUTPUT         µÄ¹æÔò¿ÉÒÔ´æÔÚÓÚ£ºraw±ímangle±í£¬nat±í£¬filter±í¡£
+OUTPUT         çš„è§„åˆ™å¯ä»¥å­˜åœ¨äºï¼šrawè¡¨mangleè¡¨ï¼Œnatè¡¨ï¼Œfilterè¡¨ã€‚
 
-POSTROUTING      µÄ¹æÔò¿ÉÒÔ´æÔÚÓÚ£ºmangle±í£¬nat±í¡£
-** ×Ô¶¨ÒåÁ´
-Ä¿µÄÖ÷ÒªÎª¹æÔò·Ö×é£¬Ö®ºó±»ÎåÁ´£¬ÉèÖÃ¹æÔò£¬Æ¥Åä¶ÔÓ¦µÄ×Ô¶¨ÒåÁ´
-*** ´´½¨ 
+POSTROUTING      çš„è§„åˆ™å¯ä»¥å­˜åœ¨äºï¼šmangleè¡¨ï¼Œnatè¡¨ã€‚
+** è‡ªå®šä¹‰é“¾
+ç›®çš„ä¸»è¦ä¸ºè§„åˆ™åˆ†ç»„ï¼Œä¹‹åè¢«äº”é“¾ï¼Œè®¾ç½®è§„åˆ™ï¼ŒåŒ¹é…å¯¹åº”çš„è‡ªå®šä¹‰é“¾
+*** åˆ›å»º 
 iptables -t filter -N IN_WEB
-*** ÒıÓÃ
+*** å¼•ç”¨
 iptables -t filter -I INPUT -p tcp --dport 80 -j IN_WEB
-*** ĞŞ¸Ä
-iptables -E IN_WEB WEB ¸ÄÃû
-Ìí¼Ó¹æÔòÓëÎåÁ´ÀàËÆ
-*** É¾³ı
-1. ÏÈ´ÓÎåÁ´°ÑÒıÓÃµ½¸ÃÁ´µÄ¹æÔòÉ¾µô
+*** ä¿®æ”¹
+iptables -E IN_WEB WEB æ”¹å
+æ·»åŠ è§„åˆ™ä¸äº”é“¾ç±»ä¼¼
+*** åˆ é™¤
+1. å…ˆä»äº”é“¾æŠŠå¼•ç”¨åˆ°è¯¥é“¾çš„è§„åˆ™åˆ æ‰
 2. iptables -X WEB
-* ±í
-raw     ±íÖĞµÄ¹æÔò¿ÉÒÔ±»ÄÄĞ©Á´Ê¹ÓÃ£ºPREROUTING£¬OUTPUT
+* è¡¨
+raw     è¡¨ä¸­çš„è§„åˆ™å¯ä»¥è¢«å“ªäº›é“¾ä½¿ç”¨ï¼šPREROUTINGï¼ŒOUTPUT
 
-mangle  ±íÖĞµÄ¹æÔò¿ÉÒÔ±»ÄÄĞ©Á´Ê¹ÓÃ£ºPREROUTING£¬INPUT£¬FORWARD£¬OUTPUT£¬POSTROUTING
+mangle  è¡¨ä¸­çš„è§„åˆ™å¯ä»¥è¢«å“ªäº›é“¾ä½¿ç”¨ï¼šPREROUTINGï¼ŒINPUTï¼ŒFORWARDï¼ŒOUTPUTï¼ŒPOSTROUTING
 
-nat     ±íÖĞµÄ¹æÔò¿ÉÒÔ±»ÄÄĞ©Á´Ê¹ÓÃ£ºPREROUTING£¬OUTPUT£¬POSTROUTING£¨centos7ÖĞ»¹ÓĞINPUT£¬centos6ÖĞÃ»ÓĞ£©
+nat     è¡¨ä¸­çš„è§„åˆ™å¯ä»¥è¢«å“ªäº›é“¾ä½¿ç”¨ï¼šPREROUTINGï¼ŒOUTPUTï¼ŒPOSTROUTINGï¼ˆcentos7ä¸­è¿˜æœ‰INPUTï¼Œcentos6ä¸­æ²¡æœ‰ï¼‰
 
-filter  ±íÖĞµÄ¹æÔò¿ÉÒÔ±»ÄÄĞ©Á´Ê¹ÓÃ£ºINPUT£¬FORWARD£¬OUTPUT
+filter  è¡¨ä¸­çš„è§„åˆ™å¯ä»¥è¢«å“ªäº›é“¾ä½¿ç”¨ï¼šINPUTï¼ŒFORWARDï¼ŒOUTPUT
 * command
-** ²é¿´¹æÔò
-iptables -t [tableName,²»Ğ´Ä¬ÈÏÎªfilter±í] -L [chainName£¬²»Ğ´Ä¬ÈÏÎªÈ«²¿]  
--v¿ÉÒÔ¿´µ½¸ü¶àĞÅÏ¢
--n±íÊ¾²»¶ÔipµØÖ··´½âÎªÓòÃû£¬¶øÊÇÖ±½ÓÏÔÊ¾ip
+** æŸ¥çœ‹è§„åˆ™
+iptables -t [tableName,ä¸å†™é»˜è®¤ä¸ºfilterè¡¨] -L [chainNameï¼Œä¸å†™é»˜è®¤ä¸ºå…¨éƒ¨]  
+-vå¯ä»¥çœ‹åˆ°æ›´å¤šä¿¡æ¯
+-nè¡¨ç¤ºä¸å¯¹ipåœ°å€åè§£ä¸ºåŸŸåï¼Œè€Œæ˜¯ç›´æ¥æ˜¾ç¤ºip
 --line-number
-** Ìí¼Ó¹æÔò
+** æ·»åŠ è§„åˆ™
 iptables -t [tableName] -I/A [chainName] -s [matchCondition] -j [action]
 eg
-iptables -t filter -I INPUT -s 192.168.92.129 -j DROP À´×Ô¸ÃipµÄ°üÖ±½Ó¶ªµô
--I ¼Óµ½Í·²¿
--A ¼Óµ½Î²²¿
-** É¾³ı¹æÔò
-Á½ÖÖ¶¼ÊÇÖ»»áÒ»´ÎÉ¾³ıÒ»Ìõ
+iptables -t filter -I INPUT -s 192.168.92.129 -j DROP æ¥è‡ªè¯¥ipçš„åŒ…ç›´æ¥ä¸¢æ‰
+-I åŠ åˆ°å¤´éƒ¨
+-A åŠ åˆ°å°¾éƒ¨
+** åˆ é™¤è§„åˆ™
+ä¸¤ç§éƒ½æ˜¯åªä¼šä¸€æ¬¡åˆ é™¤ä¸€æ¡
 1. iptables -t [tableName] -D [chainName] [ruleNumber] 
 2. iptables -t [tableName] -D [chainName] -s 192.168.92.129 -j DROP
 
 iptables -t [tableName] -F [chainName]
-** ĞŞ¸Ä¹æÔò
+** ä¿®æ”¹è§„åˆ™
 iptables -t [filterName] -R [chainName] [ruleNumber] [oldMatchCondition such as -s xxx] -j [action]
-** ±£´æÓë»Ö¸´
+** ä¿å­˜ä¸æ¢å¤
 iptables-save > /etc/sysconfig/iptables
 iptables-store < /etc/sysconfig/iptables
 * matchCondition
-** »ù±¾Æ¥ÅäÌõ¼ş
+** åŸºæœ¬åŒ¹é…æ¡ä»¶
 *** source
 -s
 **** single ip
@@ -65,41 +65,41 @@ iptables-store < /etc/sysconfig/iptables
 10.6.0.0/16
 *** destination
 -d
-ÓësourceÀàËÆ
-*** !È¡·´Ìõ¼ş
-¿ÉÒÔ×÷ÓÃÓÚsource/destination£¬»òÕßÍØÕ¹Æ¥ÅäÌõ¼şµÄÖîÈç¶Ë¿Ú£¬µ«ÊÇµ±Îªsource/destination¶à¸öipÊ±£¬²»ÔÊĞíÊ¹ÓÃ
+ä¸sourceç±»ä¼¼
+*** !å–åæ¡ä»¶
+å¯ä»¥ä½œç”¨äºsource/destinationï¼Œæˆ–è€…æ‹“å±•åŒ¹é…æ¡ä»¶çš„è¯¸å¦‚ç«¯å£ï¼Œä½†æ˜¯å½“ä¸ºsource/destinationå¤šä¸ªipæ—¶ï¼Œä¸å…è®¸ä½¿ç”¨
 *** protocol
 -p
 tcp, udp, udplite, icmp, icmpv6,esp, ah, sctp, mh
-iptable -t filter -I INPUT -s 192.168.92.129 -p tcp ¹Ø±ÕtcpÁ¬½ÓµÄpacket
+iptable -t filter -I INPUT -s 192.168.92.129 -p tcp å…³é—­tcpè¿æ¥çš„packet
 *** interface
 **** -i
-Á÷ÈëÊ±µÄÍø¿¨
--iÑ¡ÏîÖ»ÄÜÓÃÓÚPREROUTINGÁ´¡¢INPUTÁ´¡¢FORWARDÁ´
+æµå…¥æ—¶çš„ç½‘å¡
+-ié€‰é¡¹åªèƒ½ç”¨äºPREROUTINGé“¾ã€INPUTé“¾ã€FORWARDé“¾
 **** -o
-Á÷³öÊ±Íø¿¨Ö¸¶¨
--oÑ¡ÏîÖ»ÄÜÓÃÓÚFORWARDÁ´¡¢OUTPUTÁ´¡¢POSTROUTINGÁ´
-** ÍØÕ¹Æ¥ÅäÌõ¼ş
-ĞèÒªÖ¸¶¨Ä£¿éºó²Å¿ÉÒÔÊ¹ÓÃ
+æµå‡ºæ—¶ç½‘å¡æŒ‡å®š
+-oé€‰é¡¹åªèƒ½ç”¨äºFORWARDé“¾ã€OUTPUTé“¾ã€POSTROUTINGé“¾
+** æ‹“å±•åŒ¹é…æ¡ä»¶
+éœ€è¦æŒ‡å®šæ¨¡å—åæ‰å¯ä»¥ä½¿ç”¨
 *** tcp
-iptables -t filter -I INPUT -s 192.168.92.129 -p tcp [-m tcp£¬ÓÉÓÚÃ»ÌîµÄÇé¿öÏÂ£¬»á×Ô¶¯¸ù¾İĞ­Òé½øĞĞÄ£¿éÑ¡Ôñ£¬ËùÒÔ¿ÉÒÔ²»Ìî] --dport 22 -j REJECT
+iptables -t filter -I INPUT -s 192.168.92.129 -p tcp [-m tcpï¼Œç”±äºæ²¡å¡«çš„æƒ…å†µä¸‹ï¼Œä¼šè‡ªåŠ¨æ ¹æ®åè®®è¿›è¡Œæ¨¡å—é€‰æ‹©ï¼Œæ‰€ä»¥å¯ä»¥ä¸å¡«] --dport 22 -j REJECT
 --dport
 --sport
-tcpÄ£¿éµÄport¿ÉÒÔÖ¸¶¨·¶Î§£¬Èç:22±íÊ¾22¼°ÒÔÏÂ¶Ë¿Ú£¬80:±íÊ¾80¼°ÒÔÉÏ¶Ë¿Ú,22:80£¬µ«ÊÇÎŞ·¨Ö¸¶¨ÀëÉ¢µÄ¶Ë¿Ú
+tcpæ¨¡å—çš„portå¯ä»¥æŒ‡å®šèŒƒå›´ï¼Œå¦‚:22è¡¨ç¤º22åŠä»¥ä¸‹ç«¯å£ï¼Œ80:è¡¨ç¤º80åŠä»¥ä¸Šç«¯å£,22:80ï¼Œä½†æ˜¯æ— æ³•æŒ‡å®šç¦»æ•£çš„ç«¯å£
 --tcp-flags SYN,ACK,FIN,RST,URG,PSH SYN
---syn Á´½ÓµÄ±¨ÎÄ
--m multiport¿ÉÒÔÃÖ²¹ÉÏÊö²»×ã
+--syn é“¾æ¥çš„æŠ¥æ–‡
+-m multiportå¯ä»¥å¼¥è¡¥ä¸Šè¿°ä¸è¶³
 *** udp
-»ù±¾Óëtcp£¬ÀàËÆ£¬¿ÉÒÔÖ¸¶¨¶Ë¿Ú
+åŸºæœ¬ä¸tcpï¼Œç±»ä¼¼ï¼Œå¯ä»¥æŒ‡å®šç«¯å£
 *** icmp
-iptables -t filter -I INPUT -p icmp -j REJECT Æ¥ÅäÈ«²¿icmp±¨ÎÄ£¬±ğÈËµÄ±¨ÎÄ·¢²»½øÀ´£¬ÎÒÃÇµÄÄÜ·¢³öÈ¥£¬µ«ÊÇÊÕ²»µ½»ØÀ´µÄ±¨ÎÄ£¬ËùÒÔ±íÏÖÎª±ğÈËping²»µ½ÎÒÃÇ£¬ÎÒÃÇÒ²ping²»µ½±ğÈË
-iptables -t filter -I INPUT -p icmp -m icmp --icmp-type 8/0 -j REJECT ¶ªµô±ğÈË·¢À´µÄ²éÑ¯°ü£¬ÎÒÃÇÄÜÕı³£ÊÕµ½ÏìÓ¦°ü£¬ËùÒÔÄÜping³öÈ¥
+iptables -t filter -I INPUT -p icmp -j REJECT åŒ¹é…å…¨éƒ¨icmpæŠ¥æ–‡ï¼Œåˆ«äººçš„æŠ¥æ–‡å‘ä¸è¿›æ¥ï¼Œæˆ‘ä»¬çš„èƒ½å‘å‡ºå»ï¼Œä½†æ˜¯æ”¶ä¸åˆ°å›æ¥çš„æŠ¥æ–‡ï¼Œæ‰€ä»¥è¡¨ç°ä¸ºåˆ«äººpingä¸åˆ°æˆ‘ä»¬ï¼Œæˆ‘ä»¬ä¹Ÿpingä¸åˆ°åˆ«äºº
+iptables -t filter -I INPUT -p icmp -m icmp --icmp-type 8/0 -j REJECT ä¸¢æ‰åˆ«äººå‘æ¥çš„æŸ¥è¯¢åŒ…ï¼Œæˆ‘ä»¬èƒ½æ­£å¸¸æ”¶åˆ°å“åº”åŒ…ï¼Œæ‰€ä»¥èƒ½pingå‡ºå»
 *** ip range
 -m iprange
 --src-range 192.168.1.127-192.168.1.146
 *** string
 -m string
---algo bm --string "ooxx" Ê¹ÓÃbmËã·¨È¥Æ¥Åä×Ö·û´®ooxx
+--algo bm --string "ooxx" ä½¿ç”¨bmç®—æ³•å»åŒ¹é…å­—ç¬¦ä¸²ooxx
 *** time
 -m time
 --timestart 09:00:00 --timestop 18:00:00
@@ -107,53 +107,53 @@ iptables -t filter -I INPUT -p icmp -m icmp --icmp-type 8/0 -j REJECT ¶ªµô±ğÈË·¢
 --monthdays 22,23,25
 --datastart 2017-12-24 --datastop 2017-12-28
 
---monthdaysÓë--weekdays¿ÉÒÔÊ¹ÓÃ"!"È¡·´£¬ÆäËûÑ¡Ïî²»ÄÜÈ¡·´
+--monthdaysä¸--weekdayså¯ä»¥ä½¿ç”¨"!"å–åï¼Œå…¶ä»–é€‰é¡¹ä¸èƒ½å–å
 *** connlimit
-ÏŞÖÆÃ¿¸öipÁ´½ÓµÄÊıÁ¿
+é™åˆ¶æ¯ä¸ªipé“¾æ¥çš„æ•°é‡
 -m connlimit
---connlimit-above 2 -j REJECT ¿ÉÁ´½ÓÊıÁ¿ÎªÁ½¸ö
---connlimit-mask Ö¸¶¨Ã¿¸öÍø¶ÎÖĞÃ¿¸ö¿Í»§¶Ë£¬ÅäºÏ--connlimit-above
+--connlimit-above 2 -j REJECT å¯é“¾æ¥æ•°é‡ä¸ºä¸¤ä¸ª
+--connlimit-mask æŒ‡å®šæ¯ä¸ªç½‘æ®µä¸­æ¯ä¸ªå®¢æˆ·ç«¯ï¼Œé…åˆ--connlimit-above
 *** limit
-¿ØÖÆ±¨ÎÄÁ´½ÓËÙÂÊ
+æ§åˆ¶æŠ¥æ–‡é“¾æ¥é€Ÿç‡
 -m limit
 --limit 10/minute
 eg.
 iptables -t filter -I INPUT -p icmp -m limit --limit 10/minute -j ACCEPT 
-Ã¿·ÖÖÓ·Å10¸ö°ü£¬Ïàµ±ÓÚ´ÓµÚ6Ãëºó£¬¿ªÊ¼£¬Ã¿6Ãë·ÅÒ»¸ö°ü£¬ËùÒÔÁùÃëÇ°µÄping£¬È«¶¼ÊÇÍ¨£¬Èç¹ûĞèÒª²»Í¨£¬ĞèÒª¸ÄÄ¬ÈÏpolicy£¬»òÕß¼ÓÒ»Ìõ¹æÔòÀ¹½ØÈ«²¿
-limitÄ£¿éÊ¹ÓÃÁËÁîÅÆÍ°Ëã·¨£¬limitµÄÊµÖÊÎªÉú³ÉÁîÅÆ£¬µ«ÊÇÄ¬ÈÏµÄÁîÅÆÓĞ5¸ö£¬ËùÒÔÅäÖÃÖ®ºó£¬Ç°Îå¸ö°üÒ²ÊÇ¿ÉÒÔÖ±½Ó´©¹ıµÄ£¬ĞèÒªÉèÖÃlimit-burst
+æ¯åˆ†é’Ÿæ”¾10ä¸ªåŒ…ï¼Œç›¸å½“äºä»ç¬¬6ç§’åï¼Œå¼€å§‹ï¼Œæ¯6ç§’æ”¾ä¸€ä¸ªåŒ…ï¼Œæ‰€ä»¥å…­ç§’å‰çš„pingï¼Œå…¨éƒ½æ˜¯é€šï¼Œå¦‚æœéœ€è¦ä¸é€šï¼Œéœ€è¦æ”¹é»˜è®¤policyï¼Œæˆ–è€…åŠ ä¸€æ¡è§„åˆ™æ‹¦æˆªå…¨éƒ¨
+limitæ¨¡å—ä½¿ç”¨äº†ä»¤ç‰Œæ¡¶ç®—æ³•ï¼Œlimitçš„å®è´¨ä¸ºç”Ÿæˆä»¤ç‰Œï¼Œä½†æ˜¯é»˜è®¤çš„ä»¤ç‰Œæœ‰5ä¸ªï¼Œæ‰€ä»¥é…ç½®ä¹‹åï¼Œå‰äº”ä¸ªåŒ…ä¹Ÿæ˜¯å¯ä»¥ç›´æ¥ç©¿è¿‡çš„ï¼Œéœ€è¦è®¾ç½®limit-burst
 *** state
-¿ÉÒÔ½«Ò»Ğ©Ğ­ÒéÊÓÎªÓĞ×´Ì¬µÄÄ£¿é£¬ÓÃÀ´¶ÔÒ»Ğ©¶Ë¿ÚµÄ¿ª·Å»úÖÆ×öÏŞÖÆ£¬±ÈÈç¶Ô80£¬²»ÔÊĞíÖ÷¶¯À´·¢ËÍ£¬Ö»½ÓÊÕÏìÓ¦±¨ÎÄµÈÀàËÆÇé¿ö
-"Á¬½Ó"ÆäÖĞµÄ±¨ÎÄ¿ÉÒÔ·ÖÎª5ÖÖ×´Ì¬£¬±¨ÎÄ×´Ì¬¿ÉÒÔÎªNEW¡¢ESTABLISHED¡¢RELATED¡¢INVALID¡¢UNTRACKED
+å¯ä»¥å°†ä¸€äº›åè®®è§†ä¸ºæœ‰çŠ¶æ€çš„æ¨¡å—ï¼Œç”¨æ¥å¯¹ä¸€äº›ç«¯å£çš„å¼€æ”¾æœºåˆ¶åšé™åˆ¶ï¼Œæ¯”å¦‚å¯¹80ï¼Œä¸å…è®¸ä¸»åŠ¨æ¥å‘é€ï¼Œåªæ¥æ”¶å“åº”æŠ¥æ–‡ç­‰ç±»ä¼¼æƒ…å†µ
+"è¿æ¥"å…¶ä¸­çš„æŠ¥æ–‡å¯ä»¥åˆ†ä¸º5ç§çŠ¶æ€ï¼ŒæŠ¥æ–‡çŠ¶æ€å¯ä»¥ä¸ºNEWã€ESTABLISHEDã€RELATEDã€INVALIDã€UNTRACKED
 * action
 ** DROP
 ** REJECT
 ** LOG
 ** SNAT
-iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT --to-source ¹«ÍøIP
+iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT --to-source å…¬ç½‘IP
 ** DNAT
-Í¨¹ıÒ»¸ö¹«¹²ip±©Â¶·şÎñ£¬È»ºóÒ»°ã¸ù¾İ¶Ë¿ÚºÅÈ·¶¨¶ÔÓ¦µÄ·şÎñ£¬±ÈÈç3389¿ÉÒÔÈÏ¶¨Îª¶ÔÓ¦µÄwin10Ô¶³Ì×ÀÃæ£¬×ª·¢µ½¶ÔÓ¦µÄÄÚ²¿Ö÷»úÖĞ£¬Ò»°ã»¹ĞèÒªÅäÖÃ»Ø³ÌµÄip£¬½øĞĞsnat£¬·ñÔò¿Í»§¶ËÊÕµ½µÄÔ´ipÊÇÀ´×ÔÓÚÄÚ²¿Ö÷»úµÄip£¬²»»á½øĞĞ½âÎö£¬ÉõÖÁ¿ÉÒÔ½øĞĞ±¨´í¶Ï¿ª
-iptables -t nat -I PREROUTING -d ¹«ÍøIP -p tcp --dport ¹«Íø¶Ë¿Ú -j DNAT --to-destination Ë½ÍøIP:¶Ë¿ÚºÅ
-iptables -t nat -I PREROUTING -d ¹«ÍøIP -p tcp --dport 8080 -j DNAT --to-destination 10.1.0.1:80
-iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT --to-source ¹«ÍøIP
-mark: ÒÔÇ°ÅáÑ¶Â·ÓÉÆ÷ÍøÉÏÊ¹ÓÃudp2raw£¬¾ÍÊÇÃ»ÅäÖÃ»Ø³Ì£¬ÓĞĞ©°æ±¾µÄlinux£¬dnatÖ®ºó»á×Ô¶¯ÅäÖÃ»Ø³Ì£¬µ¼ÖÂµçÄÔ¶Ï¿ªÁ´½Ó£¬¶øµçÄÔ£¬Ö±½Ólinux×ª·¢£¬»Ø³ÌÊ±£¬¿ÉÒÔÕı³£ÔòÊÇÒòÎªÄÚ²¿Ö»ÊÇµ¥´¿Ê¹ÓÃÁË¶Ë¿Ú×ª·¢£¬ip¶¼ÊÇÒ»ÖÂ
+é€šè¿‡ä¸€ä¸ªå…¬å…±ipæš´éœ²æœåŠ¡ï¼Œç„¶åä¸€èˆ¬æ ¹æ®ç«¯å£å·ç¡®å®šå¯¹åº”çš„æœåŠ¡ï¼Œæ¯”å¦‚3389å¯ä»¥è®¤å®šä¸ºå¯¹åº”çš„win10è¿œç¨‹æ¡Œé¢ï¼Œè½¬å‘åˆ°å¯¹åº”çš„å†…éƒ¨ä¸»æœºä¸­ï¼Œä¸€èˆ¬è¿˜éœ€è¦é…ç½®å›ç¨‹çš„ipï¼Œè¿›è¡Œsnatï¼Œå¦åˆ™å®¢æˆ·ç«¯æ”¶åˆ°çš„æºipæ˜¯æ¥è‡ªäºå†…éƒ¨ä¸»æœºçš„ipï¼Œä¸ä¼šè¿›è¡Œè§£æï¼Œç”šè‡³å¯ä»¥è¿›è¡ŒæŠ¥é”™æ–­å¼€
+iptables -t nat -I PREROUTING -d å…¬ç½‘IP -p tcp --dport å…¬ç½‘ç«¯å£ -j DNAT --to-destination ç§ç½‘IP:ç«¯å£å·
+iptables -t nat -I PREROUTING -d å…¬ç½‘IP -p tcp --dport 8080 -j DNAT --to-destination 10.1.0.1:80
+iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT --to-source å…¬ç½‘IP
+mark: ä»¥å‰è£´è®¯è·¯ç”±å™¨ç½‘ä¸Šä½¿ç”¨udp2rawï¼Œå°±æ˜¯æ²¡é…ç½®å›ç¨‹ï¼Œæœ‰äº›ç‰ˆæœ¬çš„linuxï¼Œdnatä¹‹åä¼šè‡ªåŠ¨é…ç½®å›ç¨‹ï¼Œå¯¼è‡´ç”µè„‘æ–­å¼€é“¾æ¥ï¼Œè€Œç”µè„‘ï¼Œç›´æ¥linuxè½¬å‘ï¼Œå›ç¨‹æ—¶ï¼Œå¯ä»¥æ­£å¸¸åˆ™æ˜¯å› ä¸ºå†…éƒ¨åªæ˜¯å•çº¯ä½¿ç”¨äº†ç«¯å£è½¬å‘ï¼Œipéƒ½æ˜¯ä¸€è‡´
 ** MASQUERADE
-¿ÉÒÔÈÏÎªÊÇ¶¯Ì¬SNAt£¬ÓÉÓÚIPµÄ¶¯Ì¬±ä»¯£¬Å¼¶ûĞèÒªÕâÖÖÅäÖÃ
-iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -o eth0 -j MASQUERADE ¸ÄÎªeth0¿ÉÓÃµÄipµØÖ·
+å¯ä»¥è®¤ä¸ºæ˜¯åŠ¨æ€SNAtï¼Œç”±äºIPçš„åŠ¨æ€å˜åŒ–ï¼Œå¶å°”éœ€è¦è¿™ç§é…ç½®
+iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -o eth0 -j MASQUERADE æ”¹ä¸ºeth0å¯ç”¨çš„ipåœ°å€
 ** REDIRECT
-±¨ÎÄÖØ¶¨Ïò
+æŠ¥æ–‡é‡å®šå‘
 iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
-* ·À»ğÇ½¸ÅÄî
-** Ö÷»ú·À»ğÇ½
-¾­¹ıprerouting->input->ouput->postrouting
-ËùÒÔÖ÷»ú·À»ğÇ½°ü¹ıÂË¶¼ÔÚinputºÍouputÁ´½øĞĞÅäÖÃ
-** ÍøÂç·À»ğÇ½
+* é˜²ç«å¢™æ¦‚å¿µ
+** ä¸»æœºé˜²ç«å¢™
+ç»è¿‡prerouting->input->ouput->postrouting
+æ‰€ä»¥ä¸»æœºé˜²ç«å¢™åŒ…è¿‡æ»¤éƒ½åœ¨inputå’Œouputé“¾è¿›è¡Œé…ç½®
+** ç½‘ç»œé˜²ç«å¢™
 prerouting->forward->postrouting
-¹ıÂËÖ»ÄÜÔÚforwardÁ´Åä
-¸ÃÁ´±ØĞëÅäÖÃºËĞÄ×ª·¢
+è¿‡æ»¤åªèƒ½åœ¨forwardé“¾é…
+è¯¥é“¾å¿…é¡»é…ç½®æ ¸å¿ƒè½¬å‘
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
 http://www.zsythink.net/archives/1663
 * reference
 http://www.zsythink.net/archives/category/%e8%bf%90%e7%bb%b4%e7%9b%b8%e5%85%b3/iptables/
 * general
-iptables -I IN_public_allow -p tcp --dport 20001 -j ACCEPT #iptable¿ª¶Ë¿Ú£¬±ÈÈçÍø¹Ø»òÕßÆäËûĞèÒª±©Â¶¶Ë¿ÚµÄ·şÎñ£¬centos7
+iptables -I IN_public_allow -p tcp --dport 20001 -j ACCEPT #iptableå¼€ç«¯å£ï¼Œæ¯”å¦‚ç½‘å…³æˆ–è€…å…¶ä»–éœ€è¦æš´éœ²ç«¯å£çš„æœåŠ¡ï¼Œcentos7

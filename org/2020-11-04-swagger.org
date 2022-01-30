@@ -1,8 +1,8 @@
 #+TITLE: swagger
 #+STARTUP: indent
-* ¿ÓÁĞ±í
-1. @ValidµÈ303±ê×¼×¢½â£¬Èç¹ûÔÙapiºÍÊµÏÖ¶¼±êÁË£¬swagger±¨´í£¬ÎŞ·¨½øÈëswagger-ui.html
-2. ±ØĞëÉèÖÃ@Requestmapping£¬¿Õ²»ÔÊĞí£¬"/"Ò²²»ÔÊĞí£¬´íÎó½á¹ûÈç1
-3. ¼¯³ÉµÇÂ¼½Ó¿Ú£¬¿ÉÒÔÊ¹ÓÃfake controllerµÄ·½Ê½Éú³ÉÎÄµµ
-4. jwtÅäÖÃ
+* å‘åˆ—è¡¨
+1. @Validç­‰303æ ‡å‡†æ³¨è§£ï¼Œå¦‚æœå†apiå’Œå®ç°éƒ½æ ‡äº†ï¼ŒswaggeræŠ¥é”™ï¼Œæ— æ³•è¿›å…¥swagger-ui.html
+2. å¿…é¡»è®¾ç½®@Requestmappingï¼Œç©ºä¸å…è®¸ï¼Œ"/"ä¹Ÿä¸å…è®¸ï¼Œé”™è¯¯ç»“æœå¦‚1
+3. é›†æˆç™»å½•æ¥å£ï¼Œå¯ä»¥ä½¿ç”¨fake controllerçš„æ–¹å¼ç”Ÿæˆæ–‡æ¡£
+4. jwté…ç½®
 https://stackoverflow.com/questions/50545286/spring-boot-swagger-ui-set-jwt-token

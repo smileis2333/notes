@@ -1,11 +1,11 @@
 #+TITLE: springmvc
 #+STARTUP: indent
 * principle
-1. DispatcherServlet×÷ÎªÖĞĞÄÅäÖÃ£¬ÓÃµ¥Ò»servletÊµÀımappingÈ«²¿ÇëÇó£¬²¢½øĞĞ·Ö·¢£¬ÔÚServlet APIµÄ»ù´¡ÉÏ£¬ÊµÏÖÁËÒ»¸öÀà¿ÉÒÔ´¦ÀíurlÓ³Éä£¬
-2. HandlerMapping£¬»ñÈ¡handlerÓÃ£¬Ö÷ÒªÓÃÓÚÖ§³Ö@RequestMappingµÄ½âÎöºÍ´¦Àí£¬ÁíÒ»ÖÖÅäÖÃÊÇÅäÖÃÎÄ¼şÀàĞÍ£¬¼´¶ÔServletµ¥¶Ôµ¥µÄ´¦Àí
-3. Handler£¬Êµ¼ÊµÄµ÷ÓÃÁ´
-4. HandlerAdapter£¬×¢½âĞÍµÄÊÇspringmvc×Ô¼ºÖ§³ÖµÄÀàĞÍ£¬¼òµ¥ĞÍµÄchain invoke£¬Á½ÖÖÏ¸½ÚÉÏµÄ´¦Àí²»Ò»ÖÂ£¬ÒòÎªĞèÒªAdapter½øĞĞµ÷ÓÃ£¬ÆÁ±Î¾ßÌåµÄµ÷ÓÃÏ¸½Ú
-* ¿çÓòÅäÖÃ
+1. DispatcherServletä½œä¸ºä¸­å¿ƒé…ç½®ï¼Œç”¨å•ä¸€servletå®ä¾‹mappingå…¨éƒ¨è¯·æ±‚ï¼Œå¹¶è¿›è¡Œåˆ†å‘ï¼Œåœ¨Servlet APIçš„åŸºç¡€ä¸Šï¼Œå®ç°äº†ä¸€ä¸ªç±»å¯ä»¥å¤„ç†urlæ˜ å°„ï¼Œ
+2. HandlerMappingï¼Œè·å–handlerç”¨ï¼Œä¸»è¦ç”¨äºæ”¯æŒ@RequestMappingçš„è§£æå’Œå¤„ç†ï¼Œå¦ä¸€ç§é…ç½®æ˜¯é…ç½®æ–‡ä»¶ç±»å‹ï¼Œå³å¯¹Servletå•å¯¹å•çš„å¤„ç†
+3. Handlerï¼Œå®é™…çš„è°ƒç”¨é“¾
+4. HandlerAdapterï¼Œæ³¨è§£å‹çš„æ˜¯springmvcè‡ªå·±æ”¯æŒçš„ç±»å‹ï¼Œç®€å•å‹çš„chain invokeï¼Œä¸¤ç§ç»†èŠ‚ä¸Šçš„å¤„ç†ä¸ä¸€è‡´ï¼Œå› ä¸ºéœ€è¦Adapterè¿›è¡Œè°ƒç”¨ï¼Œå±è”½å…·ä½“çš„è°ƒç”¨ç»†èŠ‚
+* è·¨åŸŸé…ç½®
 ** springboot
 *** configuration
 #+BEGIN_SRC java
@@ -13,9 +13,9 @@
 public class CORSConfig {
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("*"); // 1ÔÊĞíÈÎºÎÓòÃûÊ¹ÓÃ
-        corsConfiguration.addAllowedHeader("*"); // 2ÔÊĞíÈÎºÎÍ·
-        corsConfiguration.addAllowedMethod("*"); // 3ÔÊĞíÈÎºÎ·½·¨£¨post¡¢getµÈ£©
+        corsConfiguration.addAllowedOrigin("*"); // 1å…è®¸ä»»ä½•åŸŸåä½¿ç”¨
+        corsConfiguration.addAllowedHeader("*"); // 2å…è®¸ä»»ä½•å¤´
+        corsConfiguration.addAllowedMethod("*"); // 3å…è®¸ä»»ä½•æ–¹æ³•ï¼ˆpostã€getç­‰ï¼‰
         return corsConfiguration;
     }
 
@@ -28,13 +28,13 @@ public class CORSConfig {
 }
 #+END_SRC
 * trick
-** Ğ´»ØÍ¼Æ¬
-*** Í¨¹ıreponseĞ´»Ø
+** å†™å›å›¾ç‰‡
+*** é€šè¿‡reponseå†™å›
 #+BEGIN_SRC java
     @GetMapping("/avatar_demo")
     public String execute(HttpServletRequest httpServletRequest,
                           HttpServletResponse httpServletResponse) throws IOException {
-        // imgÎªÍ¼Æ¬µÄ¶ş½øÖÆÁ÷
+        // imgä¸ºå›¾ç‰‡çš„äºŒè¿›åˆ¶æµ
 //        String templatePath = Thread.currentThread().getContextClassLoader().getResource("").getPath()+"template/";
         File avatar = new File("C:\\Users\\smile2333\\IdeaProjects\\qa_server\\src\\main\\resources\\static\\avatar.png");
         FileInputStream inputStream = new FileInputStream(avatar);
@@ -51,58 +51,58 @@ public class CORSConfig {
     }
     
 #+END_SRC
-*** Í¨¹ı·µ»ØÖµ·µ»Ø
+*** é€šè¿‡è¿”å›å€¼è¿”å›
 #+BEGIN_SRC java
 @ResponseBody
 @RequestMapping(value = "/somePath", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
 public byte[] someMethod() throws Exception {
     /*
-        ÓÃspring»ñµÃÏîÄ¿ÖĞµÄ×ÊÔ´£¬´Ë´¦µÄapplicationContext×Ô¼ºÏë°ì·¨»ñÈ¡(³£ÓÃµÄ·½Ê½ÊÇÔÚÏîÄ¿Æô¶¯Ê±´æµ½static³£Á¿Àï)
-        getResource·½·¨²ÎÊıµÄÂ·¾¶¸ñÊ½¿ÉÒÔÎªÒÔÏÂ4ÖÖÖ®Ò»£º
-        1.classpath:com/myapp/config.xml Ïà¶ÔÓÚclassesÄ¿Â¼µÄÂ·¾¶
-        2.file:///data/config.xml Ïà¶ÔÓÚÏµÍ³¸ùÄ¿Â¼µÄÂ·¾¶
-        3.http://myserver/logo.png ÍøÂçÉÏµÄÂ·¾¶
-        4./data/config.xml ²»¼ÓÇ°×º£¬Ïà¶ÔÓÚÏîÄ¿¸ùÂ·¾¶£¬ÀıÈç¿ÉÒÔĞ´/WEB-INF/web.xml
+        ç”¨springè·å¾—é¡¹ç›®ä¸­çš„èµ„æºï¼Œæ­¤å¤„çš„applicationContextè‡ªå·±æƒ³åŠæ³•è·å–(å¸¸ç”¨çš„æ–¹å¼æ˜¯åœ¨é¡¹ç›®å¯åŠ¨æ—¶å­˜åˆ°staticå¸¸é‡é‡Œ)
+        getResourceæ–¹æ³•å‚æ•°çš„è·¯å¾„æ ¼å¼å¯ä»¥ä¸ºä»¥ä¸‹4ç§ä¹‹ä¸€ï¼š
+        1.classpath:com/myapp/config.xml ç›¸å¯¹äºclassesç›®å½•çš„è·¯å¾„
+        2.file:///data/config.xml ç›¸å¯¹äºç³»ç»Ÿæ ¹ç›®å½•çš„è·¯å¾„
+        3.http://myserver/logo.png ç½‘ç»œä¸Šçš„è·¯å¾„
+        4./data/config.xml ä¸åŠ å‰ç¼€ï¼Œç›¸å¯¹äºé¡¹ç›®æ ¹è·¯å¾„ï¼Œä¾‹å¦‚å¯ä»¥å†™/WEB-INF/web.xml
     */
     Resource resource = applicationContext.getResource("/xx/background.jpg");
 
-    //ÔØÈëµ×Í¼
+    //è½½å…¥åº•å›¾
     BufferedImage image = ImageIO.read(resource.getFile());
 
-    //¿ªÊ¼»æ»­
+    //å¼€å§‹ç»˜ç”»
     Graphics2D g = image.createGraphics();
 
-    //Ê¹ÓÃ×Ô¶¨Òå×ÖÌå
+    //ä½¿ç”¨è‡ªå®šä¹‰å­—ä½“
     File fontFile = applicationContext.getResource("/xx/youyuan.ttf").getFile();
     Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.BOLD, 30);
     g.setFont(font);
 
-    //ÉèÖÃÎÄ×ÖÑÕÉ«£¬Ğ´ÎÄ×Ö£¨Ò²¿ÉÒÔ×ö¸ü¶àÊÂÇé£©
+    //è®¾ç½®æ–‡å­—é¢œè‰²ï¼Œå†™æ–‡å­—ï¼ˆä¹Ÿå¯ä»¥åšæ›´å¤šäº‹æƒ…ï¼‰
     g.setColor(new Color(30, 30, 30));
     g.drawString("XXX", 100, 100);
 
-    //½áÊø»æ»­
+    //ç»“æŸç»˜ç”»
     g.dispose();
 
-    //ÒÔ×Ö½ÚÊı×éµÄ·½Ê½Êä³öÍ¼Ïñ
+    //ä»¥å­—èŠ‚æ•°ç»„çš„æ–¹å¼è¾“å‡ºå›¾åƒ
     ByteArrayOutputStream array = new ByteArrayOutputStream();
     ImageIO.write(image, "JPEG", array);
     return array.toByteArray();
 }
 #+END_SRC
 * principle
-1. SpringÉ¨ÃèÏîÄ¿,½¨¸ömap
-2. É¨controller
-3. ÄÃRequestMapping±êµÄ·½·¨£¬È¡Ó³Éä×÷Îªkey(Èç¹ûÀàÒ²±êÁË£¬ÔòºÏ²¢)£¬ÖµÎªMethod
-4. ¸ù¾İÓÃ»§ÇëÇó£¬ÄÃ³öURI½øĞĞÆ¥Åä
+1. Springæ‰«æé¡¹ç›®,å»ºä¸ªmap
+2. æ‰«controller
+3. æ‹¿RequestMappingæ ‡çš„æ–¹æ³•ï¼Œå–æ˜ å°„ä½œä¸ºkey(å¦‚æœç±»ä¹Ÿæ ‡äº†ï¼Œåˆ™åˆå¹¶)ï¼Œå€¼ä¸ºMethod
+4. æ ¹æ®ç”¨æˆ·è¯·æ±‚ï¼Œæ‹¿å‡ºURIè¿›è¡ŒåŒ¹é…
 ** handlerMapping
-1. ÓÃÓÚÈ¡³öhandler£¬ÕÒµÄÊ±ºòÊÇÒ»²¨ÁĞ±í£¬ÒòÎª´æÔÚ¾ÉÊ½´úÂëµÄÎÊÌâ£¬±ÈÈçController½Ó¿ÚµÄhandleRequest£¬HttpRequestHandlerµÄhandleRequest
-2. Ä¿µÄÊÇ¸÷ÖÖÀàĞÍµÄ¸÷ÖÖ·ÖÀà£¬ÈçÈ«²¿Ê¹ÓÃ@ControllerµÄ×ßRequestHandlerMapping
+1. ç”¨äºå–å‡ºhandlerï¼Œæ‰¾çš„æ—¶å€™æ˜¯ä¸€æ³¢åˆ—è¡¨ï¼Œå› ä¸ºå­˜åœ¨æ—§å¼ä»£ç çš„é—®é¢˜ï¼Œæ¯”å¦‚Controlleræ¥å£çš„handleRequestï¼ŒHttpRequestHandlerçš„handleRequest
+2. ç›®çš„æ˜¯å„ç§ç±»å‹çš„å„ç§åˆ†ç±»ï¼Œå¦‚å…¨éƒ¨ä½¿ç”¨@Controllerçš„èµ°RequestHandlerMapping
 ** handlerAdapter
-1. ÀàËÆhandlerMapping£¬Ò²ÊÇÎª¼æÈİ´¦Àí
-2. ×¢½â·½·¨µÄÊÇ·´Éäµ÷ÓÃ£¬¶ø¾ÉÊ½µÄ¿ÉÒÔÖ±½Óµ÷ÓÃ£¬Ç¿×ªÂß¼­Ö±½Óµ÷ÓÃ(ÒòÎªÒ»¸öuri¾Í¶ÔÓ¦Ò»¸öhandler)
-*** ´¦ÀíhandlerMethod
-´¦Àí´¦Àí£¬·´Éäµ÷ÓÃ£¬ÓÃÁËÒ»´ó¶ÑµÄArgumentResolverÀ´´¦Àí²ÎÊı½ÓÊÕÓë¸³Öµ
+1. ç±»ä¼¼handlerMappingï¼Œä¹Ÿæ˜¯ä¸ºå…¼å®¹å¤„ç†
+2. æ³¨è§£æ–¹æ³•çš„æ˜¯åå°„è°ƒç”¨ï¼Œè€Œæ—§å¼çš„å¯ä»¥ç›´æ¥è°ƒç”¨ï¼Œå¼ºè½¬é€»è¾‘ç›´æ¥è°ƒç”¨(å› ä¸ºä¸€ä¸ªuriå°±å¯¹åº”ä¸€ä¸ªhandler)
+*** å¤„ç†handlerMethod
+å¤„ç†å¤„ç†ï¼Œåå°„è°ƒç”¨ï¼Œç”¨äº†ä¸€å¤§å †çš„ArgumentResolveræ¥å¤„ç†å‚æ•°æ¥æ”¶ä¸èµ‹å€¼
 
-* ÁãÅäÖÃ
-Spring WebÄ£¿éÒÑ¾­ÉèÖÃÊ¹ÓÃÁËServlet3.0Ö®ºó³öÌ¨µÄSPIÖ§³Ö£¬ÔÚMETA-INF\services\javax.servlet.ServletContainerInitializerÉèÖÃÁËSpringServletContainerInitializer£¬²¢ÖÆ¶¨ÁËÈ¡ÊµÏÖWebApplicationInitializer½Ó¿ÚµÄÀà£¬×÷ÎªÆô¶¯ÅäÖÃÀàÖ®Ò»£¬Ö®ºóÈ¡³öÈ«²¿½øĞĞ³õÊ¼»¯£¬ËùÒÔ×Ô¶¨ÒåÆô¶¯ÎŞ·¨ÓÃµ½servlet SPIµÄ²¿·Ö£¬ÊµÏÖÁËWebApplicationInitializer¾Í¿ÉÒÔ³É¹¦±»Spring½ÓÊÕµ½
+* é›¶é…ç½®
+Spring Webæ¨¡å—å·²ç»è®¾ç½®ä½¿ç”¨äº†Servlet3.0ä¹‹åå‡ºå°çš„SPIæ”¯æŒï¼Œåœ¨META-INF\services\javax.servlet.ServletContainerInitializerè®¾ç½®äº†SpringServletContainerInitializerï¼Œå¹¶åˆ¶å®šäº†å–å®ç°WebApplicationInitializeræ¥å£çš„ç±»ï¼Œä½œä¸ºå¯åŠ¨é…ç½®ç±»ä¹‹ä¸€ï¼Œä¹‹åå–å‡ºå…¨éƒ¨è¿›è¡Œåˆå§‹åŒ–ï¼Œæ‰€ä»¥è‡ªå®šä¹‰å¯åŠ¨æ— æ³•ç”¨åˆ°servlet SPIçš„éƒ¨åˆ†ï¼Œå®ç°äº†WebApplicationInitializerå°±å¯ä»¥æˆåŠŸè¢«Springæ¥æ”¶åˆ°

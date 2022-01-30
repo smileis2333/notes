@@ -22,8 +22,8 @@
 #+END_SRC
 ** compoent
 *** paragraph
-P p = factory.createP(); //¶ÎÂä
-PPr paragraphProperties = factory.createPPr(); //¶ÎÂäÑùÊ½
+P p = factory.createP(); //æ®µè½
+PPr paragraphProperties = factory.createPPr(); //æ®µè½æ ·å¼
 *** r part(sub part text)
 R r = factory.createR();
 Text t = factory.createText();

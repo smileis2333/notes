@@ -1,16 +1,16 @@
 #+TITLE: python
 #+STARTUP: indent
 * basic
-** ±àÂëÖ¸¶¨
-Ä¬ÈÏÊÇutf-8,# -*- coding: cp-1252 -*-¿ÉÒÔÖ¸¶¨
-** ×¢ÊÍ
-*** µ¥ĞĞ-#
-*** ¶àĞĞ
+** ç¼–ç æŒ‡å®š
+é»˜è®¤æ˜¯utf-8,# -*- coding: cp-1252 -*-å¯ä»¥æŒ‡å®š
+** æ³¨é‡Š
+*** å•è¡Œ-#
+*** å¤šè¡Œ
 """/'''
 content
 """/'''
-** Ëõ½ø±íÊ¾´úÂë¿é
-** Êı¾İÀàĞÍ
+** ç¼©è¿›è¡¨ç¤ºä»£ç å—
+** æ•°æ®ç±»å‹
 *** Number
 **** int
 **** bool
@@ -21,7 +21,7 @@ content
 *** String
 *** Tuple
 tuple = ( 'abcd', 786 , 2.23, 'runoob', 70.2  )
-²»¿É±ä
+ä¸å¯å˜
 *** List
 list = [ 'abcd', 786 , 2.23, 'runoob', 70.2 ]
 *** Set
@@ -30,25 +30,25 @@ student = {'Tom', 'Jim', 'Mary', 'Tom', 'Jack', 'Rose'}
 #+BEGIN_SRC python
 dict = {'Name': 'Runoob', 'Age': 7, 'Class': 'First'}
 dict['Age'] = 8
-del dict['Name'] # É¾³ı¼ü 'Name'
-dict.clear()     # Çå¿Õ×Öµä
-del dict         # É¾³ı×Öµä
+del dict['Name'] # åˆ é™¤é”® 'Name'
+dict.clear()     # æ¸…ç©ºå­—å…¸
+del dict         # åˆ é™¤å­—å…¸
 
 #+END_SRC
-** Ä£¿é¹ÜÀí
-½«Õû¸öÄ£¿é(somemodule)µ¼Èë£¬¸ñÊ½Îª£º import somemodule
-´ÓÄ³¸öÄ£¿éÖĞµ¼ÈëÄ³¸öº¯Êı,¸ñÊ½Îª£º from somemodule import somefunction
-´ÓÄ³¸öÄ£¿éÖĞµ¼Èë¶à¸öº¯Êı,¸ñÊ½Îª£º from somemodule import firstfunc, secondfunc, thirdfunc
-½«Ä³¸öÄ£¿éÖĞµÄÈ«²¿º¯Êıµ¼Èë£¬¸ñÊ½Îª£º from somemodule import *
-** ÔËËã·û(ÌØÓĞ)
+** æ¨¡å—ç®¡ç†
+å°†æ•´ä¸ªæ¨¡å—(somemodule)å¯¼å…¥ï¼Œæ ¼å¼ä¸ºï¼š import somemodule
+ä»æŸä¸ªæ¨¡å—ä¸­å¯¼å…¥æŸä¸ªå‡½æ•°,æ ¼å¼ä¸ºï¼š from somemodule import somefunction
+ä»æŸä¸ªæ¨¡å—ä¸­å¯¼å…¥å¤šä¸ªå‡½æ•°,æ ¼å¼ä¸ºï¼š from somemodule import firstfunc, secondfunc, thirdfunc
+å°†æŸä¸ªæ¨¡å—ä¸­çš„å…¨éƒ¨å‡½æ•°å¯¼å…¥ï¼Œæ ¼å¼ä¸ºï¼š from somemodule import *
+** è¿ç®—ç¬¦(ç‰¹æœ‰)
 *** **
-Ãİ
+å¹‚
 *** //
-È¡Õû³ı
+å–æ•´é™¤
 *** **=
 *** //=
 *** :=
-º£ÏóÔËËã·û
+æµ·è±¡è¿ç®—ç¬¦
 *** and
 *** or
 *** not
@@ -56,7 +56,7 @@ del dict         # É¾³ı×Öµä
 *** not in
 *** is
 *** is not
-** Ñ­»·Óï¾ä
+** å¾ªç¯è¯­å¥
 *** while
 #+BEGIN_SRC python
 while counter <= n:
@@ -69,7 +69,7 @@ languages = ["C", "C++", "Perl", "Python"]
 for x in languages:
     print (x)
 #+END_SRC
-** Æµ·±ÓÃµ½µÄº¯Êı
+** é¢‘ç¹ç”¨åˆ°çš„å‡½æ•°
 *** range
 #+BEGIN_SRC python
 for i in range(5):
@@ -82,7 +82,7 @@ for i in range(5,9) :
 
 for i in range(0, 10, 3) :
     print(i)
-    # µÚÈı¸ö²ÎÊıÎª²½³¤,0, 3, 6, 9
+    # ç¬¬ä¸‰ä¸ªå‚æ•°ä¸ºæ­¥é•¿,0, 3, 6, 9
 
 a = ['Google', 'Baidu', 'Runoob', 'Taobao', 'QQ']
 for i in range(len(a)):
@@ -112,7 +112,7 @@ print (next(it)) # 2
 
 
 list=[1,2,3,4]
-it = iter(list)    # ´´½¨µü´úÆ÷¶ÔÏó
+it = iter(list)    # åˆ›å»ºè¿­ä»£å™¨å¯¹è±¡
 for x in it:
     print (x, end=" ")
 
@@ -123,7 +123,7 @@ while True:
     except StopIteration:
         sys.exit()
 #+END_SRC
-**** ´´½¨Ò»¸öµü´úÆ÷
+**** åˆ›å»ºä¸€ä¸ªè¿­ä»£å™¨
 #+BEGIN_SRC python
 class MyNumbers:
   def __iter__(self):
@@ -144,7 +144,7 @@ print(next(myiter))
 print(next(myiter))
 print(next(myiter))
 
-# ·ÀÖ¹ÎŞÏßÑ­»·
+# é˜²æ­¢æ— çº¿å¾ªç¯
 class MyNumbers:
   def __iter__(self):
     self.a = 1
@@ -165,12 +165,12 @@ for x in myiter:
   print(x)
 
 #+END_SRC
-** º¯Êı
-*** Éú³ÉÆ÷
+** å‡½æ•°
+*** ç”Ÿæˆå™¨
 #+BEGIN_SRC python
 import sys
  
-def fibonacci(n): # Éú³ÉÆ÷º¯Êı - ì³²¨ÄÇÆõ
+def fibonacci(n): # ç”Ÿæˆå™¨å‡½æ•° - æ–æ³¢é‚£å¥‘
     a, b, counter = 0, 1, 0
     while True:
         if (counter > n): 
@@ -178,7 +178,7 @@ def fibonacci(n): # Éú³ÉÆ÷º¯Êı - ì³²¨ÄÇÆõ
         yield a
         a, b = b, a + b
         counter += 1
-f = fibonacci(10) # f ÊÇÒ»¸öµü´úÆ÷£¬ÓÉÉú³ÉÆ÷·µ»ØÉú³É
+f = fibonacci(10) # f æ˜¯ä¸€ä¸ªè¿­ä»£å™¨ï¼Œç”±ç”Ÿæˆå™¨è¿”å›ç”Ÿæˆ
  
 while True:
     try:
@@ -189,7 +189,7 @@ while True:
 #+END_SRC
 *** define
 #+BEGIN_SRC python
-# ¼ÆËãÃæ»ıº¯Êı
+# è®¡ç®—é¢ç§¯å‡½æ•°
 def area(width, height):
     return width * height
  
@@ -204,16 +204,16 @@ print("width =", w, " height =", h, " area =", area(w, h))
 #+END_SRC
 *** lambda
 #+BEGIN_SRC python
-# ¿ÉĞ´º¯ÊıËµÃ÷
+# å¯å†™å‡½æ•°è¯´æ˜
 sum = lambda arg1, arg2: arg1 + arg2
  
-# µ÷ÓÃsumº¯Êı
-print ("Ïà¼ÓºóµÄÖµÎª : ", sum( 10, 20 ))
-print ("Ïà¼ÓºóµÄÖµÎª : ", sum( 20, 20 ))
+# è°ƒç”¨sumå‡½æ•°
+print ("ç›¸åŠ åçš„å€¼ä¸º : ", sum( 10, 20 ))
+print ("ç›¸åŠ åçš„å€¼ä¸º : ", sum( 20, 20 ))
 
 #+END_SRC
 ** io
-*** ¶ÁÈ¡
+*** è¯»å–
 #+BEGIN_SRC python
 file = open(fileName,"mode")
 file.read([count])

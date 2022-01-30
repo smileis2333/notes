@@ -24,64 +24,64 @@ advertised.listeners=PLAINTEXT://123.56.164.131:9092 # appent to server.properti
 * partition
 ** replica
 *** leader
-1. È«²¿Éú²úºÍÏû·ÑÇëÇó¶¼¾­¹ı¸Ãbroker£¬ÔÚÓÉÆä£¬½øĞĞ±¸·İĞ´³ö£¬ÓÃÓÚ±£Ö¤Ò»ÖÂĞÔ
-2. ÔÚ³õ´Î´´½¨topicÊ±£¬Ê¹ÓÃ¶ÔÓ¦Ëã·¨½øĞĞleaderÆ½ºâ£¬×÷ÎªpartitionµÄpreferred leader£¬ÔÚleaderå´ÁËºó£¬Èç¹û³öÓÚin-sync£¬Ö±½ÓÌáÉı£¬ÓÅÓÚÆäËûfollower
+1. å…¨éƒ¨ç”Ÿäº§å’Œæ¶ˆè´¹è¯·æ±‚éƒ½ç»è¿‡è¯¥brokerï¼Œåœ¨ç”±å…¶ï¼Œè¿›è¡Œå¤‡ä»½å†™å‡ºï¼Œç”¨äºä¿è¯ä¸€è‡´æ€§
+2. åœ¨åˆæ¬¡åˆ›å»ºtopicæ—¶ï¼Œä½¿ç”¨å¯¹åº”ç®—æ³•è¿›è¡Œleaderå¹³è¡¡ï¼Œä½œä¸ºpartitionçš„preferred leaderï¼Œåœ¨leaderå®•äº†åï¼Œå¦‚æœå‡ºäºin-syncï¼Œç›´æ¥æå‡ï¼Œä¼˜äºå…¶ä»–follower
 *** follower
-Êı¾İ±¸·İ£¬µ±leader of partitionå´ÁËÖ®ºó£¬ÌáÉıÎª¸ÃpartitionµÄleader
-** ·ÖÅäËã·¨
+æ•°æ®å¤‡ä»½ï¼Œå½“leader of partitionå®•äº†ä¹‹åï¼Œæå‡ä¸ºè¯¥partitionçš„leader
+** åˆ†é…ç®—æ³•
 *** without rack
 eg:
-6 brokder£¬10 partitons, replica factor is 3£¬ total 30 partition
-1. ³éÈ¡Ëæ»úÊı£¬×÷Îª³õÊ¼broker£¬±ÈÈç³éÈ¡4
-2. ÏÈ·ÖÅäleader£¬·ÖÅäpartition0 leaderµ½brokder4,partition1 leaderµ½brokder5,partition2 µ½broker0£¬ÒÔ´ËÀàÍÆ
-3. ·ÖÅäfollower,·Ö±ğ´Ó·ÖÇø¶ÔÓ¦µÄleaderÍùºóÅÅ£¬±ÈÈçpartition0 -->broker5,broker0, partiton1-->broker0,brokder1£¬ÒÀ´ËÀàÍÆ
+6 brokderï¼Œ10 partitons, replica factor is 3ï¼Œ total 30 partition
+1. æŠ½å–éšæœºæ•°ï¼Œä½œä¸ºåˆå§‹brokerï¼Œæ¯”å¦‚æŠ½å–4
+2. å…ˆåˆ†é…leaderï¼Œåˆ†é…partition0 leaderåˆ°brokder4,partition1 leaderåˆ°brokder5,partition2 åˆ°broker0ï¼Œä»¥æ­¤ç±»æ¨
+3. åˆ†é…follower,åˆ†åˆ«ä»åˆ†åŒºå¯¹åº”çš„leaderå¾€åæ’ï¼Œæ¯”å¦‚partition0 -->broker5,broker0, partiton1-->broker0,brokder1ï¼Œä¾æ­¤ç±»æ¨
 *** with rack
 rack1->broker1,broker2,broker3
 rack2->broker4,broker5,broker6
 
-Ñ¡È¡Ë³ĞòÎªbroker1,broker4,broker2...
+é€‰å–é¡ºåºä¸ºbroker1,broker4,broker2...
 * message
 * producer
 ** bootstrap.servers
-kafka broker£¬Ò»°ãÅäÁ½¸ö(·ÀÖ¹µ¥µã¹ÊÕÏ)£¬Ê£ÏÂµÄÓÉÓÚÆäÍ¨Ñ¶»úÖÆ£¬×îÖÕ¿ÉÒÔÍêÈ«»ñÈ¡µ½È«²¿µÄbrokerĞÅÏ¢
+kafka brokerï¼Œä¸€èˆ¬é…ä¸¤ä¸ª(é˜²æ­¢å•ç‚¹æ•…éšœ)ï¼Œå‰©ä¸‹çš„ç”±äºå…¶é€šè®¯æœºåˆ¶ï¼Œæœ€ç»ˆå¯ä»¥å®Œå…¨è·å–åˆ°å…¨éƒ¨çš„brokerä¿¡æ¯
 ** key.serializer
 ** value.serializer
 ** ACKS
-acks=0 ÎŞÊÓÊÇ·ñÏìÓ¦£¬¿ÉÒÔ¾¡¿ÉÄÜ´ïµ½ÍøÂçÆ¿¾±ÉÏÏßµÄ·¢ËÍÄÜÁ¦
-acks=1 ÊÕµ½leader·¢»ØµÄÏìÓ¦£¬»¹ÊÇÓĞ¶ªÊ§µÄ¿ÉÄÜĞÔ
-acks=all ÓÉleaderÈ·ÈÏÈ«²¿followerÍ¬²½Íê³É£¬²ÅÈ·ÈÏ³É¹¦£¬×î°²È«£¬ÏûºÄ×î´ó
+acks=0 æ— è§†æ˜¯å¦å“åº”ï¼Œå¯ä»¥å°½å¯èƒ½è¾¾åˆ°ç½‘ç»œç“¶é¢ˆä¸Šçº¿çš„å‘é€èƒ½åŠ›
+acks=1 æ”¶åˆ°leaderå‘å›çš„å“åº”ï¼Œè¿˜æ˜¯æœ‰ä¸¢å¤±çš„å¯èƒ½æ€§
+acks=all ç”±leaderç¡®è®¤å…¨éƒ¨followeråŒæ­¥å®Œæˆï¼Œæ‰ç¡®è®¤æˆåŠŸï¼Œæœ€å®‰å…¨ï¼Œæ¶ˆè€—æœ€å¤§
 ** BUFFER.MEMORY
 ** COMPRESSION.TYPE
-Ñ¹Ëõ¸ñÊ½£¬Ä¬ÈÏ²»Ñ¹
+å‹ç¼©æ ¼å¼ï¼Œé»˜è®¤ä¸å‹
 ** RETRIES
-ÖØÊÔ¼ä¸ô
+é‡è¯•é—´éš”
 ** BATCH.SIZE
 batch bytecode memory
 ** LINGER.MS
-Èç¹ûÃ»Âú£¬µÄbatch·¢ËÍ¼ä¸ô
+å¦‚æœæ²¡æ»¡ï¼Œçš„batchå‘é€é—´éš”
 ** CLIENT.ID
 ** MAX.IN.FLIGHT.REQUESTS.PER.CONNECTION
-Ã¿¸öÁ¬½ÓµÈ´ıÏàÓ¦µÄÇëÇóÊı
+æ¯ä¸ªè¿æ¥ç­‰å¾…ç›¸åº”çš„è¯·æ±‚æ•°
 ** TIMEOUT.MS, REQUEST.TIMEOUT.MS, AND METADATA.FETCH.TIMEOUT.MS
 ** MAX.BLOCK.MS
 ** MAX.REQUEST.SIZE
-×î´óµÄÇëÇóµÄÌå»ı£¬²»ÉèÖÃÔòÈ¡¾öÓÚbatch size
+æœ€å¤§çš„è¯·æ±‚çš„ä½“ç§¯ï¼Œä¸è®¾ç½®åˆ™å–å†³äºbatch size
 ** RECEIVE.BUFFER.BYTES AND SEND.BUFFER.BYTES
 ** Serializers
 org.apache.kafka.common.serialization.Serializer<T>
 * consumer
 ** consumer group
 each consumer in same group that subsribe same topic read subnet of partitions of the topic
-×îĞ¡Á£¶ÈÎªpartition£¬Èç¹ûconsumer³¬¹ıÁË£¬Ö±½Óidle£¬¼´Ïû·ÑÕßÊıÁ¿ÊÇ·ñÄÜÔö¼ÓÏû·Ñ±ÈÂÊµÄ£¬³É¹¦µÄÇ°ÌáÈ¡¾öÓÚ·ÖÇøÊıÄ¿
+æœ€å°ç²’åº¦ä¸ºpartitionï¼Œå¦‚æœconsumerè¶…è¿‡äº†ï¼Œç›´æ¥idleï¼Œå³æ¶ˆè´¹è€…æ•°é‡æ˜¯å¦èƒ½å¢åŠ æ¶ˆè´¹æ¯”ç‡çš„ï¼ŒæˆåŠŸçš„å‰æå–å†³äºåˆ†åŒºæ•°ç›®
 ** options
 *** bootstrap.servers
 *** group.id
 *** key.deserializer
 *** value.deserializer
 *** FETCH.MIN.BYTES
-Èç¹ûbrokerÏûÏ¢×ÜÊı×Ü´óĞ¡²»¹»£¬Ôòwait
+å¦‚æœbrokeræ¶ˆæ¯æ€»æ•°æ€»å¤§å°ä¸å¤Ÿï¼Œåˆ™wait
 *** FETCH.MAX.WAIT.MS
-¾ÍËã²»Âú×ãfetch.min.bytes£¬³¬Ê±·¢ËÍµÄÏŞÖÆ
+å°±ç®—ä¸æ»¡è¶³fetch.min.bytesï¼Œè¶…æ—¶å‘é€çš„é™åˆ¶
 *** MAX.PARTITION.FETCH.BYTES
 *** SESSION.TIMEOUT.MS
 *** AUTO.OFFSET.RESET
@@ -89,14 +89,14 @@ each consumer in same group that subsribe same topic read subnet of partitions o
 consumer auto save last batch offset record to kafka when poll
 *** PARTITION.ASSIGNMENT.STRATEGY
 **** Range
-Ã¿¸ö·ÖÇø·Ö¿ªËã£¬°´¾ù·ÖÀ´£¬
+æ¯ä¸ªåˆ†åŒºåˆ†å¼€ç®—ï¼ŒæŒ‰å‡åˆ†æ¥ï¼Œ
 eg:
 A,B topic a1,a2,a3, b1,b2,b3
-Á½¸öÏû·ÑÕß·ÖÎª
+ä¸¤ä¸ªæ¶ˆè´¹è€…åˆ†ä¸º
 a1,a2,b1,b2 a3,b3
 **** RoundRobin
-ÊÓÎªÈ«Ìå·ÖÅä
-ÉÏÊö·ÖÅä±ä¸üÎª
+è§†ä¸ºå…¨ä½“åˆ†é…
+ä¸Šè¿°åˆ†é…å˜æ›´ä¸º
 a1,a3,b2 a2,b1,b3
 *** CLIENT.ID
 *** MAX.POLL.RECORDS
@@ -130,9 +130,9 @@ if (partitionInfos != null) {
 #+END_SRC
 ** commit
 __consumer_offsets
-ÔÚ´¦ÀíÍêÊı¾İºó£¬±£´æµ±Ç°¶Ôµ±Ç°µÄpartitionµÄoffset½øĞĞÌá½»£¬ÔÚµôÏßºó»òÕßrebalanaceºó£¬ÄÜ¹»´Ó±£´æµÄÎ»ÖÃ¿ªÊ¼¶ÁÈ¡(µ«ÊÇ×îºó»¹ÊÇÓĞ¿ÉÄÜÖØ¶Á£¬ÒòÎªÊ±¼ä´°¿ÚÎŞ·¨ÏûÊ§)
-consumer.commitSync(); //×èÈû·½·¨£¬»áÊ§°ÜÊ±retry
-consumer.commitAsync(); //·Ç×èÈû£¬¿ÉÒÔÈûcallback£¬²»ÄÜÊ§°ÜÊ±×Ô¶¯retry(ÒòÎªÖ»ÄÜcallback½øĞĞ´íÎó´¦Àí)£¬ÒòÎªÓĞ¿ÉÄÜ£¬ÏÂ¸öcommit³É¹¦£¬Èç¹ûÔÊĞíretry£¬Ê±¼ä²î³öÏÖ£¬ÉÏÒ»´ÎµÄretryÔÚÏÂÒ»¸öcommit³É¹¦ºó£¬»áÔì³Éµ¹´ø³öÏÖ
+åœ¨å¤„ç†å®Œæ•°æ®åï¼Œä¿å­˜å½“å‰å¯¹å½“å‰çš„partitionçš„offsetè¿›è¡Œæäº¤ï¼Œåœ¨æ‰çº¿åæˆ–è€…rebalanaceåï¼Œèƒ½å¤Ÿä»ä¿å­˜çš„ä½ç½®å¼€å§‹è¯»å–(ä½†æ˜¯æœ€åè¿˜æ˜¯æœ‰å¯èƒ½é‡è¯»ï¼Œå› ä¸ºæ—¶é—´çª—å£æ— æ³•æ¶ˆå¤±)
+consumer.commitSync(); //é˜»å¡æ–¹æ³•ï¼Œä¼šå¤±è´¥æ—¶retry
+consumer.commitAsync(); //éé˜»å¡ï¼Œå¯ä»¥å¡callbackï¼Œä¸èƒ½å¤±è´¥æ—¶è‡ªåŠ¨retry(å› ä¸ºåªèƒ½callbackè¿›è¡Œé”™è¯¯å¤„ç†)ï¼Œå› ä¸ºæœ‰å¯èƒ½ï¼Œä¸‹ä¸ªcommitæˆåŠŸï¼Œå¦‚æœå…è®¸retryï¼Œæ—¶é—´å·®å‡ºç°ï¼Œä¸Šä¸€æ¬¡çš„retryåœ¨ä¸‹ä¸€ä¸ªcommitæˆåŠŸåï¼Œä¼šé€ æˆå€’å¸¦å‡ºç°
 #+BEGIN_SRC java
 while (true) {
     ConsumerRecords<String, String> records = consumer.poll(100);
@@ -187,7 +187,7 @@ try {
     }
 }
 
-// ´¿ÊÖ¶¯Ö¸¶¨Ìá½»offset£¬×Ô¶¯ºÍ°ë×Ô¶¯¶¼ÊÇÌá¹©×îºóµÄÒ»ÏµÁĞoffset(¶à¸öpartition)£¬´¿ÊÖ¶¯¾Í±ØĞëÏÈ´ærecordµÄÈ«²¿Ïà¹Ømetadata£¬È»ºóÔÙ½»¸økafka client
+// çº¯æ‰‹åŠ¨æŒ‡å®šæäº¤offsetï¼Œè‡ªåŠ¨å’ŒåŠè‡ªåŠ¨éƒ½æ˜¯æä¾›æœ€åçš„ä¸€ç³»åˆ—offset(å¤šä¸ªpartition)ï¼Œçº¯æ‰‹åŠ¨å°±å¿…é¡»å…ˆå­˜recordçš„å…¨éƒ¨ç›¸å…³metadataï¼Œç„¶åå†äº¤ç»™kafka client
 private Map<TopicPartition, OffsetAndMetadata> currentOffsets =
     new HashMap<>(); 1
 int count = 0;
@@ -204,13 +204,13 @@ while (true) {
             new TopicPartition(record.topic(), record.partition()),
             new OffsetAndMetadata(record.offset()+1, "no metadata")); 3
         if (count % 1000 == 0)   4
-            consumer.commitAsync(currentOffsets, null);  // ÄÚ²¿»á¸ù¾İpartitionÑ¡Ôñoffset commit£¬ÆäËû·ÏÆú
+            consumer.commitAsync(currentOffsets, null);  // å†…éƒ¨ä¼šæ ¹æ®partitioné€‰æ‹©offset commitï¼Œå…¶ä»–åºŸå¼ƒ
         count++;
     }
 }
 #+END_SRC
 ** Rebalance Listeners
-*** ÖîÈçÎÄ¼ş£¬socket¾ä±úµÄÇåÀí´¦Àí
+*** è¯¸å¦‚æ–‡ä»¶ï¼Œsocketå¥æŸ„çš„æ¸…ç†å¤„ç†
 #+BEGIN_SRC java
 private Map<TopicPartition, OffsetAndMetadata> currentOffsets =
     new HashMap<>();
@@ -256,7 +256,7 @@ try {
     }
 }
 #+END_SRC
-*** offset ´æµ½db£¬ÒÔ¼°¸´Ô­
+*** offset å­˜åˆ°dbï¼Œä»¥åŠå¤åŸ
 #+BEGIN_SRC java
 public class SaveOffsetsOnRebalance implements ConsumerRebalanceListener {
 
@@ -290,7 +290,7 @@ while (true) {
 }
 #+END_SRC
 ** exit
-Ïß³Ì°²È«£¬´¥·¢WakeupException£¬²¢ÔÚÏÂÒ»´Îpoll£¬·´À¡Í£Ö¹
+çº¿ç¨‹å®‰å…¨ï¼Œè§¦å‘WakeupExceptionï¼Œå¹¶åœ¨ä¸‹ä¸€æ¬¡pollï¼Œåé¦ˆåœæ­¢
 consumer.wakeup()
 ** Deserializers
 #+BEGIN_SRC java
@@ -324,7 +324,7 @@ while (true) {
 #+END_SRC
 * avro
 #+BEGIN_SRC java
-// Ê¹ÓÃÉú³ÉµÄCustomerÀà
+// ä½¿ç”¨ç”Ÿæˆçš„Customerç±»
 Properties props = new Properties();
 
 props.put("bootstrap.servers", "localhost:9092");
@@ -349,7 +349,7 @@ while (true) {
     producer.send(record); 6
 }
 
-// Ö±½Ó´æ£¬Ö±½ÓĞ´
+// ç›´æ¥å­˜ï¼Œç›´æ¥å†™
 Properties props = new Properties();
 props.put("bootstrap.servers", "localhost:9092");
 props.put("key.serializer",
@@ -424,31 +424,31 @@ public class BananaPartitioner implements Partitioner {
 #+END_SRC
 * broker
 ** controller
-1. Ä¬ÈÏµÚÒ»¸öÔÚ¼¯ÈºÖĞÆô¶¯µÄbroker³ÉÎªcontroller£¬×¢²á½øzookeeper
-2. ¸ºÔğÑ¡Ôñ¸÷¸öpartitionµÄleader(ÔÚÆäËûbrokerå´»ú/Àë¿ª£¬»òÕßĞÂ¼Ópartitionµ¼ÖÂrebalanceÊ±)
-3. ĞÂ¼Óbroker½øÈëÊ±£¬Èç¹û´æÔÚreplica partition£¬controllerÍ¨ÖªÆä´Ó¸÷¸öleader½øĞĞÊı¾İÍ¬²½
-4. ÆäËûbroker watch zookeeper£¬controllerå´ÁËÖ®ºóÌæ»»ÉÏÈ¥
-5. Í¨¹ızookeeper´æ°æ±¾ºÅ·ÀÖ¹³öÏÖsplit brain
+1. é»˜è®¤ç¬¬ä¸€ä¸ªåœ¨é›†ç¾¤ä¸­å¯åŠ¨çš„brokeræˆä¸ºcontrollerï¼Œæ³¨å†Œè¿›zookeeper
+2. è´Ÿè´£é€‰æ‹©å„ä¸ªpartitionçš„leader(åœ¨å…¶ä»–brokerå®•æœº/ç¦»å¼€ï¼Œæˆ–è€…æ–°åŠ partitionå¯¼è‡´rebalanceæ—¶)
+3. æ–°åŠ brokerè¿›å…¥æ—¶ï¼Œå¦‚æœå­˜åœ¨replica partitionï¼Œcontrolleré€šçŸ¥å…¶ä»å„ä¸ªleaderè¿›è¡Œæ•°æ®åŒæ­¥
+4. å…¶ä»–broker watch zookeeperï¼Œcontrollerå®•äº†ä¹‹åæ›¿æ¢ä¸Šå»
+5. é€šè¿‡zookeeperå­˜ç‰ˆæœ¬å·é˜²æ­¢å‡ºç°split brain
 * client
-kafka¶ÔÓÚ¿Í»§¶ËµÄÍ¨Ñ¶»úÖÆÓëFastDFSÀàËÆ£¬¾ù²»ÊÇÍ¸Ã÷µÄ£¬¶øÊÇÌá¹©½Ó¿Ú£¬¹©client»ñÈ¡¹ØÓÚleader/partitionµÄĞÅÏ¢£¬¿Í»§¶Ë×Ô¼º¸ù¾İĞÅÏ¢½øĞĞÇëÇó·¢ËÍ£¬Èç¹ûÖ±½Ó·¢µ½client£¬kafka followerÖ±½Óreject£¬Êı¾İÖ»ÄÜ´ÓleaderÄÃµ½
-kafkaµÄÍâ²¿Í¨Ñ¶ºÍ¼¯ÈºÖ®¼äµÄÍ¨Ñ¶»úÖÆÊÇÍ¬Ò»Ì×£¬¸ù¾İÇëÇóµÄÀàĞÍ£¬½øĞĞ²»Í¬´¦ÀíÀ´½øĞĞÍ¨Ñ¶£¬ÇëÇóÀàĞÍ20+(°üÀ¨produce,fetch,...)
-client-->any broker-->»ñÈ¡cluster metadata 
+kafkaå¯¹äºå®¢æˆ·ç«¯çš„é€šè®¯æœºåˆ¶ä¸FastDFSç±»ä¼¼ï¼Œå‡ä¸æ˜¯é€æ˜çš„ï¼Œè€Œæ˜¯æä¾›æ¥å£ï¼Œä¾›clientè·å–å…³äºleader/partitionçš„ä¿¡æ¯ï¼Œå®¢æˆ·ç«¯è‡ªå·±æ ¹æ®ä¿¡æ¯è¿›è¡Œè¯·æ±‚å‘é€ï¼Œå¦‚æœç›´æ¥å‘åˆ°clientï¼Œkafka followerç›´æ¥rejectï¼Œæ•°æ®åªèƒ½ä»leaderæ‹¿åˆ°
+kafkaçš„å¤–éƒ¨é€šè®¯å’Œé›†ç¾¤ä¹‹é—´çš„é€šè®¯æœºåˆ¶æ˜¯åŒä¸€å¥—ï¼Œæ ¹æ®è¯·æ±‚çš„ç±»å‹ï¼Œè¿›è¡Œä¸åŒå¤„ç†æ¥è¿›è¡Œé€šè®¯ï¼Œè¯·æ±‚ç±»å‹20+(åŒ…æ‹¬produce,fetch,...)
+client-->any broker-->è·å–cluster metadata 
 client-->leader of partition--->consumer/produce
 broker-->broker--->sync data with the leader
-leader-->follower---> sync progress check(replica.lag.time.max.ms ³¬Ê±ºó£¬ÊÓÎªout of sync£¬ÎŞ·¨±»ÌáÉıÎªleader)
+leader-->follower---> sync progress check(replica.lag.time.max.ms è¶…æ—¶åï¼Œè§†ä¸ºout of syncï¼Œæ— æ³•è¢«æå‡ä¸ºleader)
 * request
 ** Request type (also called API key)
-such as fetch, produce£¬metadata Ö¸¶¨ºËĞÄµÄ´¦ÀíÂß¼­ÒÔ¼°È¡µÃµÄÊı¾İ
+such as fetch, produceï¼Œmetadata æŒ‡å®šæ ¸å¿ƒçš„å¤„ç†é€»è¾‘ä»¥åŠå–å¾—çš„æ•°æ®
 *** fetch
 *** produce
 *** metadata
-ÄÃµ½cluster metadata£¬Èç¹û¹ıÁËinterval£¬refresh£¬Èç¹ûÆäËûÀàĞÍµÄÇëÇóÊ§°Ü£¬refresh
+æ‹¿åˆ°cluster metadataï¼Œå¦‚æœè¿‡äº†intervalï¼Œrefreshï¼Œå¦‚æœå…¶ä»–ç±»å‹çš„è¯·æ±‚å¤±è´¥ï¼Œrefresh
 ** Request version (so the brokers can handle clients of different versions and respond accordingly)
-°æ±¾¼æÈİÉèÖÃ£¬¸ß¼æÈİµÍ£¬µäĞÍµÄ±ÈÈçÒÔÇ°²»´øbroker of controller,1Ö®ºóµÄ°æ±¾¾Í´øÁË
+ç‰ˆæœ¬å…¼å®¹è®¾ç½®ï¼Œé«˜å…¼å®¹ä½ï¼Œå…¸å‹çš„æ¯”å¦‚ä»¥å‰ä¸å¸¦broker of controller,1ä¹‹åçš„ç‰ˆæœ¬å°±å¸¦äº†
 ** Correlation ID: a number that uniquely identifies the request and also appears in the response and in the error logs (the ID is used for troubleshooting)
-×·×ÙĞÅÏ¢
+è¿½è¸ªä¿¡æ¯
 ** Client ID: used to identify the application that sent the request
-×·×ÙĞÅÏ¢
+è¿½è¸ªä¿¡æ¯
 * administering
 ** kafka-topics.sh
 kafka-topics.sh --zookeeper zoo1.example.com:2181/kafka-cluster --create --topic my-topic --replication-factor 2 --partitions 8
@@ -475,7 +475,7 @@ kafka-console-consumer.sh --zookeeper zoo1.example.com:2181/kafka-cluster --topi
 kafka-console-producer.sh --broker-list kafka1.example.com:9092,kafka2.example.com:9092 --topic my-topic
 * stream processing
 ** event stream
-Ò»ÖÖÊı¾İÄ£ĞÍ¼¯ºÏµÄ¶¨Òå£¬unbound£¬ordered£¬replayable(orderÌØĞÔ¿ÉÓërdbÀà±È£¬ÆäorderÊÇorder byµÄÒ»ÖÖÕ¹Ê¾ĞÔ£¬¶ø·ÇÊı¾İ´æ´¢½á¹¹)
+ä¸€ç§æ•°æ®æ¨¡å‹é›†åˆçš„å®šä¹‰ï¼Œunboundï¼Œorderedï¼Œreplayable(orderç‰¹æ€§å¯ä¸rdbç±»æ¯”ï¼Œå…¶orderæ˜¯order byçš„ä¸€ç§å±•ç¤ºæ€§ï¼Œè€Œéæ•°æ®å­˜å‚¨ç»“æ„)
 * ref
 [[https://queue.acm.org/detail.cfm?id=2745385][There is No Now]]
 [[https://learning.oreilly.com/library/view/kafka-the-definitive/9781491936153/][Kafka: The Definitive Guide]]

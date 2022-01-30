@@ -7,33 +7,33 @@ eg:
  ./gradlew -DsocksProxyHost=127.0.0.1 -DsocksProxyPort=1080 your-command
 ** browser
 *** switchomega
-**** ×Ô¶¯ÇĞ»»Ä£Ê½
-¸ù¾İÓòÃûÍ¨Åä·û£¬ÍøÖ·Í¨Åä·û£¬ÍøÖ·ÕıÔò½øĞĞÆ¥Åä£¬¸ù¾İÌØ¶¨µÄ¹æÔòÑ¡¶¨¶ÔÓ¦µÄ´úÀí·şÎñÆ÷
-**** PACÄ£Ê½
-¸ù¾İPAC½Å±¾½øĞĞ´úÀí·şÎñÆ÷Ñ¡Ôñ
-**** ĞéÄ£Ê½
-Ïàµ±½Ó¿ÚµÄ¸ÅÄî£¬ÔÚ×Ô¶¯ÇĞ»»Ä£Ê½£¬ÉèÖÃĞé³¡¾°Ä£Ê½£¬Êµ¼Ê×ßµÄ´úÀí·şÎñÆ÷È¡¾öÓÚĞéÄ£Ê½µÄÊÂÊµÉèÖÃ£¬¿ÉÒÔ×öµ½£¬¶à¸ö´úÀí·şÎñÆ÷¿ÉÒÔ¹²ÏíÒ»Ì××Ô¶¯ÇĞ»»¹æÔò
+**** è‡ªåŠ¨åˆ‡æ¢æ¨¡å¼
+æ ¹æ®åŸŸåé€šé…ç¬¦ï¼Œç½‘å€é€šé…ç¬¦ï¼Œç½‘å€æ­£åˆ™è¿›è¡ŒåŒ¹é…ï¼Œæ ¹æ®ç‰¹å®šçš„è§„åˆ™é€‰å®šå¯¹åº”çš„ä»£ç†æœåŠ¡å™¨
+**** PACæ¨¡å¼
+æ ¹æ®PACè„šæœ¬è¿›è¡Œä»£ç†æœåŠ¡å™¨é€‰æ‹©
+**** è™šæ¨¡å¼
+ç›¸å½“æ¥å£çš„æ¦‚å¿µï¼Œåœ¨è‡ªåŠ¨åˆ‡æ¢æ¨¡å¼ï¼Œè®¾ç½®è™šåœºæ™¯æ¨¡å¼ï¼Œå®é™…èµ°çš„ä»£ç†æœåŠ¡å™¨å–å†³äºè™šæ¨¡å¼çš„äº‹å®è®¾ç½®ï¼Œå¯ä»¥åšåˆ°ï¼Œå¤šä¸ªä»£ç†æœåŠ¡å™¨å¯ä»¥å…±äº«ä¸€å¥—è‡ªåŠ¨åˆ‡æ¢è§„åˆ™
 ** PAC script
 little js function
 ** JVM
--Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=8888 // ¶Ô·â×°JVM http clientµÄÓĞÓÃ
+-Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=8888 // å¯¹å°è£…JVM http clientçš„æœ‰ç”¨
 
--DsocksProxyHost=127.0.0.1 -DsocksProxyPort=8889 // ¶Ô´Ósocket¹¹½¨http clientÓĞÓÃ£¬ÈçApache DefaultHttpClient
+-DsocksProxyHost=127.0.0.1 -DsocksProxyPort=8889 // å¯¹ä»socketæ„å»ºhttp clientæœ‰ç”¨ï¼Œå¦‚Apache DefaultHttpClient
 * sock5
 ** tool
 *** shadowsocks-libev
 ss-local -s [host] -p [port] -l 1080 -k apBPAP123 -m chacha20-ietf
 
-ss-local -s µØÖ· -p 20039 -l 1080 -k ÃÜÂë -m chacha20-ietf
+ss-local -s åœ°å€ -p 20039 -l 1080 -k å¯†ç  -m chacha20-ietf
 *** proxychains
 *** vpn-tether
-ÊÖ»ú¿ªÆôssr¹²Ïí¸øµçÄÔ
+æ‰‹æœºå¼€å¯ssrå…±äº«ç»™ç”µè„‘
 *** mellow
 PROCESS-NAME, clash-win64.exe, Direct
 PROCESS-NAME, clash.exe, Direct
 PROCESS-NAME, unknown process, Direct
 
-Á÷Á¿×ªclash£¬Ä¿Ç°Î´³É¹¦
+æµé‡è½¬clashï¼Œç›®å‰æœªæˆåŠŸ
 *** clash
 https://docs.nsl-net.cc/usr-interface/surge-tutorial
 *** converter
@@ -66,19 +66,19 @@ N3RO
 36DCup
 ssrcloud
 Mengdi-Cloud
-ÈÌÕßÔÆ
+å¿è€…äº‘
 MunCloud 
-ËÙÍÜÔÆ
+é€Ÿè›™äº‘
 NSL
 N3R0
-* ·ÀÊ§Áª
-https://free-ss.site/ // Ãâ·ÑÉÏÍøÕËºÅ£¬ËÙ¶ÈÂı£¬¿ÉÄÜ´æÔÚÃÛ¹Ş
+* é˜²å¤±è”
+https://free-ss.site/ // å…è´¹ä¸Šç½‘è´¦å·ï¼Œé€Ÿåº¦æ…¢ï¼Œå¯èƒ½å­˜åœ¨èœœç½
 * bbr
-https://github.com/tcp-nanqinlang/wiki/wiki/general bbrÒ»¼ü½Å±¾
+https://github.com/tcp-nanqinlang/wiki/wiki/general bbrä¸€é”®è„šæœ¬
 https://www.moerats.com/archives/297/
 https://www.tecmint.com/increase-linux-server-internet-speed-with-tcp-bbr/ 
 https://www.moerats.com/archives/10/
 https://www.moerats.com/archives/387/
 * ref
-https://blog.charlieethan.com/index.php/archives/04.html/comment-page-1 ºÚÃûµ¥
+https://blog.charlieethan.com/index.php/archives/04.html/comment-page-1 é»‘åå•
 https://program-think.blogspot.com/2019/04/Proxy-Tricks.html?m=1 method

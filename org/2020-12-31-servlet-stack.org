@@ -5,7 +5,7 @@
 the servlet central all process and view resolution, actual work is performed by configurable delegate components
 *** standalone config(except springboot)
 **** servlet 3.0 SPI
-spring web下的META-INF/services/javax.servlet.ServletContainerInitializer指定了org.springframework.web.SpringServletContainerInitialize，该类扫描WebApplicationInitializer接口的实现类进行context的初始化
+spring web涓嬬殑META-INF/services/javax.servlet.ServletContainerInitializer鎸囧畾浜唎rg.springframework.web.SpringServletContainerInitialize锛岃绫绘壂鎻廤ebApplicationInitializer鎺ュ彛鐨勫疄鐜扮被杩涜context鐨勫垵濮嬪寲
 #+BEGIN_SRC java
 
 public class MyWebApplicationInitializer implements WebApplicationInitializer {

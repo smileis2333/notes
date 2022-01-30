@@ -1,68 +1,68 @@
 #+TITLE: org usage
 #+STARTUP: indent
-* ÎÄµµ½á¹¹
- * ºÅ¿ØÖÆ±êÌâ½á¹¹£¬tab¿ØÖÆÕ¹¿ªÊÕËõ
-tabÕ¹¿ª×Ó±êÌâ£¬S-tabÑ­»·Õ¹¿ª£¬c-u c-u c-u tabÈ«Õ¹¿ª
+* æ–‡æ¡£ç»“æž„
+ * å·æŽ§åˆ¶æ ‡é¢˜ç»“æž„ï¼ŒtabæŽ§åˆ¶å±•å¼€æ”¶ç¼©
+tabå±•å¼€å­æ ‡é¢˜ï¼ŒS-tabå¾ªçŽ¯å±•å¼€ï¼Œc-u c-u c-u tabå…¨å±•å¼€
 ** move
-c-c c-n ÏÂ¸ö±êÌâ
-c-c c-p ÉÏ¸ö±êÌâ
-c-c c-f ÏÂ¸öÍ¬¼¶±êÌâ
-c-c c-b ÉÏ¸öÍ¬¼¶±êÌâ
-c-c c-u »Øµ½ÉÏÒ»¼¶±êÌâ
-** ½á¹¹±ä»¯
-m-ret ²åÈëÐÂ±êÌâ/ÁÐ±í
-m-s-ret ²åÈëtodoÏî
-m-left/right Éý¸ß±êÌâµÄ¼¶±ð(¼ÓÐÇºÅ)/½µµÍ¼¶±ð£¬µ¥¸ö±êÌâ
-m-S-left/right Éý¸ß/½µµÍ£¬×ÓÊ÷¸ú×Å±ä
-m-down/up µ÷Õû±êÌâÎ»ÖÃ£¬×ÓÊ÷¸ú×Å¶¯
-c-x n s/w ËõÐ¡/·Å¿íÊÓÍ¼
-** Ï¡ÊèÊ÷
-¸ù¾Ý¹æÔò£¬É¸Ñ¡³ö¶ÔÓ¦µÄ±êÌâÊ÷£¬ÀàËÆËÑË÷£¬µ«ÊÇ¸üÖ±¹Ûµã
+c-c c-n ä¸‹ä¸ªæ ‡é¢˜
+c-c c-p ä¸Šä¸ªæ ‡é¢˜
+c-c c-f ä¸‹ä¸ªåŒçº§æ ‡é¢˜
+c-c c-b ä¸Šä¸ªåŒçº§æ ‡é¢˜
+c-c c-u å›žåˆ°ä¸Šä¸€çº§æ ‡é¢˜
+** ç»“æž„å˜åŒ–
+m-ret æ’å…¥æ–°æ ‡é¢˜/åˆ—è¡¨
+m-s-ret æ’å…¥todoé¡¹
+m-left/right å‡é«˜æ ‡é¢˜çš„çº§åˆ«(åŠ æ˜Ÿå·)/é™ä½Žçº§åˆ«ï¼Œå•ä¸ªæ ‡é¢˜
+m-S-left/right å‡é«˜/é™ä½Žï¼Œå­æ ‘è·Ÿç€å˜
+m-down/up è°ƒæ•´æ ‡é¢˜ä½ç½®ï¼Œå­æ ‘è·Ÿç€åŠ¨
+c-x n s/w ç¼©å°/æ”¾å®½è§†å›¾
+** ç¨€ç–æ ‘
+æ ¹æ®è§„åˆ™ï¼Œç­›é€‰å‡ºå¯¹åº”çš„æ ‡é¢˜æ ‘ï¼Œç±»ä¼¼æœç´¢ï¼Œä½†æ˜¯æ›´ç›´è§‚ç‚¹
 c-c /
-¿ÉÑ¡Ïî°üÀ¨ÕýÔò£¬todoÏîÄ¿µÈ
-** ÁÐ±í
-ÎÞÐòÁÐ±íÒÔ- + ¿ªÍ·
-ÓÐÐòÁÐ±í1. 1)¿ªÍ·, ÅäÖÃm-ret¿ÉÒÔÖØÐÂÅÅÐò
-::½«ÁÐ±íÏîÄ¿ÓëÃèÊö·Ö¿ª
-½á¹¹±ä»¯µÄ¶¯»­¶¯ÁÐ±íÍ¬ÑùÓÐÐ§
-** ½Å×¢
-ÀàËÆÂÛÎÄµÄ²Î¿¼ÎÄÏ×ÒýÓÃ
-¸ÃÑ§Ï°±Ê¼Ç²Î¿¼×Ô[fn:1]
-* ±í¸ñ
-´´½¨±í¸ñ
-|×Ö¶ÎÃû1|×Ö¶ÎÃû2|
+å¯é€‰é¡¹åŒ…æ‹¬æ­£åˆ™ï¼Œtodoé¡¹ç›®ç­‰
+** åˆ—è¡¨
+æ— åºåˆ—è¡¨ä»¥- + å¼€å¤´
+æœ‰åºåˆ—è¡¨1. 1)å¼€å¤´, é…ç½®m-retå¯ä»¥é‡æ–°æŽ’åº
+::å°†åˆ—è¡¨é¡¹ç›®ä¸Žæè¿°åˆ†å¼€
+ç»“æž„å˜åŒ–çš„åŠ¨ç”»åŠ¨åˆ—è¡¨åŒæ ·æœ‰æ•ˆ
+** è„šæ³¨
+ç±»ä¼¼è®ºæ–‡çš„å‚è€ƒæ–‡çŒ®å¼•ç”¨
+è¯¥å­¦ä¹ ç¬”è®°å‚è€ƒè‡ª[fn:1]
+* è¡¨æ ¼
+åˆ›å»ºè¡¨æ ¼
+|å­—æ®µå1|å­—æ®µå2|
 |-
-È»ºótab´´½¨
-tabµ¥Ôª¸ñ¼äÒÆ¶¯
-m-left/right ÕûÁÐÒÆ¶¯
-m-S-left É¾³ýµ±Ç°ÁÐ
-m-S-right ×ó²àÔö¼ÓÐÂÁÐ
-m-up/down ÒÆ¶¯ÐÐ
-m-S-up É¾³ýµ±Ç°ÐÐ
-m-S-down ÉÏÒ»À¸Ìí¼ÓÐÂÐÐ
-c-c - ¼ÓÈë---·Ö¸îÏß
-c-c ret ·Ö¸îÏß¼ÓÐÂÐÐ
-c-c ^a/n ¸ù¾Ýµ±Ç°ÁÐÅÅÐò£¬aÊÇ×ÖÄ¸£¬nÊÇÊý×Ö
+ç„¶åŽtabåˆ›å»º
+tabå•å…ƒæ ¼é—´ç§»åŠ¨
+m-left/right æ•´åˆ—ç§»åŠ¨
+m-S-left åˆ é™¤å½“å‰åˆ—
+m-S-right å·¦ä¾§å¢žåŠ æ–°åˆ—
+m-up/down ç§»åŠ¨è¡Œ
+m-S-up åˆ é™¤å½“å‰è¡Œ
+m-S-down ä¸Šä¸€æ æ·»åŠ æ–°è¡Œ
+c-c - åŠ å…¥---åˆ†å‰²çº¿
+c-c ret åˆ†å‰²çº¿åŠ æ–°è¡Œ
+c-c ^a/n æ ¹æ®å½“å‰åˆ—æŽ’åºï¼Œaæ˜¯å­—æ¯ï¼Œnæ˜¯æ•°å­—
 
 
 | Name | Phone  | Age |
 |------+--------+-----|
 | a1   | phone1 |     |
 | b2   | phone0 |     |
-* ³¬Á´½Ó
-[[][]](link,description) »òÕß[[]](link),ÊäÈëÍê»áÏÔÊ¾description£¬Ã»ÓÐ²ÅÏÔÊ¾linkµÄÁ´½Ó
-c-c c-l ±à¼­Á´½ÓºÍÃèÊö£¬ÒòÎªÊÓÍ¼±äÁË¸ÄÆðÀ´Âé·³
-** Íâ²¿Á´½Ó
-** ÄÚ²¿Á´½Ó
-[[ÄÚ²¿Á´½Ó]] Á´½ÓÄÚÈÝÎªµ±Ç°µÄ±êÌâ
+* è¶…é“¾æŽ¥
+[[][]](link,description) æˆ–è€…[[]](link),è¾“å…¥å®Œä¼šæ˜¾ç¤ºdescriptionï¼Œæ²¡æœ‰æ‰æ˜¾ç¤ºlinkçš„é“¾æŽ¥
+c-c c-l ç¼–è¾‘é“¾æŽ¥å’Œæè¿°ï¼Œå› ä¸ºè§†å›¾å˜äº†æ”¹èµ·æ¥éº»çƒ¦
+** å¤–éƒ¨é“¾æŽ¥
+** å†…éƒ¨é“¾æŽ¥
+[[å†…éƒ¨é“¾æŽ¥]] é“¾æŽ¥å†…å®¹ä¸ºå½“å‰çš„æ ‡é¢˜
 * Todo
-c-c c-t ´ò¿ªtodo
+c-c c-t æ‰“å¼€todo
 S-right/left
-c-c / t Ï¡ÊèÊ÷ÏÔÊ¾todoÏî
-c-c a t È«¾ÖÏÔÊ¾todoÏî
-M-S-Ret ²åÈëÐÂµÄtodoÏî
-ÈÎÎñÏ¸·Ö
-todoÏîÄ¿Î²²¿¼ÓÈë[/][%]£¬Ò»¸öÊÇÕ¼±È£¬Ò»¸öÊÇ°Ù·Ö±È
+c-c / t ç¨€ç–æ ‘æ˜¾ç¤ºtodoé¡¹
+c-c a t å…¨å±€æ˜¾ç¤ºtodoé¡¹
+M-S-Ret æ’å…¥æ–°çš„todoé¡¹
+ä»»åŠ¡ç»†åˆ†
+todoé¡¹ç›®å°¾éƒ¨åŠ å…¥[/][%]ï¼Œä¸€ä¸ªæ˜¯å æ¯”ï¼Œä¸€ä¸ªæ˜¯ç™¾åˆ†æ¯”
 ** STARTED test todo[0%]
 *** TODO test[1/1]
 **** DONE kkk
@@ -73,26 +73,25 @@ CLOSED: [2020-05-28 Thu 18:54]
   - [X] sarach
 - [X] other
 - [X] nothing
-* ±êÇ©
-C-c C-c ÉèÖÃtag, ÊÖ¶¯´ò:taglist:Ò²ÐÐ£¬µ«ÊÇÃ»ÓÐ¶ÔÆë
-C-c \ ÓÃtag¹¹ÔìÏ¡ÊèÊ÷
+* æ ‡ç­¾
+C-c C-c è®¾ç½®tag, æ‰‹åŠ¨æ‰“:taglist:ä¹Ÿè¡Œï¼Œä½†æ˜¯æ²¡æœ‰å¯¹é½
+C-c \ ç”¨tagæž„é€ ç¨€ç–æ ‘
 ** eg
 *** eg1
 **** eg2                                                                     :eg2:
-* ÊôÐÔ
-Ò²¿ÉÒÔÓÃÓÚ¹¹ÔìÏ¡ÊèÊ÷
+* å±žæ€§
+ä¹Ÿå¯ä»¥ç”¨äºŽæž„é€ ç¨€ç–æ ‘
 :PROPERTIES:
 :Publisher_ALL: "Deutsche Grammophon" Philips EMI
 :END:
 ** child
 :PROPERTIES:
 :END:
-* ²¶»ñ
-´ò¿ª²¶»ñ£¬Ñ¡ÔñÀàÐÍ£¬¸ù¾Ý×Ô¼ºÉèÖÃµÄÀàÐÍ£¬ÐÂ´´½¨µÄÌõÄ¿×Ô¶¯±£´æµ½¶ÔÓ¦Î»ÖÃ
+* æ•èŽ·
+æ‰“å¼€æ•èŽ·ï¼Œé€‰æ‹©ç±»åž‹ï¼Œæ ¹æ®è‡ªå·±è®¾ç½®çš„ç±»åž‹ï¼Œæ–°åˆ›å»ºçš„æ¡ç›®è‡ªåŠ¨ä¿å­˜åˆ°å¯¹åº”ä½ç½®
 * Footnotes
 [fn:1]  https://www.cnblogs.com/Open_Source/archive/2011/07/17/2108747.html#sec-2
-* ²âÊÔ
-¹þ¹þ
-* ×¢ÒâÊÂÏî
-<s tab²¹È«´úÂë¿é£¬¿ì½Ý¼üÄ¬ÈÏÒÑ¾­ÎÞÐ§
-C-c C-, ´ÓÑ¡ÏîÖÐ»ñÈ¡
+* æµ‹è¯•
+å“ˆå“ˆ
+* newinput
+C-c C-,

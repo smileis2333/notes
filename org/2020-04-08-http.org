@@ -5,28 +5,28 @@
 *** static file
 *** generate file
 ** client view
-ÔÚ¿Í»§¶Ë¿´À´£¬²Ù×÷¶¼ÊÇÍ¸Ã÷µÄ£¬ÒòÎª¿Í»§¶ËÖ»ÄÜ¿´¼û×îÖÕµÄÎÄ¼ş£¬¶øÎŞ·¨¹Û²ìµ½ÄÚ²¿µÄ´¦Àí¹ı³Ì
+åœ¨å®¢æˆ·ç«¯çœ‹æ¥ï¼Œæ“ä½œéƒ½æ˜¯é€æ˜çš„ï¼Œå› ä¸ºå®¢æˆ·ç«¯åªèƒ½çœ‹è§æœ€ç»ˆçš„æ–‡ä»¶ï¼Œè€Œæ— æ³•è§‚å¯Ÿåˆ°å†…éƒ¨çš„å¤„ç†è¿‡ç¨‹
 ** URI
 *** URL
 [[../img/url.png][url format]]
-µØÖ·¶¨Î»×ÊÔ´£¬Î²²¿µÄÁ´½Ó¶à²ã¼¶Óëweb serverµÄÅäÖÃÂ·¾¶Ò»°ãÇé¿öÏÂÊÇÒ»ÖÂµÄ(Èç¹ûÃ»×÷)
+åœ°å€å®šä½èµ„æºï¼Œå°¾éƒ¨çš„é“¾æ¥å¤šå±‚çº§ä¸web serverçš„é…ç½®è·¯å¾„ä¸€èˆ¬æƒ…å†µä¸‹æ˜¯ä¸€è‡´çš„(å¦‚æœæ²¡ä½œ)
 <scheme>://<user>:<password>@<host>:<port>/<path>;<params>?<query>#<frag>
-¿ÉÒÔ²»ÊÇhttpĞ­Òé£¬Ìá¹©ÁËÒ»ÖÖÍ³Ò»µÄÑ°Ö·»úÖÆ£¬µäĞÍµÄ±ÈÈç
+å¯ä»¥ä¸æ˜¯httpåè®®ï¼Œæä¾›äº†ä¸€ç§ç»Ÿä¸€çš„å¯»å€æœºåˆ¶ï¼Œå…¸å‹çš„æ¯”å¦‚
 eg
-1. ÓÃä¯ÀÀÆ÷ftpÏÂÎÄ¼ş£¬Èç¹ûÃ»ÓĞä¯ÀÀÆ÷»òÆäËû¿Í»§¶Ë£¬ĞèÒª½¨Á¢Á¬½Ó£¬È»ºóÒ»²ãÒ»²ã½øÈëÄ¿Â¼£¬È»ºóÇĞ»»Ä£Ê½£¬×îºóÔÙÏÂÔØÎÄ¼ş
-2. ¶ÔÓÚhttp serverÏà¶Ô²»ÊÇÄÇÃ´Ã÷ÏÔ£¬ÒòÎªÑ°Ö·ÊÇÔÙserver¶ËÍê³ÉµÄ£¬µ«ÊÇÒ²ÊÇÓëÎÄ¼şÏµÍ³µÄÄ¿Â¼¶ÔÓ¦Ò»ÖÂ
+1. ç”¨æµè§ˆå™¨ftpä¸‹æ–‡ä»¶ï¼Œå¦‚æœæ²¡æœ‰æµè§ˆå™¨æˆ–å…¶ä»–å®¢æˆ·ç«¯ï¼Œéœ€è¦å»ºç«‹è¿æ¥ï¼Œç„¶åä¸€å±‚ä¸€å±‚è¿›å…¥ç›®å½•ï¼Œç„¶ååˆ‡æ¢æ¨¡å¼ï¼Œæœ€åå†ä¸‹è½½æ–‡ä»¶
+2. å¯¹äºhttp serverç›¸å¯¹ä¸æ˜¯é‚£ä¹ˆæ˜æ˜¾ï¼Œå› ä¸ºå¯»å€æ˜¯å†serverç«¯å®Œæˆçš„ï¼Œä½†æ˜¯ä¹Ÿæ˜¯ä¸æ–‡ä»¶ç³»ç»Ÿçš„ç›®å½•å¯¹åº”ä¸€è‡´
 **** absolute path
 **** relative path
-1. ÓĞ<Base>¶Á<Base>
-2. Ã»ÓĞBase¶ÁÇ¶ÈëÏà¶ÔÂ·¾¶µÄÎÄ¼ş×÷ÎªBase url
-3. ºÏ²¢Â·¾¶µÃµ½×îÖÕµÄ×ÊÔ´(Ò»°ãÓÖÓÉbrowser´¦Àí)
+1. æœ‰<Base>è¯»<Base>
+2. æ²¡æœ‰Baseè¯»åµŒå…¥ç›¸å¯¹è·¯å¾„çš„æ–‡ä»¶ä½œä¸ºBase url
+3. åˆå¹¶è·¯å¾„å¾—åˆ°æœ€ç»ˆçš„èµ„æº(ä¸€èˆ¬åˆç”±browserå¤„ç†)
 *** URN
-urlÆäÊµÖÊ¾ÍÊÇ½«Ó¦ÓÃĞ­ÒéµÄ²Ù×÷(ftp)»òÎÄ¼ş´æ´¢Â·¾¶(http)±©Â¶¸øÓÃ»§£¬¶øURNÖ¼ÔÚÍ¨¹ı´¿ÃüÃû·ûºÅµÄĞÎÊ½Ö±½Ó¶¨Òå×ÊÔ´£¬ºÜÄÑÌæ´úURL£¬ÒòÎªµ±Ç°µÄÍøÂçÌåÏµÊÇ½¨Á¢ÔÚ²ã¼¶µÄÌåÏµÉÏ
-Ãû×Ö¶¨Î»×ÊÔ´£¬¶ø²»ÊÜ×ÊÔ´ÔÚserverµÄÎÄ¼ş´æ´¢Î»ÖÃÓ°Ïì
+urlå…¶å®è´¨å°±æ˜¯å°†åº”ç”¨åè®®çš„æ“ä½œ(ftp)æˆ–æ–‡ä»¶å­˜å‚¨è·¯å¾„(http)æš´éœ²ç»™ç”¨æˆ·ï¼Œè€ŒURNæ—¨åœ¨é€šè¿‡çº¯å‘½åç¬¦å·çš„å½¢å¼ç›´æ¥å®šä¹‰èµ„æºï¼Œå¾ˆéš¾æ›¿ä»£URLï¼Œå› ä¸ºå½“å‰çš„ç½‘ç»œä½“ç³»æ˜¯å»ºç«‹åœ¨å±‚çº§çš„ä½“ç³»ä¸Š
+åå­—å®šä½èµ„æºï¼Œè€Œä¸å—èµ„æºåœ¨serverçš„æ–‡ä»¶å­˜å‚¨ä½ç½®å½±å“
 eg:
 urn:ietf:rfc:2141
 ** MIME types
-ÆğÔ´ÓÚÀÏÊ½µÄµç×ÓÓÊ¼ş½»»¥Ê±´ú
+èµ·æºäºè€å¼çš„ç”µå­é‚®ä»¶äº¤äº’æ—¶ä»£
 identifier resources type for client(web browser) to display or invoke default application to open(such as windows office suite file)
 [[../img/mine_type.png][mine type]]
 format: [primary object type]/[a specific subtype]
@@ -47,13 +47,13 @@ get
 put
 post
 delete
-head -- ÄÃheaderÍ·
-options -- ¼ì²âÖ§³ÖµÄmethod
+head -- æ‹¿headerå¤´
+options -- æ£€æµ‹æ”¯æŒçš„method
 trace -- trace proxy
 *** content-type
 **** form-data
-¿ÉÒÔ´«ÎÄ¼ş»òÕß±íµ¥£¬´ø·Ö½ç·û
-Content-Type: multipart/form-data; boundary=--------------------------869499447916789433928274 # ·Ö½ç·û
+å¯ä»¥ä¼ æ–‡ä»¶æˆ–è€…è¡¨å•ï¼Œå¸¦åˆ†ç•Œç¬¦
+Content-Type: multipart/form-data; boundary=--------------------------869499447916789433928274 # åˆ†ç•Œç¬¦
 Content-Length: 2614
 Connection: keep-alive
 
@@ -69,9 +69,9 @@ v2
 Content-Disposition: form-data; name="f1"; filename="gobrand.txt"
 Content-Type: text/plain
 
-...ÎÄ¼şÊı¾İ
+...æ–‡ä»¶æ•°æ®
 **** x-www-form-urlencoded
-Ö»ÄÜ´«±íµ¥Êı¾İ
+åªèƒ½ä¼ è¡¨å•æ•°æ®
 POST /post HTTP/1.1
 User-Agent: PostmanRuntime/7.26.5
 Accept: */*
@@ -85,9 +85,9 @@ Connection: keep-alive
 
 n1=v1&n2=v2
 **** raw
-×Ö·û´®£¬ÈçjsonµÈ
+å­—ç¬¦ä¸²ï¼Œå¦‚jsonç­‰
 **** binary
-¶ş½øÖÆ
+äºŒè¿›åˆ¶
 ** response
 <version> <status> <reason-phrase>
 <headers>
@@ -95,38 +95,38 @@ n1=v1&n2=v2
 <entity-body>
 *** status
 **** 1xx
-100 ÇëÇóÌ½²â£¬ÈçÉÏ´«Ê±ÇëÇó½Ó¿Ú£¬Í·²¿ÉèÖÃÆÚ´ı100£¬Èç¹ûÄÃµ½ÁË£¬ÔÚ´«
-101 Éı¼¶Ğ­Òé
+100 è¯·æ±‚æ¢æµ‹ï¼Œå¦‚ä¸Šä¼ æ—¶è¯·æ±‚æ¥å£ï¼Œå¤´éƒ¨è®¾ç½®æœŸå¾…100ï¼Œå¦‚æœæ‹¿åˆ°äº†ï¼Œåœ¨ä¼ 
+101 å‡çº§åè®®
 **** 2xx
 200 OK
-201 putºócreated
-202 accepted£¬²»È·±£Íê³É
-203 È±ÈÏÖ¤ĞÅÏ¢
-204 ÎŞÄÚÈİ
-205 ÖØÖÃÄÚÈİ
-206 È¡µÃ²¿·ÖÄÚÈİ(¸úrequestÖ¸¶¨µÄrangeÓĞ¹Ø)
+201 putåcreated
+202 acceptedï¼Œä¸ç¡®ä¿å®Œæˆ
+203 ç¼ºè®¤è¯ä¿¡æ¯
+204 æ— å†…å®¹
+205 é‡ç½®å†…å®¹
+206 å–å¾—éƒ¨åˆ†å†…å®¹(è·ŸrequestæŒ‡å®šçš„rangeæœ‰å…³)
 **** 3xx
-300 ¶à¸öÒıÓÃ¿ÉÒÔÑ¡£¬Èçi18
+300 å¤šä¸ªå¼•ç”¨å¯ä»¥é€‰ï¼Œå¦‚i18
 301 Moved permanently
-302 ÁÙÊ±ÒÆ¶¯£¬http1.1Ê±±»ÇĞÎª33ºÍ307£¬Ö»ÄÜ×ßget(ÒòÎª´æÔÚĞÅÏ¢¶ªÊ§£¬postÅÜget)
-303 ´ø×ÅpostĞÅÏ¢ÖØ¶¨Ïò£¬302µÄpost×ªgetÓïÒåÇĞ·Ö(Õâ²¿·ÖÊÇpost×ªpost)
-304 Not Modified£¬Ö÷ÒªÊÇÒ³Ãæ»º´æÊ±È·¶¨ÄÚÈİÊÇ·ñË¢ĞÂ(ÉèÖÃ¶ÔÓ¦µÄheader)
-305 use proxy£¬±ÈÈçÍ¨¹ı¶ÔÓ¦µÄproxy²ÅÄÜ×ßÍ¨
-307 302µÄget×ªgetÓïÒåÇĞ·Ö
+302 ä¸´æ—¶ç§»åŠ¨ï¼Œhttp1.1æ—¶è¢«åˆ‡ä¸º33å’Œ307ï¼Œåªèƒ½èµ°get(å› ä¸ºå­˜åœ¨ä¿¡æ¯ä¸¢å¤±ï¼Œpostè·‘get)
+303 å¸¦ç€postä¿¡æ¯é‡å®šå‘ï¼Œ302çš„postè½¬getè¯­ä¹‰åˆ‡åˆ†(è¿™éƒ¨åˆ†æ˜¯postè½¬post)
+304 Not Modifiedï¼Œä¸»è¦æ˜¯é¡µé¢ç¼“å­˜æ—¶ç¡®å®šå†…å®¹æ˜¯å¦åˆ·æ–°(è®¾ç½®å¯¹åº”çš„header)
+305 use proxyï¼Œæ¯”å¦‚é€šè¿‡å¯¹åº”çš„proxyæ‰èƒ½èµ°é€š
+307 302çš„getè½¬getè¯­ä¹‰åˆ‡åˆ†
 **** 4xx
-400 bad request ÇëÇó¸ñÊ½ÓĞÎÊÌâ
-401 Î´ÈÏÖ¤
-403 ½ûÖ¹·ÃÎÊ
+400 bad request è¯·æ±‚æ ¼å¼æœ‰é—®é¢˜
+401 æœªè®¤è¯
+403 ç¦æ­¢è®¿é—®
 404 not found
 405 method not allow
 406 not accepted
-407 ´úÀí·şÎñÆ÷ĞèÒªÈÏÖ¤
-408 ´¦Àí³¬Ê±
-409 ³åÍ»
-410 ÀàËÆ404,µ«ÊÇ¾ßÓĞÓĞ¹ı×ÊÔ´µÄÓïÒå
-411 serverÒªÇóclientÉèÖÃcontent-length
+407 ä»£ç†æœåŠ¡å™¨éœ€è¦è®¤è¯
+408 å¤„ç†è¶…æ—¶
+409 å†²çª
+410 ç±»ä¼¼404,ä½†æ˜¯å…·æœ‰æœ‰è¿‡èµ„æºçš„è¯­ä¹‰
+411 serverè¦æ±‚clientè®¾ç½®content-length
 412 condition fail
-413 ÇëÇó´óĞ¡´óÓÚ·µ»Ø¸ºÔØ
+413 è¯·æ±‚å¤§å°å¤§äºè¿”å›è´Ÿè½½
 414 URL too long
 415 unsupported media type
 416 Requested Range Not Satisfiable
@@ -134,8 +134,8 @@ n1=v1&n2=v2
 **** 5xx
 500 Internal Server Error
 501 Not Implemented
-502 Bad Gateway£¬proxyÏà¹Ø
-503 Service Unavailable£¬·şÎñ²»¿ÉÓÃ£¬Î´À´¿ÉÄÜ¿ÉÓÃµÄÓïÒå
+502 Bad Gatewayï¼Œproxyç›¸å…³
+503 Service Unavailableï¼ŒæœåŠ¡ä¸å¯ç”¨ï¼Œæœªæ¥å¯èƒ½å¯ç”¨çš„è¯­ä¹‰
 504 Gateway Timeout
 505 HTTP Version Not Supported
 ** header
@@ -218,22 +218,22 @@ Last-Modified
 *** Extension header
 * version
 ** 0.9
-Ö»Ö§³ÖGET£¬protocol´´½¨³õÆÚ£¬deprecated
+åªæ”¯æŒGETï¼Œprotocolåˆ›å»ºåˆæœŸï¼Œdeprecated
 ** 1.0
-Ö÷ÒªÌØÕ÷³öÏÖ, deprecated
+ä¸»è¦ç‰¹å¾å‡ºç°, deprecated
 ** 1.0+
-³§ÉÌ¾ºÈü£¬ÔÓ²İ´ÔÉú
+å‚å•†ç«èµ›ï¼Œæ‚è‰ä¸›ç”Ÿ
 ** 1.1
-ÔÙ¹æ·¶£¬ÕûºÏ1.0¸÷ÖÖclientÌØÕ÷
-** 2.0(¾ÉÃûng)
+å†è§„èŒƒï¼Œæ•´åˆ1.0å„ç§clientç‰¹å¾
+** 2.0(æ—§ång)
 http + ssl = https
 * connection
 ** protocol layer
-½¨Á¢TCPÁ¬½Ó£¬Ò»´ÎÎÕÊÖ£¬Á½´ÎÎÕÊÖ£¬µÚÈı´ÎÎÕÊÖ(ÉÓ´øÊı¾İ£¬Èç¹ûĞ¡Êı¾İÖ±½Ó¾ÍÒ»²¨½â¾öÁË£¬ÒòÎªTCP,IPÍ·20byte£¬TCP segmentÍ·20byte£¬ÂúÔØ±¨ÎÄ¿ÉÒÔ´ïµ½1500byte)
+å»ºç«‹TCPè¿æ¥ï¼Œä¸€æ¬¡æ¡æ‰‹ï¼Œä¸¤æ¬¡æ¡æ‰‹ï¼Œç¬¬ä¸‰æ¬¡æ¡æ‰‹(æå¸¦æ•°æ®ï¼Œå¦‚æœå°æ•°æ®ç›´æ¥å°±ä¸€æ³¢è§£å†³äº†ï¼Œå› ä¸ºTCP,IPå¤´20byteï¼ŒTCP segmentå¤´20byteï¼Œæ»¡è½½æŠ¥æ–‡å¯ä»¥è¾¾åˆ°1500byte)
 ** header
 modern proxies must never proxy the Connection header or any headers whose names appear inside the Connection values
-keep-alive 1.0Ê±´úÄ¬ÈÏÃ»¿ª
-persistent 1.1Ê±´úÄ¬ÈÏ¿ªÆô£¬³ı·ÇConnection: closeÊÖ¶¯Ö¸¶¨¹Ø±Õ
+keep-alive 1.0æ—¶ä»£é»˜è®¤æ²¡å¼€
+persistent 1.1æ—¶ä»£é»˜è®¤å¼€å¯ï¼Œé™¤éConnection: closeæ‰‹åŠ¨æŒ‡å®šå…³é—­
 *** Connection:
 **** value
 - HTTP header field names, listing headers relevant for only this connection
@@ -247,13 +247,13 @@ Keep-Alive: max=5, timeout=120
 ** optimistic
 *** Parallel connections
 [[../img/http_parallel_connection.png][Parallel Connections]]
-Õë¶ÔµÄÊÇ¿Í»§¶Ë£¬Ò»´ÎĞÔ¿ª¶à¸öTCPÁ¬½Ó
+é’ˆå¯¹çš„æ˜¯å®¢æˆ·ç«¯ï¼Œä¸€æ¬¡æ€§å¼€å¤šä¸ªTCPè¿æ¥
 *** Persistent connections
 [[file:~/Desktop/personal/study/img/http_persistent_connection.png][Persistent Connections]]
-¸´ÓÃÁ¬½Ó£¬Ê¡handshake£¬²¢ÇÒ·¢ËÍ´°¿ÚÒÑ¾­µÃµ½ÁËÒ»²¿·Ötune£¬µ«ÊÇÕë¶Ô¶à¸öÁ¬½ÓÊ¹ÓÃÍ¬Ò»¸ö persistent connectionÊ±£¬»¹ÊÇserial
+å¤ç”¨è¿æ¥ï¼Œçœhandshakeï¼Œå¹¶ä¸”å‘é€çª—å£å·²ç»å¾—åˆ°äº†ä¸€éƒ¨åˆ†tuneï¼Œä½†æ˜¯é’ˆå¯¹å¤šä¸ªè¿æ¥ä½¿ç”¨åŒä¸€ä¸ª persistent connectionæ—¶ï¼Œè¿˜æ˜¯serial
 *** Pipelined connections
 [[file:~/Desktop/personal/study/img/http_pipeline_connection.png][Pipelined Connections]]
-ÔÚpersistent connectiondµÄ»ù´¡ÉÏ£¬²»ÒªÇóÍê³É transactionÔÚ½øĞĞÏÂÒ»¸ö£¬request¿ÉÒÔ°´ĞòÖ±½Ó¶ª£¬responseÒ²±ØĞë°´Ğò·µ»Ø£¬ÒòÎªÆ¨ÊÂ¶à(ÃİµÈĞÔ²ÅÄÜ×ß£¬´øside-effect²»×ß£¬ÒòÎªä¯ÀÀÆ÷ĞèÒªÔÚÕ¨ÁËµÄÊ±ºò½øĞĞÖØÊÔ)£¬bug¶à£¬ÊµÓÃĞÔÔÚÖ÷Á÷µÄä¯ÀÀÆ÷ÉÏ¾ùÊÇÄ¬ÈÏ¹Ø±ÕÖĞ
+åœ¨persistent connectiondçš„åŸºç¡€ä¸Šï¼Œä¸è¦æ±‚å®Œæˆ transactionåœ¨è¿›è¡Œä¸‹ä¸€ä¸ªï¼Œrequestå¯ä»¥æŒ‰åºç›´æ¥ä¸¢ï¼Œresponseä¹Ÿå¿…é¡»æŒ‰åºè¿”å›ï¼Œå› ä¸ºå±äº‹å¤š(å¹‚ç­‰æ€§æ‰èƒ½èµ°ï¼Œå¸¦side-effectä¸èµ°ï¼Œå› ä¸ºæµè§ˆå™¨éœ€è¦åœ¨ç‚¸äº†çš„æ—¶å€™è¿›è¡Œé‡è¯•)ï¼Œbugå¤šï¼Œå®ç”¨æ€§åœ¨ä¸»æµçš„æµè§ˆå™¨ä¸Šå‡æ˜¯é»˜è®¤å…³é—­ä¸­
 *** Multiplexed connections
 * proxy
 ** Via header
@@ -262,9 +262,9 @@ waypoint          = ( received-protocol received-by [ comment ] )
 received-protocol = [ protocol-name "/" ] protocol-version
 received-by       = ( host [ ":" port ] ) | pseudonym
 ** trace method
-½«·şÎñÆ÷ÊÕµ½µÄrequestÈûµ½response body£¬×îÖ÷ÒªµÄÊÇ¿ÉÒÔ´Óclient½øĞĞ²é¿´requestµÄviaÍ·£¬¹Û²ì¾­¹ıproxy£¬µ«ÊÇ´ó²¿·ÖµÄwebsite¶¼²»Ö§³Ö£¬ÒòÎª¿ÉÄÜ±©Â¶ÍøÂç½á¹¹
+å°†æœåŠ¡å™¨æ”¶åˆ°çš„requestå¡åˆ°response bodyï¼Œæœ€ä¸»è¦çš„æ˜¯å¯ä»¥ä»clientè¿›è¡ŒæŸ¥çœ‹requestçš„viaå¤´ï¼Œè§‚å¯Ÿç»è¿‡proxyï¼Œä½†æ˜¯å¤§éƒ¨åˆ†çš„websiteéƒ½ä¸æ”¯æŒï¼Œå› ä¸ºå¯èƒ½æš´éœ²ç½‘ç»œç»“æ„
 ** MAX-FORWARDS header
-Ö¸¶¨×î³¤¿É¾­¹ıµÄproxy£¬Ã¿´Î¾­¹ıproxy£¬-1
+æŒ‡å®šæœ€é•¿å¯ç»è¿‡çš„proxyï¼Œæ¯æ¬¡ç»è¿‡proxyï¼Œ-1
 * gateway
 ** server protocol converters gateway
 ** application server gateway
@@ -277,7 +277,7 @@ User-agent: Mozilla/4.0
 [[file:~/Desktop/personal/study/img/http_tunel_gateway.png][Using CONNECT to establish an SSL tunnel]]
 * cached
 ** private cached
-Ò»°ãÖ¸browser cached that storing in disk filesystem
+ä¸€èˆ¬æŒ‡browser cached that storing in disk filesystem
 ** public cached
 proxy cached
 [[file:~/Desktop/personal/study/img/http_Proxy_Cache_Hierarchies.png][Proxy Cache Hierarchies]]
@@ -293,14 +293,14 @@ Cache-Control: no-cache
 Cache-Control: no-store
 ***** cached document in cached server
 Cache-Control: max-age=3600
-Cache-Control: s-maxage=3600 #ÓÃÔÚÖ¸Ê¾cached serverµÄrevalidation
+Cache-Control: s-maxage=3600 #ç”¨åœ¨æŒ‡ç¤ºcached serverçš„revalidation
 ***** tell cached revaladate on every access
 Cache-Control: must-revalidate
 *** client side
 condition methods(get with condition header)
 **** If-Modified-Since: <date>
 **** If-None-Match: <tags>
-responseµÄetag¿ÉÒÔ´ø»Øetag£¬¸½´øÎÄ¼şchecksumÖ®ÀàµÄÖµ£¬¿Í»§¶ËÔÚ¾ö¶¨revalidationÊ±£¬¿ÉÓÃetag´«Èë£¬web serverÖ§³Öweak validator(¸Ä×¢ÊÍÊÓÎªÎÄ¼şetagÖµ²»±äx)ºÍstrong validator
+responseçš„etagå¯ä»¥å¸¦å›etagï¼Œé™„å¸¦æ–‡ä»¶checksumä¹‹ç±»çš„å€¼ï¼Œå®¢æˆ·ç«¯åœ¨å†³å®šrevalidationæ—¶ï¼Œå¯ç”¨etagä¼ å…¥ï¼Œweb serveræ”¯æŒweak validator(æ”¹æ³¨é‡Šè§†ä¸ºæ–‡ä»¶etagå€¼ä¸å˜x)å’Œstrong validator
 **** Cache-Control header
 Cache-Control: max-stale = <s>
 Cache-Control: min-fresh = <s>
@@ -314,25 +314,25 @@ Cache-Control: only-if-cached
 Set-Cookie: name=value [; expires=date] [; path=path] [; domain=domain] [; secure] # response header
 Cookie: name1=value1 [; name2=value2] ... # request header
 *** authentication
-ÊÇ×¨ÎªhttpÉè¼ÆµÄ·ÀÖ¹±©Â¶credentialºÍreplay attackµÄÈÏÖ¤Ğ­Òé£¬ÔÚhttpsÇé¿öÏÂ£¬½ö½ö×÷ÎªĞÄÀíÉÏµÄÎ¿¼®£¬²»¾ß±¸¹ı´óµÄ×÷ÓÃ£¬´ó²¿·Ö¸ü¶àµÄÊÇÓÉapplication server½øĞĞÈÏÖ¤ÉÏµÄ¹ÜÀíºÍdigest(nonceÒ²Ã»ÂÑÓÃ£¬digest»ù±¾Ö»ÒªÒ»´Î£¬ÒòÎªhttps±¾À´¾Í±»¼ÓÃÜ¹ıÒ»´ÎÁË)
+æ˜¯ä¸“ä¸ºhttpè®¾è®¡çš„é˜²æ­¢æš´éœ²credentialå’Œreplay attackçš„è®¤è¯åè®®ï¼Œåœ¨httpsæƒ…å†µä¸‹ï¼Œä»…ä»…ä½œä¸ºå¿ƒç†ä¸Šçš„æ…°ç±ï¼Œä¸å…·å¤‡è¿‡å¤§çš„ä½œç”¨ï¼Œå¤§éƒ¨åˆ†æ›´å¤šçš„æ˜¯ç”±application serverè¿›è¡Œè®¤è¯ä¸Šçš„ç®¡ç†å’Œdigest(nonceä¹Ÿæ²¡åµç”¨ï¼ŒdigeståŸºæœ¬åªè¦ä¸€æ¬¡ï¼Œå› ä¸ºhttpsæœ¬æ¥å°±è¢«åŠ å¯†è¿‡ä¸€æ¬¡äº†)
 **** basic authentication
-1. ¶ÔÓÚÊ¹ÓÃnative ÈÏÖ¤µÄÇé¿öÏÂ£¬ÒÔserver·µ»Ø401£¬´¥·¢ä¯ÀÀÆ÷´ò¿ªÈÏÖ¤µ¯´°ÊäÈëusername,passwordºó£¬½øĞĞbase64±àÂë£¬ÉèÖÃµ½AuthenticationÍ·£¬½øĞĞresend request
-2. ¶ÔÓÚÏÖ´úµ¥Ò³webÏµÍ³£¬³£ÅäºÏcookie»ñÈ¡jwtÁîÅÆ£¬ÔÚ×÷ÎªAuthenticationÄÚÈİ´«Èë(°üº¬¸÷ÀàÈ¨ÏŞĞÅÏ¢ºÍÇ©Ãû)
+1. å¯¹äºä½¿ç”¨native è®¤è¯çš„æƒ…å†µä¸‹ï¼Œä»¥serverè¿”å›401ï¼Œè§¦å‘æµè§ˆå™¨æ‰“å¼€è®¤è¯å¼¹çª—è¾“å…¥username,passwordåï¼Œè¿›è¡Œbase64ç¼–ç ï¼Œè®¾ç½®åˆ°Authenticationå¤´ï¼Œè¿›è¡Œresend request
+2. å¯¹äºç°ä»£å•é¡µwebç³»ç»Ÿï¼Œå¸¸é…åˆcookieè·å–jwtä»¤ç‰Œï¼Œåœ¨ä½œä¸ºAuthenticationå†…å®¹ä¼ å…¥(åŒ…å«å„ç±»æƒé™ä¿¡æ¯å’Œç­¾å)
 ***** realm
 [[file:~/Desktop/personal/study/img/http_authentication_realm.png][Security realms in a web server]]
-Ò»×é×ÊÔ´ºÍÒ»¸öÓÃ»§¹ØÁª£¬Ò»°ã¿ÉÒÔ¹ØÁª¶à¸ö£¬ÔÚÈÏÖ¤¿ò¼ÜÖĞ³£³£³öÏÖ
+ä¸€ç»„èµ„æºå’Œä¸€ä¸ªç”¨æˆ·å…³è”ï¼Œä¸€èˆ¬å¯ä»¥å…³è”å¤šä¸ªï¼Œåœ¨è®¤è¯æ¡†æ¶ä¸­å¸¸å¸¸å‡ºç°
 HTTP/1.0 401 Unauthorized
 WWW-Authenticate: Basic realm="Corporate Financials"
 **** Digest Authentication
 [[file:~/Desktop/personal/study/img/http_digest_authentication.png][Basic versus digest authentication syntax]]
-ºËĞÄÔ­Àí
-1. one-way functions such as MD5 ·ÀÖ¹ÃÜÂëÄæ½âÎö¶ø±©Â¶(Base64ÊÇ¶Ô³Æ¼ÓÃÜ)
-2. ÔÚ1µÄÇ°ÌáÏÂ¼ÓÈënonce£¬Ê¹µÃ¿Í»§¶ËÃ¿´ÎÄÜÖØĞÂÉú³Édigest(·ÀÖ¹ÇëÇó±»capture-replay£¬Èç¹û²»Ã¿´ÎÒ»Ñù£¬ÇÒ²»×ßhttps£¬ÔÚcaptureÇëÇóµÄÊ±ºò£¬²»ÖªµÀÕıÈ·µÄÃÜÂë£¬µ«ÊÇ¿ÉÒÔÊ¹ÓÃdigestµÈ¼ÛÓÚÃÜÂë)
+æ ¸å¿ƒåŸç†
+1. one-way functions such as MD5 é˜²æ­¢å¯†ç é€†è§£æè€Œæš´éœ²(Base64æ˜¯å¯¹ç§°åŠ å¯†)
+2. åœ¨1çš„å‰æä¸‹åŠ å…¥nonceï¼Œä½¿å¾—å®¢æˆ·ç«¯æ¯æ¬¡èƒ½é‡æ–°ç”Ÿæˆdigest(é˜²æ­¢è¯·æ±‚è¢«capture-replayï¼Œå¦‚æœä¸æ¯æ¬¡ä¸€æ ·ï¼Œä¸”ä¸èµ°httpsï¼Œåœ¨captureè¯·æ±‚çš„æ—¶å€™ï¼Œä¸çŸ¥é“æ­£ç¡®çš„å¯†ç ï¼Œä½†æ˜¯å¯ä»¥ä½¿ç”¨digestç­‰ä»·äºå¯†ç )
 * https
 [[file:~/Desktop/personal/study/img/http_ca_cert_format.png][Typical digital signature format]]
-ºËĞÄÔ­Àí(ĞÅÈÎÁ´Ô­Àí):
-1. CA±£Ö¤ÁË¹«Ô¿£¬Ëã·¨·Ö·¢µÄ¹ı³ÌÄÜ¹»×¼È·µÄ´ïµ½client£¬¶ø²»±»´Û¸Ä(CAË½Ô¿¼ÓÃÜÖ¤ÊéĞÅÏ¢£¬client¹«Ô¿½â¿ªÈ·ÈÏÍêÕûĞÔ£¬Ö¤ÊéÄÚÖ¸¶¨µÄwebsiteµÄ¹«Ô¿ºÍËã·¨)
-2. ÓÃ1µÃµ½µÄ¹«Ô¿ºÍËã·¨½øĞĞ¶Ô³Æ¼ÓÃÜËã·¨ºÍÃÜÔ¿Ğ­ÉÌ£¬Ğ­ÉÌ¹ı³Ì±»¼ÓÃÜ(¿Í»§¶Ë·¢Æğ)
-3. ½»»¥¹ı³ÌÖĞÊ¹ÓÃ2µÄĞ­ÉÌÃÜÔ¿ºÍËã·¨¼ÓÃÜºó´«Êä
+æ ¸å¿ƒåŸç†(ä¿¡ä»»é“¾åŸç†):
+1. CAä¿è¯äº†å…¬é’¥ï¼Œç®—æ³•åˆ†å‘çš„è¿‡ç¨‹èƒ½å¤Ÿå‡†ç¡®çš„è¾¾åˆ°clientï¼Œè€Œä¸è¢«ç¯¡æ”¹(CAç§é’¥åŠ å¯†è¯ä¹¦ä¿¡æ¯ï¼Œclientå…¬é’¥è§£å¼€ç¡®è®¤å®Œæ•´æ€§ï¼Œè¯ä¹¦å†…æŒ‡å®šçš„websiteçš„å…¬é’¥å’Œç®—æ³•)
+2. ç”¨1å¾—åˆ°çš„å…¬é’¥å’Œç®—æ³•è¿›è¡Œå¯¹ç§°åŠ å¯†ç®—æ³•å’Œå¯†é’¥åå•†ï¼Œåå•†è¿‡ç¨‹è¢«åŠ å¯†(å®¢æˆ·ç«¯å‘èµ·)
+3. äº¤äº’è¿‡ç¨‹ä¸­ä½¿ç”¨2çš„åå•†å¯†é’¥å’Œç®—æ³•åŠ å¯†åä¼ è¾“
 * ref
 [[https://learning.oreilly.com/library/view/http-the-definitive/1565925092/][HTTP: The Definitive Guide]]

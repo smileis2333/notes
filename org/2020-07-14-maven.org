@@ -14,19 +14,19 @@
 * POM
 ** project
 *** modelVersion
-Óëmaven×ÔÉíÓÐ¹Ø£¬Ò»°ãÈ¡Ä¬ÈÏ
+ä¸Žmavenè‡ªèº«æœ‰å…³ï¼Œä¸€èˆ¬å–é»˜è®¤
 *** groupId
 *** artifactId
 *** version
 *** parent
-ÓëObjectÀàËÆ£¬È«²¿mavenÏîÄ¿¶¼ÓÐÒ»¸ö×î¶¥²ãµÄ¹«¹²parent POM£¬¸÷ÖÖ²å¼þºÍÃüÁî¶¼·â×°ÔÚÀïÃæ
+ä¸ŽObjectç±»ä¼¼ï¼Œå…¨éƒ¨mavené¡¹ç›®éƒ½æœ‰ä¸€ä¸ªæœ€é¡¶å±‚çš„å…¬å…±parent POMï¼Œå„ç§æ’ä»¶å’Œå‘½ä»¤éƒ½å°è£…åœ¨é‡Œé¢
 *** dependencies
 **** dependency
 ***** groupId
 ***** artifactId
 ***** version
 ***** scope
-**** ÅÅ³ý
+**** æŽ’é™¤
 <exclusions>
   <exclusion>
     <groupId></groupId>
@@ -36,12 +36,12 @@
 
 * cordinate
 ** groupId
-1. Ò»°ãÎª¹«Ë¾ÓòÃûÄæÐò
+1. ä¸€èˆ¬ä¸ºå…¬å¸åŸŸåé€†åº
 ** artifactId
 ** version
 * lifecycle
-1. ½«¸÷¸öphase½øÐÐÂß¼­·Ö×é£¬¸÷¸ö×éÖÐµÄphaseÖ´ÐÐ¾ù²»±ðµÄlifecycleµÄphase
-2. lifecycleÄÚ¶¨ÒåÁËË³Ðò£¬ÈÎÒâÆäÖÐÒ»¸öphaseÖ´ÐÐ£¬»áµ¼ÖÂÉùÃ÷ÔÚÇ°µÄphaseµÄ°´ÐòÖ´ÐÐ£¬ºóÉùÃ÷µÄ²»ÊÜÓ°Ïì
+1. å°†å„ä¸ªphaseè¿›è¡Œé€»è¾‘åˆ†ç»„ï¼Œå„ä¸ªç»„ä¸­çš„phaseæ‰§è¡Œå‡ä¸åˆ«çš„lifecycleçš„phase
+2. lifecycleå†…å®šä¹‰äº†é¡ºåºï¼Œä»»æ„å…¶ä¸­ä¸€ä¸ªphaseæ‰§è¡Œï¼Œä¼šå¯¼è‡´å£°æ˜Žåœ¨å‰çš„phaseçš„æŒ‰åºæ‰§è¡Œï¼ŒåŽå£°æ˜Žçš„ä¸å—å½±å“
 ** clean
 *** pre-clean
 *** clean
@@ -51,7 +51,7 @@
 *** initialize
 *** ...
 *** compile
-ËäÈ»»áÇåµôÎÄ¼þ£¬µ«ÊÇµ÷ÓÃµÄ²¢²»ÊÇcleanÖÜÆÚµÄclean phase£¬¶øÊÇÄÚ²¿ÊµÏÖµÄÁíÒ»ÖÖ»úÖÆ
+è™½ç„¶ä¼šæ¸…æŽ‰æ–‡ä»¶ï¼Œä½†æ˜¯è°ƒç”¨çš„å¹¶ä¸æ˜¯cleanå‘¨æœŸçš„clean phaseï¼Œè€Œæ˜¯å†…éƒ¨å®žçŽ°çš„å¦ä¸€ç§æœºåˆ¶
 *** ...
 *** test
 ** site
@@ -62,31 +62,31 @@
 * repository
 ** local
 ** remote
-1. Ë½·þ
+1. ç§æœ
 2. service repo such as central repo, mirror central repo
 * command
 mvn [plugin-name]:[goal-name]
 * plugin
-mavenÒÀÀµÉúÃüÖÜÆÚ£¬¶øÉúÃüÖÜÆÚµÄ¸÷ÖÖphase×÷ÎªÍ³Ò»µÄ½Ó¿Ú£¬¾ßÌåÒÀÀµÓÚ¾ßÌåµÄ²å¼þ
+mavenä¾èµ–ç”Ÿå‘½å‘¨æœŸï¼Œè€Œç”Ÿå‘½å‘¨æœŸçš„å„ç§phaseä½œä¸ºç»Ÿä¸€çš„æŽ¥å£ï¼Œå…·ä½“ä¾èµ–äºŽå…·ä½“çš„æ’ä»¶
 * dependency
-1. ÔÚ½øÐÐÕý³£·¢²¼µÄÊ±ºò£¬ËùÓÐÖ¸¶¨µÄÒÀÀµ¶¼²»»á½øÐÐ´ò°ü
-2. ³ý·Ç´ò³ÉÍêÕûµÄÖ´ÐÐjar°ü(ÖîÈçspring bootÖ´ÐÐ°ü)£¬»òÕßwar°üÊ±£¬»á°Ñcompile scopeµÄÒÀÀµ¶¼´ò½ølib
-3. scopeµÄ´«µÝ»áÓ°Ïì±àÒëÇé¿ö, compileÄÜ´«µÝ
-4. °æ±¾³åÍ»£¬¾Í½üÓÅÏÈ£¬Â·¾¶ÏàÍ¬£¬ÏÈÉùÃ÷ÕßÓÐÏÞ
+1. åœ¨è¿›è¡Œæ­£å¸¸å‘å¸ƒçš„æ—¶å€™ï¼Œæ‰€æœ‰æŒ‡å®šçš„ä¾èµ–éƒ½ä¸ä¼šè¿›è¡Œæ‰“åŒ…
+2. é™¤éžæ‰“æˆå®Œæ•´çš„æ‰§è¡ŒjaråŒ…(è¯¸å¦‚spring bootæ‰§è¡ŒåŒ…)ï¼Œæˆ–è€…waråŒ…æ—¶ï¼Œä¼šæŠŠcompile scopeçš„ä¾èµ–éƒ½æ‰“è¿›lib
+3. scopeçš„ä¼ é€’ä¼šå½±å“ç¼–è¯‘æƒ…å†µ, compileèƒ½ä¼ é€’
+4. ç‰ˆæœ¬å†²çªï¼Œå°±è¿‘ä¼˜å…ˆï¼Œè·¯å¾„ç›¸åŒï¼Œå…ˆå£°æ˜Žè€…æœ‰é™
 ** scope
 *** compile
-±àÒëÐèÒª£¬¼òµ¥À´½²£¬¾ÍÊÇÏàµ±ÓÚÈ«¾ÖÁË
+ç¼–è¯‘éœ€è¦ï¼Œç®€å•æ¥è®²ï¼Œå°±æ˜¯ç›¸å½“äºŽå…¨å±€äº†
 *** provide
-Õë¶Ôwar°ü£¬À´½²£¬±àÒëÐèÒªservlet-api£¬IDEÌáÊ¾ÐèÒªservlet-api£¬µ«ÊÇwar°üÔËÐÐµÄservletÓÉcontainer¸ºÔð
+é’ˆå¯¹waråŒ…ï¼Œæ¥è®²ï¼Œç¼–è¯‘éœ€è¦servlet-apiï¼ŒIDEæç¤ºéœ€è¦servlet-apiï¼Œä½†æ˜¯waråŒ…è¿è¡Œçš„servletç”±containerè´Ÿè´£
 *** test
-Ö»ÔÚtest caseÉúÐ§
+åªåœ¨test caseç”Ÿæ•ˆ
 *** runtime
-±àÒë²»ÐèÒª£¬ÔËÐÐÐèÒª£¬µäÐÍÀý×ÓÊÇ¸÷ÀàSPI implement£¬ÖîÈçDB driver
+ç¼–è¯‘ä¸éœ€è¦ï¼Œè¿è¡Œéœ€è¦ï¼Œå…¸åž‹ä¾‹å­æ˜¯å„ç±»SPI implementï¼Œè¯¸å¦‚DB driver
 * archetype
-¿ÉÒÔÊ¹ÓÃarchetype²å¼þÑ¡Ôñ´´½¨Ê±Ê¹ÓÃµÄÑù°åÄ¿Â¼
+å¯ä»¥ä½¿ç”¨archetypeæ’ä»¶é€‰æ‹©åˆ›å»ºæ—¶ä½¿ç”¨çš„æ ·æ¿ç›®å½•
 * trick
 ** idea
-±àÒë±¨´í/¾¯¸æ
+ç¼–è¯‘æŠ¥é”™/è­¦å‘Š
 #+BEGIN_SRC xml
 <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -94,14 +94,14 @@ mavenÒÀÀµÉúÃüÖÜÆÚ£¬¶øÉúÃüÖÜÆÚµÄ¸÷ÖÖphase×÷ÎªÍ³Ò»µÄ½Ó¿Ú£¬¾ßÌåÒÀÀµÓÚ¾ßÌåµÄ²å¼þ
     <maven.compiler.target>10</maven.compiler.target>
 </properties>
 #+END_SRC
-** ¿ØÖÆ°æ±¾
-properties¶¨ÒåÊôÐÔxxx£¬version´¦Ê¹ÓÃ${xxx}
-** ¶àÄ£¿é´¦Àí
-´´½¨¾ÛºÏ¹¤³Ì(Ò»°ã¾ÍÓÃ¸¸¹¤³Ì),Ê¹ÓÃ¾ÛºÏ¹¤³Ì½øÐÐmvnµ÷ÓÃ
+** æŽ§åˆ¶ç‰ˆæœ¬
+propertieså®šä¹‰å±žæ€§xxxï¼Œversionå¤„ä½¿ç”¨${xxx}
+** å¤šæ¨¡å—å¤„ç†
+åˆ›å»ºèšåˆå·¥ç¨‹(ä¸€èˆ¬å°±ç”¨çˆ¶å·¥ç¨‹),ä½¿ç”¨èšåˆå·¥ç¨‹è¿›è¡Œmvnè°ƒç”¨
 #+BEGIN_SRC xml
   <modules>
     <module>[path]</module>
   </modules>
 #+END_SRC
-* ×¢ÒâÊÂÏî
-maven3.6Ö®ºó²»Ö§³Öhttp£¬Èç¹ûË½·þÊÇhttp£¬ÐèÒªÊÖ¶¯ÏÂÔØ½µ¼¶maven
+* æ³¨æ„äº‹é¡¹
+maven3.6ä¹‹åŽä¸æ”¯æŒhttpï¼Œå¦‚æžœç§æœæ˜¯httpï¼Œéœ€è¦æ‰‹åŠ¨ä¸‹è½½é™çº§maven

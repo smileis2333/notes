@@ -5,12 +5,12 @@ https://help.aliyun.com/knowledge_detail/36576.html
 * openapi explorer
 https://api.aliyun.com/?spm=a2c4g.11186623.2.13.304e50a4oJ0wKF#/
 * oss
-** ·şÎñÆ÷Ç©ÃûÇ°¶ËÉÏ´«
-Ç©ÃûÁ´½Ó²»Ö§³ÖµÄaclµÄÉèÖÃ£¬Èç¹ûË½ÓĞbucketĞèÒªÁÙÊ±Á´½ÓÉÏ´«¹«¿ª£¬Ö»ÄÜÔÚoss callback·şÎñÆ÷µÄÊ±ºò×ö´¦Àí
+** æœåŠ¡å™¨ç­¾åå‰ç«¯ä¸Šä¼ 
+ç­¾åé“¾æ¥ä¸æ”¯æŒçš„aclçš„è®¾ç½®ï¼Œå¦‚æœç§æœ‰bucketéœ€è¦ä¸´æ—¶é“¾æ¥ä¸Šä¼ å…¬å¼€ï¼Œåªèƒ½åœ¨oss callbackæœåŠ¡å™¨çš„æ—¶å€™åšå¤„ç†
 https://help.aliyun.com/document_detail/31927.html?spm=a2c4g.11186623.6.1734.d27643d3VVhFe7
-** ÍĞ¹Ü¾²Ì¬Õ¾µã
-bucketÁĞ±í --> Ñ¡¶¨bucket --> »ù´¡ÉèÖÃ -->¾²Ì¬Ò³Ãæ¿ªÆô
+** æ‰˜ç®¡é™æ€ç«™ç‚¹
+bucketåˆ—è¡¨ --> é€‰å®šbucket --> åŸºç¡€è®¾ç½® -->é™æ€é¡µé¢å¼€å¯
 
-ÓÉÓÚ²ßÂÔ¸Ä¶¯£¬Ä¬ÈÏ»á´øÉÏContent-Disposition:attachment×÷ÎªÏÂÔØÎÄ¼ş´ò¿ª£¬½â¾ö·½°¸
-1. ÅäÖÃcnameÖ¸¹ıÈ¥£¬¿ÉÒÔ×Ô¶¯Ïû³ıµô
-2. ÒÆ³ıheader£¬¿ÉÒÔÓÃCharles rewrite»òÕßNginx proxy_hide_headerÀ´´¦Àí×Ö¶Î£¬Ç°Õß×î¼òµ¥
+ç”±äºç­–ç•¥æ”¹åŠ¨ï¼Œé»˜è®¤ä¼šå¸¦ä¸ŠContent-Disposition:attachmentä½œä¸ºä¸‹è½½æ–‡ä»¶æ‰“å¼€ï¼Œè§£å†³æ–¹æ¡ˆ
+1. é…ç½®cnameæŒ‡è¿‡å»ï¼Œå¯ä»¥è‡ªåŠ¨æ¶ˆé™¤æ‰
+2. ç§»é™¤headerï¼Œå¯ä»¥ç”¨Charles rewriteæˆ–è€…Nginx proxy_hide_headeræ¥å¤„ç†å­—æ®µï¼Œå‰è€…æœ€ç®€å•

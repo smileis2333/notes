@@ -9,8 +9,8 @@ https://support.microsoft.com/en-us/windows/keyboard-shortcuts-in-windows-dcc61a
 * gesture shortcut
 * cygwin
 .\setup-x86_64.exe -q -P wget -P gcc-g++ -P make -P diffutils -P libmpfr-devel -P libgmp-devel -P libmpc-devel
-* ¾â³İÏû³ı
-Ñ¡ÖĞ¶ÔÓ¦³ÌĞò£¬ÓÒ¼üÊôĞÌ->¼æÈİĞÔ->¸ü¸Ä¸ßdpiÉèÖÃ->¹´Ñ¡Ìæ´ú¸ßdpiËõ·ÅÎª...
+* é”¯é½¿æ¶ˆé™¤
+é€‰ä¸­å¯¹åº”ç¨‹åºï¼Œå³é”®å±åˆ‘->å…¼å®¹æ€§->æ›´æ”¹é«˜dpiè®¾ç½®->å‹¾é€‰æ›¿ä»£é«˜dpiç¼©æ”¾ä¸º...
 * cmd
 # env
 echo %JAVA_HOME%
@@ -18,13 +18,13 @@ echo %JAVA_HOME%
 netstat -ano|findstr 20007
 taskkill /PID [processId] /F
 * im
-** ÈÕÎÄ
-ctrl-cap Æ½¼ÙÃû
-alt-cap  Æ¬¼ÙÃû
-shift-cap ÇĞ»»ÎªÓ¢ÎÄ
+** æ—¥æ–‡
+ctrl-cap å¹³å‡å
+alt-cap  ç‰‡å‡å
+shift-cap åˆ‡æ¢ä¸ºè‹±æ–‡
 * host
 C:\WINDOWS\system32\drivers\etc
-* Ä¿Â¼
+* ç›®å½•
 ** tmp
 ~/AppData/Local/Temp
 * wsl
@@ -45,7 +45,7 @@ https://github.com/VPraharsha03/GentooWSL2
 # make.conf
 GENTOO_MIRRORS="https://mirrors.ustc.edu.cn/gentoo/"
 MAKEOPTS="-j7"
-** ¿Ó
+** å‘
 *** docker
 touch /etc/fstab
 update-alternatives --set iptables /usr/sbin/iptables-legacy
@@ -59,6 +59,6 @@ https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the
 
 https://stackoverflow.com/questions/65272764/ports-are-not-available-listen-tcp-0-0-0-0-50070-bind-an-attempt-was-made-to
 *** vim
-ctrl+v¹Øµô
+ctrl+vå…³æ‰
 * script
-win +r shutdown -s -t 3600 //¹Ø»ú£¬1Ğ¡Ê±ºó
+win +r shutdown -s -t 3600 //å…³æœºï¼Œ1å°æ—¶å

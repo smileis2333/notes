@@ -1,15 +1,15 @@
 #+TITLE: emacs
 #+STARTUP: indent
-* win10ÏÂÅäÖÃ 
-** ÅäÖÃÄ¿Â¼
- win10ÅäÖÃemacs HOMEÄ¿Â¼£¬»·¾³±äÁ¿ÉèÖÃHOME
+* win10ä¸‹é…ç½® 
+** é…ç½®ç›®å½•
+ win10é…ç½®emacs HOMEç›®å½•ï¼Œç¯å¢ƒå˜é‡è®¾ç½®HOME
 ** find file default path
 (setq default-directory "/path/")
 * package
 ** magit
 *** magit-status
 *** tab
-²é¿´unstaged changesµÄ±ä¸ü
+æŸ¥çœ‹unstaged changesçš„å˜æ›´
 *** s
 stage
 *** u
@@ -17,4 +17,4 @@ unstage
 *** C-c C-c
 commit
 * org
-(setq org-hide-emphasis-markers t) ¹Ø±ÕÇ¿µ÷·ûºÅµÄÒş²Ø
+(setq org-hide-emphasis-markers t) å…³é—­å¼ºè°ƒç¬¦å·çš„éšè—

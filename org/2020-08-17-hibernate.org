@@ -1,7 +1,7 @@
 #+TITLE:  hibernate
 #+STARTUP: indent
 * config
-persistence.xmlÖ»ÄÜÉèÖÃ±ê×¼ÊôĞÔºÍ²¿·ÖÊµÏÖµÄÊôĞÔ£¬Èç¹ûĞèÒªÓÃµ½ÌØ¶¨ÊµÀıµÄÊôĞÔÉèÖÃ£¬ĞèÒªÉèÖÃÔ­ÉúµÄÅäÖÃÎÄ¼ş
+persistence.xmlåªèƒ½è®¾ç½®æ ‡å‡†å±æ€§å’Œéƒ¨åˆ†å®ç°çš„å±æ€§ï¼Œå¦‚æœéœ€è¦ç”¨åˆ°ç‰¹å®šå®ä¾‹çš„å±æ€§è®¾ç½®ï¼Œéœ€è¦è®¾ç½®åŸç”Ÿçš„é…ç½®æ–‡ä»¶
 EntityManagerFactory emf = Persistence.createEntityManagerFactory("HelloWorldPU"); //load META-INF/persistence.xml, use the name of persistence-unit to open
 * exclusive
 ** SessionFactory
@@ -34,7 +34,7 @@ Metadata metadata = metadataBuilder.build();
 the org.hibernate.jpa.internal.EntityManagerFactoryImpl has a constructor that accepts a SessionFactory.
 * relation control
 ** method bind
-ÓÅÏÈÑ¡Ïî
+ä¼˜å…ˆé€‰é¡¹
 #+BEGIN_SRC java
 public void addBid(Bid bid){
 // pre check
@@ -43,7 +43,7 @@ public void addBid(Bid bid){
 }
 #+END_SRC
 ** constructor bind
-½«µ¥Ò»ÒÀÀµÍ¨¹ı¹¹ÔìÆ÷×¢Èë£¬³õÊ¼»¯Ê±ÉèÖÃÁ½ÕßµÄÁªÏµ
+å°†å•ä¸€ä¾èµ–é€šè¿‡æ„é€ å™¨æ³¨å…¥ï¼Œåˆå§‹åŒ–æ—¶è®¾ç½®ä¸¤è€…çš„è”ç³»
 #+BEGIN_SRC java
 public Bid(Item item){
   this.item = item;
@@ -54,9 +54,9 @@ public Bid(Item item){
 ** annotation
 *** @Entity
 *** @NamedQuery
-¶¨ÒåÔ­ÉúÓï¾ä
-hibernate¿ÉÒÔ¶ªÔÚpackafe-info.java
-JPA×Ô´øµÄ²»ĞĞ
+å®šä¹‰åŸç”Ÿè¯­å¥
+hibernateå¯ä»¥ä¸¢åœ¨packafe-info.java
+JPAè‡ªå¸¦çš„ä¸è¡Œ
 #+BEGIN_SRC java
 @NamedQueries({
     @NamedQuery(
@@ -80,16 +80,16 @@ JPA×Ô´øµÄ²»ĞĞ
 #+END_SRC
 *** @Id
 *** @GeneratedValue
-TABLE£ºÊ¹ÓÃÒ»¸öÌØ¶¨µÄÊı¾İ¿â±í¸ñÀ´±£´æÖ÷¼ü¡£
-SEQUENCE£º¸ù¾İµ×²ãÊı¾İ¿âµÄĞòÁĞÀ´Éú³ÉÖ÷¼ü£¬Ìõ¼şÊÇÊı¾İ¿âÖ§³ÖĞòÁĞ¡£
-IDENTITY£ºÖ÷¼üÓÉÊı¾İ¿â×Ô¶¯Éú³É£¨Ö÷ÒªÊÇ×Ô¶¯Ôö³¤ĞÍ£©
-AUTO£ºÖ÷¼üÓÉ³ÌĞò¿ØÖÆ¡£
+TABLEï¼šä½¿ç”¨ä¸€ä¸ªç‰¹å®šçš„æ•°æ®åº“è¡¨æ ¼æ¥ä¿å­˜ä¸»é”®ã€‚
+SEQUENCEï¼šæ ¹æ®åº•å±‚æ•°æ®åº“çš„åºåˆ—æ¥ç”Ÿæˆä¸»é”®ï¼Œæ¡ä»¶æ˜¯æ•°æ®åº“æ”¯æŒåºåˆ—ã€‚
+IDENTITYï¼šä¸»é”®ç”±æ•°æ®åº“è‡ªåŠ¨ç”Ÿæˆï¼ˆä¸»è¦æ˜¯è‡ªåŠ¨å¢é•¿å‹ï¼‰
+AUTOï¼šä¸»é”®ç”±ç¨‹åºæ§åˆ¶ã€‚
 *** @Table
-@Table(name = "`USERS`") //hibernate¿ÉÒÔÓÃ``×ªÒå
-@Table(name = "\"USERS\"") //JPAÊ¹ÓÃ"×ªÒå
+@Table(name = "`USERS`") //hibernateå¯ä»¥ç”¨``è½¬ä¹‰
+@Table(name = "\"USERS\"") //JPAä½¿ç”¨"è½¬ä¹‰
 ** xml configure
 *** JPA mapping file
-persistence.xmlÄ¬ÈÏ¼ÓÔØÍ¬Â·¾¶ÏÂµÄorm.xml(¿É¸ÄÃû)
+persistence.xmlé»˜è®¤åŠ è½½åŒè·¯å¾„ä¸‹çš„orm.xml(å¯æ”¹å)
 #+BEGIN_SRC xml
 
 <persistence-unit name="SimpleXMLCompletePU">
@@ -139,8 +139,8 @@ persistence.xmlÄ¬ÈÏ¼ÓÔØÍ¬Â·¾¶ÏÂµÄorm.xml(¿É¸ÄÃû)
 </entity-mappings>
 #+END_SRC
 *** hibernate mapping file
-1. suffix.hbm.xml£¬¾ÉÊ½µÄÅäÖÃÊµÌåÀà·½Ê½£¬Ò»°ãÒÑ²»ÔÙÊ¹ÓÃ¸ÃÖÖÀàĞÍ½øĞĞÊµÌåÀàÅäÖÃ(²ÉÓÃJPA×¢½âÎªÖ÷Á÷)
-2. ÎÄ¼ş¿ÉÒÔ·ÅÖÃ¶àÖÖÔªËØ£¬Ä¿Ç°¶àÓÃÓÚ±¾µØSQLÅäÖÃ£¬ÒÔ¼°hibernate×¨Êô¹¦ÄÜµÄÅäÖÃÆôÓÃ£¬»ò×é¼şÊ¹ÓÃ
+1. suffix.hbm.xmlï¼Œæ—§å¼çš„é…ç½®å®ä½“ç±»æ–¹å¼ï¼Œä¸€èˆ¬å·²ä¸å†ä½¿ç”¨è¯¥ç§ç±»å‹è¿›è¡Œå®ä½“ç±»é…ç½®(é‡‡ç”¨JPAæ³¨è§£ä¸ºä¸»æµ)
+2. æ–‡ä»¶å¯ä»¥æ”¾ç½®å¤šç§å…ƒç´ ï¼Œç›®å‰å¤šç”¨äºæœ¬åœ°SQLé…ç½®ï¼Œä»¥åŠhibernateä¸“å±åŠŸèƒ½çš„é…ç½®å¯ç”¨ï¼Œæˆ–ç»„ä»¶ä½¿ç”¨
 #+BEGIN_SRC xml
 <?xml version="1.0"?>
 <!-- 
@@ -153,7 +153,7 @@ persistence.xmlÄ¬ÈÏ¼ÓÔØÍ¬Â·¾¶ÏÂµÄorm.xml(¿É¸ÄÃû)
         package="org.jpwh.model.simple"
         default-access="field">
 
-    <!-- An entity class mapping ,¿ÉÒÔÅä¶à¸ö£¬µ«ÊÇÔ¼¶¨»ù±¾¶¼ÊÇÒ»¸öÊµÌåÀàÅäÒ»¸ö -->
+    <!-- An entity class mapping ,å¯ä»¥é…å¤šä¸ªï¼Œä½†æ˜¯çº¦å®šåŸºæœ¬éƒ½æ˜¯ä¸€ä¸ªå®ä½“ç±»é…ä¸€ä¸ª -->
     <class name="Item">
         <id name="id">
             <generator class="native"/>
@@ -243,11 +243,11 @@ hibernate exclusive
     }
 #+END_SRC
 * choose type
-Çø·Öentity/value typeµÄ¹Ø¼ü£¬ÔÚÓÚÏÈ½«ÆäÊÓÎªvalue type£¬Ö®ºóÔÙ¹Û²ìÊÇ·ñ·ûºÏ£¬²»·ûºÏÔò½øĞĞÀàĞÍÌáÉı
+åŒºåˆ†entity/value typeçš„å…³é”®ï¼Œåœ¨äºå…ˆå°†å…¶è§†ä¸ºvalue typeï¼Œä¹‹åå†è§‚å¯Ÿæ˜¯å¦ç¬¦åˆï¼Œä¸ç¬¦åˆåˆ™è¿›è¡Œç±»å‹æå‡
 ** entity type
-¶ÔÓÚ±íµÄÊµÌåÓ³Éä£¬´øÖ÷¼ü£¬ÉúÃüÖÜÆÚ¶ÀÁ¢(Ö¸µÄÊÇ³Ö¾ÃĞÍ)¡£Shared references
+å¯¹äºè¡¨çš„å®ä½“æ˜ å°„ï¼Œå¸¦ä¸»é”®ï¼Œç”Ÿå‘½å‘¨æœŸç‹¬ç«‹(æŒ‡çš„æ˜¯æŒä¹…å‹)ã€‚Shared references
 ** value type
-¶ÔÓÚ±íÉè¼ÆÔÚJavaÖĞµÄ¶ş²ã³éÏó£¬ÎŞÖ÷¼ü£¬ÉúÃüÖÜÆÚÒÀÀµÓÚÍâ²ãµÄÊµÌå¶ÔÏó£¬µäĞÍµÄ±ÈÈç±í×Ö¶ÎÖĞµÄÈıÖÖµØÖ·£¬¿ÉÒÔÔÚJavaÖĞ³éÏóÎªAddress½øĞĞ»ã×Üt±íÊ¾
+å¯¹äºè¡¨è®¾è®¡åœ¨Javaä¸­çš„äºŒå±‚æŠ½è±¡ï¼Œæ— ä¸»é”®ï¼Œç”Ÿå‘½å‘¨æœŸä¾èµ–äºå¤–å±‚çš„å®ä½“å¯¹è±¡ï¼Œå…¸å‹çš„æ¯”å¦‚è¡¨å­—æ®µä¸­çš„ä¸‰ç§åœ°å€ï¼Œå¯ä»¥åœ¨Javaä¸­æŠ½è±¡ä¸ºAddressè¿›è¡Œæ±‡æ€»tè¡¨ç¤º
 * option
 ** prefix
 #+BEGIN_SRC java
@@ -271,11 +271,11 @@ public class CENamingStrategy extends
 </persistence-unit>
 #+END_SRC
 ** Dynamic SQL generation
-²åÈëºÍ¸üĞÂÈç¹ûÉèÖÃ×Ô¶¯Éú³Éstatement£¬ÔÚÊµÌåÀàºÜ¶àµÄÇé¿öÏÂ£¬»áµ¼ÖÂ´óÁ¿µÄÓï¾ä½øĞĞÁËÄÚ´æÕ¼ÓÃ¡£»òÕß×Ö¶ÎºÜ¶àµÄÇé¿ö£¬»áÓ°ÏìÓÅ»¯
+æ’å…¥å’Œæ›´æ–°å¦‚æœè®¾ç½®è‡ªåŠ¨ç”Ÿæˆstatementï¼Œåœ¨å®ä½“ç±»å¾ˆå¤šçš„æƒ…å†µä¸‹ï¼Œä¼šå¯¼è‡´å¤§é‡çš„è¯­å¥è¿›è¡Œäº†å†…å­˜å ç”¨ã€‚æˆ–è€…å­—æ®µå¾ˆå¤šçš„æƒ…å†µï¼Œä¼šå½±å“ä¼˜åŒ–
 @org.hibernate.annotations.DynamicInsert
 @org.hibernate.annotations.DynamicUpdate
 ** application view
-ÔÚÃ»ÓĞDBÈ¨ÏŞÊ±£¬½øĞĞÄÚ´æµÄview½¨Á¢
+åœ¨æ²¡æœ‰DBæƒé™æ—¶ï¼Œè¿›è¡Œå†…å­˜çš„viewå»ºç«‹
 #+BEGIN_SRC java
 @Entity
 @org.hibernate.annotations.Immutable
@@ -288,18 +288,18 @@ public class CENamingStrategy extends
 #+END_SRC
 ** immutable 
 @org.hibernate.annotations.Immutable
-½øĞĞÓïÒåµÄ²»¿É±äÉè¶¨£¬hibernate»á½øĞĞÒ»ÏµÁĞµÄÓÅ»¯£¬±ÈÈç²»Éú³ÉupdateÓï¾ä£¬±ÈÈç±ÜÃâÔà¼ì²éµÈ
+è¿›è¡Œè¯­ä¹‰çš„ä¸å¯å˜è®¾å®šï¼Œhibernateä¼šè¿›è¡Œä¸€ç³»åˆ—çš„ä¼˜åŒ–ï¼Œæ¯”å¦‚ä¸ç”Ÿæˆupdateè¯­å¥ï¼Œæ¯”å¦‚é¿å…è„æ£€æŸ¥ç­‰
 * map value type
 ** map basic properties
 *** @javax.persistence.Transient
 *** @Basic
-optional=true allow NULL×Ô¶¯½¨±í²Å²úÉú×÷ÓÃ£¬ÒÑ½¨ºÃµÄÇé¿öÏÂ£¬ÓÉhibernate¶ÔÈë²Î×ö¼ì²â£¬¿ÉÄÜÓëDDL²»Ò»ÖÂ
+optional=true allow NULLè‡ªåŠ¨å»ºè¡¨æ‰äº§ç”Ÿä½œç”¨ï¼Œå·²å»ºå¥½çš„æƒ…å†µä¸‹ï¼Œç”±hibernateå¯¹å…¥å‚åšæ£€æµ‹ï¼Œå¯èƒ½ä¸DDLä¸ä¸€è‡´
 fetch set lazy loading
 *** @Column(nullable = false)
 *** access
-@Access¾ö¶¨ÔËĞĞÊ±µÄ·ÃÎÊÂß¼­£¬¿É×÷ÓÃÓÚfield/entity
-FIELDÖ±½Ó·ÃÎÊ
-PROPERTYÍ¨¹ıgetter/setter·ÃÎÊ
+@Accesså†³å®šè¿è¡Œæ—¶çš„è®¿é—®é€»è¾‘ï¼Œå¯ä½œç”¨äºfield/entity
+FIELDç›´æ¥è®¿é—®
+PROPERTYé€šè¿‡getter/setterè®¿é—®
 <hibernate-mapping>
     <class name="Item">
         <id name="id">
@@ -308,11 +308,11 @@ PROPERTYÍ¨¹ıgetter/setter·ÃÎÊ
         </id>
         <property name="validated"
                   column="VALIDATED"
-                  access="noop"/> <!--²»ÔÚ´æÔÚÓÚÒµÎñÂß¼­µÄ·ÏÆúÊôĞÔ£¬µ«ÓÖ±ØĞë¸ù¾İ¸Ã×Ö¶ÎµÄ½øĞĞÉ¸Ñ¡£¬»áµ¼ÖÂ×¢½âµÄ´¦ÀíÈ«²¿Ê§Ğ§£¬ËùÒÔÈç¹ûĞèÒª¸ÃÌØĞÔ£¬¸ÃÅäÖÃÎÄ¼şĞèÒª¶ÔÊµÌå½øĞÔÈ«²¿ÊôĞÔµÄÅäÖÃ-->
+                  access="noop"/> <!--ä¸åœ¨å­˜åœ¨äºä¸šåŠ¡é€»è¾‘çš„åºŸå¼ƒå±æ€§ï¼Œä½†åˆå¿…é¡»æ ¹æ®è¯¥å­—æ®µçš„è¿›è¡Œç­›é€‰ï¼Œä¼šå¯¼è‡´æ³¨è§£çš„å¤„ç†å…¨éƒ¨å¤±æ•ˆï¼Œæ‰€ä»¥å¦‚æœéœ€è¦è¯¥ç‰¹æ€§ï¼Œè¯¥é…ç½®æ–‡ä»¶éœ€è¦å¯¹å®ä½“è¿›æ€§å…¨éƒ¨å±æ€§çš„é…ç½®-->
     </class>
 </hibernate-mapping>
 *** @org.hibernate.annotations.Formula
-·Ç±íÊôĞÔ£¬µäĞÍµÄ±ÈÈç¼ÆËãÊôĞÔµÄµÃ³ö(hibernate¶ÔÆäÉùÃ÷SQL½øĞÔ×Ó²éÑ¯Ç¶Èë£¬ÔÚ²éÑ¯Ê±Ò»²¢µÃ³ö¼ÆËã½á¹û)
+éè¡¨å±æ€§ï¼Œå…¸å‹çš„æ¯”å¦‚è®¡ç®—å±æ€§çš„å¾—å‡º(hibernateå¯¹å…¶å£°æ˜SQLè¿›æ€§å­æŸ¥è¯¢åµŒå…¥ï¼Œåœ¨æŸ¥è¯¢æ—¶ä¸€å¹¶å¾—å‡ºè®¡ç®—ç»“æœ)
 @org.hibernate.annotations.Formula(
     "substr(DESCRIPTION, 1, 12) || '...'"
 )
@@ -332,34 +332,34 @@ List<Item> result =
     em.createQuery("select i from Item i where i.metricWeight = :w")
         .setParameter("w", 2.0)
         .getResultList();
-×ª»»µÃµ½
+è½¬æ¢å¾—åˆ°
 // ...
 where
     i.IMPERIALWEIGHT / 2.20462=?
-*** Êı¾İ¿âÄ¬ÈÏÖµ
-½«Ä¬ÈÏÖµÉú³ÉÎ¯ÅÉ¸øhibernate£¬hibernateÃ¿´Îinsert/updateÊ±£¬ÏÈselectµÃµ½Ä¬ÈÏÖµ(ÓĞ¿ÉÄÜ¿É±»»º´æ)£¬Èç¹û²»ÉèÖÃ£¬ĞèÒªÖØĞÂÓÃ»§¸ù¾İÖ÷¼ü²éÒ»±éµÃµ½ÍêÕûµÄÊı¾İ(²»²éµÄÇé¿ö£¬ÎŞ·¨µÃÖªÄ¬ÈÏÖµÉú³ÉÇé¿ö)
+*** æ•°æ®åº“é»˜è®¤å€¼
+å°†é»˜è®¤å€¼ç”Ÿæˆå§”æ´¾ç»™hibernateï¼Œhibernateæ¯æ¬¡insert/updateæ—¶ï¼Œå…ˆselectå¾—åˆ°é»˜è®¤å€¼(æœ‰å¯èƒ½å¯è¢«ç¼“å­˜)ï¼Œå¦‚æœä¸è®¾ç½®ï¼Œéœ€è¦é‡æ–°ç”¨æˆ·æ ¹æ®ä¸»é”®æŸ¥ä¸€éå¾—åˆ°å®Œæ•´çš„æ•°æ®(ä¸æŸ¥çš„æƒ…å†µï¼Œæ— æ³•å¾—çŸ¥é»˜è®¤å€¼ç”Ÿæˆæƒ…å†µ)
 @Temporal(TemporalType.TIMESTAMP)
 @Column(insertable = false, updatable = false)
 @org.hibernate.annotations.Generated(
-    org.hibernate.annotations.GenerationTime.ALWAYS //Ã¿´Îinsert/update×Ô¶¯Ë¢ĞÂ¸ÃÊôĞÌ
+    org.hibernate.annotations.GenerationTime.ALWAYS //æ¯æ¬¡insert/updateè‡ªåŠ¨åˆ·æ–°è¯¥å±åˆ‘
 )
 protected Date lastModified;
 <enter/>
 @Column(insertable = false)
 @org.hibernate.annotations.ColumnDefault("1.00")
 @org.hibernate.annotations.Generated(
-    org.hibernate.annotations.GenerationTime.INSERT //insertÊ±²ÅË¢ĞÂ
+    org.hibernate.annotations.GenerationTime.INSERT //insertæ—¶æ‰åˆ·æ–°
 )
 protected BigDecimal initialPrice;
-@Temporal ¶ÔÊ±¼äÏà¹Ø×Ö¶Î½øĞÔÀàĞÍÖ¸¶¨£¬µÚ¶şÖÖ×ö·¨ÊÇÊ¹ÓÃconvertor
-@CreationTimestamp/@UpdateTimestampÓë@GeneratedÎªÍ¬¼¶×¢½â
+@Temporal å¯¹æ—¶é—´ç›¸å…³å­—æ®µè¿›æ€§ç±»å‹æŒ‡å®šï¼Œç¬¬äºŒç§åšæ³•æ˜¯ä½¿ç”¨convertor
+@CreationTimestamp/@UpdateTimestampä¸@Generatedä¸ºåŒçº§æ³¨è§£
 *** enumerations
-@Enumerated //Ä¬ÈÏ´¦ÀíÎªÉùÃ÷Ë³ĞòµÄ´æ´¢£¬¿ÉÒÔÖ¸¶¨ÎªEnumType.STRINGÖ±½ÓĞ´±êÇ©
+@Enumerated //é»˜è®¤å¤„ç†ä¸ºå£°æ˜é¡ºåºçš„å­˜å‚¨ï¼Œå¯ä»¥æŒ‡å®šä¸ºEnumType.STRINGç›´æ¥å†™æ ‡ç­¾
 ** map embeddable value
-Ã»ÓĞ¶ÀÁ¢µÄÉúÃüÖÜÆÚ£¬ÒÀÀµÓÚÆäËû¶ÔÏó¾ö¶¨×Ô¼ºµÄ´æ»î(ÊµÖÊÎª¶à¸öÊı¾İ¿â×Ö¶Î¾ÛºÏÎªÒ»¸ö³éÏóÀà£¬´ó²¿·ÖÉùÃ÷ÓëEntityÀàËÆ)£¬Ê¹ÓÃ@Embeddable
-Á½¿ìÇøÓòµÄ×Ö¶Î½øĞĞÁËembeddable¸´ÓÃ
+æ²¡æœ‰ç‹¬ç«‹çš„ç”Ÿå‘½å‘¨æœŸï¼Œä¾èµ–äºå…¶ä»–å¯¹è±¡å†³å®šè‡ªå·±çš„å­˜æ´»(å®è´¨ä¸ºå¤šä¸ªæ•°æ®åº“å­—æ®µèšåˆä¸ºä¸€ä¸ªæŠ½è±¡ç±»ï¼Œå¤§éƒ¨åˆ†å£°æ˜ä¸Entityç±»ä¼¼)ï¼Œä½¿ç”¨@Embeddable
+ä¸¤å¿«åŒºåŸŸçš„å­—æ®µè¿›è¡Œäº†embeddableå¤ç”¨
 *** override
-ÈçÏÂ£¬Ò»¸ö¶ÔÏó´æÔÚÁ½¸öAddress¶ÔÏó£¬ÒòÎª×Ö¶ÎµÄÕ¼Î»¸´ÓÃ±ØĞë½øĞĞÖØÉè£¬·ñÔò»¹ĞèÒªÖØĞÂ¶¨ÒåÒ»¸öÀàËÆAddressµÄÈßÓàÀà
+å¦‚ä¸‹ï¼Œä¸€ä¸ªå¯¹è±¡å­˜åœ¨ä¸¤ä¸ªAddresså¯¹è±¡ï¼Œå› ä¸ºå­—æ®µçš„å ä½å¤ç”¨å¿…é¡»è¿›è¡Œé‡è®¾ï¼Œå¦åˆ™è¿˜éœ€è¦é‡æ–°å®šä¹‰ä¸€ä¸ªç±»ä¼¼Addressçš„å†—ä½™ç±»
     @Embedded // Not necessary...
     @AttributeOverrides({
             @AttributeOverride(name = "street",
@@ -370,24 +370,24 @@ protected BigDecimal initialPrice;
                     column = @Column(name = "BILLING_CITY"))
     })
     protected Address billingAddress;
-Ö§³ÖÎŞÏŞÇ¶Ì×
-*** @Lob Ö¸¶¨byte[]×ªÎªBLOBÀàĞÍ£¬Ä¬ÈÏ¸ù¾İ³¤¶È×ª³ÉCHAR/VARCHAR
-//µ¼ÖÂÑÓ³Ù¼ÓÔØÊ§Ğ§
+æ”¯æŒæ— é™åµŒå¥—
+*** @Lob æŒ‡å®šbyte[]è½¬ä¸ºBLOBç±»å‹ï¼Œé»˜è®¤æ ¹æ®é•¿åº¦è½¬æˆCHAR/VARCHAR
+//å¯¼è‡´å»¶è¿ŸåŠ è½½å¤±æ•ˆ
 @Lob
 protected byte[] image;
 @Lob
 protected String description;
 
-ÑÓ³Ù¼ÓÔØ£¬È±µãÊÇÓëJDBC°ó¶¨£¬ÄÑÒÔ½øĞĞµ¥Ôª²âÊÔ
+å»¶è¿ŸåŠ è½½ï¼Œç¼ºç‚¹æ˜¯ä¸JDBCç»‘å®šï¼Œéš¾ä»¥è¿›è¡Œå•å…ƒæµ‹è¯•
 @Lob
     protected java.sql.Blob imageBlob;
     @Lob
     protected java.sql.Clob description;
-//Ö¸¶¨´¦ÀíÆ÷
+//æŒ‡å®šå¤„ç†å™¨
   @org.hibernate.annotations.Type(type = "yes_no")
     protected boolean verified = false;
 *** custom convertor
-È±Ïİ£¬ÎŞ·¨Ò»Öµ×ªÊı¾İ¿â¶àÁĞ»òÕß·´Ïò£¬Í¬Ê±£¬²éÑ¯Ê±Ò²ÎŞ·¨°´ÄÚ²¿×Ö¶Î²éÑ¯£¬ÒòÎªÎŞ·¨×ª»»³öSQL£¬¼ÛÖµÈ¡¾öÓÚÊı¾İÁ£¶ÈÒÔ¼°Ó¦ÓÃ³¡¾°
+ç¼ºé™·ï¼Œæ— æ³•ä¸€å€¼è½¬æ•°æ®åº“å¤šåˆ—æˆ–è€…åå‘ï¼ŒåŒæ—¶ï¼ŒæŸ¥è¯¢æ—¶ä¹Ÿæ— æ³•æŒ‰å†…éƒ¨å­—æ®µæŸ¥è¯¢ï¼Œå› ä¸ºæ— æ³•è½¬æ¢å‡ºSQLï¼Œä»·å€¼å–å†³äºæ•°æ®ç²’åº¦ä»¥åŠåº”ç”¨åœºæ™¯
 #+BEGIN_SRC java
 @Converter(autoApply = true) // Default for MonetaryAmount properties
 public class MonetaryAmountConverter
@@ -411,7 +411,7 @@ public class MonetaryAmountConverter
 @Column(name = "PRICE", length = 63)
 protected MonetaryAmount buyNowPrice;
 
-//Ö¸¶¨ÌØ¶¨×Ö¶Î²ÉÓÃ×ª»»Æ÷
+//æŒ‡å®šç‰¹å®šå­—æ®µé‡‡ç”¨è½¬æ¢å™¨
 @Convert(
     converter = ZipcodeConverter.class,
     attributeName = "zipcode" // Or "city.zipcode" for nested embeddables
@@ -420,7 +420,7 @@ protected Address homeAddress;
 
 #+END_SRC
 *** custom userType
-¶àÁĞºÏÎªÒ»¸ö¶ÔÏó£¬¿ÉÒÔ²ÉÓÃuserType»úÖÆ£¬×Ô¼º´¦ÀíResultSetºÍColumns×¢½âÖ¸¶¨µÄ¶à¸öcloumnÓ³ÉäÂß¼­
+å¤šåˆ—åˆä¸ºä¸€ä¸ªå¯¹è±¡ï¼Œå¯ä»¥é‡‡ç”¨userTypeæœºåˆ¶ï¼Œè‡ªå·±å¤„ç†ResultSetå’ŒColumnsæ³¨è§£æŒ‡å®šçš„å¤šä¸ªcloumnæ˜ å°„é€»è¾‘
 #+BEGIN_SRC java
  @NotNull
  @org.hibernate.annotations.Type(
@@ -458,10 +458,10 @@ protected Address homeAddress;
 
 #+END_SRC
 * Mapping inheritance
-Ö÷ÒªµÄÓ°ÏìÊÇ¶àÌ¬²éÑ¯£¬¼´Í¨¹ı¸¸ÀàÒıÓÃ½øĞĞ²éÑ¯
+ä¸»è¦çš„å½±å“æ˜¯å¤šæ€æŸ¥è¯¢ï¼Œå³é€šè¿‡çˆ¶ç±»å¼•ç”¨è¿›è¡ŒæŸ¥è¯¢
 ** Table per concrete class with implicit polymorphism
-Ã¿¸öÊµÌåÒ»¸ö±í
-¸¸ÀàÉùÃ÷¹«ÓÃ×Ö¶Î£¬×ÓÀà¶ÔÊı¾İ¿âÁĞÃû½øĞĞ¸²¸ÇÉùÃ÷
+æ¯ä¸ªå®ä½“ä¸€ä¸ªè¡¨
+çˆ¶ç±»å£°æ˜å…¬ç”¨å­—æ®µï¼Œå­ç±»å¯¹æ•°æ®åº“åˆ—åè¿›è¡Œè¦†ç›–å£°æ˜
 #+BEGIN_SRC java
 @MappedSuperclass
 public abstract class BillingDetails {
@@ -486,7 +486,7 @@ public class CreditCard extends BillingDetails {
 }
 #+END_SRC
 ** Table per concrete class with unions
-Ã¿¸öÊµÌåÒ»¸öÀà£¬¶àÌ¬²éÑ¯Í¨¹ıºÏ³ÉunionºÏ³É
+æ¯ä¸ªå®ä½“ä¸€ä¸ªç±»ï¼Œå¤šæ€æŸ¥è¯¢é€šè¿‡åˆæˆunionåˆæˆ
 #+BEGIN_SRC java
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -535,9 +535,9 @@ select
     ) as BILLINGDETAILS
 #+END_SRC
 ** Table per class hierarchy
-¶à¸öÊµÌå×Ö¶Î¾ÛºÏÔÚÒ»ÕÅ±íÖĞ£¬ÎŞ·¨ºÏÀíÉèÖÃÔ¼Êø£¬Ò»°ãÃ»ÈËÓÃ
+å¤šä¸ªå®ä½“å­—æ®µèšåˆåœ¨ä¸€å¼ è¡¨ä¸­ï¼Œæ— æ³•åˆç†è®¾ç½®çº¦æŸï¼Œä¸€èˆ¬æ²¡äººç”¨
 ** TABLE PER SUBCLASS WITH JOINS
-³éÏó¸¸ÀàÒ²×÷ÎªÊı¾İ¿â¶ÔÓ¦±í´æÈë£¬ÁªÏµÍ¨¹ıjoinÊµÏÖ
+æŠ½è±¡çˆ¶ç±»ä¹Ÿä½œä¸ºæ•°æ®åº“å¯¹åº”è¡¨å­˜å…¥ï¼Œè”ç³»é€šè¿‡joinå®ç°
 #+BEGIN_SRC java
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -582,7 +582,7 @@ may be hibernate only
 may be hibernate only
 ** collections of value type
 *** @ElementCollection
-map value type£¬Èç¹û¼¯ºÏ´æÔÚ¶ÔÓ¦Ó³Éä±í£¬ÔòÒ»¶¨Òª¼Ó
+map value typeï¼Œå¦‚æœé›†åˆå­˜åœ¨å¯¹åº”æ˜ å°„è¡¨ï¼Œåˆ™ä¸€å®šè¦åŠ 
 #+BEGIN_SRC java
 @Entity
 public class Item {
@@ -640,8 +640,8 @@ public class Item {
 }
 #+END_SRC
 *** map map
-Èç¹ûÊÇenum£¬@MapKeyEnumerated
-Èç¹ûÊÇÊ±¼äÀàĞÍ£¬@MapKeyTemporal
+å¦‚æœæ˜¯enumï¼Œ@MapKeyEnumerated
+å¦‚æœæ˜¯æ—¶é—´ç±»å‹ï¼Œ@MapKeyTemporal
 #+BEGIN_SRC java
 @Entity
 public class Item {
@@ -651,9 +651,9 @@ public class Item {
     protected Long id;
 
     @ElementCollection
-    @CollectionTable(name = "IMAGE")  //±íÃû
-    @MapKeyColumn(name = "FILENAME") //×÷¼üµÄ±íÖĞµÄ×Ö¶Î
-    @Column(name = "IMAGENAME") // ×÷ÖµµÄ±íÖĞµÄ×Ö¶Î
+    @CollectionTable(name = "IMAGE")  //è¡¨å
+    @MapKeyColumn(name = "FILENAME") //ä½œé”®çš„è¡¨ä¸­çš„å­—æ®µ
+    @Column(name = "IMAGENAME") // ä½œå€¼çš„è¡¨ä¸­çš„å­—æ®µ
     protected Map<String, String> images = new HashMap<String, String>();
 
     public Long getId() {
@@ -678,7 +678,7 @@ public class Item {
     @org.hibernate.annotations.SortNatural
     protected SortedSet<String> images = new TreeSet<String>();
 
-// ¼ÓÈëSQLÅÅĞò
+// åŠ å…¥SQLæ’åº
     @ElementCollection
     @CollectionTable(name = "IMAGE")
     @Column(name = "FILENAME")
@@ -688,7 +688,7 @@ public class Item {
 #+END_SRC
 ** collections of component
 #+BEGIN_SRC java
-//Ö¸¶¨Éú³É±íÖ÷¼ü£¬²»Ö¸¶¨ÔòÊÇÈ«²¿½øĞĞÁĞ½øĞĞºÏ³ÉÖ÷¼ü£¬ËùÒÔ²»Ö¸¶¨Ê±±ØĞëÉèÖÃ×Ö¶Î·Ç¿Õ@Column(nullable = false)
+//æŒ‡å®šç”Ÿæˆè¡¨ä¸»é”®ï¼Œä¸æŒ‡å®šåˆ™æ˜¯å…¨éƒ¨è¿›è¡Œåˆ—è¿›è¡Œåˆæˆä¸»é”®ï¼Œæ‰€ä»¥ä¸æŒ‡å®šæ—¶å¿…é¡»è®¾ç½®å­—æ®µéç©º@Column(nullable = false)
 @org.hibernate.annotations.CollectionId(
  columns = @Column(name = "IMAGE_ID"),
  type = @org.hibernate.annotations.Type(type = "long"),
@@ -696,10 +696,10 @@ public class Item {
  protected Collection<Image> images = new ArrayList<Image>();
 #+END_SRC
 ** entity association
-ºÃ´¦ÊÇ¿ÉÒÔÊ¹ÓÃcascade
+å¥½å¤„æ˜¯å¯ä»¥ä½¿ç”¨cascade
 *** many to one/one to many
-½¨Á¢ÁªÏµºó¿ÉÒÔÊ¹ÓÃJPQL
-select b from Bid b where b.item = :itemParameter ÕÒ³öÈ«²¿·ûºÏÄ³¸öitemµÄBids
+å»ºç«‹è”ç³»åå¯ä»¥ä½¿ç”¨JPQL
+select b from Bid b where b.item = :itemParameter æ‰¾å‡ºå…¨éƒ¨ç¬¦åˆæŸä¸ªitemçš„Bids
 **** many to one
 #+BEGIN_SRC java
 @Entity
@@ -745,7 +745,7 @@ public class Bid {
 
 #+END_SRC
 **** one to many
-µÚ¶şÖÖÖ÷ÒªÓÃÔÚembbeddableÀàÖĞ£¬ÒòÎªÎŞ·¨Ö±½Ó·´Ïò¹ØÁª(²»ÊÇ±»¹ØÁªÀà×ÔÉí)
+ç¬¬äºŒç§ä¸»è¦ç”¨åœ¨embbeddableç±»ä¸­ï¼Œå› ä¸ºæ— æ³•ç›´æ¥åå‘å…³è”(ä¸æ˜¯è¢«å…³è”ç±»è‡ªèº«)
 ***** base on @ManyToOne of other side
 #+BEGIN_SRC java
 @Entity
@@ -839,52 +839,52 @@ public class Item {
 #+END_SRC
 **** delete
 ***** orphanRemoval
-¶ÔÓÚ´Ó¼¯ºÏÒÆ³ıºó£¬persist item£¬²¢Ìá½»ÊÂÎñ£¬hibernate½øĞĞÔàÊı¾İ¼ì²é²¢×Ô¶¯É¾³ı£¬ÉÙÓÃ£¬ÒòÎªĞèÒªÏÈ°ÑÊı¾İload½øÄÚ´æ£¬Èç¹ûÇå¿Õ¼¯ºÏ(100Ìõ)£¬ĞèÒª´¥·¢100´Î
+å¯¹äºä»é›†åˆç§»é™¤åï¼Œpersist itemï¼Œå¹¶æäº¤äº‹åŠ¡ï¼Œhibernateè¿›è¡Œè„æ•°æ®æ£€æŸ¥å¹¶è‡ªåŠ¨åˆ é™¤ï¼Œå°‘ç”¨ï¼Œå› ä¸ºéœ€è¦å…ˆæŠŠæ•°æ®loadè¿›å†…å­˜ï¼Œå¦‚æœæ¸…ç©ºé›†åˆ(100æ¡)ï¼Œéœ€è¦è§¦å‘100æ¬¡
 ***** @OnDelete
-Ä¬ÈÏ¼¶Áª´¦ÀíÊÇÏÈ¼ÓÔØÔÚÉ¾³ı£¬hibernateµ÷ÓÃSQLµ÷ÓÃÖ±½ÓÒ»´ÎÉ¾µô
+é»˜è®¤çº§è”å¤„ç†æ˜¯å…ˆåŠ è½½åœ¨åˆ é™¤ï¼Œhibernateè°ƒç”¨SQLè°ƒç”¨ç›´æ¥ä¸€æ¬¡åˆ æ‰
 *** one to one
 unidirectional
 *** cascade
-¶ÔÓÚÉ¾³ı¶øÑÔ£¬»áÏÈ´¥·¢¼ÓÔØ¼¯ºÏÊı¾İ£¬ÔÚÉ¾³ı£¬µÍĞ§
-*** ÖĞ¼ä±í
+å¯¹äºåˆ é™¤è€Œè¨€ï¼Œä¼šå…ˆè§¦å‘åŠ è½½é›†åˆæ•°æ®ï¼Œåœ¨åˆ é™¤ï¼Œä½æ•ˆ
+*** ä¸­é—´è¡¨
 @JoinTable
-¶ÔÓÚ¶à¶Ô¶à¿ÉÒÔ²ÉÈ¡Á½ÖÖ²ßÂÔ
-1. Îª¹ØÁª±íÉèÖÃ¶ÔÓ¦µÄÊµÌå£¬È»ºóÁ½²àÊ¹ÓÃ@OneToMany£¬ºÃ´¦ÎªÖ§³Öµ¼º½
-2. ÖĞ¼ä±í²»´æÔÚ¶ÔÓ¦ÊµÌå£¬¹ØÁªÁ½²àÖ±½ÓÊ¹ÓÃ@ManyToMany×÷¹ØÁª
+å¯¹äºå¤šå¯¹å¤šå¯ä»¥é‡‡å–ä¸¤ç§ç­–ç•¥
+1. ä¸ºå…³è”è¡¨è®¾ç½®å¯¹åº”çš„å®ä½“ï¼Œç„¶åä¸¤ä¾§ä½¿ç”¨@OneToManyï¼Œå¥½å¤„ä¸ºæ”¯æŒå¯¼èˆª
+2. ä¸­é—´è¡¨ä¸å­˜åœ¨å¯¹åº”å®ä½“ï¼Œå…³è”ä¸¤ä¾§ç›´æ¥ä½¿ç”¨@ManyToManyä½œå…³è”
 * lazy loading
-½öÔÚÄÜÈ·±£Êı¾İÒ»¶¨´æÔÚµÄÇé¿öÏÂ£¬²Å¾ßÓĞÒâÒå£¬·ñÔòhibernate±ØĞëÏÈ¼ì²éÊÇ·ñÎªnull£¬ÔÚ²é
+ä»…åœ¨èƒ½ç¡®ä¿æ•°æ®ä¸€å®šå­˜åœ¨çš„æƒ…å†µä¸‹ï¼Œæ‰å…·æœ‰æ„ä¹‰ï¼Œå¦åˆ™hibernateå¿…é¡»å…ˆæ£€æŸ¥æ˜¯å¦ä¸ºnullï¼Œåœ¨æŸ¥
 * lifecycle
 ** transient
 ** persistent
 ** detached
 em.detach(user);
 ** removed
-É¾ÁËÖ÷¼ü»á±£Áô£¬Èç¹ûĞèÒªÈ¥µôĞèÒª¶îÍâÅäÖÃ
+åˆ äº†ä¸»é”®ä¼šä¿ç•™ï¼Œå¦‚æœéœ€è¦å»æ‰éœ€è¦é¢å¤–é…ç½®
 * EntityManager
-JPA¹æ·¶£¬controll/switch data's lifycycle
+JPAè§„èŒƒï¼Œcontroll/switch data's lifycycle
 * Transaction
 ** db level
 ** application level
 *** pessimistic
 **** row lock depend on db vendor
-Ö±½ÓÉÏĞĞËø£¬¾ßÌå²Ù×÷ÓÉvendor½øĞĞ´¦Àí£¬hibernateµÄ´¦ÀíÊÇ¸ù¾İ¸÷¸öDB²úÉÌ½øĞĞ±ÈÈç(h2: select xx from  xxxx for update)µÄÓï¾ä¼¶¸ÉÉæ
+ç›´æ¥ä¸Šè¡Œé”ï¼Œå…·ä½“æ“ä½œç”±vendorè¿›è¡Œå¤„ç†ï¼Œhibernateçš„å¤„ç†æ˜¯æ ¹æ®å„ä¸ªDBäº§å•†è¿›è¡Œæ¯”å¦‚(h2: select xx from  xxxx for update)çš„è¯­å¥çº§å¹²æ¶‰
 **** offline lock
-ORM framework vendor¿ÉÒÔÑ¡ÔñÖ±½Ó°ÑËø´æ½øDB/ÄÚ´æ½á¹¹ÖĞ
+ORM framework vendorå¯ä»¥é€‰æ‹©ç›´æ¥æŠŠé”å­˜è¿›DB/å†…å­˜ç»“æ„ä¸­
 *** optimistic
 **** @Version
-***** ÕûÊı
-ÔàÊı¾İ¼ì²éµ½¾Í°æ±¾ºÅ+1£¬Êı¾İ¿â°æ±¾±ØĞëÎª-1£¬·ñÔòÊ§°Ü
-¼ì²éµÄ·¶Î§°üÀ¨ÈÎºÎvlaue type£¬@OneToMany and @ManyToManyÉèÖÃÁËmappedByÊ±£¬²»ÁĞÈë¼ì²â
-@org.hibernate.annotations.OptimisticLock(excluded = true)¹Ø±ÕÄ³¸ö×Ö¶ÎÔÚ¼ì²âÊ±£¬¶Ô°æ±¾ºÅµÄÓ°Ïì
-***** Ê±¼ä´Á
-°²È«ĞÔÂÔ²î£¬ÒòÎªJVMÊ±¼äÎŞ·¨¾«È·µ½ºÁÃë£¬µ±²¢·¢¸ü¸Ä·¢ÉúÔÚ1ºÁÃëÒÔÄÚÊ±£¬µÚ¶ş¸öÊÂÎñÎŞ·¨·¢ÏÖ°æ±¾ºÅÊÂÊµÉÏÒÑ¾­±ä¸ü£¬¼¯ÈºÊ±»¹Éæ¼°µ½Ê±¼äÍ¬²½ÎÊÌâ
-@org.hibernate.annotations.Type(type="dbtimestamp") ´ÓÊı¾İ¿âÄÃÊ±¼ä
-Ò»°ãÊÇ¶Ô¾ÉÏµÍ³/ÄÑÒÔ¸ü¸ÄÊı¾İ¿âDDLÊ±µÄ±¸Ñ¡·½°¸
+***** æ•´æ•°
+è„æ•°æ®æ£€æŸ¥åˆ°å°±ç‰ˆæœ¬å·+1ï¼Œæ•°æ®åº“ç‰ˆæœ¬å¿…é¡»ä¸º-1ï¼Œå¦åˆ™å¤±è´¥
+æ£€æŸ¥çš„èŒƒå›´åŒ…æ‹¬ä»»ä½•vlaue typeï¼Œ@OneToMany and @ManyToManyè®¾ç½®äº†mappedByæ—¶ï¼Œä¸åˆ—å…¥æ£€æµ‹
+@org.hibernate.annotations.OptimisticLock(excluded = true)å…³é—­æŸä¸ªå­—æ®µåœ¨æ£€æµ‹æ—¶ï¼Œå¯¹ç‰ˆæœ¬å·çš„å½±å“
+***** æ—¶é—´æˆ³
+å®‰å…¨æ€§ç•¥å·®ï¼Œå› ä¸ºJVMæ—¶é—´æ— æ³•ç²¾ç¡®åˆ°æ¯«ç§’ï¼Œå½“å¹¶å‘æ›´æ”¹å‘ç”Ÿåœ¨1æ¯«ç§’ä»¥å†…æ—¶ï¼Œç¬¬äºŒä¸ªäº‹åŠ¡æ— æ³•å‘ç°ç‰ˆæœ¬å·äº‹å®ä¸Šå·²ç»å˜æ›´ï¼Œé›†ç¾¤æ—¶è¿˜æ¶‰åŠåˆ°æ—¶é—´åŒæ­¥é—®é¢˜
+@org.hibernate.annotations.Type(type="dbtimestamp") ä»æ•°æ®åº“æ‹¿æ—¶é—´
+ä¸€èˆ¬æ˜¯å¯¹æ—§ç³»ç»Ÿ/éš¾ä»¥æ›´æ”¹æ•°æ®åº“DDLæ—¶çš„å¤‡é€‰æ–¹æ¡ˆ
 ***** OptimisticLocking
 @org.hibernate.annotations.OptimisticLocking(
-    type = org.hibernate.annotations.OptimisticLockType.ALL)// ±ê×¢entity£¬ÓÉEntityManagerÖ±½ÓÅĞ¶ÏÒÑ¾­³Ö¾Ã»¯µÄ¶ÔÏó×´Ì¬£¬ÒÀÀµÓÚhibernate
+    type = org.hibernate.annotations.OptimisticLockType.ALL)// æ ‡æ³¨entityï¼Œç”±EntityManagerç›´æ¥åˆ¤æ–­å·²ç»æŒä¹…åŒ–çš„å¯¹è±¡çŠ¶æ€ï¼Œä¾èµ–äºhibernate
 @org.hibernate.annotations.DynamicUpdate
-ĞèÒª¿ªÆô¶¯Ì¬SQLÉú³É£¬ÓÉhibernate¸ù¾İ¶ÔÏóµÄ¾É×´Ì¬½øĞĞ°æ±¾È·ÈÏ£¬Éú³ÉÈçÏÂÀàËÆSQL:
+éœ€è¦å¼€å¯åŠ¨æ€SQLç”Ÿæˆï¼Œç”±hibernateæ ¹æ®å¯¹è±¡çš„æ—§çŠ¶æ€è¿›è¡Œç‰ˆæœ¬ç¡®è®¤ï¼Œç”Ÿæˆå¦‚ä¸‹ç±»ä¼¼SQL:
 #+BEGIN_SRC sql
 update ITEM set NAME = 'New Name'
     where ID = 123
@@ -896,70 +896,70 @@ update ITEM set NAME = 'New Name'
         and SELLER_ID = 45
 #+END_SRC
 ****** OptimisticLockType
-ËøµÄ°æ±¾Ôà¼ì²é²ßÂÔ(ÓÃÓÚ¶¯Ì¬Éú³ÉSQL)£¬°üº¬È«²¿×Ö¶Î×ö¾É¼ì²é£¬Ôà×Ö¶Î×ö¾É¼ì²é(Êµ¼ÊÖĞ²»ÓÃ£¬ÒòÎªÈç¹ûA¸Äa×Ö¶Î£¬B¸Äb×Ö¶Î£¬Á½Õß²»ÊÓÎª³åÍ»)µÈ
+é”çš„ç‰ˆæœ¬è„æ£€æŸ¥ç­–ç•¥(ç”¨äºåŠ¨æ€ç”ŸæˆSQL)ï¼ŒåŒ…å«å…¨éƒ¨å­—æ®µåšæ—§æ£€æŸ¥ï¼Œè„å­—æ®µåšæ—§æ£€æŸ¥(å®é™…ä¸­ä¸ç”¨ï¼Œå› ä¸ºå¦‚æœAæ”¹aå­—æ®µï¼ŒBæ”¹bå­—æ®µï¼Œä¸¤è€…ä¸è§†ä¸ºå†²çª)ç­‰
 * helper
 ** PersistenceUtilHelper-hibernate
 ** HibernateProxyHelper-JPA
 * fetch plan
-1. lazyÊÇ¶ÔhibernateµÄ´¦ÀíÌáÊ¾£¬¾ßÌåÄÜ·ñÍê³ÉÈ¡¾öÓÚ¶à¸öÓ°ÏìÒò×Ó
-2. eager²»Ò»Ñù£¬ÊÇÒ»ÖÖÇ¿ÖÆÒªÇó
+1. lazyæ˜¯å¯¹hibernateçš„å¤„ç†æç¤ºï¼Œå…·ä½“èƒ½å¦å®Œæˆå–å†³äºå¤šä¸ªå½±å“å› å­
+2. eagerä¸ä¸€æ ·ï¼Œæ˜¯ä¸€ç§å¼ºåˆ¶è¦æ±‚
 ** lazy
 *** association
-Ä¬ÈÏÊÇeager£¬ĞèÒª×Ô¼ºÖ¸¶¨
-1. Ö»ÓĞ±ØĞë´æÔÚµÄÇé¿öÏÂ£¬¼´optional=false²ÅÓĞ¼ÛÖµ
-2. Èç¹û¹ØÁª×Ö¶ÎÔÊĞíÎªnull£¬hibernate»áÏÈhit db½øĞĞ×Ö¶Î´æÔÚµÄÈ·ÈÏ(Ê§È¥ÁËlazy loadingµÄÒâÒå£¬´æÔÚ²¹³äÊÖ¶Î£¬×Ö½ÚÂë²Ù×÷)
+é»˜è®¤æ˜¯eagerï¼Œéœ€è¦è‡ªå·±æŒ‡å®š
+1. åªæœ‰å¿…é¡»å­˜åœ¨çš„æƒ…å†µä¸‹ï¼Œå³optional=falseæ‰æœ‰ä»·å€¼
+2. å¦‚æœå…³è”å­—æ®µå…è®¸ä¸ºnullï¼Œhibernateä¼šå…ˆhit dbè¿›è¡Œå­—æ®µå­˜åœ¨çš„ç¡®è®¤(å¤±å»äº†lazy loadingçš„æ„ä¹‰ï¼Œå­˜åœ¨è¡¥å……æ‰‹æ®µï¼Œå­—èŠ‚ç æ“ä½œ)
 *** collections
-¿ªÊ¼µ÷ÓÃÄÚ²¿·½·¨Ê±£¬½øĞĞ³õÊ¼»¯
+å¼€å§‹è°ƒç”¨å†…éƒ¨æ–¹æ³•æ—¶ï¼Œè¿›è¡Œåˆå§‹åŒ–
 **** partially close lazy loading
 @org.hibernate.annotations.LazyCollection(
        org.hibernate.annotations.LazyCollectionOption.EXTRA
 )
 size()/isEmpty()/contains()/add()
-¸ù¾İÇé¿ö½øĞĞ²¿·ÖSQLµ÷ÓÃ£¬Èçselect count(\*)²»´¥·¢¼¯ºÏµÄÔªËØÀÁ¼ÓÔØ
+æ ¹æ®æƒ…å†µè¿›è¡Œéƒ¨åˆ†SQLè°ƒç”¨ï¼Œå¦‚select count(\*)ä¸è§¦å‘é›†åˆçš„å…ƒç´ æ‡’åŠ è½½
 *** bytecode enhance
-1. @org.hibernate.annotations.Proxy(lazy = false)½ûÓÃÉú³É¸ÃÀàµÄ´úÀíÀà(±äÏà½ûÖ¹ÁËÈ«²¿Ïà¹ØµÄÀÁ¼ÓÔØ£¬×÷ÎªÆäËûÀàµÄ¹ØÁªÊôĞÔ)
-2. @LazyToOne(LazyToOneOption.PROXY)±êÊôĞÔ£¬ÔÚ·ÃÎÊ·½·¨ÉÏ½øĞĞÖ¸Áî²åÈë£¬Ìæ»»´úÀíÀÁ¼ÓÔØ£¬Ò»°ã³£ÓÃÔÚ´ó×Ö·û´®/ÎÄ¼şÁ÷²ã¼¶µÄ´¦ÀíÊÖ¶Î
-Èç¹û³¬¹ıÒ»¸öÕâÃ´±ê£¬µ±ÆäÖĞÒ»¸ö±»·ÃÎÊ³õÊ¼»¯Ê±£¬ÆäËûÒ²»áÒ»Æğ³õÊ¼»¯£¬Ä¿Ç°hibernateµÄ¸Ã´¦Àí²»ÍêÉÆ
+1. @org.hibernate.annotations.Proxy(lazy = false)ç¦ç”¨ç”Ÿæˆè¯¥ç±»çš„ä»£ç†ç±»(å˜ç›¸ç¦æ­¢äº†å…¨éƒ¨ç›¸å…³çš„æ‡’åŠ è½½ï¼Œä½œä¸ºå…¶ä»–ç±»çš„å…³è”å±æ€§)
+2. @LazyToOne(LazyToOneOption.PROXY)æ ‡å±æ€§ï¼Œåœ¨è®¿é—®æ–¹æ³•ä¸Šè¿›è¡ŒæŒ‡ä»¤æ’å…¥ï¼Œæ›¿æ¢ä»£ç†æ‡’åŠ è½½ï¼Œä¸€èˆ¬å¸¸ç”¨åœ¨å¤§å­—ç¬¦ä¸²/æ–‡ä»¶æµå±‚çº§çš„å¤„ç†æ‰‹æ®µ
+å¦‚æœè¶…è¿‡ä¸€ä¸ªè¿™ä¹ˆæ ‡ï¼Œå½“å…¶ä¸­ä¸€ä¸ªè¢«è®¿é—®åˆå§‹åŒ–æ—¶ï¼Œå…¶ä»–ä¹Ÿä¼šä¸€èµ·åˆå§‹åŒ–ï¼Œç›®å‰hibernateçš„è¯¥å¤„ç†ä¸å®Œå–„
 #+BEGIN_SRC java
-@Basic(fetch = FetchType.LAZY) // Èç¹û¿ªÆôÁËbytecode enhancer²ÅÓĞÓÃ
+@Basic(fetch = FetchType.LAZY) // å¦‚æœå¼€å¯äº†bytecode enhanceræ‰æœ‰ç”¨
 protected String description;
 #+END_SRC
 ** eager
-¸ù¾İÓïÒåºÍÁ¬±íÏŞÖÆ¾ö¶¨ÊÇ·ñÁ¬±í½øĞĞ²éÑ¯£¬³¬¹ıÁËhibernateÔÊĞíµÄÁ¬±íÏŞÖÆ£¬ÆäËûÄÄÅÂÊÇeagerÒ²ÊÇÍ¨¹ı¶îÍâµÄquery statement»ñÈ¡Êı¾İ
+æ ¹æ®è¯­ä¹‰å’Œè¿è¡¨é™åˆ¶å†³å®šæ˜¯å¦è¿è¡¨è¿›è¡ŒæŸ¥è¯¢ï¼Œè¶…è¿‡äº†hibernateå…è®¸çš„è¿è¡¨é™åˆ¶ï¼Œå…¶ä»–å“ªæ€•æ˜¯eagerä¹Ÿæ˜¯é€šè¿‡é¢å¤–çš„query statementè·å–æ•°æ®
 * filter data
 ** cascading state transitions
 *** cascade option
 **** PERSIST
-PERSISTµÄÊ±ºòÒ»ÆğPERSIST
+PERSISTçš„æ—¶å€™ä¸€èµ·PERSIST
 **** MERGE
-DETACHÇĞµ½MERGEµÄÊ±ºòÒ»ÆğMERGE
+DETACHåˆ‡åˆ°MERGEçš„æ—¶å€™ä¸€èµ·MERGE
 **** REFRESH
-µ±ÊÖ¶¯Ë¢ĞÂÊ±£¬¹ØÁªµÄÊµÌå¶¼Ë¢ĞÂ
+å½“æ‰‹åŠ¨åˆ·æ–°æ—¶ï¼Œå…³è”çš„å®ä½“éƒ½åˆ·æ–°
 **** DETACH
-detachµÄÊ±ºòÒ»Æğdetach
+detachçš„æ—¶å€™ä¸€èµ·detach
 **** REPLICATE
-µ±´¦ÓÚdetach£¬ÖØÁ¬Ê±£¬hibernateÅĞ¶ÏdbÊÇ·ñ´æÔÚ¼ÇÂ¼£¬Èç¹û´æÔÚ£¬´æ½øÈ¥£¬²¢ÔÚÊÂÎñÌá½»ºó£¬ĞÂÊı¾İË¢µ½dbÉÏ£¬Èç¹û²»´æÔÚ£¬Ê¹ÓÃinsertÓï¾ä²åÈëÊı¾İ
+å½“å¤„äºdetachï¼Œé‡è¿æ—¶ï¼Œhibernateåˆ¤æ–­dbæ˜¯å¦å­˜åœ¨è®°å½•ï¼Œå¦‚æœå­˜åœ¨ï¼Œå­˜è¿›å»ï¼Œå¹¶åœ¨äº‹åŠ¡æäº¤åï¼Œæ–°æ•°æ®åˆ·åˆ°dbä¸Šï¼Œå¦‚æœä¸å­˜åœ¨ï¼Œä½¿ç”¨insertè¯­å¥æ’å…¥æ•°æ®
 ** LISTENING TO AND INTERCEPTING EVENTS
-Ê¹ÓÃÁË×¢½âÃèÊöÀ¹½Ø·½·¨£¬ÄÜ¹»Í»È»À¹½Ø·½·¨¶ÔÓÚÒµÎñµÄÓïÒå×÷ÓÃ£¬µ«ÊÇÈ±ÉÙÁË²¿·Ötype safe
+ä½¿ç”¨äº†æ³¨è§£æè¿°æ‹¦æˆªæ–¹æ³•ï¼Œèƒ½å¤Ÿçªç„¶æ‹¦æˆªæ–¹æ³•å¯¹äºä¸šåŠ¡çš„è¯­ä¹‰ä½œç”¨ï¼Œä½†æ˜¯ç¼ºå°‘äº†éƒ¨åˆ†type safe
 *** callback annotations 
 **** @PostLoad
-Ã¿´Îload½øpersist context£¬°üÀ¨identifier lookup£¬lazy loadingµÈ³¡¾°
+æ¯æ¬¡loadè¿›persist contextï¼ŒåŒ…æ‹¬identifier lookupï¼Œlazy loadingç­‰åœºæ™¯
 **** @PrePersist
 **** @PostPersist
 **** @PreUpdate, @PostUpdate
 **** @PreRemove, @PostRemove
 *** interceptors
-ÊµÏÖpublic class EmptyInterceptor implements Interceptor, Serializable {
+å®ç°public class EmptyInterceptor implements Interceptor, Serializable {
 *** core system event
-hibernateµÄÕû¸öºËĞÄ»ùÓÚÊÂ¼şÇı¶¯ÊµÏÖ£¬Èç¹ûĞèÒª¸üÉîÈëµÄĞŞ¸Ä£¬ĞèÒª¼Ì³Ğ¶ÔÓ¦µÄevent¼àÌıÆ÷£¬½øĞĞ¶¨ÖÆ
+hibernateçš„æ•´ä¸ªæ ¸å¿ƒåŸºäºäº‹ä»¶é©±åŠ¨å®ç°ï¼Œå¦‚æœéœ€è¦æ›´æ·±å…¥çš„ä¿®æ”¹ï¼Œéœ€è¦ç»§æ‰¿å¯¹åº”çš„eventç›‘å¬å™¨ï¼Œè¿›è¡Œå®šåˆ¶
 ** enver
-Ìá¹©ÀàËÆ°æ±¾¿ØÖÆµÄÉó¼Æ¹¦ÄÜ£¬»áÉú³É¶ÔÓ¦ÊµÌåµÄ°æ±¾¿ØÖÆ±í
+æä¾›ç±»ä¼¼ç‰ˆæœ¬æ§åˆ¶çš„å®¡è®¡åŠŸèƒ½ï¼Œä¼šç”Ÿæˆå¯¹åº”å®ä½“çš„ç‰ˆæœ¬æ§åˆ¶è¡¨
 ** filter
 * trick
 ** refresh
-hibernateÖ»ÓĞ¿ªÆôÁËÊÂÎñ£¬²éÑ¯Ç°²Å»á½øĞĞflush()£¬¿ÉÒÔµ÷ÓÃem.flush(entity)´ÓÊı¾İ¿âË¢ĞÂµ±Ç°ÊµÌå
+hibernateåªæœ‰å¼€å¯äº†äº‹åŠ¡ï¼ŒæŸ¥è¯¢å‰æ‰ä¼šè¿›è¡Œflush()ï¼Œå¯ä»¥è°ƒç”¨em.flush(entity)ä»æ•°æ®åº“åˆ·æ–°å½“å‰å®ä½“
 ** make best to use jdk collection interface
-hibernateÔÚÄÚ²¿µÄÊµÏÖÖĞ£¬´óÁ¿Éæ¼°ÁË´úÀí£¬ÓÈÆäÊÇ¼¯ºÏÊ¹ÓÃÁËÒ»ÏµÁĞµÄwrapperÌæ»»£¬Èç¹û²ÉÓÃ¹ıÓÚ¾ßÌåµÄÀà£¬¿ÉÄÜÔì³É¼æÈİĞÔ³åÍ»
+hibernateåœ¨å†…éƒ¨çš„å®ç°ä¸­ï¼Œå¤§é‡æ¶‰åŠäº†ä»£ç†ï¼Œå°¤å…¶æ˜¯é›†åˆä½¿ç”¨äº†ä¸€ç³»åˆ—çš„wrapperæ›¿æ¢ï¼Œå¦‚æœé‡‡ç”¨è¿‡äºå…·ä½“çš„ç±»ï¼Œå¯èƒ½é€ æˆå…¼å®¹æ€§å†²çª
 ** n+1 select problem
 *** error demo
 #+BEGIN_SRC java
@@ -1016,14 +1016,14 @@ public class Item {
 List<Item> items = em.createQuery("select i from Item i").getResultList();
 // select * from ITEM
 for (Item item : items) {
-    assertTrue(item.getBids().size() > 0); // ·ÃÎÊµ½ÆäÖĞÒ»¸ö¼¯ºÏ£¬Ö±½Ó´¥·¢sub select
+    assertTrue(item.getBids().size() > 0); // è®¿é—®åˆ°å…¶ä¸­ä¸€ä¸ªé›†åˆï¼Œç›´æ¥è§¦å‘sub select
     // select * from BID where ITEM_ID in (
     //  select ID from ITEM
     // )
 }
 #+END_SRC
 ** cartesian product problem
-¶ÔÓÚ@ManyToOneºÍ@OneToOne£¬eager¶¼ÊÇ½ÏÎª°²È«µÄ£¬ÒòÎªÒ»²ãÖĞµÄÊı¾İ¾ùÊÇ×÷ÎªÓĞĞ§Êı¾İ£¬µ«ÊÇ¶ÔÓÚ@OneToMany£¬µ¼ÖÂcartesian product problem£¬¼´²éÑ¯½á¹ûµÄÈßÓà×Ö¶ÎÅòÕÍ£¬ÓÉÓÚ±íÁ¬½ÓÊıÔ½´ó£¬ÅòÕÍµÃÔ½ÎŞ·¨Ô¤²â
+å¯¹äº@ManyToOneå’Œ@OneToOneï¼Œeageréƒ½æ˜¯è¾ƒä¸ºå®‰å…¨çš„ï¼Œå› ä¸ºä¸€å±‚ä¸­çš„æ•°æ®å‡æ˜¯ä½œä¸ºæœ‰æ•ˆæ•°æ®ï¼Œä½†æ˜¯å¯¹äº@OneToManyï¼Œå¯¼è‡´cartesian product problemï¼Œå³æŸ¥è¯¢ç»“æœçš„å†—ä½™å­—æ®µè†¨èƒ€ï¼Œç”±äºè¡¨è¿æ¥æ•°è¶Šå¤§ï¼Œè†¨èƒ€å¾—è¶Šæ— æ³•é¢„æµ‹
 *** multiple select
 #+BEGIN_SRC java
 @Entity
@@ -1043,8 +1043,8 @@ public class Item{
 }
 #+END_SRC
 ** dynamic eager fetching
-1. ¶ÔÓÚÊµÌåÀàµÄ¸÷Ïîfetch planºÍ²ßÂÔ¿ÉÄÜ»áÓ°Ïìµ½È«¾Ö,ÒòÎªÆä×ÔÉíÒ²¿ÉÄÜ±»ÆäËû×÷ÎªÊôĞÔÊ¹ÓÃ
-2. ³éÀë³ö¸÷ÖÖ³¡¾°µÄÖ´ĞĞ²ßÂÔ£¬¸ù¾İ³¡¾°½øĞĞÑ¡ÔñÖ´ĞĞ£¬ÔÚÊ¹ÓÃÊ±ÓÉÓÃ»§Ö¸¶¨²ßÂÔ
+1. å¯¹äºå®ä½“ç±»çš„å„é¡¹fetch planå’Œç­–ç•¥å¯èƒ½ä¼šå½±å“åˆ°å…¨å±€,å› ä¸ºå…¶è‡ªèº«ä¹Ÿå¯èƒ½è¢«å…¶ä»–ä½œä¸ºå±æ€§ä½¿ç”¨
+2. æŠ½ç¦»å‡ºå„ç§åœºæ™¯çš„æ‰§è¡Œç­–ç•¥ï¼Œæ ¹æ®åœºæ™¯è¿›è¡Œé€‰æ‹©æ‰§è¡Œï¼Œåœ¨ä½¿ç”¨æ—¶ç”±ç”¨æˆ·æŒ‡å®šç­–ç•¥
 #+BEGIN_SRC java
 // package-info.java
 @org.hibernate.annotations.FetchProfiles({
@@ -1063,22 +1063,22 @@ public class Item{
 })
 
 // usage demo
-Item item = em.find(Item.class, ITEM_ID); // Ö´ĞĞÄ¬ÈÏ²ßÂÔ
+Item item = em.find(Item.class, ITEM_ID); // æ‰§è¡Œé»˜è®¤ç­–ç•¥
 
 em.clear();
-em.unwrap(Session.class).enableFetchProfile(Item.PROFILE_JOIN_SELLER); // »ñÈ¡Ê±Ê¹ÓÃÁ¬½Ó²ßÂÔ£¬Ò»²¢»ñÈ¡seller
+em.unwrap(Session.class).enableFetchProfile(Item.PROFILE_JOIN_SELLER); // è·å–æ—¶ä½¿ç”¨è¿æ¥ç­–ç•¥ï¼Œä¸€å¹¶è·å–seller
 item = em.find(Item.class, ITEM_ID);
 
 em.clear();
-em.unwrap(Session.class).enableFetchProfile(Item.PROFILE_JOIN_BIDS); // »ñÈ¡Ê±Ê¹ÓÃÁ¬½Ó²ßÂÔ£¬Ò»²¢»ñÈ¡bidsºÍseller£¬²úÉúÁË²ßÂÔ½»²æ
+em.unwrap(Session.class).enableFetchProfile(Item.PROFILE_JOIN_BIDS); // è·å–æ—¶ä½¿ç”¨è¿æ¥ç­–ç•¥ï¼Œä¸€å¹¶è·å–bidså’Œsellerï¼Œäº§ç”Ÿäº†ç­–ç•¥äº¤å‰
 item = em.find(Item.class, ITEM_ID);
 
 #+END_SRC
 *** entity graph
-Ê¹ÓÃ×¢½âÉùÃ÷ÄÄĞ©ÀÁ¼ÓÔØ£¬¸ù¾İĞèÇó½øĞĞÇĞ»»£¬Ïà±Èprofile£¬¿ØÖÆĞÔÖÊ¸üÈõÒ»Ğ©
+ä½¿ç”¨æ³¨è§£å£°æ˜å“ªäº›æ‡’åŠ è½½ï¼Œæ ¹æ®éœ€æ±‚è¿›è¡Œåˆ‡æ¢ï¼Œç›¸æ¯”profileï¼Œæ§åˆ¶æ€§è´¨æ›´å¼±ä¸€äº›
 ** shared data cache
 *** enable immutable entity cached
-ÕıÈ·ĞÔÈ¡¾öÓÚÀàµÄÊµÏÖ£¬ÒÔ¼°»òĞí²Ù×İ£¬¸ÃÉèÖÃÔÊĞíÖ±½Ó´æ¶ÔÏóÒıÓÃ£¬µ«ÊÇhibernate²»ÅĞ¶¨¸ÃÀàÊÇ·ñ´ÓÓïÒåÕæµÄ'²»¿É±ä'£¬Òò´ËÈ¡¾öÓÚÈË/¸ÃÀàµÄÉè¼ÆÂß¼­
+æ­£ç¡®æ€§å–å†³äºç±»çš„å®ç°ï¼Œä»¥åŠæˆ–è®¸æ“çºµï¼Œè¯¥è®¾ç½®å…è®¸ç›´æ¥å­˜å¯¹è±¡å¼•ç”¨ï¼Œä½†æ˜¯hibernateä¸åˆ¤å®šè¯¥ç±»æ˜¯å¦ä»è¯­ä¹‰çœŸçš„'ä¸å¯å˜'ï¼Œå› æ­¤å–å†³äºäºº/è¯¥ç±»çš„è®¾è®¡é€»è¾‘
 hibernate.cache.use_reference_entries
 *** bypass sharead data
 
@@ -1123,9 +1123,9 @@ criteria.select(i).where(
 ****** general
 ******* equail
 ******* gt
-Ö»½ÓÊÕÊı×Ö
+åªæ¥æ”¶æ•°å­—
 ******* greaterThan
-ÄÜ±ÈµÄÈ«ÄÜ·Å
+èƒ½æ¯”çš„å…¨èƒ½æ”¾
 #+BEGIN_SRC java
 Root<Item> i = criteria.from(Item.class);
 criteria.select(i).where(
@@ -1209,7 +1209,7 @@ Query query = em.createNativeQuery(
 #+END_SRC
 ** nameing query
 *** bundle with annotation
-¿ÉÒÔÒ»ÅúÒ»ÅúÓÃ×¢½â°ó¶¨µ½ÊµÌåÀàÉÏ
+å¯ä»¥ä¸€æ‰¹ä¸€æ‰¹ç”¨æ³¨è§£ç»‘å®šåˆ°å®ä½“ç±»ä¸Š
 #+BEGIN_SRC java
 @NamedQueries({
     @NamedQuery(
@@ -1222,7 +1222,7 @@ public class Item {
     // ...
 }
 
-@NamedNativeQueries //Ô­ÉúSQL
+@NamedNativeQueries //åŸç”ŸSQL
 @NamedNativeQuery 
 #+END_SRC
 *** xml
@@ -1265,30 +1265,30 @@ org.hibernate.Query query = session.getNamedQuery("findItems");
 ** jpql
 *** update
 update Item i set i.active = true where i.seller = :s
-Ö±½ÓµÄÓï¾ä²Ù×İÎŞ·¨Ë¢ĞÂhibernateµÄ»ùÓÚsessionµÄ»º´æÊµÀı£¬¶ş¼¶»º´æ¹ØÓÚ¸ÃÊµÌåÀàµÄ»º´æÈ«²¿Çåµô(ÄÄÅÂÖ»¸Äµ½Ò»Ìõ£¬Ò²ÇåµôÈ«²¿Ïà¹Ø)
+ç›´æ¥çš„è¯­å¥æ“çºµæ— æ³•åˆ·æ–°hibernateçš„åŸºäºsessionçš„ç¼“å­˜å®ä¾‹ï¼ŒäºŒçº§ç¼“å­˜å…³äºè¯¥å®ä½“ç±»çš„ç¼“å­˜å…¨éƒ¨æ¸…æ‰(å“ªæ€•åªæ”¹åˆ°ä¸€æ¡ï¼Œä¹Ÿæ¸…æ‰å…¨éƒ¨ç›¸å…³)
 ** native sql
-Ä¬ÈÏÖ±½ÓÈ«²¿Çåµô¶ş¼¶»º´æ£¬ÒòÎªÎŞ·¨Ê¶±ğ¶ÔÓ¦µÄÓ°ÏìÊµÌå£¨JPQL»òÕßcriteriaÍ¨¹ıÀà×¢½âµ¼º½ÕÒµ½±í£¬Í¬Ê±È·ÈÏ»º´æÇøÓò£¬native sqlÔÚhibernateÖĞÎŞ·¨·´ÏòÕÒ»Øentity class£¬ÀíÂÛÉÏ¿ÉÒÔ×öµ½£¬ËùÒÔÎŞ·¨È·¶¨»º´æÇøÓò£©
+é»˜è®¤ç›´æ¥å…¨éƒ¨æ¸…æ‰äºŒçº§ç¼“å­˜ï¼Œå› ä¸ºæ— æ³•è¯†åˆ«å¯¹åº”çš„å½±å“å®ä½“ï¼ˆJPQLæˆ–è€…criteriaé€šè¿‡ç±»æ³¨è§£å¯¼èˆªæ‰¾åˆ°è¡¨ï¼ŒåŒæ—¶ç¡®è®¤ç¼“å­˜åŒºåŸŸï¼Œnative sqlåœ¨hibernateä¸­æ— æ³•åå‘æ‰¾å›entity classï¼Œç†è®ºä¸Šå¯ä»¥åšåˆ°ï¼Œæ‰€ä»¥æ— æ³•ç¡®å®šç¼“å­˜åŒºåŸŸï¼‰
 query.addSynchronizedEntityClass(Item.class);
 * cache
 ** session cached
-ºËĞÄ: »º´æµÄÊÇÊµÀı£¬ÎŞ·¨¿çsession£¬Óë¶ş¼¶Ò»Ñù»ùÓÚidentifier×÷key
+æ ¸å¿ƒ: ç¼“å­˜çš„æ˜¯å®ä¾‹ï¼Œæ— æ³•è·¨sessionï¼Œä¸äºŒçº§ä¸€æ ·åŸºäºidentifierä½œkey
 ** shared data cached
-ºËĞÄ: »º´æµÄÊÇ×Ö¶Î(ÒÔÌØÊâµÄ»ã±à¸ñÊ½)£¬ÔÚhitÊ±×é×°»ØÈ¥£¨ºÏÇéºÏÀí£¬Èç¹û´æµÄÊÇentity£¬»áÊ¹µÃ¶à¸ösession²Ù×İµÄÍ¬Ò»ÊµÌå»¥Ïà¸ÉÈÅ£©
-1. Ò»¶ÔÒ»µÄÇé¿öÏÂ£¬µÃµ½¶ÔÓ¦µÄµ¥¸öidentifier£¬È»ºóÔÙhit×é×°
-2. Ò»¶Ô¶àµÄÇé¿öÏÂ£¬µÃµ½¼¯ºÏµÄidentifierÁĞ±í£¬È»ºóÔÙ°¤¸öhit×é×°
+æ ¸å¿ƒ: ç¼“å­˜çš„æ˜¯å­—æ®µ(ä»¥ç‰¹æ®Šçš„æ±‡ç¼–æ ¼å¼)ï¼Œåœ¨hitæ—¶ç»„è£…å›å»ï¼ˆåˆæƒ…åˆç†ï¼Œå¦‚æœå­˜çš„æ˜¯entityï¼Œä¼šä½¿å¾—å¤šä¸ªsessionæ“çºµçš„åŒä¸€å®ä½“äº’ç›¸å¹²æ‰°ï¼‰
+1. ä¸€å¯¹ä¸€çš„æƒ…å†µä¸‹ï¼Œå¾—åˆ°å¯¹åº”çš„å•ä¸ªidentifierï¼Œç„¶åå†hitç»„è£…
+2. ä¸€å¯¹å¤šçš„æƒ…å†µä¸‹ï¼Œå¾—åˆ°é›†åˆçš„identifieråˆ—è¡¨ï¼Œç„¶åå†æŒ¨ä¸ªhitç»„è£…
 *** enable cache
 **** enable in persistence.xml
 **** enable in entity
-1. ÉèÖÃÊµÌåµÄ»º´æ¿ªÆô£¬@Cacheable
-2. ÉèÖÃ»º´æ²ßÂÔ
+1. è®¾ç½®å®ä½“çš„ç¼“å­˜å¼€å¯ï¼Œ@Cacheable
+2. è®¾ç½®ç¼“å­˜ç­–ç•¥
 **** config cache implement such as ehcache
 
 ** query result cache
-»ùÓÚstatementµÄ½á¹û»º´æ£¬ÒÔÓï¾ä×ÔÉí×÷¼ü£¬¸Ã»º´æÓëmybatisµÄ»º´æ²ßÂÔºÜÀàËÆ
-ÊÕÒæÂÊ½ÏµÍ£¬ÔÚÊµ¼Ê³¡¾°ÖĞµÃ²»µ½½Ï´óµÄĞÔÄÜÌáÉı
+åŸºäºstatementçš„ç»“æœç¼“å­˜ï¼Œä»¥è¯­å¥è‡ªèº«ä½œé”®ï¼Œè¯¥ç¼“å­˜ä¸mybatisçš„ç¼“å­˜ç­–ç•¥å¾ˆç±»ä¼¼
+æ”¶ç›Šç‡è¾ƒä½ï¼Œåœ¨å®é™…åœºæ™¯ä¸­å¾—ä¸åˆ°è¾ƒå¤§çš„æ€§èƒ½æå‡
 * general
-** count Ô­Éúcount
+** count åŸç”Ÿcount
 https://www.baeldung.com/hibernate-criteria-queries
 * ref
-https://blog.csdn.net/weixin_30437847/article/details/95211223 Á¬½Ó³Ø
-https://www.cnblogs.com/jianzhixuan/p/6923216.html Êı¾İ¿âwait_timeout
+https://blog.csdn.net/weixin_30437847/article/details/95211223 è¿æ¥æ± 
+https://www.cnblogs.com/jianzhixuan/p/6923216.html æ•°æ®åº“wait_timeout

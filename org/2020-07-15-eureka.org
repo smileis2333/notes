@@ -13,14 +13,14 @@ server:
 
 eureka:
   instance:
-    hostname: localhost #eureka·şÎñ¶ËµÄÊµÀıÃû³Æ
+    hostname: localhost #eurekaæœåŠ¡ç«¯çš„å®ä¾‹åç§°
   client:
-    #false±íÊ¾²»Ïò×¢²áÖĞĞÄ×¢²á×Ô¼º
+    #falseè¡¨ç¤ºä¸å‘æ³¨å†Œä¸­å¿ƒæ³¨å†Œè‡ªå·±
     register-with-eureka: false
-    #false±íÊ¾×Ô¼º¶Ë¾ÍÊÇ×¢²áÖĞĞÄ£¬ÎÒµÄÖ°Ôğ¾ÍÊÇÎ¬»¤·şÎñÊµÀı£¬²¢²»ĞèÒªÈ¥¼ìË÷·şÎñ
+    #falseè¡¨ç¤ºè‡ªå·±ç«¯å°±æ˜¯æ³¨å†Œä¸­å¿ƒï¼Œæˆ‘çš„èŒè´£å°±æ˜¯ç»´æŠ¤æœåŠ¡å®ä¾‹ï¼Œå¹¶ä¸éœ€è¦å»æ£€ç´¢æœåŠ¡
     fetch-registry: false
     service-url:
-      #ÉèÖÃÓëEureka Server½»»¥µÄµØÖ·²éÑ¯·şÎñºÍ×¢²á·şÎñ¶¼ĞèÒªÒÀÀµÕâ¸öµØÖ·
+      #è®¾ç½®ä¸Eureka Serveräº¤äº’çš„åœ°å€æŸ¥è¯¢æœåŠ¡å’Œæ³¨å†ŒæœåŠ¡éƒ½éœ€è¦ä¾èµ–è¿™ä¸ªåœ°å€
       defaultZ4 one: http://${eureka.instance.hostname}:${server.port}/eureka/
 #+END_SRC
 ** enable
@@ -40,20 +40,20 @@ server:
 
 eureka:
   client:
-    #±íÊ¾ÊÇ·ñ½«×Ô¼º×¢²á½øEurekaServerÄ¬ÈÏÎªtrue
+    #è¡¨ç¤ºæ˜¯å¦å°†è‡ªå·±æ³¨å†Œè¿›EurekaServeré»˜è®¤ä¸ºtrue
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:7001/eureka #Ö§³ÖÊı×é
+      defaultZone: http://localhost:7001/eureka #æ”¯æŒæ•°ç»„
 
 #+END_SRC
 ** enable
 @EnableEurekaClient
 ** instance
 *** instance-id
-ÓÃÖ¸¶¨µÄÄÚÈİÈ¡´úhost:/portÏÔÊ¾
+ç”¨æŒ‡å®šçš„å†…å®¹å–ä»£host:/portæ˜¾ç¤º
 *** prefer-ip-address(boolean)
-hoverÊ±ÏÔÊ¾ipµØÖ·
+hoveræ—¶æ˜¾ç¤ºipåœ°å€
 * trick
 ** ban slef protection
 eureka.server.enable-self-preservation // server side

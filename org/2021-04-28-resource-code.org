@@ -4,7 +4,7 @@
 https://github.com/yjfox/-Java-Concurrency-in-Practice-Source-Code
 * tcp ip volume
 https://github.com/QianChenglong/TCP-IP-Illustrated-Volume-1
-* Íâ²¿¼ì²â¶Ë¿ÚÊÇ·ñ±»·â
+* å¤–éƒ¨æ£€æµ‹ç«¯å£æ˜¯å¦è¢«å°
 https://www.yougetsignal.com/tools/open-ports/
-* GAÔÚÏß²âÊÔAPI
+* GAåœ¨çº¿æµ‹è¯•API
 https://ga-dev-tools.web.app/query-explorer/    

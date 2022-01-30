@@ -18,9 +18,9 @@ expected
 *** @AfterClass
 *** @Ignore
 *** @RunWith
-** ²ÎÊý»¯²âÊÔ
+** å‚æ•°åŒ–æµ‹è¯•
 @RunWith(Parameterized.class)
-@Parameters ×¢ÊÍµÄ¹«¹²µÄ¾²Ì¬·½·¨£¬Ëü·µ»ØÒ»¸ö¶ÔÏó²ÎÊýÊý×é
-´´½¨Ò»¸ö¹«¹²µÄ¹¹Ôìº¯Êý£¬Ëü½ÓÊÜºÍÒ»ÐÐ²âÊÔÊý¾ÝÏàµÈÍ¬µÄ¶«Î÷
-¸ù¾ÝÐèÒª´Ó²âÊÔÓÃÀýÀïÃæÄÃÊôÐÔ
+@Parameters æ³¨é‡Šçš„å…¬å…±çš„é™æ€æ–¹æ³•ï¼Œå®ƒè¿”å›žä¸€ä¸ªå¯¹è±¡å‚æ•°æ•°ç»„
+åˆ›å»ºä¸€ä¸ªå…¬å…±çš„æž„é€ å‡½æ•°ï¼Œå®ƒæŽ¥å—å’Œä¸€è¡Œæµ‹è¯•æ•°æ®ç›¸ç­‰åŒçš„ä¸œè¥¿
+æ ¹æ®éœ€è¦ä»Žæµ‹è¯•ç”¨ä¾‹é‡Œé¢æ‹¿å±žæ€§
 

@@ -6,22 +6,22 @@ apt install subversion
 ** create repo
 mkdir /opt/svn
 svnadmin create /opt/svn/runoob
-*** µ¥¿â
-svnserve -d -r /opt/svn/runoob //Åä×îµ×µÄÄ¿Â¼
+*** å•åº“
+svnserve -d -r /opt/svn/runoob //é…æœ€åº•çš„ç›®å½•
 
-// authzÎÄ¼şÅäÖÃ·½Ê½
+// authzæ–‡ä»¶é…ç½®æ–¹å¼
 [groups]
 admin=user1
 dev=user2
 [/]
 @admin=rw
 user2=r
-*** ¶à¿â
-svnserve -d -r /opt/svn //ÅäÉÏ²ãÄ¿Â¼
+*** å¤šåº“
+svnserve -d -r /opt/svn //é…ä¸Šå±‚ç›®å½•
 
-½«svnadmin´´½¨µÄ°æ±¾¿âµÄpasswdºÍauthzÉ¾µô£¬ÔÚ¸ùÄ¿Â¼ÅäÖÃÕâÁ½Ïî£¬È»ºóÃ¿¸ö×Ó¿â£¬ÅäÖÃauthzºÍpasswdÖ¸Ïò¸ùÂ·¾¶µÄÁ½¸öÅäÖÃÎÄ¼ş
+å°†svnadminåˆ›å»ºçš„ç‰ˆæœ¬åº“çš„passwdå’Œauthzåˆ æ‰ï¼Œåœ¨æ ¹ç›®å½•é…ç½®è¿™ä¸¤é¡¹ï¼Œç„¶åæ¯ä¸ªå­åº“ï¼Œé…ç½®authzå’ŒpasswdæŒ‡å‘æ ¹è·¯å¾„çš„ä¸¤ä¸ªé…ç½®æ–‡ä»¶
 
-// authzÅäÖÃ
+// authzé…ç½®
 [groups]
 admin=user1
 dev=user2
@@ -34,22 +34,22 @@ user2=r
 user2=r
 *** config
 **** $repo/conf/svnserve.conf
-1. ÅäÖÃanon-access£¬·Ç¼øÈ¨ÓÃ»§¶ÁĞ´È¨ÏŞ
-2. ÅäÖÃauth-access£¬¼øÈ¨ÓÃ»§¶ÁĞ´È¨ÏŞ
-3. authz-dbÂ·¾¶
-4. realmµÇÂ¼Ê±Ìá¹©µÄÈÏÖ¤ÓòÃû³Æ
-5. password-dbÂ·¾¶
+1. é…ç½®anon-accessï¼Œéé‰´æƒç”¨æˆ·è¯»å†™æƒé™
+2. é…ç½®auth-accessï¼Œé‰´æƒç”¨æˆ·è¯»å†™æƒé™
+3. authz-dbè·¯å¾„
+4. realmç™»å½•æ—¶æä¾›çš„è®¤è¯åŸŸåç§°
+5. password-dbè·¯å¾„
 **** $repo/conf/passwd
 [users]
 admin = admin
 thinker = 123456
 **** $repo/conf/authz-db
-¸ÃÅäÖÃÎÄ¼şÓÉÒ»¸ö[groups]ÅäÖÃ¶ÎºÍÈô¸É¸ö°æ±¾¿âÂ·¾¶È¨ÏŞ¶Î×é³É¡£
+è¯¥é…ç½®æ–‡ä»¶ç”±ä¸€ä¸ª[groups]é…ç½®æ®µå’Œè‹¥å¹²ä¸ªç‰ˆæœ¬åº“è·¯å¾„æƒé™æ®µç»„æˆã€‚
 
 [groups]
 g_admin = admin,thinker
 
-# @±íÊ¾×éÒıÓÃ£¬ÆÕÍ¨ÓÃ»§Ö±½ÓĞ´
+# @è¡¨ç¤ºç»„å¼•ç”¨ï¼Œæ™®é€šç”¨æˆ·ç›´æ¥å†™
 [admintools:/]
 @g_admin = rw
 ** checkout
@@ -57,15 +57,15 @@ svn checkout svn://[host]/[repoName]
 ** check
 *** svn status
 *** svn log
-Ö¸¶¨ÎÄ¼ş¿ÉÒÔÖ»¿´ÎÄ¼ş
-ÏÔÊ¾È«²¿ĞÅÏ¢
+æŒ‡å®šæ–‡ä»¶å¯ä»¥åªçœ‹æ–‡ä»¶
+æ˜¾ç¤ºå…¨éƒ¨ä¿¡æ¯
 -r [revisionStart]:[revisionEnd]
 *** svn diff
 **** default
-Ä¬ÈÏ¿´±¾µØÓë»º´æ
-**** »º´æÓë°æ±¾¿â
-svn diff -r [revisionVesion] [glob] ±¾µØ»º´æ±È¶Ô°æ±¾3
-**** °æ±¾Óë°æ±¾
+é»˜è®¤çœ‹æœ¬åœ°ä¸ç¼“å­˜
+**** ç¼“å­˜ä¸ç‰ˆæœ¬åº“
+svn diff -r [revisionVesion] [glob] æœ¬åœ°ç¼“å­˜æ¯”å¯¹ç‰ˆæœ¬3
+**** ç‰ˆæœ¬ä¸ç‰ˆæœ¬
 svn diff -r [revisionStart]:[revisionEnd] [glob]
 *** svn cat
 svn cat -r [revisionVesion] [glob]
@@ -77,7 +77,7 @@ svn add [glob]
 svn commit -m 'commit message'
 ** update
 svn update
-µ±³öÏÖ³åÍ»Ê±£¬»á³öÏÖ¶ÔÓ¦µÄÑ¡Ïî£¬¹©²Ù×÷
+å½“å‡ºç°å†²çªæ—¶ï¼Œä¼šå‡ºç°å¯¹åº”çš„é€‰é¡¹ï¼Œä¾›æ“ä½œ
 ** revert
 svn revert [glob]
 svn revert -R [directory]

@@ -1,30 +1,30 @@
 #+TITLE:  lvs
 #+STARTUP: indent
-* ����
-ʵ�ָ��ؾ��������������������������ɫ�ֱ�Ϊ�ͻ��ˣ�LVS���������Լ�RealServer��LVS������ͨ��NAT�Լ���Ӧ�ĵ����㷨�����б��ĵ�ת����iptables֧��DNAT������һ���˿�����һ��ת��������û�취����һ���˿�ÿ�����ת������Ӧ������������LVS����������ɣ�ipvs����ipvsam��ipvsadm��Ϊnetfilter��ģ�����
+* 概述
+实现负载均衡的软件方案，场景的三个角色分别为客户端，LVS服务器，以及RealServer，LVS服务是通过NAT以及对应的调度算法来进行报文的转发，iptables支持DNAT，可以一个端口配置一套转发，但是没办法做到一个端口每次随机转发到对应的内网主机，LVS由两部分组成，ipvs，和ipvsam，ipvsadm作为netfilter的模块存在
 * command
-** ������Ⱥ
+** 创建集群
 ipvsadm -A -t [VIP]:[port] -s [loadblanceAlgorithm]
-** ���ӹ���
+** 添加规则
 ipvsadm -a -t [VIP]:[port] -r [RIP] -m
--m����ʹ��lvs-natģʽ
-** �鿴����
+-m代表使用lvs-nat模式
+** 查看规则
 ipvsadm -L
--n ���Զ˿ں�ip���������
-** ����/��ȡ����
+-n 不对端口和ip进行逆解析
+** 保存/读取规则
 ipvsadm -S > /xxx/xxx
 ipvsadm -R < /xxx/xxx
-** ��������ת��
+** 开启核心转发
 echo 1 > /proc/sys/net/ipv4/ip_forward
-* ��Ⱥģʽ
-Tun��DR����Ҫ����VS���ڣ����Իس���Ҫ����loΪVIP������ARP
-** natģʽ
-���붼��Ҫ��������������ʱ��ƿ��
-** Tunģʽ
-����дip����һ��IP tunel��֮�󴫸�RS��RS������ͨ���Լ��ĳ�����·ֱ�ӳ�ȥ������дipΪVIP
-** DRģʽ
-ֱ�Ӹ�MAC��ַ���ת����ֻ�ܾ������棬����ֻ�ĵ�ַ�����VS��RS�˿���Ҫһ��
+* 集群模式
+Tun和DR都需要不走VS出口，所以回程需要配置lo为VIP并抑制ARP
+** nat模式
+出入都需要经过，大量请求时有瓶颈
+** Tun模式
+不改写ip，加一层IP tunel，之后传给RS，RS解析后，通过自己的出网线路直接出去，并改写ip为VIP
+** DR模式
+直接改MAC地址完成转发，只能局域网玩，由于只改地址，因此VS和RS端口需要一致
 * trick
-���ؾ�����Ҫ����״̬��Ӧ�������session�ȵĴ�������
+负载均衡需要考虑状态形应用如采用session等的处理方案
 * reference
 http://www.zsythink.net/archives/2185

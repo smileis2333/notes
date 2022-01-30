@@ -3,37 +3,37 @@
 * <security:http>
 ** access
 *** isFullyAuthenticated()
-·ÃÎÊ¶ÔÓ¦×ÊÔ´Ê±»áµ¯´°£¬¿ÉÒÔĞŞ¸ÄÄ¬ÈÏµÄÈÏÖ¤Ò³Ãæ
+è®¿é—®å¯¹åº”èµ„æºæ—¶ä¼šå¼¹çª—ï¼Œå¯ä»¥ä¿®æ”¹é»˜è®¤çš„è®¤è¯é¡µé¢
 *** permitAll()
-ÔÊĞíÈ«²¿Çé¿öµÄ·ÃÎÊ
+å…è®¸å…¨éƒ¨æƒ…å†µçš„è®¿é—®
 *** isAnonymous()
-Ã»µÇÂ¼ÄÜ·ÃÎÊ£¬µÇÂ¼ÁË¾Í·ÃÎÊ²»ÁË
+æ²¡ç™»å½•èƒ½è®¿é—®ï¼Œç™»å½•äº†å°±è®¿é—®ä¸äº†
 * <security:form-login>
 ** login-page
-×Ô¶¨ÒåµÇÂ¼Ò³
+è‡ªå®šä¹‰ç™»å½•é¡µ
 ** login-processing-url
-×Ô¶¨ÒåµÇÂ¼ÇëÇó£¬ĞèÒªÉèÖÃCSRF¹Ø±ÕÎªtrue
+è‡ªå®šä¹‰ç™»å½•è¯·æ±‚ï¼Œéœ€è¦è®¾ç½®CSRFå…³é—­ä¸ºtrue
 * <security:authentication-manager>
 ** <security:authentication-provider>
-* ×Ô¶¨ÒåÈ¨ÏŞµÄ¶¯Ì¬»ñÈ¡
-ÊµÏÖUserDetailService½Ó¿Ú
+* è‡ªå®šä¹‰æƒé™çš„åŠ¨æ€è·å–
+å®ç°UserDetailServiceæ¥å£
 #+BEGIN_SRC xml
 <bean id="userDetailServiceImpl1" class="org.example.security.UserDetailServiceImpl1"/>
     <security:authentication-manager>
         <security:authentication-provider user-service-ref="userDetailServiceImpl1"/>
 
     </security:authentication-manager>
-UserDetail½Ó¿ÚÊÇ·µ»ØÖµ
+UserDetailæ¥å£æ˜¯è¿”å›å€¼
 #+END_SRC
-* ÈÏÖ¤ÍêĞĞÎªĞŞ¸Ä
-Ä¬ÈÏÊÇ½øĞĞÒ³ÃæµÄÌø×ª£¬Èç¹ûĞèÒª·µ»ØjsonÊıÖµ£¬ĞèÒªÊµÏÖÈçÏÂ½Ó¿Ú
+* è®¤è¯å®Œè¡Œä¸ºä¿®æ”¹
+é»˜è®¤æ˜¯è¿›è¡Œé¡µé¢çš„è·³è½¬ï¼Œå¦‚æœéœ€è¦è¿”å›jsonæ•°å€¼ï¼Œéœ€è¦å®ç°å¦‚ä¸‹æ¥å£
 ** authenticationsuccesshandler
-³É¹¦Ê±ĞĞÎª
+æˆåŠŸæ—¶è¡Œä¸º
 ** AuthenticationFailureHandler
-Ê§°ÜÊ±ĞĞÎª
+å¤±è´¥æ—¶è¡Œä¸º
 * remember me
-Ç°¶ËĞèÒªÅäÖÃÊôĞÔremember-meµÄ×Ö¶Î(×Ö¶ÎÃû¹Ì¶¨)£¬È»ºó·şÎñÆ÷»áÍù»ØĞ´Èëremember-meµÄcookie(´æ×Åtoken)£¬ÔÚ¹Ø±ÕÍøÒ³(»á»°ĞÅÏ¢¶ªÊ§ºó)£¬ÖØĞÂ½øÈëÊ±£¬»áÊ¹ÓÃremember-meÕâ¸öcookie½øĞĞÑéÖ¤
-** ÅäÖÃ
+å‰ç«¯éœ€è¦é…ç½®å±æ€§remember-meçš„å­—æ®µ(å­—æ®µåå›ºå®š)ï¼Œç„¶åæœåŠ¡å™¨ä¼šå¾€å›å†™å…¥remember-meçš„cookie(å­˜ç€token)ï¼Œåœ¨å…³é—­ç½‘é¡µ(ä¼šè¯ä¿¡æ¯ä¸¢å¤±å)ï¼Œé‡æ–°è¿›å…¥æ—¶ï¼Œä¼šä½¿ç”¨remember-meè¿™ä¸ªcookieè¿›è¡ŒéªŒè¯
+** é…ç½®
 #+BEGIN_SRC xml
 <security:http>
   <security:remember-me token-repository-ref="jdbcTokenRepository" token-validity-seconds="3600"/>
@@ -47,7 +47,7 @@ UserDetail½Ó¿ÚÊÇ·µ»ØÖµ
 ** springboot
 rememberMe().tokenRepository(persistentTokenRepository()).tokenValiditySeconds(60*60)
 * SecurityContextHolder
-¿ÉÒÔ»ñÈ¡ÈÏÖ¤ºóµÄĞÅÏ¢
+å¯ä»¥è·å–è®¤è¯åçš„ä¿¡æ¯
 #+BEGIN_SRC java
 Object principal =
         SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -68,19 +68,19 @@ if (principal != null) {
 </security:authentication-manager>
 #+END_SRC
 * springboot
-** ÅäÖÃ
+** é…ç½®
 #+BEGIN_SRC java
 @Configuration
-@EnableWebSecurity  //Æô¶¯SpringSecurity¹ıÂËÆ÷Á´
+@EnableWebSecurity  //å¯åŠ¨SpringSecurityè¿‡æ»¤å™¨é“¾
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    //¸Ã·½·¨µÄ×÷ÓÃ¾ÍÊÇ´úÌæÖ®Ç°ÅäÖÃ£º<security:authentication-manager>
+    //è¯¥æ–¹æ³•çš„ä½œç”¨å°±æ˜¯ä»£æ›¿ä¹‹å‰é…ç½®ï¼š<security:authentication-manager>
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("eric").password("123456").authorities("PRODUCT_ADD","PRODUCT_UPDATE");
     }
 
-    //¸Ã·½·¨µÄ×÷ÓÃ¾ÍÊÇ´úÌæÖ®Ç°ÅäÖÃ£º<security:http>
+    //è¯¥æ–¹æ³•çš„ä½œç”¨å°±æ˜¯ä»£æ›¿ä¹‹å‰é…ç½®ï¼š<security:http>
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -105,9 +105,9 @@ public class ErrorPageConfig {
     public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(){
         return new EmbeddedServletContainerCustomizer(){
 
-            //ErrorPage:¶¨Òå´íÎóÒ³Ãæ
-            //²ÎÊıÒ»£ºHttpStatus.FORBIDDEN£º ¸Ã´íÎó½ÓÊÕÊ²Ã´´íÎó×´Ì¬Âë
-            //²ÎÊı¶ş£º½»¸øÄÄ¸öÇëÇó´¦Àí
+            //ErrorPage:å®šä¹‰é”™è¯¯é¡µé¢
+            //å‚æ•°ä¸€ï¼šHttpStatus.FORBIDDENï¼š è¯¥é”™è¯¯æ¥æ”¶ä»€ä¹ˆé”™è¯¯çŠ¶æ€ç 
+            //å‚æ•°äºŒï¼šäº¤ç»™å“ªä¸ªè¯·æ±‚å¤„ç†
             @Override
             public void customize(ConfigurableEmbeddedServletContainer container) {
                 container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN,"/403"));
@@ -117,11 +117,11 @@ public class ErrorPageConfig {
     }
 }
 #+END_SRC
-* ×Ô¶¨ÒåFilter
+* è‡ªå®šä¹‰Filter
 ** OncePerRequestFilter
-ÑéÖ¤Âë¹ıÂËÆ÷£¬ÔÚUsernamePasswordAuthenticationFilterÇ°ÉúĞ§¼´¿É
+éªŒè¯ç è¿‡æ»¤å™¨ï¼Œåœ¨UsernamePasswordAuthenticationFilterå‰ç”Ÿæ•ˆå³å¯
 #+BEGIN_SRC java
-//ÊµÏÖOncePerRequestFilter, È»ºóÅäÖÃÎÄ¼şÖ¸¶¨ÉúĞ§µÄÎ»ÖÃ
+//å®ç°OncePerRequestFilter, ç„¶åé…ç½®æ–‡ä»¶æŒ‡å®šç”Ÿæ•ˆçš„ä½ç½®
 public class ImageCodeAuthenticationFilter extends OncePerRequestFilter {
 
     private AuthenticationFailureHandler authenticationFailureHandler;
@@ -139,21 +139,21 @@ public class ImageCodeAuthenticationFilter extends OncePerRequestFilter {
 
 #+END_SRC
 #+BEGIN_SRC xml
-<!--before/afterÖ¸¶¨ÔÚÄÄ¸ö¹ıÂËÆ÷Ö®Ç°,FORM_LOGIN_FILTERÊÇUsernamePasswordAuthenticationFilter-->
+<!--before/afteræŒ‡å®šåœ¨å“ªä¸ªè¿‡æ»¤å™¨ä¹‹å‰,FORM_LOGIN_FILTERæ˜¯UsernamePasswordAuthenticationFilter-->
 <security:http>
     <security:custom-filter ref="beanId" before="FORM_LOGIN_FILTER"/>
 </security:http>
 #+END_SRC
-* ¿Ó
-** Ğ´ËÀÈÏÖ¤ĞÅÏ¢µÄÇé¿ö
+* å‘
+** å†™æ­»è®¤è¯ä¿¡æ¯çš„æƒ…å†µ
 #+BEGIN_SRC xml
     <bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"></bean>
 #+END_SRC
-5.xÖ®ºó, Èç¹ûĞ´ËÀµÄÈÏÖ¤ĞÅÏ¢ÃÜÂëÊÇÃ÷ÎÄ£¬ÔòĞèÒªÅäÖÃ¸Ãbean£¬ÒÔÖ¸¶¨²»¼ÓÃÜ£¬·ñÔò»á±¨´í£¬ÁíÒ»ÖÖ×ö·¨ÔòÊÇÃÜÂëÅäÖÃÊ¹ÓÃÃ÷ÎÄ¼ÓÃÜºóµÄ½á¹û¡£¸ñÊ½Èç{bcrypt}$2a$10$rY/0dflGbwW6L1yt4RVA4OH8aocD7tvMHoChyKY/XtS4DXKr.JbTC
+5.xä¹‹å, å¦‚æœå†™æ­»çš„è®¤è¯ä¿¡æ¯å¯†ç æ˜¯æ˜æ–‡ï¼Œåˆ™éœ€è¦é…ç½®è¯¥beanï¼Œä»¥æŒ‡å®šä¸åŠ å¯†ï¼Œå¦åˆ™ä¼šæŠ¥é”™ï¼Œå¦ä¸€ç§åšæ³•åˆ™æ˜¯å¯†ç é…ç½®ä½¿ç”¨æ˜æ–‡åŠ å¯†åçš„ç»“æœã€‚æ ¼å¼å¦‚{bcrypt}$2a$10$rY/0dflGbwW6L1yt4RVA4OH8aocD7tvMHoChyKY/XtS4DXKr.JbTC
 ref https://blog.csdn.net/feinifi/article/details/80959225
-** ÅäÖÃjsonµÇÂ¼
-1. ×Ô¶¨ÒåUsernamePasswordAuthenticationFilter½øĞĞ¾É½Ó¿ÚÌæ»»
-2. ¹Ø±Õcsrf
+** é…ç½®jsonç™»å½•
+1. è‡ªå®šä¹‰UsernamePasswordAuthenticationFilterè¿›è¡Œæ—§æ¥å£æ›¿æ¢
+2. å…³é—­csrf
 #+BEGIN_SRC java
 @Configuration
 @EnableWebSecurity
@@ -209,12 +209,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 }
 
 #+END_SRC
-** ¶àÕË»§µÇÂ¼
-Ó¦¸ÃÍ³Ò»endpoint£¬ÓÉ¿Í»§¶ËÖ¸¶¨ÕË»§ÀàĞÍ£¬ºó¶Ë¿ÉÒÔÔÙUserService´¦×¢Èëhttprequest¶ÁÈ¡ÕË»§ÀàĞÍ£¬µÚ¶şÖÖ·½°¸ÊÇÖØĞ´providerÀ´½øĞĞ×Ô¶¨ÒåÊı¾İÀàĞÍ±£´æ
-** 5.0Ö®ºóÄ¬ÈÏPasswordEncoder matchÉè¼Æ±ä³É{¼ÓÃÜÀàĞÍ}¼ÓÃÜÃÜÂë£¬¼´ÒªÃ´»»£¬ÒªÃ´Ê¹ÓÃĞÂµÄÉú³É²ßÂÔ
+** å¤šè´¦æˆ·ç™»å½•
+åº”è¯¥ç»Ÿä¸€endpointï¼Œç”±å®¢æˆ·ç«¯æŒ‡å®šè´¦æˆ·ç±»å‹ï¼Œåç«¯å¯ä»¥å†UserServiceå¤„æ³¨å…¥httprequestè¯»å–è´¦æˆ·ç±»å‹ï¼Œç¬¬äºŒç§æ–¹æ¡ˆæ˜¯é‡å†™provideræ¥è¿›è¡Œè‡ªå®šä¹‰æ•°æ®ç±»å‹ä¿å­˜
+** 5.0ä¹‹åé»˜è®¤PasswordEncoder matchè®¾è®¡å˜æˆ{åŠ å¯†ç±»å‹}åŠ å¯†å¯†ç ï¼Œå³è¦ä¹ˆæ¢ï¼Œè¦ä¹ˆä½¿ç”¨æ–°çš„ç”Ÿæˆç­–ç•¥
 ** cors
-auth urlÄ¬ÈÏ²»×ßCorsFilter£¬ĞèÒªÊÖ¶¯¼Ó½øÈ¥
-ÅäÖÃËæ×Å°æ±¾±ä¸ü£¬»áÓĞ¸÷ÖÖÀàĞÍµÄĞ´·¨ÅäÖÃ£¬
+auth urlé»˜è®¤ä¸èµ°CorsFilterï¼Œéœ€è¦æ‰‹åŠ¨åŠ è¿›å»
+é…ç½®éšç€ç‰ˆæœ¬å˜æ›´ï¼Œä¼šæœ‰å„ç§ç±»å‹çš„å†™æ³•é…ç½®ï¼Œ
 *** 2.4.3
 #+BEGIN_SRC java
 @Configuration
@@ -228,9 +228,9 @@ public class CORSConfig {
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         final String origin = String.format("%s://%s", protocol, corsDomain);
-        corsConfiguration.addAllowedOrigin(origin); // 1ÔÊĞíÈÎºÎÓòÃûÊ¹ÓÃ
-        corsConfiguration.addAllowedHeader("*"); // 2ÔÊĞíÈÎºÎÍ·
-        corsConfiguration.addAllowedMethod("*"); // 3ÔÊĞíÈÎºÎ·½·¨£¨post¡¢getµÈ£©
+        corsConfiguration.addAllowedOrigin(origin); // 1å…è®¸ä»»ä½•åŸŸåä½¿ç”¨
+        corsConfiguration.addAllowedHeader("*"); // 2å…è®¸ä»»ä½•å¤´
+        corsConfiguration.addAllowedMethod("*"); // 3å…è®¸ä»»ä½•æ–¹æ³•ï¼ˆpostã€getç­‰ï¼‰
         corsConfiguration.setAllowCredentials(true);
         return corsConfiguration;
     }
@@ -244,7 +244,7 @@ public class CORSConfig {
 }
 
 #+END_SRC
-** ·Ç±ê×¼flowÈç¹úÄÚ
+** éæ ‡å‡†flowå¦‚å›½å†…
 #+BEGIN_SRC java
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -287,18 +287,18 @@ spring:
     oauth2:
       client:
         registration:
-          github: # spring securityÔ¤ÉèµÄaouth provider£¬ÆäËû¶¼±»Ä¬ÈÏÉèÖÃºÃÁË
+          github: # spring securityé¢„è®¾çš„aouth providerï¼Œå…¶ä»–éƒ½è¢«é»˜è®¤è®¾ç½®å¥½äº†
             clientId: 3c5e748405a71fe5ad36
             clientSecret: 0bdc22fa41906e60486b07ba4c600f996c6e5c96
-          gb-bsite: # ×Ô¶¨ÒåµÄ£¬ĞèÒªÖ¸¶¨ÀàĞÍºÍÖØ¶¨Ïò
+          gb-bsite: # è‡ªå®šä¹‰çš„ï¼Œéœ€è¦æŒ‡å®šç±»å‹å’Œé‡å®šå‘
             client-id: survey
             client-secret: 8c6b1389-7585-40c3-adbd-ffe7bc054e26
             authorization-grant-type: authorization_code
             redirect-uri: http://api.questionnaire.dev.gobrand.top/login/oauth2/code/gb-bsite 
-            # ÈÏÖ¤Íê±ÏµÄ»Øµ÷£¬code»á¶ªµ½¸Ã»Øµ÷µÄºóÃæ£¬±ØĞëÉèÖÃ£¬ÓÃÓÚÉèÖÃÉÏÏÂÎÄ£¬ÕæÕıµÄ×îÖÕ»Øµ÷ĞèÒªÔÚ.oauth2Login().defaultSuccessUrl(domain)ÉèÖÃ
+            # è®¤è¯å®Œæ¯•çš„å›è°ƒï¼Œcodeä¼šä¸¢åˆ°è¯¥å›è°ƒçš„åé¢ï¼Œå¿…é¡»è®¾ç½®ï¼Œç”¨äºè®¾ç½®ä¸Šä¸‹æ–‡ï¼ŒçœŸæ­£çš„æœ€ç»ˆå›è°ƒéœ€è¦åœ¨.oauth2Login().defaultSuccessUrl(domain)è®¾ç½®
 
         provider:
-          gb-bsite: # ×Ô¶¨Òåprovider
+          gb-bsite: # è‡ªå®šä¹‰provider
             authorization-uri: http://localhost:8080/auth/realms/business-account/protocol/openid-connect/auth
             token-uri: http://localhost:8080/auth/realms/business-account/protocol/openid-connect/token
             user-info-uri: http://localhost:8080/auth/realms/business-account/protocol/openid-connect/userinfo
@@ -306,12 +306,12 @@ spring:
 
 #+END_SRC
 ** resource server
-¶ÔÓÚÊ¹ÓÃspring oauth2(deprecated)ÍâµÄÈÏÖ¤²úÆ·£¬ÓÉÓÚ×Ö¶Î¸ñÊ½²»·ûºÏspring securityµÄ³éÈ¡¹æÔò£¬Ö±½Ó±¾µØÊı¾İ¿â²Ù×÷µÄÔ­ÀíÊÇUserService·µ»ØUserDetailµÄÊ±ºò°ÑAuthorityĞ´ÈëÊôĞÔ
+å¯¹äºä½¿ç”¨spring oauth2(deprecated)å¤–çš„è®¤è¯äº§å“ï¼Œç”±äºå­—æ®µæ ¼å¼ä¸ç¬¦åˆspring securityçš„æŠ½å–è§„åˆ™ï¼Œç›´æ¥æœ¬åœ°æ•°æ®åº“æ“ä½œçš„åŸç†æ˜¯UserServiceè¿”å›UserDetailçš„æ—¶å€™æŠŠAuthorityå†™å…¥å±æ€§
 *** eg: keycloak
-ÎªÁË·½±ãÍ³Ò»£¬¿ÉÒÔ´ÓkeycloakµÄScopeÅäÖÃÉèÖÃMapper
+ä¸ºäº†æ–¹ä¾¿ç»Ÿä¸€ï¼Œå¯ä»¥ä»keycloakçš„Scopeé…ç½®è®¾ç½®Mapper
 [[file:~/Desktop/personal/study/img/keycloak_map_role.png][keycloak map role for spring security convenient]]
 #+BEGIN_SRC java
-// Èç¹û¸ü¸´ÔÓ£¬ĞèÒªÕû¸öÖØĞ´Converter£¬Ä¬ÈÏµÄÖ»³éÒ»¸ö×Ö¶Î
+// å¦‚æœæ›´å¤æ‚ï¼Œéœ€è¦æ•´ä¸ªé‡å†™Converterï¼Œé»˜è®¤çš„åªæŠ½ä¸€ä¸ªå­—æ®µ
     private JwtAuthenticationConverter jwtAuthenticationConverter() {
         // create a custom JWT converter to map the roles from the token as granted authorities
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -324,7 +324,7 @@ spring:
     }
 
 #+END_SRC
-¼´ÊÇoauth client£¬ÓÖÊÇresource server£¬²»ÊÇ×Ô¼º¶Ô×Ô¼ºresource server£¬ÉÏÏÂÎÄ²»¿ÉÄÜÍ¬Ò»¸ö£¬AuthenticationTokenÖ»ÓĞÒ»¸ö£¬³ı·Ç¸ÄÁËĞ´ÈëÂß¼­
+å³æ˜¯oauth clientï¼Œåˆæ˜¯resource serverï¼Œä¸æ˜¯è‡ªå·±å¯¹è‡ªå·±resource serverï¼Œä¸Šä¸‹æ–‡ä¸å¯èƒ½åŒä¸€ä¸ªï¼ŒAuthenticationTokenåªæœ‰ä¸€ä¸ªï¼Œé™¤éæ”¹äº†å†™å…¥é€»è¾‘
 https://stackoverflow.com/questions/58805033/using-spring-boot-2-oauth-client-and-resourceserver-in-the-same-context
 *** spring gateway as oauth client
 https://piotrminkowski.com/2020/10/09/spring-cloud-gateway-oauth2-with-keycloak/
@@ -356,7 +356,7 @@ spring:
       default-filters:
         - TokenRelay
       routes:
-        - id: survey # µ÷ÑĞ¹¤¾ß×ª·¢
+        - id: survey # è°ƒç ”å·¥å…·è½¬å‘
           uri: http://127.0.0.1:56789
           predicates:
             - Path=/survey/**
@@ -364,9 +364,9 @@ spring:
             - StripPrefix=1
 
 #+END_SRC
-** oauth clientÄÃaccess token
+** oauth clientæ‹¿access token
 SpringUtil.getBean(OAuth2AuthorizedClientService.class).loadAuthorizedClient("gb-bsite","15815817741")
-*** ×¢Èëjwt£¬redirect
+*** æ³¨å…¥jwtï¼Œredirect
 #+BEGIN_SRC java
 @RequiredArgsConstructor
 @Slf4j
@@ -435,5 +435,5 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
 #+END_SRC
 * ref
-¼´ÊÇ·şÎñÆ÷ÓÖµ±×ÊÔ´·şÎñÆ÷£¬¶à¶ÎÅäÖÃ
+å³æ˜¯æœåŠ¡å™¨åˆå½“èµ„æºæœåŠ¡å™¨ï¼Œå¤šæ®µé…ç½®
 https://stackoverflow.com/questions/44970848/spring-security-jwt-token-for-api-and-session-for-web

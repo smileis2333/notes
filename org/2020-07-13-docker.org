@@ -9,9 +9,9 @@ https://hub.docker.com official repo, free account can only have one private rep
 docker login
 docker logout
 *** push
-// Èç¹û¾µÏñÊÇÄ§¸ÄÒÑ¾­´æÔÚµÄ£¬±ØĞëÖØĞÂ´òtag£¬·ñÔòÓÉÓÚnamespace²»Ò»ÖÂ£¬ÎŞ·¨ÉÏ´«
+// å¦‚æœé•œåƒæ˜¯é­”æ”¹å·²ç»å­˜åœ¨çš„ï¼Œå¿…é¡»é‡æ–°æ‰“tagï¼Œå¦åˆ™ç”±äºnamespaceä¸ä¸€è‡´ï¼Œæ— æ³•ä¸Šä¼ 
 docker tag [imageId] [username]/[iamgeName:[tag]]
-// ÊÇ·ñË½ÓĞ£¬µÃÉÏÍøÕ¾½øĞĞÉè¶¨£¬ÕûÌå²Ù×÷ÓëGitHubÀàËÆ
+// æ˜¯å¦ç§æœ‰ï¼Œå¾—ä¸Šç½‘ç«™è¿›è¡Œè®¾å®šï¼Œæ•´ä½“æ“ä½œä¸GitHubç±»ä¼¼
 docker push [username]/[imageName:[tag]]
 * Dockerfile
 ** FROM
@@ -19,45 +19,45 @@ FROM [imageName]
 ** RUN
 RUN [shell] //run this command in build procesure, allow multi RUN
 ** COPY
-COPY [--chown=<user>:<group>] <Ô´Â·¾¶1>...  <Ä¿±êÂ·¾¶>
-COPY [--chown=<user>:<group>] ["<Ô´Â·¾¶1>",...  "<Ä¿±êÂ·¾¶>"]
+COPY [--chown=<user>:<group>] <æºè·¯å¾„1>...  <ç›®æ ‡è·¯å¾„>
+COPY [--chown=<user>:<group>] ["<æºè·¯å¾„1>",...  "<ç›®æ ‡è·¯å¾„>"]
 COPY hom* /mydir/
 COPY hom?.txt /mydir/
 ** ADD
-¸´ÖÆÑ¹Ëõ°ü»á×Ô¶¯½âÑ¹, tar Ñ¹ËõÎÄ¼şµÄ»°£¬Ñ¹Ëõ¸ñÊ½Îª gzip, bzip2 ÒÔ¼° xz µÄÇé¿öÏÂ
+å¤åˆ¶å‹ç¼©åŒ…ä¼šè‡ªåŠ¨è§£å‹, tar å‹ç¼©æ–‡ä»¶çš„è¯ï¼Œå‹ç¼©æ ¼å¼ä¸º gzip, bzip2 ä»¥åŠ xz çš„æƒ…å†µä¸‹
 ** CMD
-docker runÊ±Ö´ĞĞ
-// Ö»ÓĞÒ»¸öÉúĞ§£¬¿É±»Ö´ĞĞÊ±Ö¸¶¨½øĞĞ¸²¸Ç
-CMD <shell ÃüÁî> 
-CMD ["<¿ÉÖ´ĞĞÎÄ¼ş»òÃüÁî>","<param1>","<param2>",...] 
-CMD ["<param1>","<param2>",...]  # ¸ÃĞ´·¨ÊÇÎª ENTRYPOINT Ö¸ÁîÖ¸¶¨µÄ³ÌĞòÌá¹©Ä¬ÈÏ²ÎÊı
+docker runæ—¶æ‰§è¡Œ
+// åªæœ‰ä¸€ä¸ªç”Ÿæ•ˆï¼Œå¯è¢«æ‰§è¡Œæ—¶æŒ‡å®šè¿›è¡Œè¦†ç›–
+CMD <shell å‘½ä»¤> 
+CMD ["<å¯æ‰§è¡Œæ–‡ä»¶æˆ–å‘½ä»¤>","<param1>","<param2>",...] 
+CMD ["<param1>","<param2>",...]  # è¯¥å†™æ³•æ˜¯ä¸º ENTRYPOINT æŒ‡ä»¤æŒ‡å®šçš„ç¨‹åºæä¾›é»˜è®¤å‚æ•°
 ** ENTRYPOINT
-ÀàËÆÓÚ CMD Ö¸Áî£¬²»¿É±»¸²¸Ç£¬ --entrypoint´«²Î
+ç±»ä¼¼äº CMD æŒ‡ä»¤ï¼Œä¸å¯è¢«è¦†ç›–ï¼Œ --entrypointä¼ å‚
 ** ENV
 ENV <key> <value>
 ENV <key1>=<value1> <key2>=<value2>...
 ** ARG
-ÓëENV×÷ÓÃÓò²»Ò»Ñù£¬ARG ÉèÖÃµÄ»·¾³±äÁ¿½ö¶Ô Dockerfile ÄÚÓĞĞ§
+ä¸ENVä½œç”¨åŸŸä¸ä¸€æ ·ï¼ŒARG è®¾ç½®çš„ç¯å¢ƒå˜é‡ä»…å¯¹ Dockerfile å†…æœ‰æ•ˆ
 ** VOLUME
-¶¨ÒåÄäÃûÊı¾İ¾í¡£ÔÚÆô¶¯ÈİÆ÷Ê±Íü¼Ç¹ÒÔØÊı¾İ¾í£¬»á×Ô¶¯¹ÒÔØµ½ÄäÃû¾í¡£
+å®šä¹‰åŒ¿åæ•°æ®å·ã€‚åœ¨å¯åŠ¨å®¹å™¨æ—¶å¿˜è®°æŒ‚è½½æ•°æ®å·ï¼Œä¼šè‡ªåŠ¨æŒ‚è½½åˆ°åŒ¿åå·ã€‚
 ** EXPOSE
-ÉùÃ÷¶Ë¿Ú¡£docker run -P Ê±£¬»á×Ô¶¯Ëæ»úÓ³Éä EXPOSE µÄ¶Ë¿Ú
+å£°æ˜ç«¯å£ã€‚docker run -P æ—¶ï¼Œä¼šè‡ªåŠ¨éšæœºæ˜ å°„ EXPOSE çš„ç«¯å£
 ** WORKDIR
-Ã¿Ò»¸ö RUN ÃüÁî¶¼ÊÇĞÂ½¨µÄÒ»²ã¡£Ö»ÓĞÍ¨¹ı WORKDIR ´´½¨µÄÄ¿Â¼²Å»áÒ»Ö±´æÔÚ
+æ¯ä¸€ä¸ª RUN å‘½ä»¤éƒ½æ˜¯æ–°å»ºçš„ä¸€å±‚ã€‚åªæœ‰é€šè¿‡ WORKDIR åˆ›å»ºçš„ç›®å½•æ‰ä¼šä¸€ç›´å­˜åœ¨
 ** USER
-ÓÃÓÚÖ¸¶¨Ö´ĞĞºóĞøÃüÁîµÄÓÃ»§ºÍÓÃ»§×é£¬Õâ±ßÖ»ÊÇÇĞ»»ºóĞøÃüÁîÖ´ĞĞµÄÓÃ»§£¨ÓÃ»§ºÍÓÃ»§×é±ØĞëÌáÇ°ÒÑ¾­´æÔÚ£©¡£
+ç”¨äºæŒ‡å®šæ‰§è¡Œåç»­å‘½ä»¤çš„ç”¨æˆ·å’Œç”¨æˆ·ç»„ï¼Œè¿™è¾¹åªæ˜¯åˆ‡æ¢åç»­å‘½ä»¤æ‰§è¡Œçš„ç”¨æˆ·ï¼ˆç”¨æˆ·å’Œç”¨æˆ·ç»„å¿…é¡»æå‰å·²ç»å­˜åœ¨ï¼‰ã€‚
 ** HEALTHCHECK
-HEALTHCHECK [Ñ¡Ïî] CMD <ÃüÁî>£ºÉèÖÃ¼ì²éÈİÆ÷½¡¿µ×´¿öµÄÃüÁî
-HEALTHCHECK NONE£ºÈç¹û»ù´¡¾µÏñÓĞ½¡¿µ¼ì²éÖ¸Áî£¬Ê¹ÓÃÕâĞĞ¿ÉÒÔÆÁ±ÎµôÆä½¡¿µ¼ì²éÖ¸Áî
-HEALTHCHECK [Ñ¡Ïî] CMD <ÃüÁî> : Õâ±ß CMD ºóÃæ¸úËæµÄÃüÁîÊ¹ÓÃ£¬¿ÉÒÔ²Î¿¼ CMD µÄÓÃ·¨¡£
+HEALTHCHECK [é€‰é¡¹] CMD <å‘½ä»¤>ï¼šè®¾ç½®æ£€æŸ¥å®¹å™¨å¥åº·çŠ¶å†µçš„å‘½ä»¤
+HEALTHCHECK NONEï¼šå¦‚æœåŸºç¡€é•œåƒæœ‰å¥åº·æ£€æŸ¥æŒ‡ä»¤ï¼Œä½¿ç”¨è¿™è¡Œå¯ä»¥å±è”½æ‰å…¶å¥åº·æ£€æŸ¥æŒ‡ä»¤
+HEALTHCHECK [é€‰é¡¹] CMD <å‘½ä»¤> : è¿™è¾¹ CMD åé¢è·Ÿéšçš„å‘½ä»¤ä½¿ç”¨ï¼Œå¯ä»¥å‚è€ƒ CMD çš„ç”¨æ³•ã€‚
 ** ONBUILD
-ÏÂ¸öÒıÓÃ¸ÃiamgeµÄDockerfile»áµ÷ÓÃ
-ONBUILD <ÆäËüÖ¸Áî>
+ä¸‹ä¸ªå¼•ç”¨è¯¥iamgeçš„Dockerfileä¼šè°ƒç”¨
+ONBUILD <å…¶å®ƒæŒ‡ä»¤>
 * install
 curl -fsSL https://get.docker.com | bash
 * tool
 ** Docker Compose
-¹ÜÀí¶à¸öcontainerµÄÆô¶¯ÉèÖÃ
+ç®¡ç†å¤šä¸ªcontainerçš„å¯åŠ¨è®¾ç½®
 *** install
 curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
@@ -101,7 +101,7 @@ docker run --pid host busybox:1.29 ps #container read host pid namespace, it's u
 *** --cidfile
 docker create --cidfile /tmp/web.cid nginx
 *** --read-only
-docker run -d --name wp --read-only wordpress:5.0.0-php7.2-apache #¿Ï¶¨±¨´í£¬ÎŞ·¨Ğ´ÈëÁÙÊ±ÎÄ¼ş£¬ĞèÒª¹ÒÔØ½øÎÄ¼şÏµÍ³
+docker run -d --name wp --read-only wordpress:5.0.0-php7.2-apache #è‚¯å®šæŠ¥é”™ï¼Œæ— æ³•å†™å…¥ä¸´æ—¶æ–‡ä»¶ï¼Œéœ€è¦æŒ‚è½½è¿›æ–‡ä»¶ç³»ç»Ÿ
 *** -v
 docker run -d --name wp2 
   --read-only 
@@ -112,12 +112,12 @@ docker run -d --name wp2
 inject enviroment variable
 docker create --env WORDPRESS_DB_HOST=<my database hostname> wordpress: 5.0.0-php7.2-apache
 *** --restart
-exponential backoff strategy to determine restart time #ÒòÎª¸ÃÈİÆ÷ÊÇÒ»´ÎĞÔÃüÁî£¬¼´Ê¹ÓÃÍê¾Í½øÈëexit£¬µ«ÊÇÓÉÓÚÉèÖÃ--restart£¬ËùÒÔ»áµ¼ÖÂÔÚÖ¸ÊıÖÜÆÚ²»¶ÏÖØÆô´òÓ¡
+exponential backoff strategy to determine restart time #å› ä¸ºè¯¥å®¹å™¨æ˜¯ä¸€æ¬¡æ€§å‘½ä»¤ï¼Œå³ä½¿ç”¨å®Œå°±è¿›å…¥exitï¼Œä½†æ˜¯ç”±äºè®¾ç½®--restartï¼Œæ‰€ä»¥ä¼šå¯¼è‡´åœ¨æŒ‡æ•°å‘¨æœŸä¸æ–­é‡å¯æ‰“å°
 *** --rm
-Ò»´ÎĞÔ°¸Àı¿ÉÒÔÓÃÍê×Ô¶¯É¾
+ä¸€æ¬¡æ€§æ¡ˆä¾‹å¯ä»¥ç”¨å®Œè‡ªåŠ¨åˆ 
 docker run --rm --name auto-exit-test busybox:1.29 echo Hello World
 *** --hostname
-Ö»¶Ôcontainer×ÔÉí½âÎö¿É¼û£¬Íâ²¿Èç¹ûĞèÒªµ¼º½£¬ĞèÒªÈİÆ÷ÍâÍ³Ò»ÅäDNS
+åªå¯¹containerè‡ªèº«è§£æå¯è§ï¼Œå¤–éƒ¨å¦‚æœéœ€è¦å¯¼èˆªï¼Œéœ€è¦å®¹å™¨å¤–ç»Ÿä¸€é…DNS
 *** --dns
 *** --add-host
 test:10.10.10.255
@@ -146,22 +146,22 @@ docker container run --rm \
     -u 10000:20000 \         #uid:groupid  
     busybox:1.29 id      
 *** --privileged
-ÎÄ¼şºÍÍøÂç¶ÀÁ¢£¬µ«ÊÇ¶ÔhostÖ÷»ú¿ÉÒÔ½øĞĞÍêÈ«½»»¥
+æ–‡ä»¶å’Œç½‘ç»œç‹¬ç«‹ï¼Œä½†æ˜¯å¯¹hostä¸»æœºå¯ä»¥è¿›è¡Œå®Œå…¨äº¤äº’
 docker container run --rm \
     --privileged \
     ubuntu:16.04 id  
 *** --entrypoint
-docker container run --name cmd-git --entrypoint git ubuntu-git #Ö¸¶¨Æô¶¯Ê±Ö¸¶¨µÄ³ÌĞò£¬×îºóÖ¸¶¨µÄ²ÎÊı²»×÷Îª³ÌĞòÖ´ĞĞ£¬¶øÊÇ×÷²Î´«¸øentrypoint(Ö÷Òª¼ÛÖµÊÇ´ò°ü¾µÏñºóµÄ²ÎÊı´«µİ)£¬Ä¬ÈÏÇé¿öÏÂµÄentrypointÊÇbash/sh£¬ËùÒÔÏàµ±ÓÚ½«²ÎÊıÖ±½Óµ±×÷programÖ´ĞĞ
+docker container run --name cmd-git --entrypoint git ubuntu-git #æŒ‡å®šå¯åŠ¨æ—¶æŒ‡å®šçš„ç¨‹åºï¼Œæœ€åæŒ‡å®šçš„å‚æ•°ä¸ä½œä¸ºç¨‹åºæ‰§è¡Œï¼Œè€Œæ˜¯ä½œå‚ä¼ ç»™entrypoint(ä¸»è¦ä»·å€¼æ˜¯æ‰“åŒ…é•œåƒåçš„å‚æ•°ä¼ é€’)ï¼Œé»˜è®¤æƒ…å†µä¸‹çš„entrypointæ˜¯bash/shï¼Œæ‰€ä»¥ç›¸å½“äºå°†å‚æ•°ç›´æ¥å½“ä½œprogramæ‰§è¡Œ
 *** CMD
-Ö÷ÒªÄ¿µÄ¾ÍÊÇÉèÖÃÄ¬ÈÏ²ÎÊı£¬entrypointÉèÖÃÁË¾Í´«¸øentrypoint£¬Íâ²¿ÉèÖÃÁË¾Í´«¸øÍâ²¿ÉèÖÃµÄprogram
+ä¸»è¦ç›®çš„å°±æ˜¯è®¾ç½®é»˜è®¤å‚æ•°ï¼Œentrypointè®¾ç½®äº†å°±ä¼ ç»™entrypointï¼Œå¤–éƒ¨è®¾ç½®äº†å°±ä¼ ç»™å¤–éƒ¨è®¾ç½®çš„program
 CMD ["/var/log/mailer.log"]
 *** --health-cmd
-Íâ²¿Ìá¹©½¡¿µ¼ì²éµÄ·½Ê½£¬Ê¹ÓÃ³¡¾°£¬±ÈÈçµÚÈı·½image¼¯³É£¬ĞèÒª¸²¸Ç
+å¤–éƒ¨æä¾›å¥åº·æ£€æŸ¥çš„æ–¹å¼ï¼Œä½¿ç”¨åœºæ™¯ï¼Œæ¯”å¦‚ç¬¬ä¸‰æ–¹imageé›†æˆï¼Œéœ€è¦è¦†ç›–
 docker container run --name=healthcheck_ex -d \
   --health-cmd='nc -vz -w 2 localhost 80 || exit 1' \
   nginx:1.13-alpine
 ** export/import
-°ÑÕû¸öcontainerµÄUFSÁªºÏºóµ¼³ö£¬¿ÉÒÔÑ¹Ëõlayer³ÉÎªÒ»¸ö£¬µ«ÊÇ¶ªÊ§ÁËmetadata
+æŠŠæ•´ä¸ªcontainerçš„UFSè”åˆåå¯¼å‡ºï¼Œå¯ä»¥å‹ç¼©layeræˆä¸ºä¸€ä¸ªï¼Œä½†æ˜¯ä¸¢å¤±äº†metadata
 docker container export --output contents.tar export-test
 docker container import
 * image
@@ -180,9 +180,9 @@ docker rmi busybox:latest
 docker load -i myfile.tar
 *** load from Dockerfile
 **** concept
-Dockerfile²»ÊÇÕæÕıµÄimage£¬¶øÊÇÒ»ÖÖÓÃÓÚÖ¸Ê¾¹¹½¨¹ı³ÌµÄ½Å±¾ÎÄ¼ş(ÓÃÓÚ½«ÊÖ¶¯attach container£¬Êµ¼Ê¹ı³ÌÒ²ÊÇÓëÊÖ¶¯Ò»ÖÂ£¬ÏÈ´´½¨container£¬È»ºó×Ô¶¯commit£¬tag£¬²¢Ê¹ÓÃµÄ¹ı³Ì½øĞĞÁËÃèÊö»¯£¬×Ô¶¯»¯)£¬Òò´Ë£¬Æä²»¾ß±¸ÈÎºÎÓëÊµ¼Êimage´æ´¢½á¹¹µÄÌØĞÔ£¬Ò²²»ÊÜÌå»ıÏŞÖÆ£¬¾ßÓĞ·½±ã°æ±¾¿ØÖÆ¼°ÒÆÖ²µÈ¶àÏî¹¦ÄÜ
-docker build -t [image_identifier] [the directory of Dockerfile] # Ö±½Ó½øÈëdocker¹ÜÀíµÄ¾µÏñÁĞ±í
-ÔÚDockerfileÖĞÊ¹ÓÃÒ»¶¨ÏŞ¶¨µÄlayerÇĞ·Ö£¬ÓĞÒ»¶¨µÄ¼ÛÖµ£¬ÒòÎªDocker builder¿ÉÒÔ»º´æ£¬Õë¶Ô³¤ºÄÊ±ÖîÈç±àÒëµÄÇé¿ö£¬ÊÊµ±ÇĞ·Ö£¬¿ÉÒÔÊ¹ÓÃ¼ÙÉèºóĞø²½Öè³öÎÊÌâÁË£¬²»ÖÁÓÚÖØĞÂ±àÒëÒ»²¨
+Dockerfileä¸æ˜¯çœŸæ­£çš„imageï¼Œè€Œæ˜¯ä¸€ç§ç”¨äºæŒ‡ç¤ºæ„å»ºè¿‡ç¨‹çš„è„šæœ¬æ–‡ä»¶(ç”¨äºå°†æ‰‹åŠ¨attach containerï¼Œå®é™…è¿‡ç¨‹ä¹Ÿæ˜¯ä¸æ‰‹åŠ¨ä¸€è‡´ï¼Œå…ˆåˆ›å»ºcontainerï¼Œç„¶åè‡ªåŠ¨commitï¼Œtagï¼Œå¹¶ä½¿ç”¨çš„è¿‡ç¨‹è¿›è¡Œäº†æè¿°åŒ–ï¼Œè‡ªåŠ¨åŒ–)ï¼Œå› æ­¤ï¼Œå…¶ä¸å…·å¤‡ä»»ä½•ä¸å®é™…imageå­˜å‚¨ç»“æ„çš„ç‰¹æ€§ï¼Œä¹Ÿä¸å—ä½“ç§¯é™åˆ¶ï¼Œå…·æœ‰æ–¹ä¾¿ç‰ˆæœ¬æ§åˆ¶åŠç§»æ¤ç­‰å¤šé¡¹åŠŸèƒ½
+docker build -t [image_identifier] [the directory of Dockerfile] # ç›´æ¥è¿›å…¥dockerç®¡ç†çš„é•œåƒåˆ—è¡¨
+åœ¨Dockerfileä¸­ä½¿ç”¨ä¸€å®šé™å®šçš„layeråˆ‡åˆ†ï¼Œæœ‰ä¸€å®šçš„ä»·å€¼ï¼Œå› ä¸ºDocker builderå¯ä»¥ç¼“å­˜ï¼Œé’ˆå¯¹é•¿è€—æ—¶è¯¸å¦‚ç¼–è¯‘çš„æƒ…å†µï¼Œé€‚å½“åˆ‡åˆ†ï¼Œå¯ä»¥ä½¿ç”¨å‡è®¾åç»­æ­¥éª¤å‡ºé—®é¢˜äº†ï¼Œä¸è‡³äºé‡æ–°ç¼–è¯‘ä¸€æ³¢
 **** demo
 # An example Dockerfile for installing Git on Ubuntu
 FROM ubuntu:latest
@@ -202,7 +202,7 @@ ENV APPROOT="/app" \
     APP="mailer.sh" \
     VERSION="0.6"
 LABEL base.name="Mailer Archetype" \
-      base.version="${VERSION}" # ENVÒıÓÃ
+      base.version="${VERSION}" # ENVå¼•ç”¨
 WORKDIR $APPROOT
 ADD . $APPROOT
 ENTRYPOINT ["/app/mailer.sh"]      1
@@ -216,15 +216,15 @@ EXPOSE 33333
 point file(default file name is Dockerfile) that content is valid build script
 ***** --quier
 ***** --no-cache
-¹Ø±Õcache
+å…³é—­cache
 ***** --target
 select execute stage
 **** instructions
-Ã¿¸öÖ¸¶¨¶¼ÊÇ²úÉúÒ»¸ö²ã£¬¿ÉÒÔ¿´µ½
+æ¯ä¸ªæŒ‡å®šéƒ½æ˜¯äº§ç”Ÿä¸€ä¸ªå±‚ï¼Œå¯ä»¥çœ‹åˆ°
 Step 2/4 : LABEL maintainer="dia@allingeek.com"
  ---> Running in 11140b391074
 Removing intermediate container 11140b391074
-ÏÈ½¨ÁËcontainer£¬È»ºócommit£¬È»ºóÉ¾µôcontainer£¬Òò´Ë£¬Ğ´DockerfileµÄ¹Ø¼üÔÚÓÚ¾¡¿ÉÄÜ°ÑÍ¬Ò»ĞÔÖÊµÄĞèÒªÅäÖÃµÄÃüÁî»òÕßÊôĞÔÔÚ¶ÔÓ¦·ûºÏµÄinstructionÖĞÅäÍê£¬²»Òª·Ö¿ªÅä£¬ÒòÎªdocker builderÓÅ»¯Á¦¶ÈÓĞÏŞ
+å…ˆå»ºäº†containerï¼Œç„¶åcommitï¼Œç„¶ååˆ æ‰containerï¼Œå› æ­¤ï¼Œå†™Dockerfileçš„å…³é”®åœ¨äºå°½å¯èƒ½æŠŠåŒä¸€æ€§è´¨çš„éœ€è¦é…ç½®çš„å‘½ä»¤æˆ–è€…å±æ€§åœ¨å¯¹åº”ç¬¦åˆçš„instructionä¸­é…å®Œï¼Œä¸è¦åˆ†å¼€é…ï¼Œå› ä¸ºdocker builderä¼˜åŒ–åŠ›åº¦æœ‰é™
 ***** FROM 
 FROM [image/layer]
 ***** LABEL
@@ -238,24 +238,24 @@ ENV APPROOT="/app" \
     VERSION="0.6"
 contend in same file could refer it using such as ${APP}
 ***** ENTRYPOINT
-ENTRYPOINT ["executable", "param1", "param2"] #Ò»°ãÓÃÕâ¸ö
-ENTRYPOINT command param1 param2 #µ¼ÖÂCMD´«µİµÄparamºÍÍâ²¿´«ÈëµÄparamÈ«¶¼ÎŞÊÓµô
+ENTRYPOINT ["executable", "param1", "param2"] #ä¸€èˆ¬ç”¨è¿™ä¸ª
+ENTRYPOINT command param1 param2 #å¯¼è‡´CMDä¼ é€’çš„paramå’Œå¤–éƒ¨ä¼ å…¥çš„paramå…¨éƒ½æ— è§†æ‰
 ***** COPY
 copy host's file to container's
-COPY ["./log-impl", "${APPROOT}"] #×îºóÒ»¸ö×îcontainerÎ»ÖÃ£¬ÆäËûÎªhostÎ»ÖÃ
+COPY ["./log-impl", "${APPROOT}"] #æœ€åä¸€ä¸ªæœ€containerä½ç½®ï¼Œå…¶ä»–ä¸ºhostä½ç½®
 ***** VOLUMN
 VOLUME ["/var/log"]
 ***** CMD
 CMD ["/var/log/mailer.log"]
 ***** ADD
-1. ¿ÉÒÔ×Ô¶¯½âÑ¹
-2. ¿ÉÒÔfetch remote resource(Ò»°ã²»ÓÃ)
+1. å¯ä»¥è‡ªåŠ¨è§£å‹
+2. å¯ä»¥fetch remote resource(ä¸€èˆ¬ä¸ç”¨)
 ***** ONBUILD
-parent imageµ¥´¿ÉùÃ÷£¬buildÊ±£¬²»Ö´ĞĞ£¬µ±child image fromÕâ¸öimageÊ±£¬buildµÄÊ±ºòÔÚÓÃ
+parent imageå•çº¯å£°æ˜ï¼Œbuildæ—¶ï¼Œä¸æ‰§è¡Œï¼Œå½“child image fromè¿™ä¸ªimageæ—¶ï¼Œbuildçš„æ—¶å€™åœ¨ç”¨
 ONBUILD COPY [".", "/var/myapp"]
 ONBUILD RUN go build /var/myapp
 ***** ARG
-²ÎÊı»¯build£¬±ÈÈçVERSIONµÈ
+å‚æ•°åŒ–buildï¼Œæ¯”å¦‚VERSIONç­‰
 ARG VERSION=unknown
 version=0.6; docker image build -t dockerinaction/mailer-base:${version} \
     -f mailer-base.df \
@@ -266,11 +266,11 @@ FROM nginx:1.13-alpine
 HEALTHCHECK --interval=5s --retries=2 \
   CMD nc -vz -w 2 localhost 80 || exit 1
 
-0: success¡ª The container is healthy and ready for use.
-1: unhealthy¡ª The container is not working correctly.
-2: reserved¡ª Do not use this exit code.
+0: successâ€” The container is healthy and ready for use.
+1: unhealthyâ€” The container is not working correctly.
+2: reservedâ€” Do not use this exit code.
 **** multistage dockerfile
-ĞèÒª¶à¸ö¹¹½¨½á¹ûÏà»¥½»»ãºó½øĞĞÍê³É(µäĞÍ±ÈÈç±àÒë»·¾³JDKºÍÔËĞĞ»·¾³JRE£¬¿ÉÒÔÍ¨¹ıÇĞÎªÁ½¶Ë£¬µÚ¶ş¶ÎÄÃµ½µÚÒ»¶ÎµÄ±àÒëºó´úÂë+JRE»·¾³£¬¼õÉÙ¾µÏñ´óĞ¡)£¬È»ºó¸´ÖÆÆäÖĞµÄÒ»Ğ©ÎÄ¼şµ½ÁíÒ»¸öimage
+éœ€è¦å¤šä¸ªæ„å»ºç»“æœç›¸äº’äº¤æ±‡åè¿›è¡Œå®Œæˆ(å…¸å‹æ¯”å¦‚ç¼–è¯‘ç¯å¢ƒJDKå’Œè¿è¡Œç¯å¢ƒJREï¼Œå¯ä»¥é€šè¿‡åˆ‡ä¸ºä¸¤ç«¯ï¼Œç¬¬äºŒæ®µæ‹¿åˆ°ç¬¬ä¸€æ®µçš„ç¼–è¯‘åä»£ç +JREç¯å¢ƒï¼Œå‡å°‘é•œåƒå¤§å°)ï¼Œç„¶åå¤åˆ¶å…¶ä¸­çš„ä¸€äº›æ–‡ä»¶åˆ°å¦ä¸€ä¸ªimage
 #################################################
 # Define a Builder stage and build app inside it
 FROM golang:1-alpine as builder
@@ -308,7 +308,7 @@ commit message
 ** principle
 1. a image bases on parent image(root image is scrathc provided by docker)
 2. a image is set of layers that command run in the parent image
-3. ËùÓĞlayerÊµÖÊÉÏ²»¿É±ä£¬image×îÖÕÒ²ÊÇÒÔlayer idÎªÖ÷½øĞĞ¶Ô×¼£¬ÏòÏÂÍêÕûÕ»µÄ¹¹½¨£¬ÔÚ´´½¨container£¬ÊµÏÖÁË¸ß¸´ÓÃĞÔÖÊ¡£
+3. æ‰€æœ‰layerå®è´¨ä¸Šä¸å¯å˜ï¼Œimageæœ€ç»ˆä¹Ÿæ˜¯ä»¥layer idä¸ºä¸»è¿›è¡Œå¯¹å‡†ï¼Œå‘ä¸‹å®Œæ•´æ ˆçš„æ„å»ºï¼Œåœ¨åˆ›å»ºcontainerï¼Œå®ç°äº†é«˜å¤ç”¨æ€§è´¨ã€‚
 ** tag
 for read
 *** docker tag
@@ -336,9 +336,9 @@ docker image tag dockerinaction/ch9_registry_bound \
     localhost:5000/dockerinaction/ch9_registry_bound
 docker image push localhost:5000/dockerinaction/ch9_registry_bound  
 *** distribute image file
-·ÅÆúdocker engine¶Ô¾µÏñµÄ¹ÜÀí£¬¼ÓÃÜ£¬registryµÈ
+æ”¾å¼ƒdocker engineå¯¹é•œåƒçš„ç®¡ç†ï¼ŒåŠ å¯†ï¼Œregistryç­‰
 *** Image source distribution
-gitµÈVCSÖ±½Ó¹ÜÀíDockerfileÎÄ¼ş
+gitç­‰VCSç›´æ¥ç®¡ç†Dockerfileæ–‡ä»¶
 * service
 ** create
 docker swarm init      # enable swarm mode
@@ -358,9 +358,9 @@ docker service update \ #rolling out
 ** rollback
 docker service update \
     --rollback \
-    hello-world # ½«Õû¸ö·şÎñµÄÊµÀıÇĞ»»ÎªÉÏÒ»¸ödesired status
+    hello-world # å°†æ•´ä¸ªæœåŠ¡çš„å®ä¾‹åˆ‡æ¢ä¸ºä¸Šä¸€ä¸ªdesired status
 
---update-failure-action # ¸üĞÂÊ±Ö¸¶¨Ê§°Üºó»Ø¹ö
+--update-failure-action # æ›´æ–°æ—¶æŒ‡å®šå¤±è´¥åå›æ»š
  --update-max-failure-ratio 
 * stack
 ** demo
@@ -383,9 +383,9 @@ services:
         ports:
             - 8080:8080
 #+END_SRC
-docker stack deploy -c databases.yml my-databases # Æô¶¯ºÍ¸üĞÂ¶¼ÊÇÍ¬Ò»Ìõ£¬ÓÉDocker×Ô¼º½øĞĞ¼à²â±ä¶¯£¬²¢×Ô¶¯½¨Á¢Á¬½ÓÍøÂç
+docker stack deploy -c databases.yml my-databases # å¯åŠ¨å’Œæ›´æ–°éƒ½æ˜¯åŒä¸€æ¡ï¼Œç”±Dockerè‡ªå·±è¿›è¡Œç›‘æµ‹å˜åŠ¨ï¼Œå¹¶è‡ªåŠ¨å»ºç«‹è¿æ¥ç½‘ç»œ
 
-docker stack deploy \ # µ±·şÎñÁĞ±íĞèÒªÉ¾µôÒ»Ğ©£¬ÖØĞÂÉèÖÃstackÊ±£¬ĞèÒªÖ¸¶¨--prune£¬·ñÔòdockerÃ»ÓĞ±»composeÒıÓÃµ½µÄresource(service£¬network,volumn)£¬È«Çåµô
+docker stack deploy \ # å½“æœåŠ¡åˆ—è¡¨éœ€è¦åˆ æ‰ä¸€äº›ï¼Œé‡æ–°è®¾ç½®stackæ—¶ï¼Œéœ€è¦æŒ‡å®š--pruneï¼Œå¦åˆ™dockeræ²¡æœ‰è¢«composeå¼•ç”¨åˆ°çš„resource(serviceï¼Œnetwork,volumn)ï¼Œå…¨æ¸…æ‰
   -c databases.yml \
   --prune \
   my-databases
@@ -393,7 +393,7 @@ docker stack deploy \ # µ±·şÎñÁĞ±íĞèÒªÉ¾µôÒ»Ğ©£¬ÖØĞÂÉèÖÃstackÊ±£¬ĞèÒªÖ¸¶¨--prune
 #+BEGIN_SRC yaml
 version: "3.7"
 volumes:
-    pgdata: # empty definition uses volume defaults£¬Èç¹û²»Ö¸¶¨volumn£¬Ò»¸öserviceµÄÈ«²¿container¶¼ÊÇµ¥¶ÀĞÂ½¨Ò»¸övolumn¹ÒÉÏ£¬µ¼ÖÂ×ÊÔ´ÎŞ·¨¹²Ïí
+    pgdata: # empty definition uses volume defaultsï¼Œå¦‚æœä¸æŒ‡å®švolumnï¼Œä¸€ä¸ªserviceçš„å…¨éƒ¨containeréƒ½æ˜¯å•ç‹¬æ–°å»ºä¸€ä¸ªvolumnæŒ‚ä¸Šï¼Œå¯¼è‡´èµ„æºæ— æ³•å…±äº«
 services:
     postgres:
         image: dockerinaction/postgres:11-alpine
@@ -412,9 +412,9 @@ services:
 #+END_SRC
 ** config
 *** file resources
-1. docker configÔÚ¶ÁÈ¡ºó£¬ÉèÖÃÀÖresource nameºÍid±ê×¼µ±Ç°µÄ×ÊÔ´ÀàĞÍ
-2. docker²ÉÓÃÖ§³ÖÎÈ¶¨ÒÀÀµµÄ×ÊÔ´¹ÜÀíĞÎÊ½(¼´Èç¹û±»ÀûÓÃµÄÎÄ¼ş×ÊÔ´±»¸ÄÁËÖ®ºó£¬¸Ã×ÊÔ´¼ÆËã³öÀ´µÄid²»Ò»ÖÂ£¬ÎÄ¼şÃû²»±ä£¬ÊÓÎªÖØĞÂ²¿ÊğÊ§°Ü)
-3. ½â¾ö2µÄ´¦ÀíÓĞÁ½Õß£¬Ò»ÖÖÊÇÖ÷ÅäÖÃÎÄ¼ş¶ÁÈ¡configÊ±£¬±»ÅäÖÃ×ÊÔ´£¬ÔÚ¸Ä¶¯Ê±£¬Ãû×ÖÒ²¸Ä£¬´Ó¶ø¹æ±ÜÒÀÀµĞÔÎÊÌâ£¬µÚ¶şÖÖÊÇÕû¸östackÍ£µô£¬rm config£¬ÖØ¿ªstack
+1. docker configåœ¨è¯»å–åï¼Œè®¾ç½®ä¹resource nameå’Œidæ ‡å‡†å½“å‰çš„èµ„æºç±»å‹
+2. dockeré‡‡ç”¨æ”¯æŒç¨³å®šä¾èµ–çš„èµ„æºç®¡ç†å½¢å¼(å³å¦‚æœè¢«åˆ©ç”¨çš„æ–‡ä»¶èµ„æºè¢«æ”¹äº†ä¹‹åï¼Œè¯¥èµ„æºè®¡ç®—å‡ºæ¥çš„idä¸ä¸€è‡´ï¼Œæ–‡ä»¶åä¸å˜ï¼Œè§†ä¸ºé‡æ–°éƒ¨ç½²å¤±è´¥)
+3. è§£å†³2çš„å¤„ç†æœ‰ä¸¤è€…ï¼Œä¸€ç§æ˜¯ä¸»é…ç½®æ–‡ä»¶è¯»å–configæ—¶ï¼Œè¢«é…ç½®èµ„æºï¼Œåœ¨æ”¹åŠ¨æ—¶ï¼Œåå­—ä¹Ÿæ”¹ï¼Œä»è€Œè§„é¿ä¾èµ–æ€§é—®é¢˜ï¼Œç¬¬äºŒç§æ˜¯æ•´ä¸ªstackåœæ‰ï¼Œrm configï¼Œé‡å¼€stack
 #+BEGIN_SRC yaml
 version: '3.7'
 
@@ -445,7 +445,7 @@ DEPLOY_ENV=dev docker stack deploy \
 
 docker config
 *** secrets
-# Ë½Ô¿
+# ç§é’¥
 cat api/config/insecure.key | \
     docker secret create ch12_greetings-svc-prod-TLS_PRIVATE_KEY_V1 -
 vnyy0gr1a09be0vcfvvqogeoj
@@ -453,11 +453,11 @@ docker secret inspect ch12_greetings-svc-prod-TLS_PRIVATE_KEY_V1
 docker config create \
     ch12_greetings_svc-prod-TLS_CERT_V1 api/config/insecure.crt
 5a1lybiyjnaseg0jlwj2s1v5m
-# ¹«Ô¿
+# å…¬é’¥
 docker config create \
     ch12_greetings_svc-prod-TLS_CERT_V1 api/config/insecure.crt
 
-# Æô¶¯
+# å¯åŠ¨
 DEPLOY_ENV=prod docker stack deploy \
     --compose-file docker-compose.yml \
     --compose-file docker-compose.prod.yml \
@@ -482,13 +482,13 @@ docker service inspect hello-world
 ** Container
 *** check
 **** docker ps
--a ¿´È«²¿£¬Ä¬ÈÏ¿´ÔËĞĞÖĞµÄ
+-a çœ‹å…¨éƒ¨ï¼Œé»˜è®¤çœ‹è¿è¡Œä¸­çš„
 **** docker logs -f [containerId]
--fÓëtailÀàËÆ£¬¿´deamonÄÚµÄÊä³öÇé¿ö
+-fä¸tailç±»ä¼¼ï¼Œçœ‹deamonå†…çš„è¾“å‡ºæƒ…å†µ
 **** docker port [containerId]
 **** docker top [containerId]
 **** docket inspect [containerId]
-·µ»ØÃèÊöcontainerÕûÌåµÄJSONÎÄ¼ş
+è¿”å›æè¿°containeræ•´ä½“çš„JSONæ–‡ä»¶
 * share data
 ** local filesystems
 CONF_SRC=~/example.conf; \
@@ -541,7 +541,7 @@ docker volume create \
 
 
 docker run -d \
-    --volume cass-shared:/var/lib/cassandra/data \     #´´½¨ÈİÆ÷µÄÊ±ºò×Ô¶¯½¨Á¢
+    --volume cass-shared:/var/lib/cassandra/data \     #åˆ›å»ºå®¹å™¨çš„æ—¶å€™è‡ªåŠ¨å»ºç«‹
     --name cass1 \
     cassandra:2.2
 
@@ -551,7 +551,7 @@ docker run --name fowler \
     alpine:latest \
     echo "Fowler collection created."
 docker run --name knuth \
-    --mount type=volume,dst=/library/TAoCP.vol1 \ #ÄäÃûvolume
+    --mount type=volume,dst=/library/TAoCP.vol1 \ #åŒ¿åvolume
     --mount type=volume,dst=/library/TAoCP.vol2 \
     --mount type=volume,dst=/library/TAoCP.vol3 \
     --mount type=volume,dst=/library/TAoCP.vol4.a \
@@ -559,14 +559,14 @@ docker run --name knuth \
     echo "Knuth collection created"
 
 docker run --name reader \                          
-    --volumes-from fowler \                        # ¿½±´¶ÔÓ¦containerµÄ¹ÒÔØvolume
+    --volumes-from fowler \                        # æ‹·è´å¯¹åº”containerçš„æŒ‚è½½volume
     --volumes-from knuth \                          
     alpine:latest ls -l /library/
 
 docker inspect --format "{{json .Mounts}}" reader   
 *** clean
 anonymous volume auto delete when all container that refer it is delete
-docker volume prune --filter example=cassandra #×Ô¶¯¼ì²â¿É±»ÇåÀíµÄvolume£¬×îºóµÄÊÇlabel
+docker volume prune --filter example=cassandra #è‡ªåŠ¨æ£€æµ‹å¯è¢«æ¸…ç†çš„volumeï¼Œæœ€åçš„æ˜¯label
 docker volume remove [cid/cname]
 *** inspect
 docker volume list
@@ -574,10 +574,10 @@ docker volume inspect \
     --format "{{json .Mountpoint}}" \ 
     location-example
 *** plugin
-ÓÃÓÚÁ¬½Ó¸÷ÖÖÎÄ¼şÏµÍ³£¬°üÀ¨±¾µØ£¬×Ô½¨ÔÆ£¬¹«ÓĞÔÆµÈ¸÷Àà½â¾ö·½°¸
+ç”¨äºè¿æ¥å„ç§æ–‡ä»¶ç³»ç»Ÿï¼ŒåŒ…æ‹¬æœ¬åœ°ï¼Œè‡ªå»ºäº‘ï¼Œå…¬æœ‰äº‘ç­‰å„ç±»è§£å†³æ–¹æ¡ˆ
 --driver=xxx
 **** local
-Ê¹ÓÃ±¾µØµÄÎÄ¼şÏµÍ³
+ä½¿ç”¨æœ¬åœ°çš„æ–‡ä»¶ç³»ç»Ÿ
 * network connect
 ** default networks
 *** bridge
@@ -598,11 +598,11 @@ docker network create \
   --ip-range 10.0.42.128/25 \
   user-network
 
-docker network connect user-network2 network-explorer # ½«ip·Ö·¢µ½container£¬ÊµÏÖconnect
+docker network connect user-network2 network-explorer # å°†ipåˆ†å‘åˆ°containerï¼Œå®ç°connect
 ** nodeport publishing
-Ä¬ÈÏÇé¿öÏÂ£¬containerÄÚ²¿Ê¹ÓÃnat½øĞĞÁË¶ÔÍâ²¿ÍøÂçµÄ·ÃÎÊ£¬¶øÍâ²¿ÎŞ·¨Ö±½Ó·ÃÎÊµ½container£¬Òò´ËĞèÒªÉèÖÃÖ÷»ú¶ÔÓ¦¶Ë¿Ú×ª·¢½øcontainer¶Ë¿Ú£¬ÓÃÀ´ÊµÏÖÁËcontainer¶ÔÍâ±©Â¶·şÎñ
+é»˜è®¤æƒ…å†µä¸‹ï¼Œcontainerå†…éƒ¨ä½¿ç”¨natè¿›è¡Œäº†å¯¹å¤–éƒ¨ç½‘ç»œçš„è®¿é—®ï¼Œè€Œå¤–éƒ¨æ— æ³•ç›´æ¥è®¿é—®åˆ°containerï¼Œå› æ­¤éœ€è¦è®¾ç½®ä¸»æœºå¯¹åº”ç«¯å£è½¬å‘è¿›containerç«¯å£ï¼Œç”¨æ¥å®ç°äº†containerå¯¹å¤–æš´éœ²æœåŠ¡
 docker run --rm \
-  -p 8080 \ #Ö÷»úËæ»úÌôÒ»¸ö¶Ë¿ÚÓ³Éäµ½containerµÄ8080
+  -p 8080 \ #ä¸»æœºéšæœºæŒ‘ä¸€ä¸ªç«¯å£æ˜ å°„åˆ°containerçš„8080
   alpine:3.8 echo "forward ephemeral TCP -> container TCP 8080"
 
 docker run --rm \
@@ -614,15 +614,15 @@ docker run --rm \
   -p 127.0.0.1:3000:3000/tcp \
   alpine:3.8 echo "forward multiple TCP ports from localhost"
 
-docker port zen_greider[cid/cname] # ¼ì²écontainerµÄ¶Ë¿ÚÓ³Éä
+docker port zen_greider[cid/cname] # æ£€æŸ¥containerçš„ç«¯å£æ˜ å°„
 * attach and detach
 * resources controll
 ** memory
---memory/-m #ÏŞÖÆÊ¹ÓÃµÄÄÚ´æ
-¸ù¾İDockerÔËĞĞÆ½Ì¨¾ö¶¨ÊÇ·ñÆôÓÃÌØĞÔ×¢Èëswap
+--memory/-m #é™åˆ¶ä½¿ç”¨çš„å†…å­˜
+æ ¹æ®Dockerè¿è¡Œå¹³å°å†³å®šæ˜¯å¦å¯ç”¨ç‰¹æ€§æ³¨å…¥swap
 ** CPU
 *** --cpu-shares 
-# ÉèÖÃÈ¨ÖØ£¬ÇóºÍºó°´°Ù·Ö±È£¬·ÖÅäÖ´ĞĞÖÜÆÚ±È£¬¼´¿ÕÏĞÊ±£¬ÍêÈ«ÀûÓÃ£¬²»×ãÊ±£¬³¯°´±ÈÀı·ÖÅäÖ´ĞĞ
+# è®¾ç½®æƒé‡ï¼Œæ±‚å’ŒåæŒ‰ç™¾åˆ†æ¯”ï¼Œåˆ†é…æ‰§è¡Œå‘¨æœŸæ¯”ï¼Œå³ç©ºé—²æ—¶ï¼Œå®Œå…¨åˆ©ç”¨ï¼Œä¸è¶³æ—¶ï¼ŒæœæŒ‰æ¯”ä¾‹åˆ†é…æ‰§è¡Œ
 docker container run -d -P --name ch6_wordpress \
 --memory 512m \
 --cpu-shares 512 \           1
@@ -631,7 +631,7 @@ docker container run -d -P --name ch6_wordpress \
 -e WORDPRESS_DB_PASSWORD=test \
 wordpress:5.0.0-php7.2-apache
 *** --cpus
-# ÏŞÖÆCPUÅä¶îÊ¹ÓÃÂÊ
+# é™åˆ¶CPUé…é¢ä½¿ç”¨ç‡
 docker container run -d -P --name ch6_wordpress \ 
 --memory 512m \
 --cpus 0.75 \                
@@ -640,7 +640,7 @@ docker container run -d -P --name ch6_wordpress \
 -e WORDPRESS_DB_PASSWORD=test \
 wordpress:5.0.0-php7.2-apache
 *** --cpuset-cpus
-# ÏŞÖÆcontainerÔÚCPUÖ¸¶¨ºËĞÄÔËĞĞ£¬save context switch cost
+# é™åˆ¶containeråœ¨CPUæŒ‡å®šæ ¸å¿ƒè¿è¡Œï¼Œsave context switch cost
 # Start a container limited to a single CPU and run a load generator
 docker container run -d \
     --cpuset-cpus 0 \                                   
@@ -663,8 +663,8 @@ docker container run -d --name ch6_ipc_consumer \
     dockerinaction/ch6_ipc -consumer
 * concept
 ** portability
-1. ¶ÔÓÚÒÀÀµÓÚÏµÍ³¼¶±ğµÄÈí¼ş·Ö·¢£¬ÎŞ·¨×öµ½ÍêÈ«ÊÊÅä 
-2. dockerÔ­ÉúÔËĞĞÔÚlinuxÉÏ£¨Ê¹ÓÃÁËlinux£©£¬ÎªwindowsºÍmacosÌá¹©ÁË¸÷×ÔÌØ¶¨µÄĞéÄâ»ú
+1. å¯¹äºä¾èµ–äºç³»ç»Ÿçº§åˆ«çš„è½¯ä»¶åˆ†å‘ï¼Œæ— æ³•åšåˆ°å®Œå…¨é€‚é… 
+2. dockeråŸç”Ÿè¿è¡Œåœ¨linuxä¸Šï¼ˆä½¿ç”¨äº†linuxï¼‰ï¼Œä¸ºwindowså’Œmacosæä¾›äº†å„è‡ªç‰¹å®šçš„è™šæ‹Ÿæœº
 ** pid namespace
 each container has its own namespace
 ** state
@@ -684,11 +684,11 @@ docker run --publish 8080:80 --name hello-world [image]
 docker update --restart=always mongo-dev
 docker --tail 100 [pid/pname]
 docker logs -f [pid/name] //all logs
-# ÅÜÍê¾ÍÉ¾³ı
+# è·‘å®Œå°±åˆ é™¤
 docker run -it --rm  top.gobrad/questionnaire /bin/bash 
 docker image build --tag qqqq .
 
-# É¾³ıÈ«²¿
+# åˆ é™¤å…¨éƒ¨
 docker rm -f $(docker ps -aq)
 
 docker container ls -a

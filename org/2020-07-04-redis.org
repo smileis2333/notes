@@ -12,7 +12,7 @@ config get *
 config set [settingName]
 config set *
 ** command 
-*** Êı¾İÀàĞÍ
+*** æ•°æ®ç±»å‹
 **** string
 ***** set [keyName] [ketValue]
 SET myKey "test"
@@ -21,24 +21,24 @@ SET myKey "test"
 ***** GETSET [keyName] value
 ***** mget [key1] [key2]...
 ***** SETNX key value
-²»´æÔÚÊ±²ÅÉèÖÃ
+ä¸å­˜åœ¨æ—¶æ‰è®¾ç½®
 **** hash
-hashÊÇÒ»¸ö¼üÖµ¶Ô¼¯ºÏ£¬Ïà¶ÔÓÚ´æÒ»¸ömap
+hashæ˜¯ä¸€ä¸ªé”®å€¼å¯¹é›†åˆï¼Œç›¸å¯¹äºå­˜ä¸€ä¸ªmap
 ***** hsset [keyName] [fieldName] [value] [fieldName] [value2]
 hget [keyName]
 eg.
-HMSET runoob field1 "Hello" field2 "World" Ïàµ±ÓÚ³õÊ¼»¯
+HMSET runoob field1 "Hello" field2 "World" ç›¸å½“äºåˆå§‹åŒ–
 ***** hget [keyName] [fieldName]
 HGET runoob field1
 HGET runoob field2
 ***** hset [keyName] [fieldName] [value]
-HSET runoob f1 1 Ö»ÄÜÒ»¸öÒ»¸ö
+HSET runoob f1 1 åªèƒ½ä¸€ä¸ªä¸€ä¸ª
 ***** hlen [keyName]
 ***** hdel [keyName] [fieldName]
 **** list
 ***** lpush [keyName] value1 value2 ...
-ÍÆµ½ÁĞ±íÍ·²¿
-***** lrange [keyName] [start] [stop] [start,stop]ÊÇ±ÕÇø¼ä
+æ¨åˆ°åˆ—è¡¨å¤´éƒ¨
+***** lrange [keyName] [start] [stop] [start,stop]æ˜¯é—­åŒºé—´
 ***** llen [keyName]
 ***** lpop [keyName]
 ***** lindex [keyName] [index]
@@ -46,7 +46,7 @@ HSET runoob f1 1 Ö»ÄÜÒ»¸öÒ»¸ö
 ***** sadd [keyName] [member1] [member2] ...
 ***** smembers [keyName]
 ***** scard [keyName]
-¿´ÊıÄ¿
+çœ‹æ•°ç›®
 **** zset
 ***** zadd [keyName] [score] [member]
 ***** zcard [keyName]
@@ -56,17 +56,17 @@ HSET runoob f1 1 Ö»ÄÜÒ»¸öÒ»¸ö
 **** redis-cli
  redis-cli -h 127.0.0.1 -p 6379
 **** ping
-Õı³£·µ»Øpong
+æ­£å¸¸è¿”å›pong
 **** quit
-¶Ï¿ªÁ¬½Ó
+æ–­å¼€è¿æ¥
 **** select [index]
-ÇĞ»»Êı¾İ¿â
+åˆ‡æ¢æ•°æ®åº“
 **** auth [password]
-ÇĞ»»ÃÜÂëÊÇ·ñÕıÈ·
+åˆ‡æ¢å¯†ç æ˜¯å¦æ­£ç¡®
 **** CONFIG set requirepass "runoob"
-¸ÄÃÜÂë
+æ”¹å¯†ç 
 **** CONFIG get requirepass
-²é¿´ÃÜÂë
+æŸ¥çœ‹å¯†ç 
 *** key op
 **** del [keyName]
 **** exists [keyName]
@@ -75,15 +75,15 @@ HSET runoob f1 1 Ö»ÄÜÒ»¸öÒ»¸ö
 **** PEXPIRE [keyName] [milliseconds]
 **** MOVE [keyName] [dbName]
 **** PERSIST [keyName]
-Ê¹Æä²»»á¹ıÆÚ
+ä½¿å…¶ä¸ä¼šè¿‡æœŸ
 **** RENAME [keyName] [newkeyName]
 **** RENAMENX [keyName] [newkeyName]
-Èç¹ûnewkeyName²»´æÔÚ£¬ÔÚ¸ÄÃû
+å¦‚æœnewkeyNameä¸å­˜åœ¨ï¼Œåœ¨æ”¹å
 **** TYPE [keyName]
-*** ÊÂÎñ
-redisµÄÊÂÎñ²»Ö§³Ö»Ø¹ö£¬Æä±¾ÖÊÊÇÃüÁî´ò°ü
+*** äº‹åŠ¡
+redisçš„äº‹åŠ¡ä¸æ”¯æŒå›æ»šï¼Œå…¶æœ¬è´¨æ˜¯å‘½ä»¤æ‰“åŒ…
 MULTI
-ÃüÁîĞòÁĞ... 
+å‘½ä»¤åºåˆ—... 
 EXEC
 * program
 ** java
@@ -113,7 +113,7 @@ class Config {
                                             MessageListenerAdapter listenerAdapter) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(listenerAdapter, new PatternTopic("redismq")); //ÅäÖÃÒª¶©ÔÄµÄ¶©ÔÄÏî
+        container.addMessageListener(listenerAdapter, new PatternTopic("redismq")); //é…ç½®è¦è®¢é˜…çš„è®¢é˜…é¡¹
         return container;
     }
 

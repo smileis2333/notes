@@ -1,22 +1,22 @@
 #+TITLE: shiro
 #+STARTUP: indent
 * Subject
-´ú±íÓÃ»§£¬²»Ò»¶¨ÊÇHttpSession£¬ShiroÄÜÔÚ¾ßÌå»·¾³ÏÂ×Ô¶¯ÇĞ»»SessionÊµÀı£¬Èç
-- ¿Í»§¶ËÓ¦ÓÃÖ±½Ó¶ÁÓÃ»§Êı¾İ
-- ·şÎñÆ÷Ó¦ÓÃÖ±½ÓÒÔHttpSessionÎªÄÚÈİ×÷·â×°
-- ¿ÉÄÜÊÇµÚÈı·½½ø³Ì
+ä»£è¡¨ç”¨æˆ·ï¼Œä¸ä¸€å®šæ˜¯HttpSessionï¼ŒShiroèƒ½åœ¨å…·ä½“ç¯å¢ƒä¸‹è‡ªåŠ¨åˆ‡æ¢Sessionå®ä¾‹ï¼Œå¦‚
+- å®¢æˆ·ç«¯åº”ç”¨ç›´æ¥è¯»ç”¨æˆ·æ•°æ®
+- æœåŠ¡å™¨åº”ç”¨ç›´æ¥ä»¥HttpSessionä¸ºå†…å®¹ä½œå°è£…
+- å¯èƒ½æ˜¯ç¬¬ä¸‰æ–¹è¿›ç¨‹
 - cron job
 * Session
-1. Ìá¹©ÁËno-webºÍwebµÄÊµÏÖ
-2. timeout»úÀíÊÇÔÚ·ÃÎÊµÄÊ±ºò²ÅĞ£Ñé(subject.getSession()£¬ÎªÁËĞÔÄÜ¿¼ÂÇ)
-3. ÓÉÓÚ2µÄÔ­Òò(¼´²»·ÃÎÊ¾ÍÒ»Ö±Õ¼ÓÃÄÚ´æ)£¬±ØĞë¿ªÆô¶¨Ê±ÈÎÎñ½øĞĞ¶¨ÆÚpurge session
+1. æä¾›äº†no-webå’Œwebçš„å®ç°
+2. timeoutæœºç†æ˜¯åœ¨è®¿é—®çš„æ—¶å€™æ‰æ ¡éªŒ(subject.getSession()ï¼Œä¸ºäº†æ€§èƒ½è€ƒè™‘)
+3. ç”±äº2çš„åŸå› (å³ä¸è®¿é—®å°±ä¸€ç›´å ç”¨å†…å­˜)ï¼Œå¿…é¡»å¼€å¯å®šæ—¶ä»»åŠ¡è¿›è¡Œå®šæœŸpurge session
 * SecurityManager
 * Realms
 ** demo
 #+BEGIN_SRC java
 
 #+END_SRC
-** ¶àrealmÅäÖÃ
+** å¤šrealmé…ç½®
 #+BEGIN_SRC xml
 <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="cacheManager" ref="cacheManager"/>
@@ -27,7 +27,7 @@
             </list>
         </property>
     </bean>
-    <!--Ê¡ÂÔÆäËûÅäÖÃ -->
+    <!--çœç•¥å…¶ä»–é…ç½® -->
     <bean id="jdbcRealm" class="com.progor.realms.MyRealm">
         <property name="credentialsMatcher">
             <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
@@ -39,11 +39,11 @@
     <bean id="secondRealm" class="com.progor.realms.SecondRealm"></bean>
 #+END_SRC
 * Authenticator
-** ÈÏÖ¤²ßÂÔ
-realmÖ§³Ö¶à¸ö£¬Ò»°ãÇé¿öÏÂÒ»¸öÍ¨ÁË¾ÍËãÈÏÖ¤Íê±ÏÁË£¬¿ÉÒÔ¸Ä
-FirstSuccessfulStrategy£ºÖ»ÒªÓĞÒ»¸ö Realm ÑéÖ¤³É¹¦¼´¿É£¬Ö»·µ»ØµÚÒ»¸ö Realm Éí·İÑéÖ¤³É¹¦µÄÈÏÖ¤ĞÅÏ¢£¬ÆäËûµÄºöÂÔ£»
-AtLeastOneSuccessfulStrategy£ºÖ»ÒªÓĞÒ»¸ö Realm ÑéÖ¤³É¹¦¼´¿É£¬ºÍ FirstSuccessfulStrategy²»Í¬£¬·µ»ØËùÓĞ Realm Éí·İÑéÖ¤³É¹¦µÄÈÏÖ¤ĞÅÏ¢£»
-AllSuccessfulStrategy£ºËùÓĞ Realm ÑéÖ¤³É¹¦²ÅËã³É¹¦£¬ÇÒ·µ»ØËùÓĞ Realm Éí·İÑéÖ¤³É¹¦µÄÈÏÖ¤ĞÅÏ¢£¬Èç¹ûÓĞÒ»¸öÊ§°Ü¾ÍÊ§°ÜÁË¡£
+** è®¤è¯ç­–ç•¥
+realmæ”¯æŒå¤šä¸ªï¼Œä¸€èˆ¬æƒ…å†µä¸‹ä¸€ä¸ªé€šäº†å°±ç®—è®¤è¯å®Œæ¯•äº†ï¼Œå¯ä»¥æ”¹
+FirstSuccessfulStrategyï¼šåªè¦æœ‰ä¸€ä¸ª Realm éªŒè¯æˆåŠŸå³å¯ï¼Œåªè¿”å›ç¬¬ä¸€ä¸ª Realm èº«ä»½éªŒè¯æˆåŠŸçš„è®¤è¯ä¿¡æ¯ï¼Œå…¶ä»–çš„å¿½ç•¥ï¼›
+AtLeastOneSuccessfulStrategyï¼šåªè¦æœ‰ä¸€ä¸ª Realm éªŒè¯æˆåŠŸå³å¯ï¼Œå’Œ FirstSuccessfulStrategyä¸åŒï¼Œè¿”å›æ‰€æœ‰ Realm èº«ä»½éªŒè¯æˆåŠŸçš„è®¤è¯ä¿¡æ¯ï¼›
+AllSuccessfulStrategyï¼šæ‰€æœ‰ Realm éªŒè¯æˆåŠŸæ‰ç®—æˆåŠŸï¼Œä¸”è¿”å›æ‰€æœ‰ Realm èº«ä»½éªŒè¯æˆåŠŸçš„è®¤è¯ä¿¡æ¯ï¼Œå¦‚æœæœ‰ä¸€ä¸ªå¤±è´¥å°±å¤±è´¥äº†ã€‚
 #+BEGIN_SRC xml
  <bean id="authenticator"
           class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
@@ -60,22 +60,22 @@ AllSuccessfulStrategy£ºËùÓĞ Realm ÑéÖ¤³É¹¦²ÅËã³É¹¦£¬ÇÒ·µ»ØËùÓĞ Realm Éí·İÑéÖ¤³É¹
 <bean id="jdbcRealm" class="com.progor.realms.MyRealm">
     <property name="credentialsMatcher">
         <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
-            <!--¶¨Òå¼ÓÃÜµÄËã·¨-->
+            <!--å®šä¹‰åŠ å¯†çš„ç®—æ³•-->
             <property name="hashAlgorithmName" value="MD5"></property>
-            <!--¶à´Î¼ÓÃÜ-->
+            <!--å¤šæ¬¡åŠ å¯†-->
             <property name="hashIterations" value="1024"></property>
         </bean>
     </property>
 </bean>
 #+END_SRC
-** realmÖĞ¼ÓÑÎ
+** realmä¸­åŠ ç›
 #+BEGIN_SRC java
-String salt = "lilei";//¼ÙÉèÕâ¸öÑÎÖµÊÇ´ÓÊı¾İ¿âÖĞ²é³öµÄ
+String salt = "lilei";//å‡è®¾è¿™ä¸ªç›å€¼æ˜¯ä»æ•°æ®åº“ä¸­æŸ¥å‡ºçš„
 ByteSource credentialsSalt = ByteSource.Util.bytes(salt);
 SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(upToken.getUsername(),password,credentialsSalt,this.getName());
 #+END_SRC
-* ¼¯³Éspring mvc
-** ÅäÖÃÀ¹½ØÆ÷
+* é›†æˆspring mvc
+** é…ç½®æ‹¦æˆªå™¨
 #+BEGIN_SRC xml
   <filter>
     <filter-name>shiroFilter</filter-name>
@@ -91,7 +91,7 @@ SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(upToken.getUsername
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 #+END_SRC
-** À¹½Ø/*
+** æ‹¦æˆª/*
 #+BEGIN_SRC xml
   <servlet>
     <servlet-name>spring</servlet-name>
@@ -107,7 +107,7 @@ SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(upToken.getUsername
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 #+END_SRC
-** ÅäÖÃspring context
+** é…ç½®spring context
 #+BEGIN_SRC xml
   <context-param>
     <param-name>contextConfigLocation</param-name>
@@ -118,7 +118,7 @@ SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(upToken.getUsername
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 #+END_SRC
-** spring contextÅäÖÃshiro
+** spring contexté…ç½®shiro
 #+BEGIN_SRC xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -129,9 +129,9 @@ SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(upToken.getUsername
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-	<!--1. ÅäÖÃ SecurityManager!-->
+	<!--1. é…ç½® SecurityManager!-->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-		<!--»º´æ¹ÜÀíÆ÷-->
+		<!--ç¼“å­˜ç®¡ç†å™¨-->
         <property name="cacheManager" ref="cacheManager"/>
 		<!--realms-->
         <property name="realms">
@@ -141,27 +141,27 @@ SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(upToken.getUsername
         </property>
     </bean>
 
-	<!--2. ÅäÖÃ CacheManager»º´æ¹ÜÀíÆ÷.-->
+	<!--2. é…ç½® CacheManagerç¼“å­˜ç®¡ç†å™¨.-->
     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-		<!--»º´æÅäÖÃÎÄ¼ş£¨ÕâÀïÔİ²»Éæ¼°£¬¿ÉÒÔËæ±ã¿½±´Ò»¸ö£©-->
+		<!--ç¼“å­˜é…ç½®æ–‡ä»¶ï¼ˆè¿™é‡Œæš‚ä¸æ¶‰åŠï¼Œå¯ä»¥éšä¾¿æ‹·è´ä¸€ä¸ªï¼‰-->
         <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
     </bean>
 
-	<!--3. ÅäÖÃ Realm-->
+	<!--3. é…ç½® Realm-->
     <bean id="jdbcRealm" class="com.progor.realms.MyRealm">
     </bean>
 
-	<!--4. ÅäÖÃ LifecycleBeanPostProcessor£¬ÓÃÀ´¹ÜÀíshiroÒ»Ğ©beanµÄÉúÃüÖÜÆÚ-->
+	<!--4. é…ç½® LifecycleBeanPostProcessorï¼Œç”¨æ¥ç®¡ç†shiroä¸€äº›beançš„ç”Ÿå‘½å‘¨æœŸ-->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
-	<!--5. ÆôÓÃshiro µÄ×¢½â¡£µ«±ØĞëÔÚÅäÖÃÁË LifecycleBeanPostProcessor Ö®ºó²Å¿ÉÒÔÊ¹ÓÃ-->
+	<!--5. å¯ç”¨shiro çš„æ³¨è§£ã€‚ä½†å¿…é¡»åœ¨é…ç½®äº† LifecycleBeanPostProcessor ä¹‹åæ‰å¯ä»¥ä½¿ç”¨-->
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
           depends-on="lifecycleBeanPostProcessor"/>
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
     </bean>
 
-	<!--6. ÅäÖÃ ShiroFilter.-->
+	<!--6. é…ç½® ShiroFilter.-->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
         <property name="loginUrl" value="/login.jsp"/>
@@ -178,8 +178,8 @@ SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(upToken.getUsername
     </bean>
 </beans>
 #+END_SRC
-* ¹ıÂË
-** ÉùÃ÷Ê½
+* è¿‡æ»¤
+** å£°æ˜å¼
 #+BEGIN_SRC xml
 <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
@@ -196,13 +196,13 @@ SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(upToken.getUsername
         </property>
     </bean>
 #+END_SRC
-** ±à³ÌÊ½
-´úÂëÀïÖ±½Óµô·½·¨×Ô¼º¼ì²é
-** ×¢½âÊ½
+** ç¼–ç¨‹å¼
+ä»£ç é‡Œç›´æ¥æ‰æ–¹æ³•è‡ªå·±æ£€æŸ¥
+** æ³¨è§£å¼
 *** @RequiresRoles
-@RequiresRoles(value={¡°admin¡±, ¡°user¡±}, logical= Logical.AND)
+@RequiresRoles(value={â€œadminâ€, â€œuserâ€}, logical= Logical.AND)
 *** @RequiresPermissions
-@RequiresPermissions (value={¡°user:a¡±, ¡°user:b¡±}, logical= Logical.OR)
+@RequiresPermissions (value={â€œuser:aâ€, â€œuser:bâ€}, logical= Logical.OR)
 *** @RequiresUser
 *** @RequiresGuest
 * ref 
@@ -210,9 +210,9 @@ quick start
 http://shiro.apache.org/10-minute-tutorial.html 
 * config
 
-Ö§³Ö¶àÖÖ·½Ê½µÄÅäÖÃ×¢Èë£¬¹Ù·½Ä¬ÈÏÍÆ¼öini¸ñÊ½£¬¿ÉÈÏÎªÊÇÇî±ÆDI
+æ”¯æŒå¤šç§æ–¹å¼çš„é…ç½®æ³¨å…¥ï¼Œå®˜æ–¹é»˜è®¤æ¨èiniæ ¼å¼ï¼Œå¯è®¤ä¸ºæ˜¯ç©·é€¼DI
 [main]
-# SecurityManager×é¼şÏà¹ØÅäÖÃ£¬Ê¹ÓÃÁËCommonµÄBeanutil£¬²¢ÇÒÄ£¿é»¯µÄÊµÏÖÊ¹µÃ¸ÃÅäÖÃ´¦¿ÉÒÔÊ¹ÓÃ¶ÔÏóµ¼º½
+# SecurityManagerç»„ä»¶ç›¸å…³é…ç½®ï¼Œä½¿ç”¨äº†Commonçš„Beanutilï¼Œå¹¶ä¸”æ¨¡å—åŒ–çš„å®ç°ä½¿å¾—è¯¥é…ç½®å¤„å¯ä»¥ä½¿ç”¨å¯¹è±¡å¯¼èˆª
 # Objects and their properties are defined here,
 # Such as the securityManager, Realms and anything
 # else needed to build the SecurityManager
@@ -222,38 +222,38 @@ myRealm.username = jsmith
 ...
 
 [users]
-# ¾²Ì¬ÅäÖÃ£¬ÊÊºÏ´æ´âµÄMVP¿ª·¢
+# é™æ€é…ç½®ï¼Œé€‚åˆå­˜ç²¹çš„MVPå¼€å‘
 
 [roles]
-# ¾²Ì¬ÅäÖÃ£¬ÅäÖÃ
+# é™æ€é…ç½®ï¼Œé…ç½®
 # user1 = 2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b, role1, role2, ...
 
 [urls]
-# ÉùÃ÷½Ó¿ÚPermission
+# å£°æ˜æ¥å£Permission
 * authorization
 ModularRealmAuthorizer --> iterate realms
 ** RolePermissionResolver
-×ªRoleÎªPermission£¬³£¼ûÓÚÎŞPermission¸ÅÄîµÄÈÏÖ¤ÏµÍ³½ÓÈë£¬ÈçLDAPÃ»ÓĞPermission£¬µ«ÊÇ¿ÉÒÔ½«¶ÔÓ¦µÄRole°üº¬µÄPermission½øĞĞÍâÖÃÀ´½øĞĞ roles --> permissionsµÄ×ª»»
+è½¬Roleä¸ºPermissionï¼Œå¸¸è§äºæ— Permissionæ¦‚å¿µçš„è®¤è¯ç³»ç»Ÿæ¥å…¥ï¼Œå¦‚LDAPæ²¡æœ‰Permissionï¼Œä½†æ˜¯å¯ä»¥å°†å¯¹åº”çš„RoleåŒ…å«çš„Permissionè¿›è¡Œå¤–ç½®æ¥è¿›è¡Œ roles --> permissionsçš„è½¬æ¢
 ** Permission
 *** Wildcard Permissions
-# ¶à²¿·İ×ÊÔ´ÃèÊö(Multiple parts)
+# å¤šéƒ¨ä»½èµ„æºæè¿°(Multiple parts)
 printer:query
-# Æ´ÔÚÒ»ÆğĞ´(Multiple values)
+# æ‹¼åœ¨ä¸€èµ·å†™(Multiple values)
 printer:print,query
 # All Values
 printer:*
 
 #+begin_src java
-// µ±Ê¹ÓÃ»ùÓÚÉÏÊöÄ£Ê½µÄpermission¿ØÖÆÊ±£¬È¨ÏŞ¼ì²â±ØĞë½øĞĞ¾ßÌå
-// ÒÔÓÃ»§A¾ßÓĞ¶ÔÓÚ´òÓ¡»úµÄlp7200µÄ´òÓ¡È¨ÏŞ£¬µÚÒ»Ìõ¼ì²éÄÜÍ¨¹ı£¬µÚ¶şÌõÔò²»ÄÜ
+// å½“ä½¿ç”¨åŸºäºä¸Šè¿°æ¨¡å¼çš„permissionæ§åˆ¶æ—¶ï¼Œæƒé™æ£€æµ‹å¿…é¡»è¿›è¡Œå…·ä½“
+// ä»¥ç”¨æˆ·Aå…·æœ‰å¯¹äºæ‰“å°æœºçš„lp7200çš„æ‰“å°æƒé™ï¼Œç¬¬ä¸€æ¡æ£€æŸ¥èƒ½é€šè¿‡ï¼Œç¬¬äºŒæ¡åˆ™ä¸èƒ½
 
 
-//ÒªÇóÓÃ»§ÓĞ¶ÔÓÚ´òÓ¡»úµÄlp7200µÄ´òÓ¡È¨ÏŞ
+//è¦æ±‚ç”¨æˆ·æœ‰å¯¹äºæ‰“å°æœºçš„lp7200çš„æ‰“å°æƒé™
 if ( SecurityUtils.getSubject().isPermitted("printer:print:lp7200") ) {
     //print the document to the lp7200 printer }
 }
 
-//ÒªÇóÓÃ»§ÓĞ¶ÔÓÚÈ«²¿´òÓ¡»úµÄµÄ´òÓ¡È¨ÏŞ, printer:print --> printer:print:*
+//è¦æ±‚ç”¨æˆ·æœ‰å¯¹äºå…¨éƒ¨æ‰“å°æœºçš„çš„æ‰“å°æƒé™, printer:print --> printer:print:*
 if ( SecurityUtils.getSubject().isPermitted("printer:print") ) {
     //print the document }
 }

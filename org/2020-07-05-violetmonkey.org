@@ -2,15 +2,15 @@
 #+STARTUP: indent
 * meta 
 ** @required
-µ¼Èëjs
+å¯¼å…¥js
 ** @resource
-Ïàµ±ÓÚÈ«¾Ö±äÁ¿¶øÒÑ£¬Ö»ÊÇ×÷Îª¹«¹²±äÁ¿
+ç›¸å½“äºå…¨å±€å˜é‡è€Œå·²ï¼Œåªæ˜¯ä½œä¸ºå…¬å…±å˜é‡
 ** @run-at
-Ö¸¶¨¼ÓÔØÊ±»ú
+æŒ‡å®šåŠ è½½æ—¶æœº
 ** @grant
-¿ªÆô´æ´¢Ö®ÀàµÄ·½·¨
+å¼€å¯å­˜å‚¨ä¹‹ç±»çš„æ–¹æ³•
 ** @match
-Æ¥Åä½Å±¾µÄÍøÖ·
+åŒ¹é…è„šæœ¬çš„ç½‘å€
 ** @exclude-match
 * GM api
 ** GM_getValue
@@ -19,5 +19,5 @@
 ** GM_addStyle
 * develop
 $ npx -p https://github.com/violentmonkey/generator-userscript.git -p yo yo @violentmonkey/userscript
-´´½¨Ä£¿éÄ¿Â¼
-¿ÉÒÔÆô¶¯build:jsÈÎÎñ½øĞĞ´ò°ü£¬´ò°üºóÎªindex.user.js
+åˆ›å»ºæ¨¡å—ç›®å½•
+å¯ä»¥å¯åŠ¨build:jsä»»åŠ¡è¿›è¡Œæ‰“åŒ…ï¼Œæ‰“åŒ…åä¸ºindex.user.js

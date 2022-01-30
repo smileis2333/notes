@@ -1,26 +1,26 @@
-#+TITLE:  java generics(·ºĞÍ)
+#+TITLE:  java generics(æ³›å‹)
 #+STARTUP: indent
-* type erase(·ºĞÍ²Á³ı)
-1. Èç¹ûÊÇÎŞÉÏÏÂ½ç/ÎŞÏŞ¶¨Í¨Åä·û£¬²Á³ı³ÉObject
-2. Èç¹ûÊÇÓĞÉÏ½ç£¬²Á³ı³ÉÉÏ½ç¶ÔÓ¦µÄÀàĞÍ(µÚÒ»¸ö±ß½ç)
-3. Èç¹ûÊÇÓĞÏÂ½ç£¬²Á³ı³ÉObject
+* type erase(æ³›å‹æ“¦é™¤)
+1. å¦‚æœæ˜¯æ— ä¸Šä¸‹ç•Œ/æ— é™å®šé€šé…ç¬¦ï¼Œæ“¦é™¤æˆObject
+2. å¦‚æœæ˜¯æœ‰ä¸Šç•Œï¼Œæ“¦é™¤æˆä¸Šç•Œå¯¹åº”çš„ç±»å‹(ç¬¬ä¸€ä¸ªè¾¹ç•Œ)
+3. å¦‚æœæ˜¯æœ‰ä¸‹ç•Œï¼Œæ“¦é™¤æˆObject
 #+BEGIN_SRC java
 
-// ±»²Á³ı³ÉObject
-// Ö¤¾İ1
+// è¢«æ“¦é™¤æˆObject
+// è¯æ®1
 ArrayList<String> list1 = new ArrayList<>();
 ArrayList<Integer> list2 = new ArrayList<>();
 System.out.println(list1.getClass() == list2.getClass()); // true
-// Ö¤¾İ2
+// è¯æ®2
 ArrayList<Integer> list1 = new ArrayList<>();
 list1.add("aaa"); // compile error
 list1.getClass().getDeclaredMethod("add",Object.class).invoke(list1,"aaa"); // compile success
 
 #+END_SRC
-** ÇÅ½Ó
+** æ¡¥æ¥
 *** code
 #+BEGIN_SRC java
-// ½â¾ö¼Ì³ĞÏÂµÄ·º»¯µÄ·½·¨ÖØĞ´
+// è§£å†³ç»§æ‰¿ä¸‹çš„æ³›åŒ–çš„æ–¹æ³•é‡å†™
 class Pair<T> {
 
     private T value;
@@ -73,7 +73,7 @@ class DateInter extends Pair<java.util.Date> {
        4: checkcast     #4                  // class java/util/Date
        7: areturn
 
-  public void setValue(java.lang.Object);  --> µ÷ÖØĞ´µÄsetValue
+  public void setValue(java.lang.Object);  --> è°ƒé‡å†™çš„setValue
     Code:
        0: aload_0
        1: aload_1
@@ -81,7 +81,7 @@ class DateInter extends Pair<java.util.Date> {
        5: invokevirtual #5                  // Method setValue:(Ljava/util/Date;)V
        8: return
 
-  public java.lang.Object getValue();  --> Éú³ÉÁËÈç¹ûÈË¹¤Ğ´£¬ÎŞ·¨Í¨¹ı±àÒëµÄ´úÂë
+  public java.lang.Object getValue();  --> ç”Ÿæˆäº†å¦‚æœäººå·¥å†™ï¼Œæ— æ³•é€šè¿‡ç¼–è¯‘çš„ä»£ç 
     Code:
        0: aload_0
        1: invokevirtual #6                  // Method getValue:()Ljava/util/Date;
@@ -106,7 +106,7 @@ upper used to read data, while lower is for writing
 class A{}
 class B extends A {}
 
-// ÈçÏÂÁ½¸ö·½·¨²»»á±¨´í
+// å¦‚ä¸‹ä¸¤ä¸ªæ–¹æ³•ä¸ä¼šæŠ¥é”™
 public static void funA(A a) {
     // ...          
 }
@@ -115,7 +115,7 @@ public static void funB(B b) {
     // ...             
 }
 
-// ÈçÏÂfunD·½·¨»á±¨´í
+// å¦‚ä¸‹funDæ–¹æ³•ä¼šæŠ¥é”™
 public static void funC(List<A> listA) {
     // ...          
 }
@@ -124,7 +124,7 @@ public static void funD(List<B> listB) {
     // ...             
 }
 
-// ¾İ´ËÒı³öÁËÉÏÏÂ½çµÄ¸ÅÄî
+// æ®æ­¤å¼•å‡ºäº†ä¸Šä¸‹ç•Œçš„æ¦‚å¿µ
 public static void funC(List<? extends A> listA) {
     // ...          
 }
@@ -134,34 +134,34 @@ public static void funD(List<B> listB) {
 }
 #+END_SRC
 * why
-Óï·¨ÌÇ£¬ÔÚ±àÒëÆ÷×Ô¶¯Éú³ÉÀàĞÍ×ª»»ºÍ¼ì²â£¬ÓÈÆä¶ÔÓÚ¼¯ºÏµÄ×÷ÓÃ×î´ó
-Ô­Àí: ÏÈ¼ì²é£¬ÔÚ²Á³ı
-* ³¡¾°
-** ·ºĞÍÀà
+è¯­æ³•ç³–ï¼Œåœ¨ç¼–è¯‘å™¨è‡ªåŠ¨ç”Ÿæˆç±»å‹è½¬æ¢å’Œæ£€æµ‹ï¼Œå°¤å…¶å¯¹äºé›†åˆçš„ä½œç”¨æœ€å¤§
+åŸç†: å…ˆæ£€æŸ¥ï¼Œåœ¨æ“¦é™¤
+* åœºæ™¯
+** æ³›å‹ç±»
 #+BEGIN_SRC java
-// Ò»Ôª
-class Point<T>{         // ´Ë´¦¿ÉÒÔËæ±ãĞ´±êÊ¶·ûºÅ£¬TÊÇtypeµÄ¼ò³Æ  
-    private T var ;     // varµÄÀàĞÍÓÉTÖ¸¶¨£¬¼´£ºÓÉÍâ²¿Ö¸¶¨  
-    public T getVar(){  // ·µ»ØÖµµÄÀàĞÍÓÉÍâ²¿¾ö¶¨  
+// ä¸€å…ƒ
+class Point<T>{         // æ­¤å¤„å¯ä»¥éšä¾¿å†™æ ‡è¯†ç¬¦å·ï¼ŒTæ˜¯typeçš„ç®€ç§°  
+    private T var ;     // varçš„ç±»å‹ç”±TæŒ‡å®šï¼Œå³ï¼šç”±å¤–éƒ¨æŒ‡å®š  
+    public T getVar(){  // è¿”å›å€¼çš„ç±»å‹ç”±å¤–éƒ¨å†³å®š  
         return var ;  
     }  
-    public void setVar(T var){  // ÉèÖÃµÄÀàĞÍÒ²ÓÉÍâ²¿¾ö¶¨  
+    public void setVar(T var){  // è®¾ç½®çš„ç±»å‹ä¹Ÿç”±å¤–éƒ¨å†³å®š  
         this.var = var ;  
     }  
 }  
 public class GenericsDemo06{  
     public static void main(String args[]){  
-        Point<String> p = new Point<String>() ;     // ÀïÃæµÄvarÀàĞÍÎªStringÀàĞÍ  
-        p.setVar("it") ;                            // ÉèÖÃ×Ö·û´®  
-        System.out.println(p.getVar().length()) ;   // È¡µÃ×Ö·û´®µÄ³¤¶È  
+        Point<String> p = new Point<String>() ;     // é‡Œé¢çš„varç±»å‹ä¸ºStringç±»å‹  
+        p.setVar("it") ;                            // è®¾ç½®å­—ç¬¦ä¸²  
+        System.out.println(p.getVar().length()) ;   // å–å¾—å­—ç¬¦ä¸²çš„é•¿åº¦  
     }  
 }
 
 
-// ¶şÔª
-class Notepad<K,V>{       // ´Ë´¦Ö¸¶¨ÁËÁ½¸ö·ºĞÍÀàĞÍ  
-    private K key ;     // ´Ë±äÁ¿µÄÀàĞÍÓÉÍâ²¿¾ö¶¨  
-    private V value ;   // ´Ë±äÁ¿µÄÀàĞÍÓÉÍâ²¿¾ö¶¨  
+// äºŒå…ƒ
+class Notepad<K,V>{       // æ­¤å¤„æŒ‡å®šäº†ä¸¤ä¸ªæ³›å‹ç±»å‹  
+    private K key ;     // æ­¤å˜é‡çš„ç±»å‹ç”±å¤–éƒ¨å†³å®š  
+    private V value ;   // æ­¤å˜é‡çš„ç±»å‹ç”±å¤–éƒ¨å†³å®š  
     public K getKey(){  
         return this.key ;  
     }  
@@ -177,25 +177,25 @@ class Notepad<K,V>{       // ´Ë´¦Ö¸¶¨ÁËÁ½¸ö·ºĞÍÀàĞÍ
 } 
 public class GenericsDemo09{  
     public static void main(String args[]){  
-        Notepad<String,Integer> t = null ;        // ¶¨ÒåÁ½¸ö·ºĞÍÀàĞÍµÄ¶ÔÏó  
-        t = new Notepad<String,Integer>() ;       // ÀïÃæµÄkeyÎªString£¬valueÎªInteger  
-        t.setKey("ÌÀÄ·") ;        // ÉèÖÃµÚÒ»¸öÄÚÈİ  
-        t.setValue(20) ;            // ÉèÖÃµÚ¶ş¸öÄÚÈİ  
-        System.out.print("ĞÕÃû£»" + t.getKey()) ;      // È¡µÃĞÅÏ¢  
-        System.out.print("£¬ÄêÁä£»" + t.getValue()) ;       // È¡µÃĞÅÏ¢  
+        Notepad<String,Integer> t = null ;        // å®šä¹‰ä¸¤ä¸ªæ³›å‹ç±»å‹çš„å¯¹è±¡  
+        t = new Notepad<String,Integer>() ;       // é‡Œé¢çš„keyä¸ºStringï¼Œvalueä¸ºInteger  
+        t.setKey("æ±¤å§†") ;        // è®¾ç½®ç¬¬ä¸€ä¸ªå†…å®¹  
+        t.setValue(20) ;            // è®¾ç½®ç¬¬äºŒä¸ªå†…å®¹  
+        System.out.print("å§“åï¼›" + t.getKey()) ;      // å–å¾—ä¿¡æ¯  
+        System.out.print("ï¼Œå¹´é¾„ï¼›" + t.getValue()) ;       // å–å¾—ä¿¡æ¯  
   
     }  
 }
 #+END_SRC
-** ·ºĞÍ·½·¨
+** æ³›å‹æ–¹æ³•
 #+BEGIN_SRC java
 
-interface Info<T>{        // ÔÚ½Ó¿ÚÉÏ¶¨Òå·ºĞÍ  
-    public T getVar() ; // ¶¨Òå³éÏó·½·¨£¬³éÏó·½·¨µÄ·µ»ØÖµ¾ÍÊÇ·ºĞÍÀàĞÍ  
+interface Info<T>{        // åœ¨æ¥å£ä¸Šå®šä¹‰æ³›å‹  
+    public T getVar() ; // å®šä¹‰æŠ½è±¡æ–¹æ³•ï¼ŒæŠ½è±¡æ–¹æ³•çš„è¿”å›å€¼å°±æ˜¯æ³›å‹ç±»å‹  
 }
-class InfoImpl<T> implements Info<T>{   // ¶¨Òå·ºĞÍ½Ó¿ÚµÄ×ÓÀà  
-    private T var ;             // ¶¨ÒåÊôĞÔ  
-    public InfoImpl(T var){     // Í¨¹ı¹¹Ôì·½·¨ÉèÖÃÊôĞÔÄÚÈİ  
+class InfoImpl<T> implements Info<T>{   // å®šä¹‰æ³›å‹æ¥å£çš„å­ç±»  
+    private T var ;             // å®šä¹‰å±æ€§  
+    public InfoImpl(T var){     // é€šè¿‡æ„é€ æ–¹æ³•è®¾ç½®å±æ€§å†…å®¹  
         this.setVar(var) ;
     }
     public void setVar(T var){
@@ -207,23 +207,23 @@ class InfoImpl<T> implements Info<T>{   // ¶¨Òå·ºĞÍ½Ó¿ÚµÄ×ÓÀà
 }
 public class GenericsDemo24{
     public static void main(String arsg[]){
-        Info<String> i = null;        // ÉùÃ÷½Ó¿Ú¶ÔÏó  
-        i = new InfoImpl<String>("ÌÀÄ·") ;  // Í¨¹ı×ÓÀàÊµÀı»¯¶ÔÏó  
-        System.out.println("ÄÚÈİ£º" + i.getVar()) ;
+        Info<String> i = null;        // å£°æ˜æ¥å£å¯¹è±¡  
+        i = new InfoImpl<String>("æ±¤å§†") ;  // é€šè¿‡å­ç±»å®ä¾‹åŒ–å¯¹è±¡  
+        System.out.println("å†…å®¹ï¼š" + i.getVar()) ;
     }
 }  
 
 
  public static void main(String[] args) throws Exception {
-     /**²»Ö¸¶¨·ºĞÍµÄÊ±ºò*/
-     int i = Test.add(1, 2); //ÕâÁ½¸ö²ÎÊı¶¼ÊÇInteger£¬ËùÒÔTÎªIntegerÀàĞÍ  
-     Number f = Test.add(1, 1.2); //ÕâÁ½¸ö²ÎÊıÒ»¸öÊÇInteger£¬ÒÔ·ç¸ñÊÇFloat£¬ËùÒÔÈ¡Í¬Ò»¸¸ÀàµÄ×îĞ¡¼¶£¬ÎªNumber  
-     Object o = Test.add(1, "asd"); //ÕâÁ½¸ö²ÎÊıÒ»¸öÊÇInteger£¬ÒÔ·ç¸ñÊÇFloat£¬ËùÒÔÈ¡Í¬Ò»¸¸ÀàµÄ×îĞ¡¼¶£¬ÎªObject  
+     /**ä¸æŒ‡å®šæ³›å‹çš„æ—¶å€™*/
+     int i = Test.add(1, 2); //è¿™ä¸¤ä¸ªå‚æ•°éƒ½æ˜¯Integerï¼Œæ‰€ä»¥Tä¸ºIntegerç±»å‹  
+     Number f = Test.add(1, 1.2); //è¿™ä¸¤ä¸ªå‚æ•°ä¸€ä¸ªæ˜¯Integerï¼Œä»¥é£æ ¼æ˜¯Floatï¼Œæ‰€ä»¥å–åŒä¸€çˆ¶ç±»çš„æœ€å°çº§ï¼Œä¸ºNumber  
+     Object o = Test.add(1, "asd"); //è¿™ä¸¤ä¸ªå‚æ•°ä¸€ä¸ªæ˜¯Integerï¼Œä»¥é£æ ¼æ˜¯Floatï¼Œæ‰€ä»¥å–åŒä¸€çˆ¶ç±»çš„æœ€å°çº§ï¼Œä¸ºObject  
 
-     /**Ö¸¶¨·ºĞÍµÄÊ±ºò*/
-     int a = Test.<Integer>add(1, 2); //Ö¸¶¨ÁËInteger£¬ËùÒÔÖ»ÄÜÎªIntegerÀàĞÍ»òÕßÆä×ÓÀà  
-     int b = Test.<Integer>add(1, 2.2); //±àÒë´íÎó£¬Ö¸¶¨ÁËInteger£¬²»ÄÜÎªFloat  
-     Number c = Test.<Number>add(1, 2.2); //Ö¸¶¨ÎªNumber£¬ËùÒÔ¿ÉÒÔÎªIntegerºÍFloat  
+     /**æŒ‡å®šæ³›å‹çš„æ—¶å€™*/
+     int a = Test.<Integer>add(1, 2); //æŒ‡å®šäº†Integerï¼Œæ‰€ä»¥åªèƒ½ä¸ºIntegerç±»å‹æˆ–è€…å…¶å­ç±»  
+     int b = Test.<Integer>add(1, 2.2); //ç¼–è¯‘é”™è¯¯ï¼ŒæŒ‡å®šäº†Integerï¼Œä¸èƒ½ä¸ºFloat  
+     Number c = Test.<Number>add(1, 2.2); //æŒ‡å®šä¸ºNumberï¼Œæ‰€ä»¥å¯ä»¥ä¸ºIntegerå’ŒFloat  
  }
 
  public static <T> T add(T x,T y){
@@ -231,7 +231,7 @@ public class GenericsDemo24{
  }
 #+END_SRC
 * trick
-** ÄÃµ½·ºĞÍÀàĞÍ
+** æ‹¿åˆ°æ³›å‹ç±»å‹
 #+BEGIN_SRC java
  class GenericType<T> {
     private T data;
@@ -247,7 +247,7 @@ public class GenericsDemo24{
     public static void main(String[] args) {
         GenericType<String> genericType = new GenericType<String>() {};
         Type superclass = genericType.getClass().getGenericSuperclass();
-        //getActualTypeArguments ·µ»ØÈ·ÇĞµÄ·ºĞÍ²ÎÊı, ÈçMap<String, Integer>·µ»Ø[String, Integer]
+        //getActualTypeArguments è¿”å›ç¡®åˆ‡çš„æ³›å‹å‚æ•°, å¦‚Map<String, Integer>è¿”å›[String, Integer]
         Type type = ((ParameterizedType) superclass).getActualTypeArguments()[0];
         System.out.println(type);//class java.lang.String
     }

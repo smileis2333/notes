@@ -1,5 +1,5 @@
 #+TITLE: jetty
 #+STARTUP: indent
 * Acceptor
-io�ַ���ʵ��Ϊ�أ�����ʵ����ѧԺ�ɵ�һ�֣��󲿷ֳ���һ������
+io分发，实现为池，但是实际是学院派的一种，大部分场景一条足矣
 * 

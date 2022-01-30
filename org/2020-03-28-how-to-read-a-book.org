@@ -4,41 +4,41 @@
 ** elementary reading
 ** inspetional reading
 *** systematic skimming/pre-reading
-1. ����ͷ�Ĳ��ֻ���preface
-2. ��Ŀ¼
-3. ����ҳ
-4. �������ߵĽ���
-5. �����½���Ҫ���ֵ�ժҪ(����е������)
-6. �����۵��Ҽ�ҳ�������Լ����ߵĽ���
+1. 看开头的部分或者preface
+2. 看目录
+3. 索引页
+4. 外侧出版者的介绍
+5. 各个章节主要部分的摘要(如果有的情况下)
+6. 根据论点找几页翻翻，以及作者的结语
 *** superficial reading
-���ڿ��ǵ�����������������׷���ȫ���и���������ʶ
+对于卡壳的术语先跳过，尽力追求对全书有个完整的认识
 ** analytical reading
 *** operation
 **** pigeonholding a book
 ***** pratical
 ***** theoretical
 **** x-raying a book
-***** �ṹ��滮����������������
-***** �����ڲ��Ķ����ԣ�����
-***** �������ߵ���ͼ
+***** 结构与规划：叙述书的整体大意
+***** 掌握内部的多面性：拟大纲
+***** 发现作者的意图
 **** coming to term with an author: 
-�ؼ��ִ�ɹ�ʶ�������������κ����ԣ����Ǵ���һ�ʶ��壬����һ���ʣ�������Ҫȷʵ����ȷʵ�������������ͬ����˼�����˽����˼���ֶξ��Ǵʶ�Ӧ��������
+关键字达成共识，否则会误读，任何语言，总是存是一词多义，或者一义多词，我们需要确实我们确实理解的与作用是同个意思，而了解该意思的手段就是词对应的上下文
 **** determining an author's message
 **** criticizing a book fairly
-ȷ�����������ۣ���ͬ��ʱ����Ҫ��ǿ��ʤ����äĿ���ԣ��󲿷�����½���ͬ������������Խ��������
+确保读懂在评论，不同意时，不要争强好胜或者盲目反对，大部分情况下将不同的意见当作可以解决的问题
 **** agree or disagree with an author
-***** ���ƫ��
-***** ����̽��
-ʹ������ǰ�������������������Ӷ���֤֤ʵ�鱾����ȱ��
-1. ֪ʶȱʧ�����½��۴���
-2. ���Ե�����
-3. �߼���ͬ
-4. ����������(����Ϊ��������Ĺ۵�)
+***** 摒除偏见
+***** 理论探讨
+使用下述前三点对书作具体分析，从而辩证证实书本身的缺陷
+1. 知识缺失，导致结论错误
+2. 明显的谬论
+3. 逻辑不同
+4. 分析不完整(仅作为保留意见的观点)
 *** RULES
-1. ������ȷ���Լ�������ʲô�����飬ͨ��ǰ�Ի�����������
-2. һ�λ�/���λ�����ȫ��ĵ��������
-3. �г���Ҫƪ�£�˵��������ΰ���˳�򹹳�ͳһ������
-4. �ҳ�����Ҫ��/���������(���߱������������Ĵ�Ҳ����û�У�ȡ��������)
+1. 尽可能确定自己读的是什么类别的书，通过前言或者其他部分
+2. 一段话/几段话概括全书的的整体大意
+3. 列出重要篇章，说明他们如何按照顺序构成统一的整体
+4. 找出作者要问/解决的问题(作者本身可能有他的答案也可能没有，取决于类型)
 5. come to terms with the author by interpreting his key words
 6. grasp the author's leading propositions by dealing with his most important sentences
 7. know the author's arguments, by finding them in, or consructing them out of, sequences of sentences
@@ -53,19 +53,19 @@ Is it true?
 what of it?
 ** syntopical reading
 * aids to reading
-** ����
-- ��ؾ���
-- ͨ�þ���
+** 经验
+- 相关经验
+- 通用经验
 ** relevant books
-������֮�䣬��һЩ�Ǵ����ŵݽ���ϵ��Ҫ�����Ƕ�����д����ʱ���ܵ�Ӱ�죬�����������鼮������������
+各类书之间，有一些是存在着递进关系，要求我们读作者写该书时所受的影响，即该书的相关书籍，以增进理解
 ** commentaries and abstracts
-��Ӧ��Ϊ���ζ���ʱ�ĸ��������ڶ����Բ����������£����в��ģ�����������ժҪ���Ѷ���ʱ�ļ���
+不应作为初次读书时的辅助，可在读后仍不理解的情况下，进行参阅，或者是利用摘要唤醒读书时的记忆
 ** reference books
-��Ӧ�ñ߶��߲飬��Ӧ����ĳ����������Ӱ���������������ּ������£��Ž��в���
+不应该边读边查，而应该在某个单词严重影响对于论述或者主旨的情况下，才进行查阅
 *** dictionary
-���ص��ʵ�ʹ�ã����������ӣ�����������ʵҲ����ֻ��Ƭ�����
+记载单词的使用，发音与例子，可能是是事实也可能只是片面意见
 *** encyclopedia
-����ڴʵ䣬������Ҫ��ʵ�ļ���
+相较于词典，更加主要事实的记载
 * specilize
 ** pratical book
 *** type
@@ -76,7 +76,7 @@ what of it?
 4. find outu what the author wants you to do
 8. find out how he proposes that you do this
 **** question
-1. �������䣬�˽����ߵ�Ŀ�ı�Ϊ����Ҫ�Ĳ���
-2. ���ֲ��˽�����������ġ��ﵽ��Ŀ��ķ���
-3. �ܲ��ܽ������ߵ���ּ���Լ������Ŀ��ķ���
-4. ������ȥ��ʲô��Ϊ
+1. 其他不变，了解作者的目的变为最重要的部分
+2. 发现并了解作者所建议的、达到他目标的方法
+3. 能不能接受作者的宗旨，以及他达成目标的方法
+4. 引导你去做什么行为

@@ -3,14 +3,14 @@
 * hierarchy
 ** service
 *** connector
-Ö»ÓĞÒ»¸öÀà£¬µ«ÊÇÖ§³ÖÅäÖÃ¸÷ÖÖĞ­Òé£¬°üÀ¨http,https,ajp£¬Ò»¸öconnectorÖ»ÄÜÅäÒ»¸öĞ­Òé
+åªæœ‰ä¸€ä¸ªç±»ï¼Œä½†æ˜¯æ”¯æŒé…ç½®å„ç§åè®®ï¼ŒåŒ…æ‹¬http,https,ajpï¼Œä¸€ä¸ªconnectoråªèƒ½é…ä¸€ä¸ªåè®®
 **** protocolHandler
-ÊµÏÖÁË¾ßÌåµÄĞ­Òé½âÎö¹æÔò
+å®ç°äº†å…·ä½“çš„åè®®è§£æè§„åˆ™
 ***** endPoint
 ****** Acceptor
-ÓÃÓÚ¶Ë¿Ú¼àÌıµÄthread£¬ÊÕµ½Ö®ºó¸øendpointÈÃÆä£¬×¢²á½øpollerµÄselectorÖĞ
+ç”¨äºç«¯å£ç›‘å¬çš„threadï¼Œæ”¶åˆ°ä¹‹åç»™endpointè®©å…¶ï¼Œæ³¨å†Œè¿›pollerçš„selectorä¸­
 ****** Poller
-       ¶Ô¾ßÌåµÄ×¢²áĞĞÎªºÍÊôĞÔ½øĞĞ´¦Àí£¬È»ºóÕÒÒ»²¨/´´½¨worder thread, ¶ª¸øworker thread½øĞĞ´¦Àí
+       å¯¹å…·ä½“çš„æ³¨å†Œè¡Œä¸ºå’Œå±æ€§è¿›è¡Œå¤„ç†ï¼Œç„¶åæ‰¾ä¸€æ³¢/åˆ›å»ºworder thread, ä¸¢ç»™worker threadè¿›è¡Œå¤„ç†
 ****** Worker
 *** engine
 List<Host>

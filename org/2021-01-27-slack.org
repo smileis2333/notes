@@ -5,17 +5,17 @@
 https://zhuanlan.zhihu.com/p/21396775?utm_source=wechat_session
 https://www.jianshu.com/p/20625e5e9ef7
 ** cons
-- ËÙ¶È
-- ¹ú¼Ê»¯
+- é€Ÿåº¦
+- å›½é™…åŒ–
 * integrate platform
 ** tettra
 ** guru
 ** trello
 * bot
 /command text
-commandÎª×Ô¶¨ÒåµÄÄÚÈİ
-´úÂëÖĞ£¬¿ÉÒÔtext×÷ÎªÃüÁîÖ´ĞĞ²ÎÊı£¬ÀàËÆ/tettra help/suggest
-¿ªÆôsocket mode¿ÉÒÔÒÔwebsocketÎ¬³ÖÁ´½Ó
+commandä¸ºè‡ªå®šä¹‰çš„å†…å®¹
+ä»£ç ä¸­ï¼Œå¯ä»¥textä½œä¸ºå‘½ä»¤æ‰§è¡Œå‚æ•°ï¼Œç±»ä¼¼/tettra help/suggest
+å¼€å¯socket modeå¯ä»¥ä»¥websocketç»´æŒé“¾æ¥
 ** java
 https://slack.dev/java-slack-sdk/
 https://slack.dev/java-slack-sdk/guides/getting-started-with-bolt-socket-mode#gradle
@@ -37,11 +37,11 @@ public class MyApp {
         // App expects an env variable: SLACK_BOT_TOKEN
         App app = new App();
 
-        // hello²âÊÔ
+        // helloæµ‹è¯•
         setHelloCommand(app);
-        // »ñÈ¡»·¾³ÁĞ±í
+        // è·å–ç¯å¢ƒåˆ—è¡¨
         setEnvCommand(app);
-        // ÃÜÂëĞŞ¸Ä
+        // å¯†ç ä¿®æ”¹
         setPasswordCommand(app);
 
         new SocketModeApp(app).start();
@@ -58,14 +58,14 @@ public class MyApp {
         app.command("/gb-env", (req, ctx) -> {
             if (StrUtil.equals("test", req.getPayload().getText())) {
                 return ctx.ack(
-                        "ÔËÓª¶Ë: https://test.gobrand.top:19980/#/login\n" +
-                                "B¶Ë: https://test.gobrand.top:19990/#/login\n" +
-                                "C¶Ë£ºhttps://test.gobrand.top:20000/home/homePage");
+                        "è¿è¥ç«¯: https://test.gobrand.top:19980/#/login\n" +
+                                "Bç«¯: https://test.gobrand.top:19990/#/login\n" +
+                                "Cç«¯ï¼šhttps://test.gobrand.top:20000/home/homePage");
             } else if (StrUtil.equals("stage", req.getPayload().getText())) {
                 return ctx.ack(
-                        "ÔËÓª¶Ë: http://opt.staging.gobrand.top/#/login \n" +
-                                "B¶Ë: http://cpn.staging.gobrand.top/#/login\n" +
-                                "C¶Ë£ºhttp://c.staging.gobrand.top/home/homePage");
+                        "è¿è¥ç«¯: http://opt.staging.gobrand.top/#/login \n" +
+                                "Bç«¯: http://cpn.staging.gobrand.top/#/login\n" +
+                                "Cç«¯ï¼šhttp://c.staging.gobrand.top/home/homePage");
             }
             return ctx.ack("command ilegal");
         });
@@ -75,7 +75,7 @@ public class MyApp {
         app.command("/gb-password", (req, ctx) -> {
             final String[] params = StrUtil.split(req.getPayload().getText()," ");
             if (params.length == 0) {
-                // dev »·¾³ client,business,opt»·¾³¶¼Ë¢³É123456b
+                // dev ç¯å¢ƒ client,business,optç¯å¢ƒéƒ½åˆ·æˆ123456b
                 SQLUtil.resetPassword();
             } else if (params.length == 1) {
                 final String env = params[0];
@@ -92,7 +92,7 @@ public class SQLUtil {
     public static final String username = "root";
     private static final String password = "yaXxCg86Kx";
     /**
-     * 123456bµÄ±àÂë
+     * 123456bçš„ç¼–ç 
      */
     private static final String userEncodePassword = "bHUxNVJZeUxZUlMyYVJHbldCNEsxaVlDNmMwb08ya1BWTG4vcWIxcThXUT0=$rwvW0VbQm3tcjJC9sQgynCpYK8KxJ+4m";
 

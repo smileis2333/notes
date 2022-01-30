@@ -1,16 +1,16 @@
 #+TITLE:springboot
 #+STARTUP: indent
-* »ñÈ¡resourcesÄ¿Â¼ÏÂµÄtemplateÄ¿Â¼µÄÎ»ÖÃ
+* è·å–resourcesç›®å½•ä¸‹çš„templateç›®å½•çš„ä½ç½®
 #+BEGIN_SRC java
 String path = Thread.currentThread().getContextClassLoader().getResource("").getPath()+"template";
 #+END_SRC
 * multi-env
-** ÅäÖÃÎÄ¼ş
-application-devÖ®Àà
-** ÃüÁî
+** é…ç½®æ–‡ä»¶
+application-devä¹‹ç±»
+** å‘½ä»¤
  java -jar  xx.jar --spring.profiles.active=prod
 * thin jar
-Ä¿Ç°Ã»·½°¸£¬³ı·ÇÍêÈ«ÊÖ¶¯ÅäÖÃ£¬ÎŞ·¨¶¯Ì¬¼ÓÔØ
+ç›®å‰æ²¡æ–¹æ¡ˆï¼Œé™¤éå®Œå…¨æ‰‹åŠ¨é…ç½®ï¼Œæ— æ³•åŠ¨æ€åŠ è½½
 https://stackoverflow.com/questions/48850628/forcing-including-lib-from-local-repo-into-jar-with-spring-thin-layout
 https://github.com/spring-projects/spring-boot/issues/13772
 https://www.baeldung.com/spring-boot-thin-jar

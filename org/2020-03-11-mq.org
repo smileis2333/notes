@@ -31,7 +31,7 @@ public class Send {
 }
 
 
-// ¿ªÆôºóÊÇ³£×¤µÄ£¬¹Ø±ÕĞèÒªÊÖ¶¯
+// å¼€å¯åæ˜¯å¸¸é©»çš„ï¼Œå…³é—­éœ€è¦æ‰‹åŠ¨
 public class Recv {
 
     private final static String QUEUE_NAME = "hello";
@@ -67,24 +67,24 @@ public class Recv {
 #+BEGIN_SRC java
 // Publish/subscribe
 
-// ½»»»»úÓë¶ÓÁĞ°ó¶¨
+// äº¤æ¢æœºä¸é˜Ÿåˆ—ç»‘å®š
 #+END_SRC
 ****** routing
 #+BEGIN_SRC java
-//Routing, ×îºóÒ»¸ö²ÎÊıÊÇroutingkey
-// ¿ÉÒÔÍ¬¸ö¶ÓÁĞ°ó¶¨¶à´Î£¬¸ù¾İ²»Í¬µÄroutingkey
+//Routing, æœ€åä¸€ä¸ªå‚æ•°æ˜¯routingkey
+// å¯ä»¥åŒä¸ªé˜Ÿåˆ—ç»‘å®šå¤šæ¬¡ï¼Œæ ¹æ®ä¸åŒçš„routingkey
 
 
-// µÚ¶ş¸ö²ÎÊıÖ¸¶¨routingkey
+// ç¬¬äºŒä¸ªå‚æ•°æŒ‡å®šroutingkey
 #+END_SRC
 ****** topic
 #+BEGIN_SRC java
-//EmailÍ¨Öª
-//smsÍ¨Öª
-//Á½ÖÖ¶¼Í¨Öª
+//Emailé€šçŸ¥
+//smsé€šçŸ¥
+//ä¸¤ç§éƒ½é€šçŸ¥
 
 
-// ·ûºÅ#¿ÉÒÔÆ¥Åä¶à¸ö´Ê£¬·ûºÅ*¿ÉÒÔÆ¥ÅäÒ»¸ö´ÊÓï
+// ç¬¦å·#å¯ä»¥åŒ¹é…å¤šä¸ªè¯ï¼Œç¬¦å·*å¯ä»¥åŒ¹é…ä¸€ä¸ªè¯è¯­
 
 #+END_SRC
 ****** header

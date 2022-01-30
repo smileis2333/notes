@@ -1,4 +1,4 @@
 npm install packageName
 npm uninstall packageName
---save ´ò°üµÄÊ±ºòĞèÒª
---save-dev ¿ª·¢Ê±ºòĞèÒª£¬´ò°üºóÃ»ÓĞ
+--save æ‰“åŒ…çš„æ—¶å€™éœ€è¦
+--save-dev å¼€å‘æ—¶å€™éœ€è¦ï¼Œæ‰“åŒ…åæ²¡æœ‰

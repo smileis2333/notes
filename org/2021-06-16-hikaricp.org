@@ -2,29 +2,29 @@
 #+STARTUP: indent
 * javassist
 https://github.com/brettwooldridge/HikariCP/issues/1198
-1. ResultsetµÈÏà¹Ø½Ó¿ÚÒªÇó¸²¸Ç50+method£¬¶øÊµ¼ÊĞèÒª¸²¸ÇµÄ¿ÉÄÜ¾Í¼¸¸ö£¬Òò´Ë£¬½«Àà³éÏóÎªabstract£¬È»ºó¸²¸Ç¶ÔÓ¦µÄ·½·¨£¬¶øÊµ¼Ê×îÖÕµÄ´úÂë£¬ÔÚÓÃjavasistÉú³É³öÀ´
-2. JDBCÈç¹ûÓÉÓÚ±ê×¼µÄµü´ú¼ÓÁËĞÂµÄ½Ó¿Ú£¬¿ÉÒÔ×Ô¶¯±»¼ÓÈë£¬¶ø²»ÓÃ×÷¶à°æ±¾¸üĞÂ
-3. ×Ö½ÚÂë²¿·ÖÌáËÙ(´ÎÒª²¿·Ö)
+1. Resultsetç­‰ç›¸å…³æ¥å£è¦æ±‚è¦†ç›–50+methodï¼Œè€Œå®é™…éœ€è¦è¦†ç›–çš„å¯èƒ½å°±å‡ ä¸ªï¼Œå› æ­¤ï¼Œå°†ç±»æŠ½è±¡ä¸ºabstractï¼Œç„¶åè¦†ç›–å¯¹åº”çš„æ–¹æ³•ï¼Œè€Œå®é™…æœ€ç»ˆçš„ä»£ç ï¼Œåœ¨ç”¨javasistç”Ÿæˆå‡ºæ¥
+2. JDBCå¦‚æœç”±äºæ ‡å‡†çš„è¿­ä»£åŠ äº†æ–°çš„æ¥å£ï¼Œå¯ä»¥è‡ªåŠ¨è¢«åŠ å…¥ï¼Œè€Œä¸ç”¨ä½œå¤šç‰ˆæœ¬æ›´æ–°
+3. å­—èŠ‚ç éƒ¨åˆ†æé€Ÿ(æ¬¡è¦éƒ¨åˆ†)
 
 * ConcurrentBag 
-ConcurrentBag --> Á½¶ËÎŞËø»ñÈ¡+SynchronousQueueÀ´´¦Àí²¢·¢´óµÄÇé¿ö
-ThreadLocal<List<Object>> threadList; ÎŞËø£¬ÔÚPoolEntry·µ»ØÊ±£¬»º´æµ½ThreadLocal
-CopyOnWriteArrayList<T> sharedList; ÎŞËø£¬´æ´¢PoolEntryÓÃÓÚÈ«²¿Ïß³Ì¹²Ïí
-SynchronousQueue<T> handoffQueue;  ²¢·¢½â¾ö£¬ÔÚÇ°Á½¶ÎÊ§°ÜÊ±£¬½øÈë×èÈû»ñÈ¡£¬Ö±µ½ÄÜÄÃµ½ĞÂÁ¬½Ó(Á¬½ÓÀ©³ä/Á¬½Ó·µ»¹Ê±)
-** ±¾ÖÊ¾ÍÊÇÓÃ two cache --> one synÀ´°ü×°Ò»¸öÈİÆ÷
-*** ÀàList
-ÔÚ¿ØÖÆÈİÆ÷¼¯ºÏµÄÊ±ºò£¬Õı³£Ê¹ÓÃÀàËÆListµÄAPI£¬Èçadd£¬remove
-*** Èı¶Î¿ØÖÆ
-ÔÚÊµ¼Ê×÷Îª³Ø¹©Íâ²¿»ñÈ¡Ê±£¬Ê¹ÓÃborrowºÍrequite£¬²¢ÔÚÄÚ²¿Ê¹ÓÃÁËÈıÖÖ»úÖÆÀ´½øĞĞÍ¬²½¹ÜÀí
+ConcurrentBag --> ä¸¤ç«¯æ— é”è·å–+SynchronousQueueæ¥å¤„ç†å¹¶å‘å¤§çš„æƒ…å†µ
+ThreadLocal<List<Object>> threadList; æ— é”ï¼Œåœ¨PoolEntryè¿”å›æ—¶ï¼Œç¼“å­˜åˆ°ThreadLocal
+CopyOnWriteArrayList<T> sharedList; æ— é”ï¼Œå­˜å‚¨PoolEntryç”¨äºå…¨éƒ¨çº¿ç¨‹å…±äº«
+SynchronousQueue<T> handoffQueue;  å¹¶å‘è§£å†³ï¼Œåœ¨å‰ä¸¤æ®µå¤±è´¥æ—¶ï¼Œè¿›å…¥é˜»å¡è·å–ï¼Œç›´åˆ°èƒ½æ‹¿åˆ°æ–°è¿æ¥(è¿æ¥æ‰©å……/è¿æ¥è¿”è¿˜æ—¶)
+** æœ¬è´¨å°±æ˜¯ç”¨ two cache --> one synæ¥åŒ…è£…ä¸€ä¸ªå®¹å™¨
+*** ç±»List
+åœ¨æ§åˆ¶å®¹å™¨é›†åˆçš„æ—¶å€™ï¼Œæ­£å¸¸ä½¿ç”¨ç±»ä¼¼Listçš„APIï¼Œå¦‚addï¼Œremove
+*** ä¸‰æ®µæ§åˆ¶
+åœ¨å®é™…ä½œä¸ºæ± ä¾›å¤–éƒ¨è·å–æ—¶ï¼Œä½¿ç”¨borrowå’Œrequiteï¼Œå¹¶åœ¨å†…éƒ¨ä½¿ç”¨äº†ä¸‰ç§æœºåˆ¶æ¥è¿›è¡ŒåŒæ­¥ç®¡ç†
 **** borrow & requite
-³¢ÊÔ´ÓThreadLocalÄÃ --> ÄÃ²»µ½´ÓsharedListÄÃ --> ÔÚÄÃ²»µ½´ÓhandoffQueueÄÃ(block)
+å°è¯•ä»ThreadLocalæ‹¿ --> æ‹¿ä¸åˆ°ä»sharedListæ‹¿ --> åœ¨æ‹¿ä¸åˆ°ä»handoffQueueæ‹¿(block)
 
-¿´¿´ÓĞÃ»ÓĞÈËÔÚ(waiter)£¬ÓĞµÄ»°¸øhandoffQueue£¬Íê³ÉÊı¾İ¿âÁ¬½ÓµÄÏß³ÌÅÉ·¢-->Èç¹ûÃ»ÈËµÈ£¬ÔòÖ±½Ó·Åµ½threadListÀïÃæ
+çœ‹çœ‹æœ‰æ²¡æœ‰äººåœ¨(waiter)ï¼Œæœ‰çš„è¯ç»™handoffQueueï¼Œå®Œæˆæ•°æ®åº“è¿æ¥çš„çº¿ç¨‹æ´¾å‘-->å¦‚æœæ²¡äººç­‰ï¼Œåˆ™ç›´æ¥æ”¾åˆ°threadListé‡Œé¢
 
 * leak detect
-Ğ¹Â¶¼ì²â
-Ä¬ÈÏÖµÎª0¼´½ûÓÃ
-ÔÚ»ñÈ¡Á¬½ÓÊ±£¬ÉèÖÃProxyConnection£¬×¼È·À´½²ÊÇJavassistÉú³ÉµÄHakariProxyConnection£¬²¢½øĞĞ¶¨Ê±ÈÎÎñµÄ°ó¶¨£¬³¬Ê±¼´ÈÏ¶¨ÎªĞ¹Â¶
+æ³„éœ²æ£€æµ‹
+é»˜è®¤å€¼ä¸º0å³ç¦ç”¨
+åœ¨è·å–è¿æ¥æ—¶ï¼Œè®¾ç½®ProxyConnectionï¼Œå‡†ç¡®æ¥è®²æ˜¯Javassistç”Ÿæˆçš„HakariProxyConnectionï¼Œå¹¶è¿›è¡Œå®šæ—¶ä»»åŠ¡çš„ç»‘å®šï¼Œè¶…æ—¶å³è®¤å®šä¸ºæ³„éœ²
 
 
 https://jacksonpuppy.com/2017-11-05/datasource-hikari.html

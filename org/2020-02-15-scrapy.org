@@ -6,7 +6,7 @@
 download visual studio build tool
 https://download.microsoft.com/download/5/f/7/5f7acaeb-8363-451f-9425-68a90f98b238/visualcppbuildtools_full.exe?fixForIE=.exe
 *** openssl
-venvÊ¹ÓÃ
+venvä½¿ç”¨
 set LIB=C:\Program Files\OpenSSL-Win64\lib;%LIB%
 set INCLUDE=C:\Program Files\OpenSSL-Win64\include;%INCLUDE%
 https://slproweb.com/download/Win64OpenSSL-1_1_1d.msi
@@ -71,7 +71,7 @@ response.css('title::text').re(r'Q\w+')
 # ['Quotes']
 
 response.css('title::text').re(r'(\w+) to (\w+)')
-# ['Quotes', 'Scrape']£¬°´ÕÕ·Ö×éÀ´³éÈ¡Êı¾İ
+# ['Quotes', 'Scrape']ï¼ŒæŒ‰ç…§åˆ†ç»„æ¥æŠ½å–æ•°æ®
 
 #+END_SRC
 ** selector
@@ -81,21 +81,21 @@ response.css('title::text').re(r'(\w+) to (\w+)')
 response.xpath('xpath')
 #+END_SRC
 ** shell
-scrapy shell "link"(²»ÄÜÊÇ'')
-** Ğ¯´øcookie
-*** Í¨¹ıspiderµÄstart_requests
+scrapy shell "link"(ä¸èƒ½æ˜¯'')
+** æºå¸¦cookie
+*** é€šè¿‡spiderçš„start_requests
 *** FormRequest
 ** download middleware
-*** ÓÃÍ¾
-1. Ö÷ÒªÓÃÓÚ·´ÅÀ£¬Èç¼ÓÈëËæ»úµÄua
-2. ´úÀí
+*** ç”¨é€”
+1. ä¸»è¦ç”¨äºåçˆ¬ï¼Œå¦‚åŠ å…¥éšæœºçš„ua
+2. ä»£ç†
 #+BEGIN_SRC python
 request.meta["proxy"]="http://123.123.123.123:8080"
 #+END_SRC
 *** process_request(self,request,spider)
 *** process_response(self,request,response,spider)
 *** process_exception
-*** ¿ªÆô
+*** å¼€å¯
 #+BEGIN_SRC python
 DOWNLOADER_MIDDLEWARES = {
     'scrapy_demo.middlewares.ScrapyDemoDownloaderMiddleware': 543,
@@ -104,13 +104,13 @@ DOWNLOADER_MIDDLEWARES = {
 #+END_SRC
 * debug
 ** pycharm
-´ÓscrapyÄ£¿é¸´ÖÆcmdline.pyµ½scrapy.cfgÍ¬Ä¿Â¼(venvµÄÎ»ÖÃÔÚvenv/Lib/site-packages/scrapy/cmdline.py)£¬ÅäÖÃ¶ÔÓ¦py½Å±¾µÄÆô¶¯½Å±¾Îªcmdline.py£¬²ÎÊıÊ¹ÓÃcrawl [spiderName]
+ä»scrapyæ¨¡å—å¤åˆ¶cmdline.pyåˆ°scrapy.cfgåŒç›®å½•(venvçš„ä½ç½®åœ¨venv/Lib/site-packages/scrapy/cmdline.py)ï¼Œé…ç½®å¯¹åº”pyè„šæœ¬çš„å¯åŠ¨è„šæœ¬ä¸ºcmdline.pyï¼Œå‚æ•°ä½¿ç”¨crawl [spiderName]
 * #+begin_example
 
 #+end_exampleg
 scrapy startproject projectName
 scrapy genspider [spiderName] [allowDomain]
-scrapy genspider -t crawl [spiderName] [allowDomain] #Éú³Écrawlspider
+scrapy genspider -t crawl [spiderName] [allowDomain] #ç”Ÿæˆcrawlspider
 
 scrapy.Request(url[,callback,method='GET',headers,body,cookies,meta,dont_filter=False])
 
@@ -118,25 +118,25 @@ scrapy.Request(url[,callback,method='GET',headers,body,cookies,meta,dont_filter=
 #+BEGIN_SRC python
 
 # setting.py
-# ÈÕÖ¾¼¶±ğ
+# æ—¥å¿—çº§åˆ«
 LOG_LEVEL="WARNING"
 
-# ÈÕÖ¾±£´æÎ»ÖÃ
+# æ—¥å¿—ä¿å­˜ä½ç½®
 LOG_FILE = './log.log'
 
-# Ä¬ÈÏÊÇ¹Ø±ÕµÄ£¬´ò¿ªpileline, ÊıÖµÔ½Ğ¡£¬pipelinesµÄÓÅÏÈ¼¶Ô½¸ß
+# é»˜è®¤æ˜¯å…³é—­çš„ï¼Œæ‰“å¼€pileline, æ•°å€¼è¶Šå°ï¼Œpipelinesçš„ä¼˜å…ˆçº§è¶Šé«˜
 ITEM_PIPELINES = {
     'scrapy_demo.pipelines.ScrapyDemoPipeline': 300,
 }
 
 
-# logging Ä£¿é
+# logging æ¨¡å—
 logger = logging.getLogger(__name__)
-logger.basicConfig(format) # ¸ü¸ÄÊä³öµÄ¸ñÊ½
-½¨ÒéÔÚÒ»¸öÄ£¿éÉèÖÃºÃloggerºó£¬ÆäËûÄ£¿éÖ±½ÓÊ¹ÓÃÆäÄ£¿é
+logger.basicConfig(format) # æ›´æ”¹è¾“å‡ºçš„æ ¼å¼
+å»ºè®®åœ¨ä¸€ä¸ªæ¨¡å—è®¾ç½®å¥½loggeråï¼Œå…¶ä»–æ¨¡å—ç›´æ¥ä½¿ç”¨å…¶æ¨¡å—
 
 
-# ²»ÓÃµ¼Èësettings.pyÎÄ¼ş
+# ä¸ç”¨å¯¼å…¥settings.pyæ–‡ä»¶
 self.settings["propertyName"]
 
 
@@ -146,9 +146,9 @@ class ScrapyDemoPipeline(object):
         item['hello'] = 'world'
         return item
     
-    def open_spider(self,spider): # ÅÀ³æ¿ªÆôÊ±Ö´ĞĞÒ»´Î
+    def open_spider(self,spider): # çˆ¬è™«å¼€å¯æ—¶æ‰§è¡Œä¸€æ¬¡
         self.file = open(xxxxx)
     
-    def close_spider(self,spider): # ÅÀ³æ¹Ø±ÕÊ±Ö´ĞĞÒ»´Î
+    def close_spider(self,spider): # çˆ¬è™«å…³é—­æ—¶æ‰§è¡Œä¸€æ¬¡
         self.file.close()
 #+END_SRC

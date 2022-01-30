@@ -5,9 +5,9 @@ public class CORSConfig {
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.addAllowedOrigin("http://127.0.0.1:8080"); // 1ÔÊĞíÈÎºÎÓòÃûÊ¹ÓÃ
-        corsConfiguration.addAllowedHeader("*"); // 2ÔÊĞíÈÎºÎÍ·
-        corsConfiguration.addAllowedMethod("*"); // 3ÔÊĞíÈÎºÎ·½·¨£¨post¡¢getµÈ£©
+        corsConfiguration.addAllowedOrigin("http://127.0.0.1:8080"); // 1å…è®¸ä»»ä½•åŸŸåä½¿ç”¨
+        corsConfiguration.addAllowedHeader("*"); // 2å…è®¸ä»»ä½•å¤´
+        corsConfiguration.addAllowedMethod("*"); // 3å…è®¸ä»»ä½•æ–¹æ³•ï¼ˆpostã€getç­‰ï¼‰
         return corsConfiguration;
     }
 

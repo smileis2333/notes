@@ -5,13 +5,13 @@ ctrl+shift+p list all executable commands
 ** command name list
 *** file
 **** new untitled file
-ÐÂ½¨ÎÄ¼þ
+æ–°å»ºæ–‡ä»¶
 **** new window
-´ò¿ªÐÂµÄvscode
+æ‰“å¼€æ–°çš„vscode
 **** open file
 **** open recent
 **** add folder to workspace
-vscodeÖ§³Ö¶à¸öÄ¿Â¼×÷Îªworkspace
+vscodeæ”¯æŒå¤šä¸ªç›®å½•ä½œä¸ºworkspace
 **** open setting(JSON/UI)
 *** edit
 **** general win10 keyboard shortcut
@@ -27,11 +27,11 @@ ctrl + /
 **** select all
 **** move select
 ***** shift + ->/<-
-°´·½ÏòÔö¼ÓÇøÓò, Ã¿´Î°´ÕÕ×Ö·û
+æŒ‰æ–¹å‘å¢žåŠ åŒºåŸŸ, æ¯æ¬¡æŒ‰ç…§å­—ç¬¦
 ***** ctrl + shift + ->/<-
-Í¬ÉÏ£¬Ã¿´Î°´ÕÕµ¥´Ê
+åŒä¸Šï¼Œæ¯æ¬¡æŒ‰ç…§å•è¯
 ***** alt + shift + ->/<-
-°´ÖÇÄÜµ¥´Ê(°´ÕÕ·â±ÕÇøÓò)Ôö¼ÓÇøÓò
+æŒ‰æ™ºèƒ½å•è¯(æŒ‰ç…§å°é—­åŒºåŸŸ)å¢žåŠ åŒºåŸŸ
 **** copy donw/up
 **** multi cursor
 *** view
@@ -43,38 +43,38 @@ ctrl + /
 **** terminal
 ctrl + `
 **** togger wrap
-ÊÇ·ñÖ§³Ö³¤¾ä×Ô¶¯»»ÐÐÏÔÊ¾
+æ˜¯å¦æ”¯æŒé•¿å¥è‡ªåŠ¨æ¢è¡Œæ˜¾ç¤º
 **** show mini map
 **** show breadcrumbs
-Ãæ°üÐ¼µ¼º½
+é¢åŒ…å±‘å¯¼èˆª
 **** render whitespace
-ÏÔÊ¾¿Õ°××Ö·û
+æ˜¾ç¤ºç©ºç™½å­—ç¬¦
 *** Go
 **** go to symbol in file
-ÁÐ³öËùÓÐ·ûºÅÒÔ¹©Ìø×ª
-**** go to definition/type definition/implement(¸ù¾ÝÓïÑÔÌØÐÔÑ¡Ôñ)
+åˆ—å‡ºæ‰€æœ‰ç¬¦å·ä»¥ä¾›è·³è½¬
+**** go to definition/type definition/implement(æ ¹æ®è¯­è¨€ç‰¹æ€§é€‰æ‹©)
 **** go to file
-¸ù¾ÝÎÄ¼þÃûÄ£ºýËÑË÷ËÑË÷ÎÄ¼þ
+æ ¹æ®æ–‡ä»¶åæ¨¡ç³Šæœç´¢æœç´¢æ–‡ä»¶
 **** back/forward/last edit location
-´úÂëÎ»ÖÃÌø×ª
+ä»£ç ä½ç½®è·³è½¬
 **** swicth editor
 ctrl + tab
 **** switch group
-¶à´°¿ÚÌø×ª
+å¤šçª—å£è·³è½¬
 ctrl + number
 **** peek definition/...
 **** go to line/column
 **** go to bracket
 **** next/previous program
 **** next/previous change
-¹Û²ìÎ´Ìá½»µÄÎÄ¼þ±ä»¯
+è§‚å¯Ÿæœªæäº¤çš„æ–‡ä»¶å˜åŒ–
 ** default keyboard shortcuts
-ÉèÖÃËùÓÐÄ¬ÈÏµÄÈ«¾Ö°´¼ü£¬¿ÉÒÔ²éÔÄÍêÕûµÄÄÚ²¿ÃüÁîÃû
+è®¾ç½®æ‰€æœ‰é»˜è®¤çš„å…¨å±€æŒ‰é”®ï¼Œå¯ä»¥æŸ¥é˜…å®Œæ•´çš„å†…éƒ¨å‘½ä»¤å
 ** vim emulator
 *** gf
 find file
-*** ½â¾öÕýÔòÓëÆäËûvimÄ£ÄâÆ÷²î±ðµÄ½â¾ö·½·¨
-¼¯³ÉneovimÔÚÉèÖÃÖÐ¼ÓÈë
+*** è§£å†³æ­£åˆ™ä¸Žå…¶ä»–vimæ¨¡æ‹Ÿå™¨å·®åˆ«çš„è§£å†³æ–¹æ³•
+é›†æˆneovimåœ¨è®¾ç½®ä¸­åŠ å…¥
 "vim.neovimPath": "C:/tools/neovim/Neovim/bin/nvim.exe",
 "vim.enableNeovim": true,
 * config C/C++ env

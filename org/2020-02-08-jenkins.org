@@ -42,43 +42,43 @@ kill $(ps aux|grep java|grep jenkins |awk '{print $2}')
 *** post build task
 *** publisher over ssh
 ** config
-Ò»¡¢jenkins°²×°
+ä¸€ã€jenkinså®‰è£…
 
-1.ÏÂÔØjenkins.war
+1.ä¸‹è½½jenkins.war
 
-2.£¨°²×°ºÃjdk£©
+2.ï¼ˆå®‰è£…å¥½jdkï¼‰
 
-3.Æô¶¯jenkins.war£ºcmd---java -jar jenkins.war
+3.å¯åŠ¨jenkins.warï¼šcmd---java -jar jenkins.war
 
-4.Ñ¡Ôñ°²×°²å¼şInstall suggested plugins
+4.é€‰æ‹©å®‰è£…æ’ä»¶Install suggested plugins
 
-5.ÉèÖÃÕËºÅºÍÃÜÂë£¬Íê³Éjenkins°²×°
+5.è®¾ç½®è´¦å·å’Œå¯†ç ï¼Œå®Œæˆjenkinså®‰è£…
 
-¶ş¡¢github tokenÉú³É
+äºŒã€github tokenç”Ÿæˆ
 
-6.Éú³Étoken£ºµÇÂ¼github---Setting---Personal Access Token---Generate new token£¨Ìí¼ÓÓĞ¶ÁĞ´È¨ÏŞµÄtoken£º¹´Ñ¡repoºÍadmin£ºrepo_hook£©
+6.ç”Ÿæˆtokenï¼šç™»å½•github---Setting---Personal Access Token---Generate new tokenï¼ˆæ·»åŠ æœ‰è¯»å†™æƒé™çš„tokenï¼šå‹¾é€‰repoå’Œadminï¼šrepo_hookï¼‰
 
-7.github hookÉèÖÃ£ºgithub---Òª¹¹½¨µÄÏîÄ¿---Setting---Webhooks---Ôö¼ÓÒ»¸öwebhook£¨Payload URLÊäÈëjenkins·ÃÎÊurl£©
+7.github hookè®¾ç½®ï¼šgithub---è¦æ„å»ºçš„é¡¹ç›®---Setting---Webhooks---å¢åŠ ä¸€ä¸ªwebhookï¼ˆPayload URLè¾“å…¥jenkinsè®¿é—®urlï¼‰
 
-Èı¡¢jenkinsÅäÖÃ
+ä¸‰ã€jenkinsé…ç½®
 
-8.jenkins github serverÅäÖÃ£ºÏµÍ³¹ÜÀí---ÏµÍ³ÉèÖÃ---GitHub---Add GitHub Sever---(Credentials)Add---KindÑ¡Ôñ¡°secret text¡±---SecretÊäÈë²½Öè6ÖĞÉú³ÉµÄtoken---Test connetion£¬²âÊÔÊÇ·ñÅäÖÃ³É¹¦
+8.jenkins github serveré…ç½®ï¼šç³»ç»Ÿç®¡ç†---ç³»ç»Ÿè®¾ç½®---GitHub---Add GitHub Sever---(Credentials)Add---Kindé€‰æ‹©â€œsecret textâ€---Secretè¾“å…¥æ­¥éª¤6ä¸­ç”Ÿæˆçš„token---Test connetionï¼Œæµ‹è¯•æ˜¯å¦é…ç½®æˆåŠŸ
 
-Èı¡¢¹¹½¨ÏîÄ¿
+ä¸‰ã€æ„å»ºé¡¹ç›®
 
-¹¹½¨Ò»¸ö×ÔÓÉ·ç¸ñµÄÈí¼şÏîÄ¿url
+æ„å»ºä¸€ä¸ªè‡ªç”±é£æ ¼çš„è½¯ä»¶é¡¹ç›®url
 
-9.GeneralÉèÖÃ£ºÊäÈëÏîÄ¿Ãû³Æ£¬project urlÊäÈëgithubÉÏÏîÄ¿ÍøÖ·
+9.Generalè®¾ç½®ï¼šè¾“å…¥é¡¹ç›®åç§°ï¼Œproject urlè¾“å…¥githubä¸Šé¡¹ç›®ç½‘å€
 
-10.Ô´Âë¹ÜÀí£ºÑ¡Ôñgit---repository url(githubÉÏ---ÏîÄ¿---Clone or download)---credential£¨Ìí¼ÓÒ»¸ögithub¶ÁĞ´È¨ÏŞµÄÕËºÅ(±ØĞëÒª£¬·ñÔò²»¿ÉÔËĞĞ)£ºKindÑ¡ÔñUsername with password£©---Ô´Âë¿âä¯ÀÀ---Ñ¡Ôñgithubweb---URLÊäÈëgitÉÏÏîÄ¿ÍøÖ·
+10.æºç ç®¡ç†ï¼šé€‰æ‹©git---repository url(githubä¸Š---é¡¹ç›®---Clone or download)---credentialï¼ˆæ·»åŠ ä¸€ä¸ªgithubè¯»å†™æƒé™çš„è´¦å·(å¿…é¡»è¦ï¼Œå¦åˆ™ä¸å¯è¿è¡Œ)ï¼šKindé€‰æ‹©Username with passwordï¼‰---æºç åº“æµè§ˆ---é€‰æ‹©githubweb---URLè¾“å…¥gitä¸Šé¡¹ç›®ç½‘å€
 
-11.¹¹½¨´¥·¢Æ÷£ºÑ¡ÔñGitHub hook trigger for GITScm polling
+11.æ„å»ºè§¦å‘å™¨ï¼šé€‰æ‹©GitHub hook trigger for GITScm polling
 
-12.¹¹½¨»·¾³£ºÑ¡ÔñUse secret text(s) or file(s)---Add---secret text£¬Ñ¡ÔñÖ®Ç°Ìí¼ÓµÄÄÇ¸ösecret text
+12.æ„å»ºç¯å¢ƒï¼šé€‰æ‹©Use secret text(s) or file(s)---Add---secret textï¼Œé€‰æ‹©ä¹‹å‰æ·»åŠ çš„é‚£ä¸ªsecret text
 
-13.±£´æ
+13.ä¿å­˜
 
-14.¹¹½¨ÏîÄ¿£¬²âÊÔÊÇ·ñ³É¹¦
+14.æ„å»ºé¡¹ç›®ï¼Œæµ‹è¯•æ˜¯å¦æˆåŠŸ
 ** script
 #+BEGIN_SRC bash
 pid=$(ps aux|grep java|grep jenkins_demo-0.0.1-SNAPSHOT |awk '{print $2}')
@@ -88,11 +88,11 @@ fi
 java -jar build/libs/jenkins_demo-0.0.1-SNAPSHOT.jar &
 #+END_SRC
 * schedule
-1. Ä¬ÈÏ¹¹½¨¿ÉÒÔÉèÖÃÊ±Çø£¬µ«²»ÄÜ´ø²Î
-2. param schedul²å¼ş¿ÉÒÔ´ø²Î£¬µ«ÊÇ²»ÄÜ´øÊ±Çø
-tzselectÉèÖÃÊ±Çø
+1. é»˜è®¤æ„å»ºå¯ä»¥è®¾ç½®æ—¶åŒºï¼Œä½†ä¸èƒ½å¸¦å‚
+2. param schedulæ’ä»¶å¯ä»¥å¸¦å‚ï¼Œä½†æ˜¯ä¸èƒ½å¸¦æ—¶åŒº
+tzselectè®¾ç½®æ—¶åŒº
 
-ĞèÒªÉèÖÃJAVA_OPTS´ø-Duser.timezone=Asia/Shanghai
+éœ€è¦è®¾ç½®JAVA_OPTSå¸¦-Duser.timezone=Asia/Shanghai
 00 8 * * *%BRANCH=dev;BUILD_ENV=TEST;MODULE=all
 10 8 * * *%BRANCH=dev;BUILD_ENV=DEV;MODULE=all
 00 13 * * *%BRANCH=dev;BUILD_ENV=TEST;MODULE=all
@@ -100,10 +100,10 @@ tzselectÉèÖÃÊ±Çø
 00 20 * * *%BRANCH=dev;BUILD_ENV=TEST;MODULE=all
 10 20 * * *%BRANCH=dev;BUILD_ENV=DEV;MODULE=all
 * jenkinsfile
-jenkinÖ§³ÖµÄpipelineÓï·¨£¬Ö§³ÖÉùÃ÷Ê½ºÍscirpt(groovy)
-¶ÔÓÚ¸´ÔÓµÄ¹¹½¨£¬ÓĞ½ÏÇ¿µÄ±íÊ¾
+jenkinæ”¯æŒçš„pipelineè¯­æ³•ï¼Œæ”¯æŒå£°æ˜å¼å’Œscirpt(groovy)
+å¯¹äºå¤æ‚çš„æ„å»ºï¼Œæœ‰è¾ƒå¼ºçš„è¡¨ç¤º
 
-!!!¶ÔÓÚ¸´ÔÓµÄ¶à·ÖÖ§£¬ĞèÒª¶îÍâµÄÖ§³Ö£¬±ÈÈç¼¯ÖĞ»¯¹ÜÀíjenkinsfile£¬´¦Àí´«²ÎÊı£¬Ä¿Ç°»¹ÊÇ¼¦Àß£¬°üÀ¨Ë¢ĞÂjenkinsfile£¬¾ßÓĞ¼«´óµÄ¸´ÔÓ¶È
+!!!å¯¹äºå¤æ‚çš„å¤šåˆ†æ”¯ï¼Œéœ€è¦é¢å¤–çš„æ”¯æŒï¼Œæ¯”å¦‚é›†ä¸­åŒ–ç®¡ç†jenkinsfileï¼Œå¤„ç†ä¼ å‚æ•°ï¼Œç›®å‰è¿˜æ˜¯é¸¡è‚‹ï¼ŒåŒ…æ‹¬åˆ·æ–°jenkinsfileï¼Œå…·æœ‰æå¤§çš„å¤æ‚åº¦
 
 #+BEGIN_SRC groovy
 pipeline {
@@ -111,9 +111,9 @@ pipeline {
   parameters {
     booleanParam(name: 'Refresh',
             defaultValue: false,
-            description: 'Ë¢ĞÂ²¿ÊğÁ÷³Ì£¬Ë¢ĞÂºóĞèÒªÔÚ°´Ò»ÏÂ²¿Êğ')
-    choice(name: 'ENV', choices: ['dev', 'test'], description: '²¿Êğ»·¾³')
-    choice(name: 'BRANCH', choices: ['dev','bo-test','bo-test2'], description: '²¿Êğ·ÖÖ§')
+            description: 'åˆ·æ–°éƒ¨ç½²æµç¨‹ï¼Œåˆ·æ–°åéœ€è¦åœ¨æŒ‰ä¸€ä¸‹éƒ¨ç½²')
+    choice(name: 'ENV', choices: ['dev', 'test'], description: 'éƒ¨ç½²ç¯å¢ƒ')
+    choice(name: 'BRANCH', choices: ['dev','bo-test','bo-test2'], description: 'éƒ¨ç½²åˆ†æ”¯')
   }
   stages {
     stage('checkout') {

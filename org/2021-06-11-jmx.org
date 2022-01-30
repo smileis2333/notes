@@ -2,14 +2,14 @@
 #+STARTUP: indent
 * architecture
 ** Instrumentation layer
-±»¹ÜÀíµÄ×ÊÔ´
+è¢«ç®¡ç†çš„èµ„æº
 ** JMX agent layer
-¿ÉÒÔÃèÊö³ÉËŞÖ÷»·¾³£¬»ò¾µÏñÖ®ÀàµÄregistry£¬¿ÉÒÔ´ÓMBeanServer½Ó¿Ú×·Ëİ¾ßÌåµÄÊµÏÖ
+å¯ä»¥æè¿°æˆå®¿ä¸»ç¯å¢ƒï¼Œæˆ–é•œåƒä¹‹ç±»çš„registryï¼Œå¯ä»¥ä»MBeanServeræ¥å£è¿½æº¯å…·ä½“çš„å®ç°
 ** Remote management layer
-¿Í»§¶Ë£¬ÈçJconsole£¬ÒÔ¼°TomcatµÄ×ÊÔ´¹ÜÀí½çÃæ£¬»òÕß×Ô¶¨ÒåµÄJMX Connector½øĞĞºóĞø´¦Àí
+å®¢æˆ·ç«¯ï¼Œå¦‚Jconsoleï¼Œä»¥åŠTomcatçš„èµ„æºç®¡ç†ç•Œé¢ï¼Œæˆ–è€…è‡ªå®šä¹‰çš„JMX Connectorè¿›è¡Œåç»­å¤„ç†
 * MBean
 ** standard MBean
-¼´±»¹ÜÀíµÄÀà×Ô¼º»òÕßÊµÏÖµÄ½Ó¿ÚÒªÒÔMBean½áÎ²£¬¼´ÒªÇóÃüÃû¹æ·¶
+å³è¢«ç®¡ç†çš„ç±»è‡ªå·±æˆ–è€…å®ç°çš„æ¥å£è¦ä»¥MBeanç»“å°¾ï¼Œå³è¦æ±‚å‘½åè§„èŒƒ
 #+BEGIN_SRC java
 package hj;
 
@@ -72,7 +72,7 @@ public class Main {
 
 #+END_SRC
 ** dynamic MBean
-ÒªÇóÊµÏÖjavax.management.DynamicMBean£¬ÓÉÓÚÃ»ÓĞÊÜµ½ÃüÃû¹æ·¶µÄÓ°Ïì£¬ËùÒÔÈ«²¿µÄ²Ù×÷ºÍĞÅÏ¢¾ù¿ÉÊÓÎª¶¯Ì¬ÅäÖÃ£¬¼´xx·½·¨¿ÉÒÔÔö¼Óxx1·½·¨ºÍxx1ÊôĞÔ£¬ÒÔ´ËÀàÍÆ(ÀàËÆ·´Éä)
+è¦æ±‚å®ç°javax.management.DynamicMBeanï¼Œç”±äºæ²¡æœ‰å—åˆ°å‘½åè§„èŒƒçš„å½±å“ï¼Œæ‰€ä»¥å…¨éƒ¨çš„æ“ä½œå’Œä¿¡æ¯å‡å¯è§†ä¸ºåŠ¨æ€é…ç½®ï¼Œå³xxæ–¹æ³•å¯ä»¥å¢åŠ xx1æ–¹æ³•å’Œxx1å±æ€§ï¼Œä»¥æ­¤ç±»æ¨(ç±»ä¼¼åå°„)
 #+begin_src java
 public class GameDynamic implements DynamicMBean {
 
@@ -224,27 +224,27 @@ public class GameDynamic implements DynamicMBean {
 
 ** open MBean	
 ** model MBean
-×÷Îª´úÀí±©Â¶°üº¬µÄ¶ÔÏóµÄĞÅÏ¢£¬¼´¶ÔÉÏÎÄÌá¹©µÄdynamic MBeanÄÚ²¿Ê¹ÓÃµÄGame¶ÔÏóµÄ¸÷ÀàĞÅÏ¢½øĞĞ×Ô¶¯±©Â¶
+ä½œä¸ºä»£ç†æš´éœ²åŒ…å«çš„å¯¹è±¡çš„ä¿¡æ¯ï¼Œå³å¯¹ä¸Šæ–‡æä¾›çš„dynamic MBeanå†…éƒ¨ä½¿ç”¨çš„Gameå¯¹è±¡çš„å„ç±»ä¿¡æ¯è¿›è¡Œè‡ªåŠ¨æš´éœ²
 * MBeanServer
-* ½ÓÈë²ã(client)
+* æ¥å…¥å±‚(client)
 ** jconsole
-Ö±½Ó½ÓÈë£¬¸ù¾İÊÇ·ñÉèÖÃ°²È«²ßÂÔÉèÖÃ²ÎÊıºóÁ¬½Ó
+ç›´æ¥æ¥å…¥ï¼Œæ ¹æ®æ˜¯å¦è®¾ç½®å®‰å…¨ç­–ç•¥è®¾ç½®å‚æ•°åè¿æ¥
 ** web(jdmk)
 ** client code
 ** Notification
-¸ºÔğMBeanÍ¨Ñ¶µÄ»úÖÆ
+è´Ÿè´£MBeané€šè®¯çš„æœºåˆ¶
 *** Notification
-·â×°ĞÅÏ¢
+å°è£…ä¿¡æ¯
 *** broadcaster
 *** listener 
 *** filiter 
 * general
-** ×¢ÒâÊÂÏî
-* ×¢ÒâÊÂÏî
-** ×î¼ÑÊµ¼ù
-½«Ä³¸öÀàĞèÒª±»¹ÜÀíµÄ×ÊÔ´£¬³éÏó³ö¶ÔÓ¦µÄ(ÀàÃû)+MBeanµÄ½Ó¿Ú£¬¼´×ÊÔ´±¾Éí¾ÍÊÇMBeanÒ²ÄÜ±»×¢²á£¬µ«ÊÇ²»½¨Òé
+** æ³¨æ„äº‹é¡¹
+* æ³¨æ„äº‹é¡¹
+** æœ€ä½³å®è·µ
+å°†æŸä¸ªç±»éœ€è¦è¢«ç®¡ç†çš„èµ„æºï¼ŒæŠ½è±¡å‡ºå¯¹åº”çš„(ç±»å)+MBeançš„æ¥å£ï¼Œå³èµ„æºæœ¬èº«å°±æ˜¯MBeanä¹Ÿèƒ½è¢«æ³¨å†Œï¼Œä½†æ˜¯ä¸å»ºè®®
 ** idea jmx
-ÓĞĞ©°æ±¾»áµ¼ÖÂjconsole¼ì²â±¾µØÊµÀıÊ§°Ü£¬¿ÉÒÔ¿ªÆôÔ¶³Ì
+æœ‰äº›ç‰ˆæœ¬ä¼šå¯¼è‡´jconsoleæ£€æµ‹æœ¬åœ°å®ä¾‹å¤±è´¥ï¼Œå¯ä»¥å¼€å¯è¿œç¨‹
 -Djava.rmi.server.hostname=127.0.0.1
 -Dcom.sun.management.jmxremote
 -Dcom.sun.management.jmxremote.port=4444

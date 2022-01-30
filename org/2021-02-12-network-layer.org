@@ -4,14 +4,14 @@
 [[file:../img/ipv4_format.gif][RFC 791]]
 ** header
 -----
-µÚÒ»¸öÊÇ°æ±¾ºÅ(4bit)£¬Ö¸¶¨Ğ¡°æ±¾µÄ²îÒì£¬¾ö¶¨´¦Àí·½Ê½
-µÚ¶ş¸öÊÇheader length(4bit)£¬ÒòÎªv4´æÔÚÀ©Õ¹×Ö¶Î£¬ËùÒÔĞèÒªÖ¸¶¨header³¤¶È²ÅÄÜ¶ÁÈ¡£¬¼¦Àß(ÍØÕ¹×Ö¶Î»ù±¾ÒÑ¾­·ÏÆú)
-TOS(3bit(ÎŞĞ§×Ö¶Î)+4bitTOS+0)£¬Ö»ÓĞËÄÎ»ÓĞÓÃ£¬Ö¸¶¨datagramµÄĞèÇó(Èç×îĞ¡ÑÓ³Ù-½»»¥Ê½Ó¦ÓÃÈçtelent£¬×î´ó¸ºÔØ-ÈçÎÄ¼ş´«Êä£¬×î´ó¿É¿¿ĞÔ)£¬ÆäËûÒ²ÊÇ±»·ÏÆúµÄ×Ö¶Î(Â·ÓÉĞ­ÒéÖĞ£¬Ö¸¶¨ÁË¿É¿¿ĞÔ)
-datagram×Ü³¤(16bit)£¬-header lengthµÃµ½Êı¾İ°ü´óĞ¡£¬×î´óÖµÈ¡¾öÓÚlink layerµÄMTU
+ç¬¬ä¸€ä¸ªæ˜¯ç‰ˆæœ¬å·(4bit)ï¼ŒæŒ‡å®šå°ç‰ˆæœ¬çš„å·®å¼‚ï¼Œå†³å®šå¤„ç†æ–¹å¼
+ç¬¬äºŒä¸ªæ˜¯header length(4bit)ï¼Œå› ä¸ºv4å­˜åœ¨æ‰©å±•å­—æ®µï¼Œæ‰€ä»¥éœ€è¦æŒ‡å®šheaderé•¿åº¦æ‰èƒ½è¯»å–ï¼Œé¸¡è‚‹(æ‹“å±•å­—æ®µåŸºæœ¬å·²ç»åºŸå¼ƒ)
+TOS(3bit(æ— æ•ˆå­—æ®µ)+4bitTOS+0)ï¼Œåªæœ‰å››ä½æœ‰ç”¨ï¼ŒæŒ‡å®šdatagramçš„éœ€æ±‚(å¦‚æœ€å°å»¶è¿Ÿ-äº¤äº’å¼åº”ç”¨å¦‚telentï¼Œæœ€å¤§è´Ÿè½½-å¦‚æ–‡ä»¶ä¼ è¾“ï¼Œæœ€å¤§å¯é æ€§)ï¼Œå…¶ä»–ä¹Ÿæ˜¯è¢«åºŸå¼ƒçš„å­—æ®µ(è·¯ç”±åè®®ä¸­ï¼ŒæŒ‡å®šäº†å¯é æ€§)
+datagramæ€»é•¿(16bit)ï¼Œ-header lengthå¾—åˆ°æ•°æ®åŒ…å¤§å°ï¼Œæœ€å¤§å€¼å–å†³äºlink layerçš„MTU
 -----
-identification field(16bit)ÓÃÓÚfragmentationºÍresssembly
-flags(3bit) Í¬ÉÏ
-fragment offset Í¬ÉÏ
+identification field(16bit)ç”¨äºfragmentationå’Œresssembly
+flags(3bit) åŒä¸Š
+fragment offset åŒä¸Š
 -----
 TTL(8bit) --> upper limit number of router throught
 protocol field(8bit) --> transport layer 
@@ -26,10 +26,10 @@ options(if any)
 data
 -----
 ** subnet
-ÄÚ²¿ÍøÂç¹ÜÀí£¬subnet mask²»»á·ÖÅäµ½¹«ÍøµÄroutesÉÏ
+å†…éƒ¨ç½‘ç»œç®¡ç†ï¼Œsubnet maskä¸ä¼šåˆ†é…åˆ°å…¬ç½‘çš„routesä¸Š
 ** CIDR
-1. Óëclassful networkÒ»Ñù£¬ÊÇÒ»ÖÖ·ÖÅä·½·¨
-2. È¡´úclassful network£¬ÎªÁË¸ü¼Ó·½±ãµÄ½øĞĞµØÖ··ÖÅäÓëaggregate route
+1. ä¸classful networkä¸€æ ·ï¼Œæ˜¯ä¸€ç§åˆ†é…æ–¹æ³•
+2. å–ä»£classful networkï¼Œä¸ºäº†æ›´åŠ æ–¹ä¾¿çš„è¿›è¡Œåœ°å€åˆ†é…ä¸aggregate route
 ** checksum
 Internet Protocol Version 4, Src: 27.151.12.70, Dst: 192.168.0.6
 
@@ -44,11 +44,11 @@ CA35 + 1 = CA36
 ^CA36 = 35c9
 ** optiom
 *** RR(record route)
-¼òÂª°æµÄÂ·ÓÉ·¢ÏÖ£¬Ö»ÄÜ·Å9¸ö
+ç®€é™‹ç‰ˆçš„è·¯ç”±å‘ç°ï¼Œåªèƒ½æ”¾9ä¸ª
 * CIDR
-±¾ÖÊÎª¼õÉÙroute entryµÄ´óĞ¡£¬ĞÎÊ½ÉÏÌåÏÖÎªÏû³ı·ÖÀàµØÖ·£¬Ô­Àí
-- ¿ØÖÆIP¿éµÄÇøÓò·ÖÅä(Í¬ÑùµÄË¼ÏëÔÚipv6Ò²ÊÇ´æÔÚ¶ÔÓ¦µÄ×ö·¨)
-- ÔÊĞíÔÚÎ»Õ¼ÂúµÄÇé¿öÏÂ½øĞĞrouteºÏ²¢
+æœ¬è´¨ä¸ºå‡å°‘route entryçš„å¤§å°ï¼Œå½¢å¼ä¸Šä½“ç°ä¸ºæ¶ˆé™¤åˆ†ç±»åœ°å€ï¼ŒåŸç†
+- æ§åˆ¶IPå—çš„åŒºåŸŸåˆ†é…(åŒæ ·çš„æ€æƒ³åœ¨ipv6ä¹Ÿæ˜¯å­˜åœ¨å¯¹åº”çš„åšæ³•)
+- å…è®¸åœ¨ä½å æ»¡çš„æƒ…å†µä¸‹è¿›è¡Œrouteåˆå¹¶
 eg:
 200.0.255.0/24
 200.0.254.0/24
@@ -57,12 +57,12 @@ eg:
 11001000 00000000 11111111 00000000/24
 11001000 00000000 11111110 00000000/24
 
-¿É»ã×ÜÎª
+å¯æ±‡æ€»ä¸º
 11001000 00000000 11111110 00000000/23
 
-200.0.254.0/23(Èç¹û»¹ÓĞ±ğµÄµØÖ·£¬¿ÉÒÔ½Ó×Å»ã×Ü)
+200.0.254.0/23(å¦‚æœè¿˜æœ‰åˆ«çš„åœ°å€ï¼Œå¯ä»¥æ¥ç€æ±‡æ€»)
 
-¸÷ÇøÓòÖ»ÒªÔÚ·ÖÅäÍøÂç¿éµÄÊ±ºò±£³Ö¿é·ÖÅä¾¡¿ÉÄÜ´¦ÓÚÍ¬Ò»ÇøÓò(ÈËÃñ±ÒÍæ¼ÒÂÛÍâ)£¬¼´¿ÉÖğ²ã»ã×Üroute
+å„åŒºåŸŸåªè¦åœ¨åˆ†é…ç½‘ç»œå—çš„æ—¶å€™ä¿æŒå—åˆ†é…å°½å¯èƒ½å¤„äºåŒä¸€åŒºåŸŸ(äººæ°‘å¸ç©å®¶è®ºå¤–)ï¼Œå³å¯é€å±‚æ±‡æ€»route
 
 * icmp
 ** formar
@@ -73,54 +73,54 @@ eg:
 15
 *** code
 specific condition
-** ½ûÖ¹Õë¶ÔÒÔÏÂÉú³Éicmp error message
-- icmp error message(·ÀÖ¹ÎŞÏŞ²úÉú´íÎóĞÅÏ¢)
-- ¹ã²¥/¶à²¥
-- link layer¹ã²¥
+** ç¦æ­¢é’ˆå¯¹ä»¥ä¸‹ç”Ÿæˆicmp error message
+- icmp error message(é˜²æ­¢æ— é™äº§ç”Ÿé”™è¯¯ä¿¡æ¯)
+- å¹¿æ’­/å¤šæ’­
+- link layerå¹¿æ’­
 - fragment
-** ÖÖÀà
+** ç§ç±»
 *** address mask request and reply(query)
-ÓÃÓÚÎŞÅÌÏµÍ³ÄÃaddress mask
+ç”¨äºæ— ç›˜ç³»ç»Ÿæ‹¿address mask
 *** timestamp request and reply(query)
 hostA --> hostB
 
-A¸ù¾İrttºÍhostBÌî³äµÄÊ±¼ä£¬Ëã³öÁ½Ö÷»úµÄÊ±¼ädiff
+Aæ ¹æ®rttå’ŒhostBå¡«å……çš„æ—¶é—´ï¼Œç®—å‡ºä¸¤ä¸»æœºçš„æ—¶é—´diff
 *** port unreachable(error)
-ÈçÓÃ
-¶Ë¿ÚÃ»¿ª
+å¦‚ç”¨
+ç«¯å£æ²¡å¼€
 *** echo request and reply
-»ù±¾ÔÚpingÉÏÊ¹ÓÃ£¬´ó²¿·ÖµÄÏµÍ³
-identifierÓÃÓÚÇø±ğprocess£¬Èç¶à¸ötty¿ª¶à¸öping
-sequence numberÓÃÓÚÇø·ÖµÚÒ»¸ö°ü£¬Çø·Ö·¢ËÍµÄecho request
+åŸºæœ¬åœ¨pingä¸Šä½¿ç”¨ï¼Œå¤§éƒ¨åˆ†çš„ç³»ç»Ÿ
+identifierç”¨äºåŒºåˆ«processï¼Œå¦‚å¤šä¸ªttyå¼€å¤šä¸ªping
+sequence numberç”¨äºåŒºåˆ†ç¬¬ä¸€ä¸ªåŒ…ï¼ŒåŒºåˆ†å‘é€çš„echo request
 *** redirect
-ÓÃÓÚ´¦Àí´Órouter½øĞĞroute·Ö·¢µÄ£¬´¦ÀíLANÏÂµÄrouteÖªÊ¶·Ö·¢
+ç”¨äºå¤„ç†ä»routerè¿›è¡Œrouteåˆ†å‘çš„ï¼Œå¤„ç†LANä¸‹çš„routeçŸ¥è¯†åˆ†å‘
 
-router´¥·¢Ìõ¼ş
+routerè§¦å‘æ¡ä»¶
 router check:
-1. ´ÓÄÄÀ´ÍùÄÄÈ¥£¬½Ó¿ÚÀ´»ØĞèÒªÒ»ÖÂ
-2. ·¢ËÍµÄredirectµØÖ·²»ÄÜÊÇ±ğµÄredirectÉú³É³öÀ´µÄ(À´Ô´Ö»ÄÜÊÇ¾²Ì¬»òÕßroute protocol×Ô¼º½»»»³öÀ´µÄ)
-3. ²»ÄÜ·¢ËÍÕß×Ô¼ºÂ·ÓÉ×Ô¼º
-4. ÏµÍ³¿ªÆôredirect
+1. ä»å“ªæ¥å¾€å“ªå»ï¼Œæ¥å£æ¥å›éœ€è¦ä¸€è‡´
+2. å‘é€çš„redirectåœ°å€ä¸èƒ½æ˜¯åˆ«çš„redirectç”Ÿæˆå‡ºæ¥çš„(æ¥æºåªèƒ½æ˜¯é™æ€æˆ–è€…route protocolè‡ªå·±äº¤æ¢å‡ºæ¥çš„)
+3. ä¸èƒ½å‘é€è€…è‡ªå·±è·¯ç”±è‡ªå·±
+4. ç³»ç»Ÿå¼€å¯redirect
 
-host¸Ä¶¯Ìõ¼ş:
-1. redirectµÄrouter±ØĞëÖ±Á¬
-2. ±ØĞë´ÓÄ¬ÈÏÍø¹Ø·¢³öÀ´µÄ(·ÀÖ¹´Û¸Ä)
-3. ·¢ËÍĞÅÏ¢µÄÍø¹Ø²»ÄÜÉùÃ÷×Ô¼ºÊÇÄ¿±ê(µÈ¼ÛÓÚÎŞĞ§Ğ£Ñé£¬×Ô¼ºÉùÃ÷×Ô¼º)
-4. redirect route²»ÄÜÊÇÖ±Á¬·¶Î§
+hostæ”¹åŠ¨æ¡ä»¶:
+1. redirectçš„routerå¿…é¡»ç›´è¿
+2. å¿…é¡»ä»é»˜è®¤ç½‘å…³å‘å‡ºæ¥çš„(é˜²æ­¢ç¯¡æ”¹)
+3. å‘é€ä¿¡æ¯çš„ç½‘å…³ä¸èƒ½å£°æ˜è‡ªå·±æ˜¯ç›®æ ‡(ç­‰ä»·äºæ— æ•ˆæ ¡éªŒï¼Œè‡ªå·±å£°æ˜è‡ªå·±)
+4. redirect routeä¸èƒ½æ˜¯ç›´è¿èŒƒå›´
 *** solicitation/advertisement
-¿ª»úÊ±ºò»ñÈ¡gateway router
+å¼€æœºæ—¶å€™è·å–gateway router
 
 [[file:../img/icmp_advetisement.png][icmp advertisement]]
 * tool
 ** ping
 echo request
 ** traceroute
-ÓÃUDP±¨ÎÄÅäºÏTTL£¬·ÖÁ½Àà´¦Àí    :
-- TTLÖÕÖ¹µÃµ½time exceed£¬È·¶¨Â·ÓÉ
-- µ½´ïÖÕµã,port unreachable£¬È·¶¨½áÊø
-ÓÃÀ´È·ÈÏÕû¸örouteµÄ¹ì¼££¬²»ÄÜ±£Ö¤×¼È·£¬ÒòÎªroute¿ÉÒÔ·¢Éú±ä»¯
+ç”¨UDPæŠ¥æ–‡é…åˆTTLï¼Œåˆ†ä¸¤ç±»å¤„ç†    :
+- TTLç»ˆæ­¢å¾—åˆ°time exceedï¼Œç¡®å®šè·¯ç”±
+- åˆ°è¾¾ç»ˆç‚¹,port unreachableï¼Œç¡®å®šç»“æŸ
+ç”¨æ¥ç¡®è®¤æ•´ä¸ªrouteçš„è½¨è¿¹ï¼Œä¸èƒ½ä¿è¯å‡†ç¡®ï¼Œå› ä¸ºrouteå¯ä»¥å‘ç”Ÿå˜åŒ–
 * ip fragment
-¹ã²¥²»ÄÜfragment
+å¹¿æ’­ä¸èƒ½fragment
 [[file:../img/fragment_packet.gif][fragment packet]]
 ** demo
 ./sock -u -i -n1 -w1471 192.168.0.6 15550
@@ -131,19 +131,19 @@ echo request
 tcpdump -i wlp1s0 udp and src 192.168.0.4
 ** header
 *** 3-bit flags
-Ò»Î»ÓÃÓÚÖ¸¶¨ÊÇ·ñ»¹ÓĞ¶îÍâµÄ fragment(ÖĞ¼äÂ·ÓÉÆ÷¿ÉÒÔ½Ó×Å·Ö)£¬ÈÃ½ÓÊÕÕßÄÜ¹»È·¶¨ÊÇ·ñ½ÓÊÜÍê±Ï
-Ò»Î»ÓÃÓÚÊÇ·ñ¿ªÆô fragment
+ä¸€ä½ç”¨äºæŒ‡å®šæ˜¯å¦è¿˜æœ‰é¢å¤–çš„ fragment(ä¸­é—´è·¯ç”±å™¨å¯ä»¥æ¥ç€åˆ†)ï¼Œè®©æ¥æ”¶è€…èƒ½å¤Ÿç¡®å®šæ˜¯å¦æ¥å—å®Œæ¯•
+ä¸€ä½ç”¨äºæ˜¯å¦å¼€å¯ fragment
 *** offset
-´ÓĞ¡µ½´óÅÅ£¬ÔÙÓÃflag bitsÖĞµÄÒ»Î»È·¶¨ÖÕÖ¹£¬È»ºó¿ªÊ¼ reassemble
+ä»å°åˆ°å¤§æ’ï¼Œå†ç”¨flag bitsä¸­çš„ä¸€ä½ç¡®å®šç»ˆæ­¢ï¼Œç„¶åå¼€å§‹ reassemble
 ** flow
-*** ÖĞ¼äÂ·ÓÉÆ÷
-- Èç¹ûÃ»¿ªDF£¬fragment³¬¹ıMTU¾Í½Ó×Å·Ö
-- Èç¹û¿ªÁË£¬·µ»ØICMP Unreachable Error (Fragmentation Required)£¬¸ù¾İÏµÍ³Ö§³Ö³Ì¶È¿ÉÄÜ·µ»ØÏÂÒ»ÌøµÄMTU
+*** ä¸­é—´è·¯ç”±å™¨
+- å¦‚æœæ²¡å¼€DFï¼Œfragmentè¶…è¿‡MTUå°±æ¥ç€åˆ†
+- å¦‚æœå¼€äº†ï¼Œè¿”å›ICMP Unreachable Error (Fragmentation Required)ï¼Œæ ¹æ®ç³»ç»Ÿæ”¯æŒç¨‹åº¦å¯èƒ½è¿”å›ä¸‹ä¸€è·³çš„MTU
 *** sender
-- È·ÈÏ×Ô¼ºµÄÍø¿¨MTU£¬½øĞĞfragment
-- Èç¹û¿ª×ÅDF£¬ÄÃ·µ»ØµÄicmpÌáÊ¾ÏÂÒ»ÌøµÄMTU(ÓĞ¾ßÌåÖµ/0)£¬Ç°ÕßÒÔ¸ÃÖµ×÷ÎªĞÂµÄfragment±ê×¼£¬ºóÕßÓÉHost×Ô¼º²Â(»ù±¾±È½Ï¼¦Àß£¬ÖÁÉÙÒª¶à´Î²ÅÄÜÈ·¶¨£¬ËùÒÔ±ê×¼ÒªÇó¾¡¿ÉÄÜÂú×ãÇ°Õß)
+- ç¡®è®¤è‡ªå·±çš„ç½‘å¡MTUï¼Œè¿›è¡Œfragment
+- å¦‚æœå¼€ç€DFï¼Œæ‹¿è¿”å›çš„icmpæç¤ºä¸‹ä¸€è·³çš„MTU(æœ‰å…·ä½“å€¼/0)ï¼Œå‰è€…ä»¥è¯¥å€¼ä½œä¸ºæ–°çš„fragmentæ ‡å‡†ï¼Œåè€…ç”±Hostè‡ªå·±çŒœ(åŸºæœ¬æ¯”è¾ƒé¸¡è‚‹ï¼Œè‡³å°‘è¦å¤šæ¬¡æ‰èƒ½ç¡®å®šï¼Œæ‰€ä»¥æ ‡å‡†è¦æ±‚å°½å¯èƒ½æ»¡è¶³å‰è€…)
 *** receiver
-ÊÕµ½Ò»¸öfragmentsÖĞµÄµÚÒ»¸ö(ÆäËû²»ĞĞ£¬ÆäËûÈ±ÁËudpµÄheader)¿ªÊ¼¼ÆÊ±(¸ù¾İid)£¬³¬Ê±ºó¶ªÆúÈ«²¿£¬²¢·µ»ØicmpÌáÊ¾ºÏ²¢Ê§°Ü(È¡¾öÓÚÏµÍ³Ö§³Ö)
+æ”¶åˆ°ä¸€ä¸ªfragmentsä¸­çš„ç¬¬ä¸€ä¸ª(å…¶ä»–ä¸è¡Œï¼Œå…¶ä»–ç¼ºäº†udpçš„header)å¼€å§‹è®¡æ—¶(æ ¹æ®id)ï¼Œè¶…æ—¶åä¸¢å¼ƒå…¨éƒ¨ï¼Œå¹¶è¿”å›icmpæç¤ºåˆå¹¶å¤±è´¥(å–å†³äºç³»ç»Ÿæ”¯æŒ)
 * endpoint format
 | Local Address | Foreign Address | Description                                              |
 |---------------+-----------------+----------------------------------------------------------|
@@ -162,11 +162,11 @@ tcpdump -i wlp1s0 udp and src 192.168.0.4
 an IP datagram is the unit of end-to-end transmission at the IP layer (before fragmentation and after reassembly), and a packet is the unit of data passed between the IP layer and the link layer. A packet can be a complete IP datagram or a fragment of an IP datagram.
 * special address
 ** Limited Broadcast
-# µÚÒ»ÕÅ¿¨µÄ¹ã²¥µØÖ·£¬·ÇRFCÇ¿ÖÆ£¬ËùÒÔ¿ÉÄÜ´æÔÚÈ«²¿¿¨¶¼·¢
+# ç¬¬ä¸€å¼ å¡çš„å¹¿æ’­åœ°å€ï¼ŒéRFCå¼ºåˆ¶ï¼Œæ‰€ä»¥å¯èƒ½å­˜åœ¨å…¨éƒ¨å¡éƒ½å‘
 255.255.255.255
 ** Net-directed Broadcast
-maskÍêºóÃæµÄhost bitÈ«1
-¶ÔÓ¦¿¨µÄ·¢¹ã²¥
+maskå®Œåé¢çš„host bitå…¨1
+å¯¹åº”å¡çš„å‘å¹¿æ’­
 ** multicast address
 # all systems on this subnet
 224.0.0.1

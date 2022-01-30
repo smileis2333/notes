@@ -1,6 +1,6 @@
 #+TITLE:  spring cloud
 #+STARTUP: indent
-* ×¢²áÖĞĞÄ
+* æ³¨å†Œä¸­å¿ƒ
 ** Eureka
 ** Zookeeper
 docker run -d -p 2181:2181 zookeeper
@@ -9,14 +9,14 @@ docker exec -it 73 /bin/bash
 zhCli.sh
 ls /
 *** trick
-Î¢·şÎñ×¢²áµÄÁÙÊ±½Úµã
+å¾®æœåŠ¡æ³¨å†Œçš„ä¸´æ—¶èŠ‚ç‚¹
 *** config
 #+BEGIN_SRC yaml
 spring:
   application:
     name: cloud-consumer-order
   cloud:
-    #×¢²áµ½zookeeperµØÖ·
+    #æ³¨å†Œåˆ°zookeeperåœ°å€
     zookeeper:
       connect-string: 192.168.2.165:2181
 #+END_SRC
@@ -28,7 +28,7 @@ consul.exe agent -dev
 spring:
   application:
     name: consul-provider-peyment
-  ###consul×¢²áÖĞĞÄµØÖ·
+  ###consulæ³¨å†Œä¸­å¿ƒåœ°å€
   cloud:
     consul:
       host: localhost
@@ -59,64 +59,64 @@ spring:
 #+END_SRC
 
 @EnableDiscoveryClient
-CP/APÇĞ»»
-* ·şÎñµ÷ÓÃ
+CP/APåˆ‡æ¢
+* æœåŠ¡è°ƒç”¨
 ** Ribbon
 *** IRule
-¶¨ÒåÁË¸÷ÖÖ¸ºÔØ¾ùºâµÄ¹æÔò
+å®šä¹‰äº†å„ç§è´Ÿè½½å‡è¡¡çš„è§„åˆ™
 *** config
-1. È«¾ÖÅäÖÃ¿ÉÒÔÖ±½ÓÔÙ@ComponentScanÏÂ
-2. Îªµ¥¸ö·şÎñÉèÖÃÔòĞèÒªÔÚÉ¨Ãè·¶Î§Íâ£¬·ñÔò»á±»ÅäÖÃÎªÈ«¾Ö£¬È»ºóÔÚÅäÖÃÀàÉèÖÃ@RibbonClient(name = "CLOUD-PAYMENT-SERVICE", configuration = MySelfRule.class)
+1. å…¨å±€é…ç½®å¯ä»¥ç›´æ¥å†@ComponentScanä¸‹
+2. ä¸ºå•ä¸ªæœåŠ¡è®¾ç½®åˆ™éœ€è¦åœ¨æ‰«æèŒƒå›´å¤–ï¼Œå¦åˆ™ä¼šè¢«é…ç½®ä¸ºå…¨å±€ï¼Œç„¶ååœ¨é…ç½®ç±»è®¾ç½®@RibbonClient(name = "CLOUD-PAYMENT-SERVICE", configuration = MySelfRule.class)
 ***** format
 #+BEGIN_SRC java
 @Configuration
 public class MySelfRule {
     @Bean
     public IRule myRule(){
-        return new RandomRule();    //¸ºÔØ¾ùºâ»úÖÆ¸ÄÎªËæ»ú
+        return new RandomRule();    //è´Ÿè½½å‡è¡¡æœºåˆ¶æ”¹ä¸ºéšæœº
     }
 }
 #+END_SRC
 
 ** LoadBalancer
-* ·şÎñµ÷ÓÃ2
+* æœåŠ¡è°ƒç”¨2
 ** Feign
 ** OpenFeign
-¶ÔribbonºÍrestTemplate×öÁË¶ş´ÎÕûºÏ£¬ÊµÏÖÁËÒÔÉùÃ÷Ê½½Ó¿ÚÅäºÏ×¢½âµÄĞÎÊ½Ê¡È¥ÁË¾ÉÓĞµÄÄ£°å»¯µÄÉêÇëÊı¾İ·½·¨
+å¯¹ribbonå’ŒrestTemplateåšäº†äºŒæ¬¡æ•´åˆï¼Œå®ç°äº†ä»¥å£°æ˜å¼æ¥å£é…åˆæ³¨è§£çš„å½¢å¼çœå»äº†æ—§æœ‰çš„æ¨¡æ¿åŒ–çš„ç”³è¯·æ•°æ®æ–¹æ³•
 *** config
-**** ³¬Ê±¿ØÖÆ
+**** è¶…æ—¶æ§åˆ¶
 #+BEGIN_SRC yaml
 ribbon:
-  #Ö¸µÄÊÇ½¨Á¢Á¬½ÓÊ¹ÓÃµÄÊ±¼ä£¬ÊÊÓÃÓÚÍøÂç×´¿öÕı³£µÄÇé¿öÏÂ£¬Á½¶ËÁ¬½ÓËùÓÃµÄÊ±¼ä
+  #æŒ‡çš„æ˜¯å»ºç«‹è¿æ¥ä½¿ç”¨çš„æ—¶é—´ï¼Œé€‚ç”¨äºç½‘ç»œçŠ¶å†µæ­£å¸¸çš„æƒ…å†µä¸‹ï¼Œä¸¤ç«¯è¿æ¥æ‰€ç”¨çš„æ—¶é—´
   ReadTimeout: 5000
-  #Ö¸µÄÊÇ½¨Á¢Á¬½Óºó´Ó·şÎñÆ÷¶ÁÈ¡µ½¿ÉÓÃ×ÊÔ´ËùÓÃµÄÊ±¼ä
+  #æŒ‡çš„æ˜¯å»ºç«‹è¿æ¥åä»æœåŠ¡å™¨è¯»å–åˆ°å¯ç”¨èµ„æºæ‰€ç”¨çš„æ—¶é—´
   ConnectTimeout: 5000
 #+END_SRC
 **** log
 #+BEGIN_SRC java
-import feign.Logger;	//²»Òªµ¼´í°ü
+import feign.Logger;	//ä¸è¦å¯¼é”™åŒ…
 
 @Configuration
 public class FeignConfig {
 
     @Bean
     Logger.Level feignLoggerLevel(){
-        //´òÓ¡×îÏêÏ¸µÄÈÕÖ¾
+        //æ‰“å°æœ€è¯¦ç»†çš„æ—¥å¿—
         return Logger.Level.FULL;
     }
 
 }
 
 #+END_SRC
-* ·şÎñ½µ¼¶
+* æœåŠ¡é™çº§
 ** Hystrix
-*** ½µ¼¶
-1. ÅäÖÃ¾ùÊÇÒ»ÖÂµÄ²Ù×÷£¬µ«ÊÇÒ»°ãÅäÖÃÔÚÏû·Ñ¶ËµÄÉÏÃæ£¬Èç¹ûÅäÖÃÔÚproviderÒ»²à£¬µ±Á´Â·ºÜ³¤Ê±£¬ÉÏÓÎÎŞ·¨¿ìËÙ½øĞĞÏìÓ¦
-2. ¿ÉÒÔÅäÖÃÔÚÈÎÒâ·½·¨ÉÏ£¬µ«ÊÇÒ»°ãÊÇÔÚ¶ÔÏû·Ñ²àµÄÔ¶³Ìµ÷ÓÃ(ÅäÖÃÔÚfeignÉÏÃæ)½øĞĞfallback´¦Àí£¬ÒòÎª±¾µØ·½·¨ÊÇ¿ÉÒÔ½øĞĞºÄÊ±¹ÀËã£¬¶øÔ¶³ÌÓÉÓÚÁ´Â·³¤¶È¡¢ÍøÂçµÈÒòËØ£¬²ÅÊÇÖÆÔ¼Ïû·Ñ²àµÄ´¦ÀíÊ±¼äÒòËØ
+*** é™çº§
+1. é…ç½®å‡æ˜¯ä¸€è‡´çš„æ“ä½œï¼Œä½†æ˜¯ä¸€èˆ¬é…ç½®åœ¨æ¶ˆè´¹ç«¯çš„ä¸Šé¢ï¼Œå¦‚æœé…ç½®åœ¨providerä¸€ä¾§ï¼Œå½“é“¾è·¯å¾ˆé•¿æ—¶ï¼Œä¸Šæ¸¸æ— æ³•å¿«é€Ÿè¿›è¡Œå“åº”
+2. å¯ä»¥é…ç½®åœ¨ä»»æ„æ–¹æ³•ä¸Šï¼Œä½†æ˜¯ä¸€èˆ¬æ˜¯åœ¨å¯¹æ¶ˆè´¹ä¾§çš„è¿œç¨‹è°ƒç”¨(é…ç½®åœ¨feignä¸Šé¢)è¿›è¡Œfallbackå¤„ç†ï¼Œå› ä¸ºæœ¬åœ°æ–¹æ³•æ˜¯å¯ä»¥è¿›è¡Œè€—æ—¶ä¼°ç®—ï¼Œè€Œè¿œç¨‹ç”±äºé“¾è·¯é•¿åº¦ã€ç½‘ç»œç­‰å› ç´ ï¼Œæ‰æ˜¯åˆ¶çº¦æ¶ˆè´¹ä¾§çš„å¤„ç†æ—¶é—´å› ç´ 
 **** config
 ***** activate
-@EnableHystrix // ¼¤»î
-***** ½µ¼¶
+@EnableHystrix // æ¿€æ´»
+***** é™çº§
 ****** single fallback
 #+BEGIN_SRC java
 @HystrixCommand(fallbackMethod = "paymentTimeOutFallbackMethod", commandProperties = {
@@ -128,17 +128,17 @@ public String paymentInfo_TimeOut(@PathVariable("id") Integer id){
     return result;
 }
 public String paymentTimeOutFallbackMethod(@PathVariable("id") Integer id){
-    return "Ïû·ÑÕß80£¬Ö§¸¶ÏµÍ³·±Ã¦";
+    return "æ¶ˆè´¹è€…80ï¼Œæ”¯ä»˜ç³»ç»Ÿç¹å¿™";
 }
 #+END_SRC
 ****** global fallback
 #+BEGIN_SRC java
-// ²»ÄÜ´ø²ÎÊı£¬ÒòÎª±»È«¾Öµ÷ÓÃ£¬²»Ò»¶¨ÄÜÈ·±£¶¼ÄÜµÃµ½ÊôĞÔ
+// ä¸èƒ½å¸¦å‚æ•°ï¼Œå› ä¸ºè¢«å…¨å±€è°ƒç”¨ï¼Œä¸ä¸€å®šèƒ½ç¡®ä¿éƒ½èƒ½å¾—åˆ°å±æ€§
 
-// ÀàµÄÉÏÃæ¼ÓÈëÉùÃ÷
+// ç±»çš„ä¸Šé¢åŠ å…¥å£°æ˜
 @DefaultProperties(defaultFallback = "payment_Global_FallbackMethod")
 
-// ĞèÒª¼¤»îfallbackµÄ·½·¨ÉèÖÃ
+// éœ€è¦æ¿€æ´»fallbackçš„æ–¹æ³•è®¾ç½®
 @HystrixCommand
 #+END_SRC
 ****** feign setting(general)
@@ -166,22 +166,22 @@ public class PaymentFallbackService implements PaymentHystrixService {
     }
 }
 #+END_SRC
-***** ÈÛ¶Ï
+***** ç†”æ–­
 #+BEGIN_SRC java
 	@HystrixCommand(fallbackMethod = "paymentCircuitBreaker_fallback",commandProperties = {
-        @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),                      //¿ªÆô¶ÏÂ·Æ÷
-        @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),         //ÇëÇó×ÜÊıãĞÖµ£¨Ä¬ÈÏ20£©
-        @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "10000"),   //ÈÛ¶Ïºó£¬½øĞĞ°ë¿ª³¢ÊÔµÄÊ±¼ä´°¿ÚÆÚ
-        @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60"),       //ÇëÇó´ÎÊıµÄ´íÎóÂÊ´ïµ½¶àÉÙÌøÕ¢(°Ù·ÖÂÊ%£¬Ä¬ÈÏ50%)
+        @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),                      //å¼€å¯æ–­è·¯å™¨
+        @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),         //è¯·æ±‚æ€»æ•°é˜ˆå€¼ï¼ˆé»˜è®¤20ï¼‰
+        @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "10000"),   //ç†”æ–­åï¼Œè¿›è¡ŒåŠå¼€å°è¯•çš„æ—¶é—´çª—å£æœŸ
+        @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60"),       //è¯·æ±‚æ¬¡æ•°çš„é”™è¯¯ç‡è¾¾åˆ°å¤šå°‘è·³é—¸(ç™¾åˆ†ç‡%ï¼Œé»˜è®¤50%)
 })
 #+END_SRC
 ***** HystrixDashboard
-¼à¿Øhystrix2.2.1Ê±ĞèÒªÔÚ±»¼à¿ØÒ»²à¼ÓÈë
+ç›‘æ§hystrix2.2.1æ—¶éœ€è¦åœ¨è¢«ç›‘æ§ä¸€ä¾§åŠ å…¥
 #+BEGIN_SRC java
 /**
- * ´ËÅäÖÃÊÇÎªÁË·şÎñ¼à¿Ø¶øÅäÖÃ£¬Óë·şÎñÈİ´í±¾ÉíÎŞ¹Ø£¬springcloudÉı¼¶ºóµÄ¿Ó
- * ServletRegistrationBeanÒòÎªSpringBootµÄÄ¬ÈÏÂ·¾¶²»ÊÇ ¡°/hystrix.stream"
- * Ö»ÒªÔÚ×Ô¼ºµÄÏîÄ¿ÀïÅäÖÃÉÏÏÂµÄservlet¾Í¿ÉÒÔÁË
+ * æ­¤é…ç½®æ˜¯ä¸ºäº†æœåŠ¡ç›‘æ§è€Œé…ç½®ï¼Œä¸æœåŠ¡å®¹é”™æœ¬èº«æ— å…³ï¼Œspringcloudå‡çº§åçš„å‘
+ * ServletRegistrationBeanå› ä¸ºSpringBootçš„é»˜è®¤è·¯å¾„ä¸æ˜¯ â€œ/hystrix.stream"
+ * åªè¦åœ¨è‡ªå·±çš„é¡¹ç›®é‡Œé…ç½®ä¸Šä¸‹çš„servletå°±å¯ä»¥äº†
  */
 @Bean
 public ServletRegistrationBean getServlet() {
@@ -193,11 +193,11 @@ public ServletRegistrationBean getServlet() {
     return  registrationBean;
 }
 #+END_SRC
-*** ÈÛ¶Ï
-*** ÏŞÁ÷
+*** ç†”æ–­
+*** é™æµ
 ** resilience4j
 ** sentinel
-* ·şÎñÍø¹Ø
+* æœåŠ¡ç½‘å…³
 ** Zuul
 ** Gateway
 *** config
@@ -209,16 +209,16 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: payment_route # Â·ÓÉµÄid,Ã»ÓĞ¹æ¶¨¹æÔòµ«ÒªÇóÎ¨Ò»,½¨ÒéÅäºÏ·şÎñÃû
-          #Æ¥ÅäºóÌá¹©·şÎñµÄÂ·ÓÉµØÖ·
+        - id: payment_route # è·¯ç”±çš„id,æ²¡æœ‰è§„å®šè§„åˆ™ä½†è¦æ±‚å”¯ä¸€,å»ºè®®é…åˆæœåŠ¡å
+          #åŒ¹é…åæä¾›æœåŠ¡çš„è·¯ç”±åœ°å€
           uri: http://localhost:8001
           predicates:
-            - Path=/payment/get/** # ¶ÏÑÔ£¬Â·¾¶ÏàÆ¥ÅäµÄ½øĞĞÂ·ÓÉ
+            - Path=/payment/get/** # æ–­è¨€ï¼Œè·¯å¾„ç›¸åŒ¹é…çš„è¿›è¡Œè·¯ç”±
 
         - id: payment_route2
           uri: http://localhost:8001
           predicates:
-            - Path=/payment/lb/** #¶ÏÑÔ,Â·¾¶ÏàÆ¥ÅäµÄ½øĞĞÂ·ÓÉ
+            - Path=/payment/lb/** #æ–­è¨€,è·¯å¾„ç›¸åŒ¹é…çš„è¿›è¡Œè·¯ç”±
 #+END_SRC
 **** source
 #+BEGIN_SRC java
@@ -230,18 +230,18 @@ public class GatewayConfig {
         RouteLocatorBuilder.Builder routes = routeLocatorBuilder.routes();
 
         routes.route("path_route_angenin",  //id
-                r -> r.path("/guonei")  //·ÃÎÊ http://localhost:9527/guonei
-                        .uri("http://news.baidu.com/guonei"));  //¾Í»á×ª·¢µ½ http://news.baidu.com/guonei
+                r -> r.path("/guonei")  //è®¿é—® http://localhost:9527/guonei
+                        .uri("http://news.baidu.com/guonei"));  //å°±ä¼šè½¬å‘åˆ° http://news.baidu.com/guonei
 
         routes.route("path_route_angenin2",  //id
-                r -> r.path("/guoji")  //·ÃÎÊ http://localhost:9527/guoji
-                        .uri("http://news.baidu.com/guoji"));  //¾Í»á×ª·¢µ½ http://news.baidu.com/guonji
+                r -> r.path("/guoji")  //è®¿é—® http://localhost:9527/guoji
+                        .uri("http://news.baidu.com/guoji"));  //å°±ä¼šè½¬å‘åˆ° http://news.baidu.com/guonji
 
         return routes.build();
     }
 }
 #+END_SRC
-**** ¿ªÆô¸ºÔØ¾ùºâ
+**** å¼€å¯è´Ÿè½½å‡è¡¡
 #+BEGIN_SRC yaml
 spring:
   application:
@@ -275,54 +275,54 @@ public class MyLogGateWayFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        log.info("**************come in MyLogGateWayFilter£º" + new Date());
-        //»ñÈ¡requestÖĞµÄuname²ÎÊı
+        log.info("**************come in MyLogGateWayFilterï¼š" + new Date());
+        //è·å–requestä¸­çš„unameå‚æ•°
         String uname = exchange.getRequest().getQueryParams().getFirst("uname");
 
         if(uname == null){
-            log.info("*******ÓÃ»§ÃûÎªnull£¬·Ç·¨ÓÃ»§£¡£¡");
-            //ÉèÖÃÏìÓ¦£¬²»±»½ÓÊÜ
+            log.info("*******ç”¨æˆ·åä¸ºnullï¼Œéæ³•ç”¨æˆ·ï¼ï¼");
+            //è®¾ç½®å“åº”ï¼Œä¸è¢«æ¥å—
             exchange.getResponse().setStatusCode(HttpStatus.NOT_ACCEPTABLE);
 
             return exchange.getResponse().setComplete();
         }
 
-        //·µ»Øchain.filter(exchange)£¬·ÅĞĞ
+        //è¿”å›chain.filter(exchange)ï¼Œæ”¾è¡Œ
         return chain.filter(exchange);
     }
 
     @Override
     public int getOrder() {
-        //·µ»ØÖµÊÇ¹ıÂËÆ÷µÄÓÅÏÈ¼¶£¬Ô½Ğ¡ÓÅÏÈ¼¶Ô½¸ß£¨×îĞ¡-2147483648£¬×î´ó2147483648£©
+        //è¿”å›å€¼æ˜¯è¿‡æ»¤å™¨çš„ä¼˜å…ˆçº§ï¼Œè¶Šå°ä¼˜å…ˆçº§è¶Šé«˜ï¼ˆæœ€å°-2147483648ï¼Œæœ€å¤§2147483648ï¼‰
         return 0;
     }
 }
 
 #+END_SRC
-* ·şÎñÅäÖÃ
+* æœåŠ¡é…ç½®
 ** Config
-³éÈ¡Î¢·şÎñÅäÖÃ×÷ÎªÖĞĞÄ»¯´¦Àí
+æŠ½å–å¾®æœåŠ¡é…ç½®ä½œä¸ºä¸­å¿ƒåŒ–å¤„ç†
 *** /{label}/{application}-{profile}.yml
 **** server
 #+BEGIN_SRC yaml
 spring:
   application:
-    name: cloud-config-center #×¢²á½øEureka·şÎñÆ÷µÄÎ¢·şÎñÃû
+    name: cloud-config-center #æ³¨å†Œè¿›EurekaæœåŠ¡å™¨çš„å¾®æœåŠ¡å
   cloud:
     config:
       server:
         git:
-          uri: https://github.com/smile-2333/springcloud-config.git  #gitµÄ²Ö¿âµØÖ·
-          search-paths:   #ËÑË÷Ä¿Â¼
+          uri: https://github.com/smile-2333/springcloud-config.git  #gitçš„ä»“åº“åœ°å€
+          search-paths:   #æœç´¢ç›®å½•
             - springcloud-config
-      label: master   #¶ÁÈ¡µÄ·ÖÖ§
+      label: master   #è¯»å–çš„åˆ†æ”¯
 #+END_SRC
 **** client
-application.yml¸ÄÎªbootstrap.yml
+application.ymlæ”¹ä¸ºbootstrap.yml
 *** /{application}-{profile}.yml
 *** {application}/{profile}/{label}
-*** ÉèÖÃÄ³¸ö·şÎñÖ§³Örefresh
-@RefreshScope //±ê×¼ºóµÄbeanËù¶ÁÈ¡µÄÅäÖÃ£¬ÔÚ±»actuator refreshÖ®ºó£¬@Value¶ÁÈ¡µÄÊıÖµ£¬»á×Ô¶¯Ë¢ĞÂÎª×îĞÂÖµ£¬ÆäËûÃ»±êµÄ£¬¶¼²»»á±ä
+*** è®¾ç½®æŸä¸ªæœåŠ¡æ”¯æŒrefresh
+@RefreshScope //æ ‡å‡†åçš„beanæ‰€è¯»å–çš„é…ç½®ï¼Œåœ¨è¢«actuator refreshä¹‹åï¼Œ@Valueè¯»å–çš„æ•°å€¼ï¼Œä¼šè‡ªåŠ¨åˆ·æ–°ä¸ºæœ€æ–°å€¼ï¼Œå…¶ä»–æ²¡æ ‡çš„ï¼Œéƒ½ä¸ä¼šå˜
 ** Nacos
 *** dependency
 #+BEGIN_SRC xml
@@ -343,10 +343,10 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 10.211.55.17:8848 #Nacos·şÎñ×¢²áÖĞĞÄµØÖ·£¨±¾»úµÄĞ´localhost£©
+        server-addr: 10.211.55.17:8848 #NacosæœåŠ¡æ³¨å†Œä¸­å¿ƒåœ°å€ï¼ˆæœ¬æœºçš„å†™localhostï¼‰
       config:
-        server-addr: 10.211.55.17:8848 #Nacos×÷ÎªÅäÖÃÖĞĞÄµØÖ·£¨±¾»úµÄĞ´localhost£©
-        file-extension: yml #Ö¸¶¨yml¸ñÊ½ÅäÖÃ
+        server-addr: 10.211.55.17:8848 #Nacosä½œä¸ºé…ç½®ä¸­å¿ƒåœ°å€ï¼ˆæœ¬æœºçš„å†™localhostï¼‰
+        file-extension: yml #æŒ‡å®šymlæ ¼å¼é…ç½®
 #+END_SRC
 #+BEGIN_SRC yaml
 
@@ -356,7 +356,7 @@ spring:
     active: dev
 #+END_SRC
 *** partition
-Ä¬ÈÏÇé¿öÏÂÏÂÁĞÊ½×ÓµÈ¼Û£¬Ò²¿É×Ô¶¨Òå
+é»˜è®¤æƒ…å†µä¸‹ä¸‹åˆ—å¼å­ç­‰ä»·ï¼Œä¹Ÿå¯è‡ªå®šä¹‰
 ${prefix}-${spring.profile.active}.${file-extension} => ${spring.application.name}-${spring.profile.active}.${file-extension}
 #+BEGIN_SRC yaml
 spring:
@@ -365,39 +365,39 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 10.211.55.17:8848 #Nacos·şÎñ×¢²áÖĞĞÄµØÖ·£¨±¾»úµÄĞ´localhost£©
+        server-addr: 10.211.55.17:8848 #NacosæœåŠ¡æ³¨å†Œä¸­å¿ƒåœ°å€ï¼ˆæœ¬æœºçš„å†™localhostï¼‰
       config:
-        server-addr: 10.211.55.17:8848 #Nacos×÷ÎªÅäÖÃÖĞĞÄµØÖ·£¨±¾»úµÄĞ´localhost£©
-        file-extension: yml #Ö¸¶¨yml¸ñÊ½ÅäÖÃ
+        server-addr: 10.211.55.17:8848 #Nacosä½œä¸ºé…ç½®ä¸­å¿ƒåœ°å€ï¼ˆæœ¬æœºçš„å†™localhostï¼‰
+        file-extension: yml #æŒ‡å®šymlæ ¼å¼é…ç½®
         group: XX_GROUP
         namespace: namespaceId
 #+END_SRC
-* ·şÎñ×ÜÏß
+* æœåŠ¡æ€»çº¿
 ** Bus
-ÅäºÏConfigÊµÏÖ¿ìËÙµÄÅäÖÃ¸üĞÂ
+é…åˆConfigå®ç°å¿«é€Ÿçš„é…ç½®æ›´æ–°
 *** config
 **** server
 #+BEGIN_SRC yaml
 spring:
   application:
-    name: cloud-config-center #×¢²á½øEureka·şÎñÆ÷µÄÎ¢·şÎñÃû
+    name: cloud-config-center #æ³¨å†Œè¿›EurekaæœåŠ¡å™¨çš„å¾®æœåŠ¡å
   cloud:
     config:
       server:
         git:
-          uri: https://github.com/smile-2333/springcloud-config.git  #gitµÄ²Ö¿âµØÖ·
-          search-paths:   #ËÑË÷Ä¿Â¼
+          uri: https://github.com/smile-2333/springcloud-config.git  #gitçš„ä»“åº“åœ°å€
+          search-paths:   #æœç´¢ç›®å½•
             - springcloud-config
-      label: master   #¶ÁÈ¡µÄ·ÖÖ§
+      label: master   #è¯»å–çš„åˆ†æ”¯
   rabbitmq:
-    host: 192.168.2.165  #±¾»úĞ´localhost£¬·şÎñÆ÷µÄĞ´·şÎñÆ÷µØÖ·
-    port: 5672   #¿Í»§¶ËºÍRabbitMQ½øĞĞÍ¨ĞÅµÄ¶Ë¿Ú
-    username: guest #Ä¬ÈÏÒ²ÊÇguest
-    password: guest #Ä¬ÈÏÒ²ÊÇguest
+    host: 192.168.2.165  #æœ¬æœºå†™localhostï¼ŒæœåŠ¡å™¨çš„å†™æœåŠ¡å™¨åœ°å€
+    port: 5672   #å®¢æˆ·ç«¯å’ŒRabbitMQè¿›è¡Œé€šä¿¡çš„ç«¯å£
+    username: guest #é»˜è®¤ä¹Ÿæ˜¯guest
+    password: guest #é»˜è®¤ä¹Ÿæ˜¯guest
 
-#RabbitMQÏà¹ØÅäÖÃ
+#RabbitMQç›¸å…³é…ç½®
 management:
-  endpoints:  #±©Â¶busË¢ĞÂÅäÖÃµÄ¶Ëµã
+  endpoints:  #æš´éœ²busåˆ·æ–°é…ç½®çš„ç«¯ç‚¹
     web:
       exposure:
         include: 'bus-refresh'
@@ -409,16 +409,16 @@ spring:
   application:
     name: config-client
   cloud:
-    config: #config¿Í»§¶ËÅäÖÃ
-      label: master   #·ÖÖ§Ãû³Æ
-      name: config    #ÅäÖÃÎÄ¼şÃû³Æ       ÕâÈı¸ö×ÛºÏ£ºmaster·ÖÖ§ÉÏµÄconfig-dev.ymlµÄÅäÖÃÎÄ¼ş
-      profile: dev    #¶ÁÈ¡ºó×ºÃû³Æ       ±»¶ÁÈ¡µ½http://config-3344.com:3344/master/config/dev
-      uri: http://localhost:3344  #ÅäÖÃÖĞĞÄµØÖ·
+    config: #configå®¢æˆ·ç«¯é…ç½®
+      label: master   #åˆ†æ”¯åç§°
+      name: config    #é…ç½®æ–‡ä»¶åç§°       è¿™ä¸‰ä¸ªç»¼åˆï¼šmasteråˆ†æ”¯ä¸Šçš„config-dev.ymlçš„é…ç½®æ–‡ä»¶
+      profile: dev    #è¯»å–åç¼€åç§°       è¢«è¯»å–åˆ°http://config-3344.com:3344/master/config/dev
+      uri: http://localhost:3344  #é…ç½®ä¸­å¿ƒåœ°å€
   rabbitmq:
-    host: 192.168.2.165  #±¾»úĞ´localhost£¬·şÎñÆ÷µÄĞ´·şÎñÆ÷µØÖ·
-    port: 5672   #¿Í»§¶ËºÍRabbitMQ½øĞĞÍ¨ĞÅµÄ¶Ë¿Ú
-    username: guest #Ä¬ÈÏÒ²ÊÇguest
-    password: guest #Ä¬ÈÏÒ²ÊÇguest
+    host: 192.168.2.165  #æœ¬æœºå†™localhostï¼ŒæœåŠ¡å™¨çš„å†™æœåŠ¡å™¨åœ°å€
+    port: 5672   #å®¢æˆ·ç«¯å’ŒRabbitMQè¿›è¡Œé€šä¿¡çš„ç«¯å£
+    username: guest #é»˜è®¤ä¹Ÿæ˜¯guest
+    password: guest #é»˜è®¤ä¹Ÿæ˜¯guest
 
 management:
   endpoints:
@@ -426,25 +426,25 @@ management:
       exposure:
         include: "*"
 #+END_SRC
-*** ÌØ¶¨
+*** ç‰¹å®š
 curl -X POST "http://localhost:3344/actuator/bus-refresh/config-client:3355"
-*** ¹ã²¥
+*** å¹¿æ’­
 curl -X POST "http://localhost:3344/actuator/bus-refresh"
 ** Nacos
 * spring cloud stream
-Ìá¹©¸÷ÀàMQÖ®¼äµÄÇÅ½Ó£¬Ä¿Ç°Ö§³ÖRabbitMQºÍKafka
+æä¾›å„ç±»MQä¹‹é—´çš„æ¡¥æ¥ï¼Œç›®å‰æ”¯æŒRabbitMQå’ŒKafka
 ** producer
 #+BEGIN_SRC java
-@EnableBinding(Source.class)    //¶¨ÒåÏûÏ¢µÄÍÆËÍ¹ÜµÀ£¨SourceÊÇspringµÄ£©
+@EnableBinding(Source.class)    //å®šä¹‰æ¶ˆæ¯çš„æ¨é€ç®¡é“ï¼ˆSourceæ˜¯springçš„ï¼‰
 public class IMessageProviderImpl implements IMessageProvider {
 
     @Resource
-    private MessageChannel output;  //ÏûÏ¢·¢ËÍ¹ÜµÀ
+    private MessageChannel output;  //æ¶ˆæ¯å‘é€ç®¡é“
 
     @Override
     public String send() {
         String serial = UUID.randomUUID().toString();
-        output.send(MessageBuilder.withPayload(serial).build());     //MessageBuilderÊÇspringµÄintegration.support.MessageBuilder
+        output.send(MessageBuilder.withPayload(serial).build());     //MessageBuilderæ˜¯springçš„integration.support.MessageBuilder
         System.out.println("*******serial: " + serial);
         return null;
     }
@@ -459,18 +459,18 @@ public class ReceiveMessageListenerController {
     @Value("${server.port}")
     private String serverPort;
 
-    @StreamListener(Sink.INPUT) //¼àÌı
+    @StreamListener(Sink.INPUT) //ç›‘å¬
     public void input(Message<String> message){
-        System.out.println("Ïû·ÑÕß1ºÅ------>ÊÕµ½µÄÏûÏ¢£º" + message.getPayload() + "\t port£º" + serverPort);
+        System.out.println("æ¶ˆè´¹è€…1å·------>æ”¶åˆ°çš„æ¶ˆæ¯ï¼š" + message.getPayload() + "\t portï¼š" + serverPort);
     }
 
 }
 #+END_SRC
 ** group
-1. Ìá¹©ÁË¹ã²¥µÄ¸ôÀë£¬Í¬×éµÄÊôÓÚ¶ÔÏûÏ¢½øĞĞ¾ºÕù£¬²»Í¬×éÖØ¸´Ïû·Ñ
-2. Ìá¹©ÁËÒ»ÖÖÏûÏ¢³Ö¾Ã»¯µÄÊÖ¶Î£¬Ä¬ÈÏÇé¿ö²»ÅäÖÃgroup£¬Ã¿´ÎÆô¶¯£¬Ó¦ÓÃ×ÔÉí»áÉú³É¶ÔÓ¦µÄMQ group£¬Æä±êÊ¶¶¼ÊÇ±ä»¯µÄ£¬Èç¹ûÈ«²¿å´»ú£¬ÏÂ´ÎÆô¶¯ÏûÏ¢»áµ¼ÖÂ¶ªÊ§£¬Èç¹ûÅäÖÃgroupÔò¿ÉÒÔÖØĞÂ¶Á»Ø
+1. æä¾›äº†å¹¿æ’­çš„éš”ç¦»ï¼ŒåŒç»„çš„å±äºå¯¹æ¶ˆæ¯è¿›è¡Œç«äº‰ï¼Œä¸åŒç»„é‡å¤æ¶ˆè´¹
+2. æä¾›äº†ä¸€ç§æ¶ˆæ¯æŒä¹…åŒ–çš„æ‰‹æ®µï¼Œé»˜è®¤æƒ…å†µä¸é…ç½®groupï¼Œæ¯æ¬¡å¯åŠ¨ï¼Œåº”ç”¨è‡ªèº«ä¼šç”Ÿæˆå¯¹åº”çš„MQ groupï¼Œå…¶æ ‡è¯†éƒ½æ˜¯å˜åŒ–çš„ï¼Œå¦‚æœå…¨éƒ¨å®•æœºï¼Œä¸‹æ¬¡å¯åŠ¨æ¶ˆæ¯ä¼šå¯¼è‡´ä¸¢å¤±ï¼Œå¦‚æœé…ç½®groupåˆ™å¯ä»¥é‡æ–°è¯»å›
 * trick
-** ·şÎñ·¢ÏÖ
+** æœåŠ¡å‘ç°
 #+BEGIN_SRC java
 @EnableDiscoveryClient // in configutation class
 ...
@@ -478,11 +478,11 @@ public class ReceiveMessageListenerController {
 private DiscoveryClient discoveryClient;
 @GetMapping(value = "/payment/discovery")
 public Object discovery(){
-    List<String> services = discoveryClient.getServices();  //µÃµ½ËùÓĞµÄÎ¢·şÎñ
+    List<String> services = discoveryClient.getServices();  //å¾—åˆ°æ‰€æœ‰çš„å¾®æœåŠ¡
     for (String element : services) {
         log.info("*****element:"+element);
     }
-    List<ServiceInstance> instances = discoveryClient.getInstances("CLOUD-PROVIDER-SERVICE"); //µÃµ½Ò»¸ö¾ßÌåÎ¢·şÎñµÄËùÓĞÊµÀı
+    List<ServiceInstance> instances = discoveryClient.getInstances("CLOUD-PROVIDER-SERVICE"); //å¾—åˆ°ä¸€ä¸ªå…·ä½“å¾®æœåŠ¡çš„æ‰€æœ‰å®ä¾‹
     for (ServiceInstance instance : instances){
         log.info(instance.getServiceId()+"\t"+instance.getHost()+"\t"+instance.getPort()+"\t"+instance.getUri());
     }

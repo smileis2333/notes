@@ -44,13 +44,13 @@ data/postgresql.conf
 log_statement = 'all'
 * look current variables
 SELECT name, setting FROM pg_settings;
-* ×¢ÒâÊÂÏî
-×óÆ¥Åä²»Ò»¶¨Ê§Ð§£¬ÓëmysqlµÄÅÐ¶¨ÓÐËùÇø±ð
+* æ³¨æ„äº‹é¡¹
+å·¦åŒ¹é…ä¸ä¸€å®šå¤±æ•ˆï¼Œä¸Žmysqlçš„åˆ¤å®šæœ‰æ‰€åŒºåˆ«
 
 #+BEGIN_SRC sql
--- ÉèidentityºÍusernameÎªuniqueË÷Òý
+-- è®¾identityå’Œusernameä¸ºuniqueç´¢å¼•
 
--- mysql ²¿·Ö£¬ÔÚÈ±Ê§µÚÒ»¿éµÄidentityÊ±£¬ÎÞ·¨×ß
+-- mysql éƒ¨åˆ†ï¼Œåœ¨ç¼ºå¤±ç¬¬ä¸€å—çš„identityæ—¶ï¼Œæ— æ³•èµ°
 SELECT * from t_user tu order by id desc;
 SELECT * from t_user tu where id = 100000;
 SELECT * FROM t_user tu where username  = '+36(687)661-451';
@@ -74,10 +74,10 @@ EXPLAIN SELECT * FROM t_user tu WHERE user_identity  = 'BUSINESS' AND username =
 --   Index Cond: (((user_identity)::text = 'BUSINESS'::text) AND ((username)::text = '+19(942)848-217'::text))
 
 #+END_SRC
-* jsonÏà¹Ø
-È¡json×îºóÒ»¸ö
+* jsonç›¸å…³
+å–jsonæœ€åŽä¸€ä¸ª
 tr.education_infos->-1
-* È«ÎÄË÷Òý
+* å…¨æ–‡ç´¢å¼•
 https://www.jianshu.com/p/0dc2a8bf9631
 * config
 ** remote access

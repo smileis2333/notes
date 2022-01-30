@@ -6,7 +6,7 @@ ftp://ftp.ncdc.noaa.gov
 *** prepare
 #+BEGIN_SRC shell
 #!/bin/bash
-# 文件内容解压合并
+# 鏂囦欢鍐呭瑙ｅ帇鍚堝苟
 path=$(pwd)
 for year_dir in all/*
 do

@@ -3,11 +3,11 @@
 * classic io
 ** File
 *** absolutePath
-1. Èç¹ûÒÑ¾­ÊÇ¾ø¶ÔÂ·ÓÉ£¬ÔòÖ±½Ó·µ»Ø
-2. ·ñÔò£¬·µ»Ø¹¹ÔìºóµÄ¾ø¶ÔÂ·¾¶£¬µ«ÊÇ·µ»ØµÄÊÇ×î³¤×Ó´®
+1. å¦‚æœå·²ç»æ˜¯ç»å¯¹è·¯ç”±ï¼Œåˆ™ç›´æ¥è¿”å›
+2. å¦åˆ™ï¼Œè¿”å›æ„é€ åçš„ç»å¯¹è·¯å¾„ï¼Œä½†æ˜¯è¿”å›çš„æ˜¯æœ€é•¿å­ä¸²
 *** canonicalPath
-1. Óë¾ø¶ÔÂ·¾¶ÀàËÆ£¬µ«ÊÇ»á×Ô¶¯ÇåÀí¸÷ÖÖ../..
-2. Í¨³£±È½ÏÁ½¸öÎÄ¼şÂ·¾¶ÊÇ·ñÒ»ÖÂ£¬²»¿ÉÒÔÓÃ¾ø¶ÔÂ·¾¶£¬Ö»ÄÜÓÃ¸ÃÂ·¾¶
+1. ä¸ç»å¯¹è·¯å¾„ç±»ä¼¼ï¼Œä½†æ˜¯ä¼šè‡ªåŠ¨æ¸…ç†å„ç§../..
+2. é€šå¸¸æ¯”è¾ƒä¸¤ä¸ªæ–‡ä»¶è·¯å¾„æ˜¯å¦ä¸€è‡´ï¼Œä¸å¯ä»¥ç”¨ç»å¯¹è·¯å¾„ï¼Œåªèƒ½ç”¨è¯¥è·¯å¾„
 *** method
 **** constructor
 File(String parent,string child)
@@ -18,7 +18,7 @@ boolean isDirectory()
 boolean isFile()
 boolean isHidden()
 long lastModified()
-long length() // Èç¹ûÎÄ¼ş´æÔÚ£¬·µ»ØÄÚÈİ³¤¶È£¬Èç¹û²»´æÔÚ£¬·µ»Ø0
+long length() // å¦‚æœæ–‡ä»¶å­˜åœ¨ï¼Œè¿”å›å†…å®¹é•¿åº¦ï¼Œå¦‚æœä¸å­˜åœ¨ï¼Œè¿”å›0
 **** travel
 static ListRoots()
 String [] list()
@@ -29,19 +29,19 @@ File [] listFiles(FileNameFilter filter)
 **** partition info
 long getFreeSpace()
 long getTotalSpace()
-long getUsableSpace() // Ïà±ÈfreeSpace£¬»áÈ¥¼ì²éËùĞèÈ¨ÏŞ£¬ÄÜ·ñ±»JVMÊ¹ÓÃ£¬ËùÒÔµÃµ½µÄ½á¹û¸üÎª¾«È·Ò»µã
+long getUsableSpace() // ç›¸æ¯”freeSpaceï¼Œä¼šå»æ£€æŸ¥æ‰€éœ€æƒé™ï¼Œèƒ½å¦è¢«JVMä½¿ç”¨ï¼Œæ‰€ä»¥å¾—åˆ°çš„ç»“æœæ›´ä¸ºç²¾ç¡®ä¸€ç‚¹
 **** create/modify
 boolean createNewFile()
-static File createTempFile(String prefix, String suffix) // »áÓÃprefix+[Ëæ»ú×Ö·û´®]+suffix£¬ÔÚÁÙÊ±Ä¿Â¼Éú³ÉÎÄ¼ş£¬ÒÀÀµÓÚOS
-static File createTempFile(String prefix, String suffix, File directory) // ¿ÉÒÔÖ¸¶¨ÁÙÊ±Ä¿Â¼
+static File createTempFile(String prefix, String suffix) // ä¼šç”¨prefix+[éšæœºå­—ç¬¦ä¸²]+suffixï¼Œåœ¨ä¸´æ—¶ç›®å½•ç”Ÿæˆæ–‡ä»¶ï¼Œä¾èµ–äºOS
+static File createTempFile(String prefix, String suffix, File directory) // å¯ä»¥æŒ‡å®šä¸´æ—¶ç›®å½•
 boolean delete()
-void deleteOnExit() // ³£ÓÃÓÚÁÙÊ±ÎÄ¼şµÄÉ¾³ı
+void deleteOnExit() // å¸¸ç”¨äºä¸´æ—¶æ–‡ä»¶çš„åˆ é™¤
 boolean mkdir()
 boolean mkdirs()
 boolean renameTo(File dest)
 boolean setLastModified(long time)
 **** permission
-¶ÁĞ´Ö´ĞĞÈ¨ÏŞ
+è¯»å†™æ‰§è¡Œæƒé™
 *** relevant
 #+BEGIN_SRC java
 @FunctionalInterface
@@ -57,13 +57,13 @@ public interface FileFilter {
 ** RandomAccessFile
 *** mode
 **** r
-Ö»¶Á£¬Èç¹ûÕÒ²»µ½Ö±½ÓÅ×Òì³£
+åªè¯»ï¼Œå¦‚æœæ‰¾ä¸åˆ°ç›´æ¥æŠ›å¼‚å¸¸
 **** rw
-¶ÁĞ´£¬ÓĞ¾Í¶Á£¬Ã»ÓĞ¾Í½¨£¬Èç¹ûÎÄ¼şÖ»¶Á£¬¾ÍÅ×Òì³£
+è¯»å†™ï¼Œæœ‰å°±è¯»ï¼Œæ²¡æœ‰å°±å»ºï¼Œå¦‚æœæ–‡ä»¶åªè¯»ï¼Œå°±æŠ›å¼‚å¸¸
 **** rwd
-Ã¿´Î²Ù×÷content£¬»áÖ±½ÓË¢ÈëÎÄ¼şÄÚÈİ
+æ¯æ¬¡æ“ä½œcontentï¼Œä¼šç›´æ¥åˆ·å…¥æ–‡ä»¶å†…å®¹
 **** rws
-ÔÚrwdµÄ»ù´¡ÉÏ£¬ÎÄ¼şĞÅÏ¢Ò²»á±»Ë¢½øÈ¥(ĞŞ¸ÄÊ±¼ä£¬È¨ÏŞ...)
+åœ¨rwdçš„åŸºç¡€ä¸Šï¼Œæ–‡ä»¶ä¿¡æ¯ä¹Ÿä¼šè¢«åˆ·è¿›å»(ä¿®æ”¹æ—¶é—´ï¼Œæƒé™...)
 *** method
 void close()
 FileDescriptor getFD()
@@ -73,17 +73,17 @@ int read()
 int read(byte[]b)
 char readChar()
 int readInt()
-void seek(long pos) //ÒÆ¶¯Ö¸ÕëÎ»ÖÃ
-void setLength(long newLength) //Èç¹û±ÈÎÄ±¾µÄlengthĞ¡£¬Ôò»á±»½Ø¶Ï
+void seek(long pos) //ç§»åŠ¨æŒ‡é’ˆä½ç½®
+void setLength(long newLength) //å¦‚æœæ¯”æ–‡æœ¬çš„lengthå°ï¼Œåˆ™ä¼šè¢«æˆªæ–­
 int skipBytes(int n)
-void write(byte[] b) //Ğ´²Ù×÷¾ùÊÇ´ÓÖ¸Õë¿ªÊ¼Ëã£¬Èç¹ûÖ¸ÕëºóÃæÓĞÄÚÈİ£¬»á±»Ë¢µô
+void write(byte[] b) //å†™æ“ä½œå‡æ˜¯ä»æŒ‡é’ˆå¼€å§‹ç®—ï¼Œå¦‚æœæŒ‡é’ˆåé¢æœ‰å†…å®¹ï¼Œä¼šè¢«åˆ·æ‰
 void write(int b)
 void writeChars(String s)
 void writeInt(int i)
 ** stream
 *** inputStream
 **** method
-int available() // ¹À¼ÆbyteÊıÄ¿ÊıÖµ
+int available() // ä¼°è®¡byteæ•°ç›®æ•°å€¼
 void close()
 void mark(int readlimit)
 boolean markSupported()
@@ -98,8 +98,8 @@ long skip(long n)
 ***** PipedInputStream
 useful for thread communicated
 ****** method
-PipedInputStream() // Î´±»ÈÎºÎpiped output streanÁ¬½Ó
-PipedInputStream(int pipeSize) //µ÷Õûbuffer
+PipedInputStream() // æœªè¢«ä»»ä½•piped output streanè¿æ¥
+PipedInputStream(int pipeSize) //è°ƒæ•´buffer
 PipedInputStream(PipedOutputStream src)
 PipedInputStream(PipedOutputStream src, int pipeSize)
 ****** demo
@@ -154,13 +154,13 @@ public class PipedStreamsDemo {
 BufferedInputStream(InputStream in)
 BufferedInputStream(InputStream in, int size)
 ******* DataInputStream
-static final long serialVersionUID = long integer value; //Ö»Òª¾ÉµÄÊôĞÔÃ»±»ÒÆ³ı(Èç¹ûÒÆ³ı»áµ¼ÖÂ¸ñÊ½²»Ò»ÖÂ)£¬Ôö¼ÓĞÂ×Ö¶ÎÊ±£¬¾ÉµÄ±£´æÎÄ¼şÈÔ¿ÉĞòÁĞ»¯
-serialver Employee //JDK×Ô´øµÄÉú³ÉUID¹¤¾ß
+static final long serialVersionUID = long integer value; //åªè¦æ—§çš„å±æ€§æ²¡è¢«ç§»é™¤(å¦‚æœç§»é™¤ä¼šå¯¼è‡´æ ¼å¼ä¸ä¸€è‡´)ï¼Œå¢åŠ æ–°å­—æ®µæ—¶ï¼Œæ—§çš„ä¿å­˜æ–‡ä»¶ä»å¯åºåˆ—åŒ–
+serialver Employee //JDKè‡ªå¸¦çš„ç”ŸæˆUIDå·¥å…·
 ***** ObjectInputStream
 *** outputStream
 **** method
-void close() // È¡Ïû×ÊÔ´¹ØÁª£¬²¢flush
-void flush() // Ö»ÊÇÍ¨ÖªOS½øĞĞĞ´Èë£¬ÄÜ·ñĞ´ÈëJVM²»ÄÜ±£Ö¤
+void close() // å–æ¶ˆèµ„æºå…³è”ï¼Œå¹¶flush
+void flush() // åªæ˜¯é€šçŸ¥OSè¿›è¡Œå†™å…¥ï¼Œèƒ½å¦å†™å…¥JVMä¸èƒ½ä¿è¯
 void write(byte[] b)
 void write(byte[] b, int off, int len)
 void write(int b)
@@ -180,12 +180,12 @@ PipedOutputStream(PipedInputStream dest)
 ******* DataOutputStream
 ******* PrintStream
 ******** ferture
-1. ²»Å×Òì³££¬ºÏÀí£¬ÒòÎª½ÓÊÕ±ê×¼ÊäÈë£¬Èç¹ûÒòÎªÊä´í£¬µ¼ÖÂÕû¸ö³ÌĞòÍ£ÁË£¬²ÅÊÇ·´³£
-2. print/println/printf×Ô¶¯flush
-3. Ö§³Öprintf½øĞĞ¸ñÊ½»¯
+1. ä¸æŠ›å¼‚å¸¸ï¼Œåˆç†ï¼Œå› ä¸ºæ¥æ”¶æ ‡å‡†è¾“å…¥ï¼Œå¦‚æœå› ä¸ºè¾“é”™ï¼Œå¯¼è‡´æ•´ä¸ªç¨‹åºåœäº†ï¼Œæ‰æ˜¯åå¸¸
+2. print/println/printfè‡ªåŠ¨flush
+3. æ”¯æŒprintfè¿›è¡Œæ ¼å¼åŒ–
 ***** ObjectOutputStream
 ****** method
-writeObject(Object obj) //static²»ĞòÁĞ»¯£¬transient²»ĞòÁĞ»¯£¬Î´ÊµÏÖSerializable½Ó¿ÚµÄÊôĞÔµÄ²»ĞòÁĞ»¯
+writeObject(Object obj) //staticä¸åºåˆ—åŒ–ï¼Œtransientä¸åºåˆ—åŒ–ï¼Œæœªå®ç°Serializableæ¥å£çš„å±æ€§çš„ä¸åºåˆ—åŒ–
 *** reader
 **** subclass
 ***** InputStreamReader 
@@ -337,8 +337,8 @@ class LabeledPoint implements Serializable {
 #+END_SRC
 **** Externalizable
 https://stackoverflow.com/a/16605838/10827862
-1. ÊµÏÖÁËSerializable¿ÉÄÜ»á¸Ä¸ñÊ½£¬»òÕß²»¸Ä(Ò»°ãÇé¿öÊÇout.defaultWriteObject()ÏÈ½øĞĞÊı¾İĞ´Èë£¬È»ºó°ÑĞèÒª×Ô¶¨ÒåµÄ²¿·Öappendµ½ºóÃæ)
-2. µ«ÊÇÊµÏÖExternalizableÒ»¶¨»á¸Ä¸ñÊ½(Êµ¼ÊÉÏÉÏÇ¿×ªObjectOutput£¬ÔÚÕû³É¸ùserializbaleÒ²¿ÉĞĞ£¬Ö÷ÒªÇø±ğ¾ÍÊÇÒ»¸öÓïÒåĞÔµÄÎÊÌâ)£¬class identifier²»±ä£¬ÒòÎªĞèÒª·´ÉäÊµÀı»¯¶ÔÏó
+1. å®ç°äº†Serializableå¯èƒ½ä¼šæ”¹æ ¼å¼ï¼Œæˆ–è€…ä¸æ”¹(ä¸€èˆ¬æƒ…å†µæ˜¯out.defaultWriteObject()å…ˆè¿›è¡Œæ•°æ®å†™å…¥ï¼Œç„¶åæŠŠéœ€è¦è‡ªå®šä¹‰çš„éƒ¨åˆ†appendåˆ°åé¢)
+2. ä½†æ˜¯å®ç°Externalizableä¸€å®šä¼šæ”¹æ ¼å¼(å®é™…ä¸Šä¸Šå¼ºè½¬ObjectOutputï¼Œåœ¨æ•´æˆæ ¹serializbaleä¹Ÿå¯è¡Œï¼Œä¸»è¦åŒºåˆ«å°±æ˜¯ä¸€ä¸ªè¯­ä¹‰æ€§çš„é—®é¢˜)ï¼Œclass identifierä¸å˜ï¼Œå› ä¸ºéœ€è¦åå°„å®ä¾‹åŒ–å¯¹è±¡
 #+BEGIN_SRC java
 public void readExternal(ObjectInput s)
       throws IOException
@@ -362,7 +362,7 @@ public void writeExternal(ObjectOutput s)
 serialver Employee
 **** set variable
 When a class has a static data member named serialVersionUID, it will not compute the fingerprint manually but will use that value instead.
-µ±¶ÔÓ¦fingerprintµÄÀà£¬¾ÉÓĞµÄÊôĞÔ±ä¶¯(Ãû×Ö¸ÄÁË/±»É¾ÁË)£¬¶¼»áµ¼ÖÂÎŞ·¨Õı³£ÔËĞĞ£¬Òò´Ë£¬ÔÚÏòÏÂ¼æÈİÊ±£¬¶ÔÓ¦ÉèÖÃ¸Ã±äÁ¿µÄÀà£¬ÍêÈ«·ÏÆú²¿·ÖÊôĞÔÊ±£¬ĞèÒª¸üĞÂ¸ÃÊôĞÔ
+å½“å¯¹åº”fingerprintçš„ç±»ï¼Œæ—§æœ‰çš„å±æ€§å˜åŠ¨(åå­—æ”¹äº†/è¢«åˆ äº†)ï¼Œéƒ½ä¼šå¯¼è‡´æ— æ³•æ­£å¸¸è¿è¡Œï¼Œå› æ­¤ï¼Œåœ¨å‘ä¸‹å…¼å®¹æ—¶ï¼Œå¯¹åº”è®¾ç½®è¯¥å˜é‡çš„ç±»ï¼Œå®Œå…¨åºŸå¼ƒéƒ¨åˆ†å±æ€§æ—¶ï¼Œéœ€è¦æ›´æ–°è¯¥å±æ€§
 #+BEGIN_SRC java
 class Employee implements Serializable // version 1.1
 {
@@ -423,7 +423,7 @@ static Path get(String first, String. . . more)
 **** path
 #+BEGIN_SRC java
 
-// return full path£¬²»Í¬ÒıÓÃ£¬ËäÈ»ÊôĞÔÏàÍ¬
+// return full pathï¼Œä¸åŒå¼•ç”¨ï¼Œè™½ç„¶å±æ€§ç›¸åŒ
 partPath.resolve(fullPath)
 
 // return path join them
@@ -445,10 +445,10 @@ Files.write(path, lines);
 #+END_SRC
 **** directory and file
 #+BEGIN_SRC java
-// Ö»ÄÜ½¨Ò»²ã
+// åªèƒ½å»ºä¸€å±‚
 Files.createDirectory(path);
 
-// ¸¸¼¶µÄÒ²½¨Á¢³ö£¬Õâ¸ö¸ü³£ÓÃ
+// çˆ¶çº§çš„ä¹Ÿå»ºç«‹å‡ºï¼Œè¿™ä¸ªæ›´å¸¸ç”¨
 Files.createDirectories(path);
 
 Path newPath = Files.createTempFile(dir, prefix, suffix);
@@ -476,10 +476,10 @@ boolean deleted = Files.deleteIfExists(path);
 - isRegularFile, isDirectory, isSymbolicLink
 **** directories
 #+BEGIN_SRC java
-// Ò»²ã×ÓÄ¿Â¼
+// ä¸€å±‚å­ç›®å½•
 Stream<Path> entries = Files.list(pathToDirectory)
 
-// È«²¿µİ¹é×ÓÄ¿Â¼
+// å…¨éƒ¨é€’å½’å­ç›®å½•
 Stream<Path> entries = Files.walk(pathToRoot)
 
 
@@ -529,9 +529,9 @@ Files.walkFileTree(fs.getPath("/"), new SimpleFileVisitor<Path>()
 #+END_SRC
 *** MEMORY-MAPPED FILES
 **** mapping mode
-FileChannel.MapMode.READ_ONLY Ö»¶Á£¬³¢ÊÔĞ´Ê±»áÅ×³öReadOnlyBufferException
-FileChannel.MapMode.READ_WRITE ¿É¶ÁĞ´£¬²¢ÇÒ»áĞ´»ØÔ´ÎÄ¼ş£¬µ«ÊÇÊÇ·ñ¿É¼ûÒÀÀµÓÚ²Ù×÷ÏµÍ³
-FileChannel.MapMode.PRIVATE ¿É¶ÁĞ´£¬µ«ÊÇ²»Ğ´»Ø
+FileChannel.MapMode.READ_ONLY åªè¯»ï¼Œå°è¯•å†™æ—¶ä¼šæŠ›å‡ºReadOnlyBufferException
+FileChannel.MapMode.READ_WRITE å¯è¯»å†™ï¼Œå¹¶ä¸”ä¼šå†™å›æºæ–‡ä»¶ï¼Œä½†æ˜¯æ˜¯å¦å¯è§ä¾èµ–äºæ“ä½œç³»ç»Ÿ
+FileChannel.MapMode.PRIVATE å¯è¯»å†™ï¼Œä½†æ˜¯ä¸å†™å›
 **** usage
 #+BEGIN_SRC java
 FileChannel channel = FileChannel.open(filename)
@@ -573,13 +573,13 @@ System.out.printf("%,.2f", 10000.0 / 3.0);
 
 String message = String.format("Hello, %s. Next year,you'll be %d", name, age);
 ** trick
-1. ÎÄ¼şÃû¶ÁÈ¡£¬Ä¬ÈÏÇé¿öÏÂ¶¼ÊÇ¶ÁÏà¶ÔÂ·¾¶£¬»ñÈ¡²Î¿¼µÄÏà¶ÔÂ·¾¶¿ÉÒÔÊ¹ÓÃSystem.getProperty("user.dir")
-2. DataOutputStreamºÍDataInputStreamÊ¹ÓÃÆ½Ì¨¶ÀÁ¢µÄ·½·¨Ğ´ÈëÊı¾İ(·ÇÎÄ±¾ÀàĞÍ£¬ËùÒÔÖ»ÓĞĞ´ÈëÓë¶ÁÈ¡Æ¥ÅäÊ±£¬Ê¹ÓÃ²Å¾ßÓĞÒâÒå)
-3. ĞòÁĞ»¯ÄÃÀ´×öclone
+1. æ–‡ä»¶åè¯»å–ï¼Œé»˜è®¤æƒ…å†µä¸‹éƒ½æ˜¯è¯»ç›¸å¯¹è·¯å¾„ï¼Œè·å–å‚è€ƒçš„ç›¸å¯¹è·¯å¾„å¯ä»¥ä½¿ç”¨System.getProperty("user.dir")
+2. DataOutputStreamå’ŒDataInputStreamä½¿ç”¨å¹³å°ç‹¬ç«‹çš„æ–¹æ³•å†™å…¥æ•°æ®(éæ–‡æœ¬ç±»å‹ï¼Œæ‰€ä»¥åªæœ‰å†™å…¥ä¸è¯»å–åŒ¹é…æ—¶ï¼Œä½¿ç”¨æ‰å…·æœ‰æ„ä¹‰)
+3. åºåˆ—åŒ–æ‹¿æ¥åšclone
 * nio
-×î´óµÄÌØµãÊÇselector¶àÂ·¸´ÓÃ
-1. ´«Í³BIO£¬½¨Á¢Á¬½Ó»á×èÈû£¬½ÓÊÕÊı¾İ»á×èÈû£¬Ç°Ò»²½ÎŞ·¨±ÜÃâ£¬µ«ÊÇÈç¹ûÄ³ÈËÔÚ½¨Á¢Á¬½ÓÖ®ºó£¬Ò»Ö±²»´«Êı¾İ£¬¾ÍÊÇµ¼ÖÂÕû¸ö³ÌĞòÒ»Ö±µÈ£¬Ò»°ãµÄ¾ÉÊ½½â¾ö·½·¨£¬Îª°Ñ½ÓÊÕÊı¾İ¶ªµ½Ïß³Ì³Ø´¦Àí
-2. selectorÔÚ½¨Á¢ÄÃµ½ÊÂ¼şÊ±£¬Ò²±ØĞë×èÈû£¬µ«ÊÇÔÚ¶ÁÈëÁ¬½Óºó£¬°ÑÁ¬½Ó¶ªÈëselector¹ÜÀíµÄchannelÀïÃæ(¿ÉÒÔ¹ÜÀíÒ»´ó¶ÑÁ¬½øÀ´µÄchannel+×î¿ªÊ¼ÓÃÀ´¹ÜÀí½ÓÊÕÁ¬½ÓµÄchannel)£¬Ö®ºó¿ÉÒÔ½Ó×ÅÍùÏÂ×ß£¬È»ºóÂÖÑ¯µ±Ç°¼à¿ØµÄchannelÊÇ·ñÀ´Êı¾İÁË£¬¸ù¾İÊÂ¼şÀàĞÍ½øĞĞXX´¦Àí£¬±ÈÈç¹ÜÀíÁ¬½ÓµÄ¾Í½ÓÊÕºó¶ª¾¡selector£¬¶øÒÑÁ¬µÄchannelÈç¹û·¢Êı¾İÁË£¬ÔÚ½ÓÊÕÊı¾İ£¬½øĞĞÆäËû²Ù×÷£¬±ÈÈçhttp£¬ÊµÏÖÁËÒ»¸öÏß³Ì¹Ü¶à¸öIO¡£linuxÄÚ²¿»úÖÆÎªepoll£¬nioÊµÖÊÎªÔÚOS·¢Õ¹ºóËùÌåÏÖµÄÒ»ÖÖÓïÑÔÌØĞÔµÄÔöÇ¿¡¢Ê¡È¥ÁË¶à¸öÏß³Ì¹ÜÊı¾İ½ÓÊÕµÄ¿ªÏú£¬ÖÁÓÚºóĞø´úÂëÂ·¾¶ÊÇ·ñ²ÉÓÃÏß³Ì³Ø£¬ÔòÈ¡¾öÓÚ³ÌĞòÈçºÎÉè¼Æ¡£
+æœ€å¤§çš„ç‰¹ç‚¹æ˜¯selectorå¤šè·¯å¤ç”¨
+1. ä¼ ç»ŸBIOï¼Œå»ºç«‹è¿æ¥ä¼šé˜»å¡ï¼Œæ¥æ”¶æ•°æ®ä¼šé˜»å¡ï¼Œå‰ä¸€æ­¥æ— æ³•é¿å…ï¼Œä½†æ˜¯å¦‚æœæŸäººåœ¨å»ºç«‹è¿æ¥ä¹‹åï¼Œä¸€ç›´ä¸ä¼ æ•°æ®ï¼Œå°±æ˜¯å¯¼è‡´æ•´ä¸ªç¨‹åºä¸€ç›´ç­‰ï¼Œä¸€èˆ¬çš„æ—§å¼è§£å†³æ–¹æ³•ï¼Œä¸ºæŠŠæ¥æ”¶æ•°æ®ä¸¢åˆ°çº¿ç¨‹æ± å¤„ç†
+2. selectoråœ¨å»ºç«‹æ‹¿åˆ°äº‹ä»¶æ—¶ï¼Œä¹Ÿå¿…é¡»é˜»å¡ï¼Œä½†æ˜¯åœ¨è¯»å…¥è¿æ¥åï¼ŒæŠŠè¿æ¥ä¸¢å…¥selectorç®¡ç†çš„channelé‡Œé¢(å¯ä»¥ç®¡ç†ä¸€å¤§å †è¿è¿›æ¥çš„channel+æœ€å¼€å§‹ç”¨æ¥ç®¡ç†æ¥æ”¶è¿æ¥çš„channel)ï¼Œä¹‹åå¯ä»¥æ¥ç€å¾€ä¸‹èµ°ï¼Œç„¶åè½®è¯¢å½“å‰ç›‘æ§çš„channelæ˜¯å¦æ¥æ•°æ®äº†ï¼Œæ ¹æ®äº‹ä»¶ç±»å‹è¿›è¡ŒXXå¤„ç†ï¼Œæ¯”å¦‚ç®¡ç†è¿æ¥çš„å°±æ¥æ”¶åä¸¢å°½selectorï¼Œè€Œå·²è¿çš„channelå¦‚æœå‘æ•°æ®äº†ï¼Œåœ¨æ¥æ”¶æ•°æ®ï¼Œè¿›è¡Œå…¶ä»–æ“ä½œï¼Œæ¯”å¦‚httpï¼Œå®ç°äº†ä¸€ä¸ªçº¿ç¨‹ç®¡å¤šä¸ªIOã€‚linuxå†…éƒ¨æœºåˆ¶ä¸ºepollï¼Œnioå®è´¨ä¸ºåœ¨OSå‘å±•åæ‰€ä½“ç°çš„ä¸€ç§è¯­è¨€ç‰¹æ€§çš„å¢å¼ºã€çœå»äº†å¤šä¸ªçº¿ç¨‹ç®¡æ•°æ®æ¥æ”¶çš„å¼€é”€ï¼Œè‡³äºåç»­ä»£ç è·¯å¾„æ˜¯å¦é‡‡ç”¨çº¿ç¨‹æ± ï¼Œåˆ™å–å†³äºç¨‹åºå¦‚ä½•è®¾è®¡ã€‚
 ** Buffer
 *** ferture
 0 <= mark <= position <= limit <= capacity
@@ -587,13 +587,13 @@ String message = String.format("Hello, %s. Next year,you'll be %d", name, age);
 **** Limit
 **** Position
 **** Mark
-ÓÃÓÚresetµÄÎ»ÖÃ±ê¶¨
+ç”¨äºresetçš„ä½ç½®æ ‡å®š
 *** method
 Object array()
 int arrayOffset()
 int capacity()
-Buffer clear() // È«²¿±êÊ¶±äÁ¿¶¼Çåµô
-Buffer flip() // Ö±½ÓÉèÖÃ¾ß±¸µÄ¸÷ÀàÊôĞÔ,position£¬mark...£¬±íÊ¾¸ÃbufferÒÑ¾­×¼±¸±»channel½ÓÊÕ(²»ÊÇ×÷Îª¸´Î»·½·¨£¬¶øÊÇ×÷Îª´¦ÀíÍê±ÏÖ®ºóµÄÒ»ÖÖ¿ì½İ·½·¨£¬ÒòÎª´¦ÀíÍêºó£¬ÔÚµô¸Ã·½·¨Ò²Ã»ÓĞÈÎºÎÒâÒå)£¬Ö÷ÒªÎª¶ÁÈ¡Êı¾İºó½øĞĞ¸Ä±ä×´Ì¬×÷ÎªĞ´³öÊ¹ÓÃ
+Buffer clear() // å…¨éƒ¨æ ‡è¯†å˜é‡éƒ½æ¸…æ‰
+Buffer flip() // ç›´æ¥è®¾ç½®å…·å¤‡çš„å„ç±»å±æ€§,positionï¼Œmark...ï¼Œè¡¨ç¤ºè¯¥bufferå·²ç»å‡†å¤‡è¢«channelæ¥æ”¶(ä¸æ˜¯ä½œä¸ºå¤ä½æ–¹æ³•ï¼Œè€Œæ˜¯ä½œä¸ºå¤„ç†å®Œæ¯•ä¹‹åçš„ä¸€ç§å¿«æ·æ–¹æ³•ï¼Œå› ä¸ºå¤„ç†å®Œåï¼Œåœ¨æ‰è¯¥æ–¹æ³•ä¹Ÿæ²¡æœ‰ä»»ä½•æ„ä¹‰)ï¼Œä¸»è¦ä¸ºè¯»å–æ•°æ®åè¿›è¡Œæ”¹å˜çŠ¶æ€ä½œä¸ºå†™å‡ºä½¿ç”¨
 boolean hasArray()
 boolean hasRemaining()
 boolean isDirect()
@@ -605,7 +605,7 @@ int position()
 Buffer position(int newPosition)
 int remaining()
 Buffer reset()
-Buffer rewind() // °Ñpositionµ¹·Å£¬Ïàµ±ÓÚÏëÔÚ¶ÁÒ»´Î
+Buffer rewind() // æŠŠpositionå€’æ”¾ï¼Œç›¸å½“äºæƒ³åœ¨è¯»ä¸€æ¬¡
 *** subclass
 **** ByteBuffer
 ***** method
@@ -622,7 +622,7 @@ ByteBuffer put(byte[] src)
 ByteBuffer put(byte[] src, int offset, int length)
 ByteBuffer get(byte[] dst)
 ByteBuffer get(byte[] dst, int offset, int length)
-ByteBuffer compact(); // ÓëclearÀàËÆ£¬µ«ÊÇ»á°ÑÎ´¶ÁµÄÅ²µ½×î×ó±ß£¬È»ºóposition´ÓÓÒ²à¿ªÊ¼Ëã
+ByteBuffer compact(); // ä¸clearç±»ä¼¼ï¼Œä½†æ˜¯ä¼šæŠŠæœªè¯»çš„æŒªåˆ°æœ€å·¦è¾¹ï¼Œç„¶åpositionä»å³ä¾§å¼€å§‹ç®—
 **** CharBuffer
 **** DoubleBuffer
 **** FloatBuffer
@@ -649,7 +649,7 @@ long write(ByteBuffer[] buffers, int offset, int length)
 long write(ByteBuffer[] buffers)
 *** FileChannel
 **** method
-void force(boolean metadata) // ÀàËÆÓÚstream flush, metadata±íÊ¾ÊÇ·ñÎÄ¼şĞÅÏ¢Ò²Ë¢½øÈ¥£¬Ò»°ã²»¶¯£¬ÒòÎª¿ÉÒÔÊ¡Ò»µãµãĞ§ÂÊ
+void force(boolean metadata) // ç±»ä¼¼äºstream flush, metadataè¡¨ç¤ºæ˜¯å¦æ–‡ä»¶ä¿¡æ¯ä¹Ÿåˆ·è¿›å»ï¼Œä¸€èˆ¬ä¸åŠ¨ï¼Œå› ä¸ºå¯ä»¥çœä¸€ç‚¹ç‚¹æ•ˆç‡
 long position()
 FileChannel position(long newPosition)
 int read(ByteBuffer buffer)
@@ -663,7 +663,7 @@ long transferTo(long position, long count, WritableByteChannel target)
 **** lock
 FileLock lock() // blocking
 FileLock lock(long position, long size, boolean shared) //blockeing
-FileLock tryLock() // without blocking£¬Ê§°Ü·µ»Ønull
+FileLock tryLock() // without blockingï¼Œå¤±è´¥è¿”å›null
 ***** FileLock
 ****** method
 FileChannel channel()
@@ -678,15 +678,15 @@ String toString()
 **** Mapping Files into Memory
 MappedByteBuffer map(FileChannel.MapMode mode, long position, long size)
 ***** FileChannel.MapMode
-READ_ONLY //Ğ´»á±¨´í
-READ_WRITE //¸ÄÁË»áĞ´»ØsourceÎÄ¼ş£¬¾ßÌåÊÇ·ñ¿ÉĞ´»¹Òª¿´ÎÄ¼şÊÇ·ñÖ§³Ö¿ÉĞ´
-PRIVATE // ¿ÉÒÔ¸Ä£¬µ«ÊÇ²»»áÓĞ·´Ó¦£¬ÒòÎªÖ»ÊÇ²Ù×÷copy
+READ_ONLY //å†™ä¼šæŠ¥é”™
+READ_WRITE //æ”¹äº†ä¼šå†™å›sourceæ–‡ä»¶ï¼Œå…·ä½“æ˜¯å¦å¯å†™è¿˜è¦çœ‹æ–‡ä»¶æ˜¯å¦æ”¯æŒå¯å†™
+PRIVATE // å¯ä»¥æ”¹ï¼Œä½†æ˜¯ä¸ä¼šæœ‰ååº”ï¼Œå› ä¸ºåªæ˜¯æ“ä½œcopy
 ***** method
 MappedByteBuffer load()
 boolean isLoaded()
 MappedByteBuffer force()
 *** Socket Channels
-¾ÉÊ½µÄsocket¾ùÊÇblockµÄ£¬ÒòÎªÆäÌáÉıĞ§ÂÊµÄ×ö·¨½öÎª½ÓÊÕµ½Ò»¸öÇëÇó¾ÍĞÂ½¨Ò»¸öthreadÓÃÓÚ´¦Àí
+æ—§å¼çš„socketå‡æ˜¯blockçš„ï¼Œå› ä¸ºå…¶æå‡æ•ˆç‡çš„åšæ³•ä»…ä¸ºæ¥æ”¶åˆ°ä¸€ä¸ªè¯·æ±‚å°±æ–°å»ºä¸€ä¸ªthreadç”¨äºå¤„ç†
 **** method
 SelectableChannel configureBlocking(boolean block)
 boolean isBlocking()
@@ -695,7 +695,7 @@ Object blockingLock()
 ***** method
 static ServerSocketChannel open()
 ServerSocket socket()
-SocketChannel accept() //×èÈûÓë·ñÈ¡¾öÓÚÉèÖÃ
+SocketChannel accept() //é˜»å¡ä¸å¦å–å†³äºè®¾ç½®
 SocketChannel bind(SocketAddress local)
 **** SocketChannel
 ***** method
@@ -716,7 +716,7 @@ DatagramChannel disconnect()
 SocketAddress receive(ByteBuffer buffer)
 int send(ByteBuffer buffer, SocketAddress destAddr)
 *** Pipes
-Ò»¶Ô¶ÁĞ´Channel£¬×Ô¶¯Á¬½Ó
+ä¸€å¯¹è¯»å†™Channelï¼Œè‡ªåŠ¨è¿æ¥
 #+BEGIN_SRC java
 import java.io.IOException;
 
@@ -802,8 +802,8 @@ public class ChannelDemo
 }
 #+END_SRC
 ** selector
-¸Ã¶ÔÏóµÄ·½·¨ÊÇ×èÈûµÄ£¬Æä±¾ÖÊÀàËÆÓÚ¶àÂ·¸´ÓÃ£¬ÈÎºÎÒ»¸ö¹ÜÀíµÄIOÓĞÊı¾İÁË£¬×Ô¶¯¼¤»î
-°Ñ×èÈûÒÆ³ı£¬¶à¸öchannelµÄ¶ÁÈ¡£¬Ïàµ±ÓÚÎ¯ÅÉ¸øOS½øĞĞ´¦Àí
+è¯¥å¯¹è±¡çš„æ–¹æ³•æ˜¯é˜»å¡çš„ï¼Œå…¶æœ¬è´¨ç±»ä¼¼äºå¤šè·¯å¤ç”¨ï¼Œä»»ä½•ä¸€ä¸ªç®¡ç†çš„IOæœ‰æ•°æ®äº†ï¼Œè‡ªåŠ¨æ¿€æ´»
+æŠŠé˜»å¡ç§»é™¤ï¼Œå¤šä¸ªchannelçš„è¯»å–ï¼Œç›¸å½“äºå§”æ´¾ç»™OSè¿›è¡Œå¤„ç†
 *** SelectableChannel
 SelectionKey register(Selector sel, int ops)
 SelectionKey register(Selector sel, int ops, Object att)
@@ -813,7 +813,7 @@ OP_CONNECT
 OP_READ
 OP_WRITE
 ** Charsets
-°Ñ×Ö·û±àÂë¼¯ºÍ±àÂë·½°¸·ÅÔÚÁËÒ»Æğ
+æŠŠå­—ç¬¦ç¼–ç é›†å’Œç¼–ç æ–¹æ¡ˆæ”¾åœ¨äº†ä¸€èµ·
 *** method
 static Charset forName(String charsetName)
 ByteBuffer encode(String s)
@@ -827,9 +827,9 @@ for (FileSystemProvider installedProvider : FileSystemProvider.installedProvider
 }
 #+END_SRC
 *** method
-FileSystem¡¯s Iterable<FileStore> getFileStores()
+FileSystemâ€™s Iterable<FileStore> getFileStores()
 ** Path
-Ïàµ±ÓÚÄ³Ğ©ÔöÇ¿µÄFile£¬µ«ÊÇ°ÑÊôĞÔÇĞ·ÖÎªÁíÒ»¸ö½Ó¿Ú£¬¶øÎÄ¼şĞÅÏ¢ÔòÔÚFileStoreÀï
+ç›¸å½“äºæŸäº›å¢å¼ºçš„Fileï¼Œä½†æ˜¯æŠŠå±æ€§åˆ‡åˆ†ä¸ºå¦ä¸€ä¸ªæ¥å£ï¼Œè€Œæ–‡ä»¶ä¿¡æ¯åˆ™åœ¨FileStoreé‡Œ
 #+BEGIN_SRC java
 public class PathDemo
 {
@@ -849,8 +849,8 @@ public class PathDemo
 #+END_SRC
 *** method
 Path of(String first, String... more)
-Path normalize() // È¥µôÈßÓàµÄÂ·¾¶Èç../ºÍ.
-Path relativize(Path other) // Ïà¶ÔÓÚotherµÄÂ·¾¶
+Path normalize() // å»æ‰å†—ä½™çš„è·¯å¾„å¦‚../å’Œ.
+Path relativize(Path other) // ç›¸å¯¹äºotherçš„è·¯å¾„
 Path resolve(Path other)
 Path resolve(String other)
 Path resolveSibling(Path other)
@@ -880,14 +880,14 @@ BufferedReader newBufferedReader(Path path, Charset cs)
 InputStream newInputStream(Path path, OpenOption... options)
 ***** java.nio.file.OpenOptions
 APPEND: If the file is opened for WRITE access, write bytes to the end of the file rather than to the beginning.
-CREATE: Create a new file when it doesn¡¯t exist.
+CREATE: Create a new file when it doesnâ€™t exist.
 CREATE_NEW: Create a new file, failing when the file already exists.
 DELETE_ON_CLOSE: Make a best effort to delete the file when the file is closed.
-DSYNC: Require that every update to the file¡¯s content be written synchronously to the underlying storage device.
+DSYNC: Require that every update to the fileâ€™s content be written synchronously to the underlying storage device.
 READ: Open the file for read access.
-SPARSE: Open a sparse file (https://en.wikipedia.org/wiki/Sparse_file). When used with the CREATE_NEW option, SPARSE provides a hint that the new file will be sparse. The option is ignored when the file system doesn¡¯t support the creation of sparse files.
-SYNC: Require that every update to the file¡¯s content or metadata be written synchronously to the underlying storage device.
-TRUNCATE_EXISTING: Truncate the length of an existing file that¡¯s opened for WRITE access to 0.
+SPARSE: Open a sparse file (https://en.wikipedia.org/wiki/Sparse_file). When used with the CREATE_NEW option, SPARSE provides a hint that the new file will be sparse. The option is ignored when the file system doesnâ€™t support the creation of sparse files.
+SYNC: Require that every update to the fileâ€™s content or metadata be written synchronously to the underlying storage device.
+TRUNCATE_EXISTING: Truncate the length of an existing file thatâ€™s opened for WRITE access to 0.
 WRITE: Open the file for write access.
 **** directory
 DirectoryStream<Path> newDirectoryStream(Path dir)
@@ -903,7 +903,7 @@ boolean deleteIfExists(Path path)
 **** travel
 Path walkFileTree(Path start, FileVisitor<? super Path> visitor)
 **** watch service
-¼àÌıÄ¿Â¼±ä»¯£¬±ÈÈçideaÔÚÍâ²¿ÎÄ¼ş±»É¾³ıµÄÊ±¼ä¿ÉÒÔ¸ĞÓ¦µ½ÎÄ¼şÄ¿Â¼µÄ±ä»¯£¬´Ó¶øË¢ĞÂUI 
+ç›‘å¬ç›®å½•å˜åŒ–ï¼Œæ¯”å¦‚ideaåœ¨å¤–éƒ¨æ–‡ä»¶è¢«åˆ é™¤çš„æ—¶é—´å¯ä»¥æ„Ÿåº”åˆ°æ–‡ä»¶ç›®å½•çš„å˜åŒ–ï¼Œä»è€Œåˆ·æ–°UI 
 #+BEGIN_SRC java
 public class WatchServiceDemo
 {
@@ -949,7 +949,7 @@ public class WatchServiceDemo
 }
 #+END_SRC
 ** FileStore
-ÎÄ¼şËùÔÚµÄ¿Õ¼äÉè±¸£¬ÈçVolumn£¬Drive£¬partitionÖ®Àà(¾ßÌåÈ¡¾öÓÚÎÄ¼şÏµÍ³)
+æ–‡ä»¶æ‰€åœ¨çš„ç©ºé—´è®¾å¤‡ï¼Œå¦‚Volumnï¼ŒDriveï¼Œpartitionä¹‹ç±»(å…·ä½“å–å†³äºæ–‡ä»¶ç³»ç»Ÿ)
 *** method
 long getTotalSpace()
 long getUnallocatedSpace()
@@ -978,7 +978,7 @@ readonly (Boolean)
 system (Boolean)
 **** AclFileAttributeView
 *** usage
-Files¡¯s <V extends FileAttributeView> V getFileAttributeView(Path path, Class<V> type, LinkOption... options)
+Filesâ€™s <V extends FileAttributeView> V getFileAttributeView(Path path, Class<V> type, LinkOption... options)
 ** Aio
 *** AsynchronousChannel
 **** method
@@ -1024,11 +1024,11 @@ public class Main
 void completed(V result, A attachment)
 void failed(Throwable t, A attachment)
 *** AsynchronousChannelGroup
-open(xx×é)£¬×éµÄ¸ÅÄîÖ÷ÒªÓÃÓÚ·ÖÅäÍ¨ÓÃµÄÖîÈçÏß³Ì³Ø£¬Í³Ò»¹Ø±ÕµÈµÈ·Ö×éÌØĞÔ
+open(xxç»„)ï¼Œç»„çš„æ¦‚å¿µä¸»è¦ç”¨äºåˆ†é…é€šç”¨çš„è¯¸å¦‚çº¿ç¨‹æ± ï¼Œç»Ÿä¸€å…³é—­ç­‰ç­‰åˆ†ç»„ç‰¹æ€§
 ** NetworkChannel 
 *** DatagramChannel
 #+BEGIN_SRC java
-//¶à²¥
+//å¤šæ’­
 public class ChannelServer
 {
     final static int PORT = 9999;

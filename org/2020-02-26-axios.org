@@ -1,11 +1,11 @@
 #+TITLE: axios
 #+STARTUP: indent
-* ÅäÖÃ¹«¹²url
+* é…ç½®å…¬å…±url
 axios.defaults.baseURL = 'http://localhost/'
 * request
 ** get
 #+BEGIN_SRC javascript
-// Îª¸ø¶¨ ID µÄ user ´´½¨ÇëÇó
+// ä¸ºç»™å®š ID çš„ user åˆ›å»ºè¯·æ±‚
 axios.get('/user?ID=12345')
   .then(function (response) {
     console.log(response);
@@ -14,7 +14,7 @@ axios.get('/user?ID=12345')
     console.log(error);
   });
 
-// ¿ÉÑ¡µØ£¬ÉÏÃæµÄÇëÇó¿ÉÒÔÕâÑù×ö
+// å¯é€‰åœ°ï¼Œä¸Šé¢çš„è¯·æ±‚å¯ä»¥è¿™æ ·åš
 axios.get('/user', {
     params: {
       ID: 12345
@@ -40,6 +40,6 @@ axios.post('/user', {
     console.log(error);
   });
 #+END_SRC
-* ÄÃµ½·µ»ØµÄcookie
+* æ‹¿åˆ°è¿”å›çš„cookie
 * document
 https://www.kancloud.cn/yunye/axios/234845

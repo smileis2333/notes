@@ -1,20 +1,20 @@
-#+TITLE: Ç°¶ËÏà¹Ø
+#+TITLE: å‰ç«¯ç›¸å…³
 #+STARTUP: indent
 * js
-https://www.runoob.com/js/js-tutorial.html ²ËÄñ½Ì³Ì
+https://www.runoob.com/js/js-tutorial.html èœé¸Ÿæ•™ç¨‹
 ** framework
 *** vuejs
 *** react
 *** angular
 *** jQuery
 https://www.runoob.com/jquery/jquery-install.html
-https://www.cnblogs.com/njccqx/p/6650089.html htmlÖĞÓÃjQueryÅĞ¶Ï¸´Ñ¡¿òÊÇ·ñÑ¡ÖĞ
+https://www.cnblogs.com/njccqx/p/6650089.html htmlä¸­ç”¨jQueryåˆ¤æ–­å¤é€‰æ¡†æ˜¯å¦é€‰ä¸­
 * css
-https://www.cnblogs.com/qcloud1001/p/9848619.html flex²¼¾Ö
-* ¸»ÎÄ±¾±à¼­Æ÷
+https://www.cnblogs.com/qcloud1001/p/9848619.html flexå¸ƒå±€
+* å¯Œæ–‡æœ¬ç¼–è¾‘å™¨
 tinymce
 * markdown
-** ±à¼­Æ÷
+** ç¼–è¾‘å™¨
 *** tui editor
 ref https://github.com/nhn/tui.editor
 ** render
@@ -23,8 +23,8 @@ ref  https://github.com/showdownjs/showdown
 * icon
 ** iconfont
 *** usage in vuejs
-* ÏñËØ
-px¡¢ÎïÀíÏñËØ¡¢rem¡¢rpxµÄ¹ØÏµ
+* åƒç´ 
+pxã€ç‰©ç†åƒç´ ã€remã€rpxçš„å…³ç³»
 https://www.jianshu.com/p/1b69f0df78f3?from=timeline
 * svg
 https://developer.mozilla.org/zh-CN/docs/Web/SVG/Tutorial/Basic_Shapes
@@ -36,15 +36,15 @@ http://pikock.github.io/bootstrap-magic/app/#!/editor builder
 https://yarn.bootcss.com/docs/usage/
 * resources
 http://www.csszengarden.com/tr/zh-cn/ zen garden
-https://www.jianshu.com/p/3bc7404af887 ¿ªÔ´µÄºóÌ¨¿ØÖÆÃæ°å
+https://www.jianshu.com/p/3bc7404af887 å¼€æºçš„åå°æ§åˆ¶é¢æ¿
 ** bootstrap
-https://bootsnipp.com/ bootstrapÑùÊ½×é¼ş
-https://startbootstrap.com/themes bootstrapÑùÊ½×é¼ş
+https://bootsnipp.com/ bootstrapæ ·å¼ç»„ä»¶
+https://startbootstrap.com/themes bootstrapæ ·å¼ç»„ä»¶
 https://bootstrapstudio.io/
 ** icon
 http://www.fontawesome.com.cn/faicons/
 * ref
-https://github.com/iamjoel/front-end-plugins ³£ÓÃ²å¼ş
-https://dribbble.com/ Æ½ÃæÉè¼ÆÆ·
-* ÂÖ²¥
+https://github.com/iamjoel/front-end-plugins å¸¸ç”¨æ’ä»¶
+https://dribbble.com/ å¹³é¢è®¾è®¡å“
+* è½®æ’­
 swiper

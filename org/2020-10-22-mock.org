@@ -4,7 +4,7 @@
 ** Performance
 ** Collaboration
 ** isolation
-����ӿ��������ⲿ����/�м�����ⲿϵͳʱ�������崻������²���ʧ��(��ʵ���Ͻӿڵ��߼�����ȷ��)
+如果接口依赖于外部服务/中间件等外部系统时，如果其宕机，导致测试失败(而实际上接口的逻辑是正确的)
 * framework
 ** mockito
 ** Mockit

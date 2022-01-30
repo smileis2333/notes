@@ -1,8 +1,8 @@
 #+TITLE: linux
 #+STARTUP: indent 
 * trick
-** �������еĽ��̹ҵ���̨��������
-ctrl + z �ҵ���̨�� bg��������
+** 正在运行的进程挂到后台继续进行
+ctrl + z 挂到后台， bg继续进行
 * debian
 dpkg -L package-name
 apt list --installed
@@ -18,25 +18,25 @@ https://blog.csdn.net/z2066411585/article/details/78761753
 https://github.com/dylanaraps/pure-bash-bible
 https://github.com/Idnan/bash-guide
 * grep
---color=auto ���� --color����ʾ��ƥ�䵽���ı���ɫ��ʾ
--i����������ʱ����Դ�Сд
--n����ʾ��������к�
--c��ͳ��ƥ�䵽��������ע�⣬��ƥ�䵽��������������ƥ�䵽�Ĵ���
--o��ֻ��ʾ�����������ַ��������ǲ�������ʾ��ÿ�������������ַ���������ʾһ��
--v����������ؼ��ֵ��У������ѯ������ƥ�䣩
--w��ƥ���������ʣ�������ַ����а���������ʣ�����ƥ��
--Ax���������ʱ��������������֮���ָ������������ָ֮���x�У�A��after
--Bx���������ʱ��������������֮ǰ��ָ������������ָ֮ǰ��x�У�B��before
--Cx���������ʱ��������������֮ǰ��֮���ָ������������ָ֮ǰ��֮���x�У�C��context
--e��ʵ�ֶ��ѡ���ƥ�䣬�߼�or��ϵ
--q����Ĭģʽ��������κ���Ϣ��������ֻ������û��ƥ�䵽��ȴ������ƥ�䵽ʲô����ʱ�����ǿ���ʹ�ô����Ȼ��ʹ��"echo $?"�鿴�Ƿ�ƥ�䵽��0��ʾƥ�䵽��1��ʾû��ƥ�䵽��
--P����ʾʹ�ü���perl���������档
--E��ʹ����չ�������ʽ�������ǻ����������ʽ����ʹ��"-E"ѡ��ʱ���൱��ʹ��egrep��
+--color=auto 或者 --color：表示对匹配到的文本着色显示
+-i：在搜索的时候忽略大小写
+-n：显示结果所在行号
+-c：统计匹配到的行数，注意，是匹配到的总行数，不是匹配到的次数
+-o：只显示符合条件的字符串，但是不整行显示，每个符合条件的字符串单独显示一行
+-v：输出不带关键字的行（反向查询，反向匹配）
+-w：匹配整个单词，如果是字符串中包含这个单词，则不作匹配
+-Ax：在输出的时候包含结果所在行之后的指定行数，这里指之后的x行，A：after
+-Bx：在输出的时候包含结果所在行之前的指定行数，这里指之前的x行，B：before
+-Cx：在输出的时候包含结果所在行之前和之后的指定行数，这里指之前和之后的x行，C：context
+-e：实现多个选项的匹配，逻辑or关系
+-q：静默模式，不输出任何信息，当我们只关心有没有匹配到，却不关心匹配到什么内容时，我们可以使用此命令，然后，使用"echo $?"查看是否匹配到，0表示匹配到，1表示没有匹配到。
+-P：表示使用兼容perl的正则引擎。
+-E：使用扩展正则表达式，而不是基本正则表达式，在使用"-E"选项时，相当于使用egrep。
 * pipe
 (./a | ./b) < [source] >[output] 2> [erroroutput]
 * grub
-1. һ��bootloader����Ҫ����linux���෢�а������(Ҳ�ܴ���������windows)
-2. ������ֻ��������װ�����̷����ϵĲ���������grub����ͨ����grub��װ�����ϸ������Ǹ�����װgrub�Ĺ��߰�
+1. 一个bootloader，主要用于linux各类发行版的引导(也能处理后引导windows)
+2. 本质上只有真正安装到磁盘分区上的才是真正的grub，而通常的grub安装包，严格来讲是辅助安装grub的工具包
 https://blog.51cto.com/bluetom/1730895
 ** grub
 ** grub2
@@ -57,17 +57,23 @@ https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf fhs
 * log
 ** sysklogd
 http://www.jinbuguo.com/linux/sysklogd.html
+* font
+Liberation fedora发布的比较靠谱
+noto做最低程度的fallback处理，涵盖面够大
+infinality字体补丁包，可以关掉其他字体只留一个用其作总交互，记得加use，提供了各种预设
 * script
 #+BEGIN_SRC bash
 
 # trace log file
-tail -f -n 0 access.log(�ļ���ɾ���ļ�������Ч)
-tail -F -n 0 access.log(���Դ�)
+tail -f -n 0 access.log(文件被删除的加内容无效)
+tail -F -n 0 access.log(尝试打开)
 
-# wsl��Ҫ��disable-inotify����������
+# wsl需要加disable-inotify，否则会假死
 tail ---disable-inotify -f -n 0 postgresql-2021-06-24_141528.log
 
 #+END_SRC
-* centos
-card auto up
-/etc/sysconfig/network-scripts/
+* locale
+locale分为三层
+系统支持的全部locale(超级多)
+管理员配置的系统支持可被选择的子集
+普通用户选其中一个locale

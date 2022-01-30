@@ -12,7 +12,7 @@ cd fastdfs; git checkout V6.06
 ./make.sh clean && ./make.sh && ./make.sh install
 ./setup.sh /etc/fdfs
 
-edit config file via needing(storage²»ÄÜÖ¸¶¨tracker ipÎª127.0.0.1, Èç¹ûÎªÍ¬Ò»Ì¨»ú×ÓÊ¹ÓÃtrackerÓëstorage£¬ĞèÒª¿¼ÂÇÄÚÍøµØÖ·Óë¿ª·¢»·¾³µÄÓ°Ïì£¬±ÈÈçstorageÅäÖÃtrackerÊ±£¬Ê¹ÓÃÄÚÍøµØÖ·£¬·şÎñÆ÷×ÔÉí¿ÉÒÔ¶ÁÈ¡£¬µ«ÊÇ¿ª·¢»·¾³Í¨¹ıtrackclient»ñÈ¡µ½µÄipµØÖ·Ò²ÊÇÄÚÍø£¬µ«ÊÇ²»ÄÜÕı³£ÉÏ´«)
+edit config file via needing(storageä¸èƒ½æŒ‡å®štracker ipä¸º127.0.0.1, å¦‚æœä¸ºåŒä¸€å°æœºå­ä½¿ç”¨trackerä¸storageï¼Œéœ€è¦è€ƒè™‘å†…ç½‘åœ°å€ä¸å¼€å‘ç¯å¢ƒçš„å½±å“ï¼Œæ¯”å¦‚storageé…ç½®trackeræ—¶ï¼Œä½¿ç”¨å†…ç½‘åœ°å€ï¼ŒæœåŠ¡å™¨è‡ªèº«å¯ä»¥è¯»å–ï¼Œä½†æ˜¯å¼€å‘ç¯å¢ƒé€šè¿‡trackclientè·å–åˆ°çš„ipåœ°å€ä¹Ÿæ˜¯å†…ç½‘ï¼Œä½†æ˜¯ä¸èƒ½æ­£å¸¸ä¸Šä¼ )
 
 /usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf restart
 /usr/bin/fdfs_storaged /etc/fdfs/storage.conf restart
@@ -35,10 +35,10 @@ location /M00 {
   root /home/yuqing/fastdfs/data;
   ngx_fastdfs_module;
 }
-# ¸ÃÄ£¿éÈ¡µÃÅäÖÃµÄlocationÔÚÖ¸¶¨µÄrootÏÂ½øĞĞÆ´½Ó²éÕÒÎÄ¼ş£¬ËùÒÔÒ»°ãĞèÒªÎªrootÅäÖÃµÄÂ·¾¶ÅäÖÃÈíÁ´½Ó
-±ÈÈçÉÏ´«ºóµÄÌáÊ¾Â·¾¶ÎªÈçÏÂ£¬µ«ÊÇÒòÎª¸ÃÄ£¿éÖ»ÅäÖÃÁË/M00£¬Í¬Ê±ÅäÖÃÁËln -s /home/yuqing/fastdfs/data  /home/yuqing/fastdfs/data/M00
+# è¯¥æ¨¡å—å–å¾—é…ç½®çš„locationåœ¨æŒ‡å®šçš„rootä¸‹è¿›è¡Œæ‹¼æ¥æŸ¥æ‰¾æ–‡ä»¶ï¼Œæ‰€ä»¥ä¸€èˆ¬éœ€è¦ä¸ºrooté…ç½®çš„è·¯å¾„é…ç½®è½¯é“¾æ¥
+æ¯”å¦‚ä¸Šä¼ åçš„æç¤ºè·¯å¾„ä¸ºå¦‚ä¸‹ï¼Œä½†æ˜¯å› ä¸ºè¯¥æ¨¡å—åªé…ç½®äº†/M00ï¼ŒåŒæ—¶é…ç½®äº†ln -s /home/yuqing/fastdfs/data  /home/yuqing/fastdfs/data/M00
 http://172.24.55.138/group1/M00/00/00/rBg3il5j2_GAecchAAB_mHYT-FQ18203_big.h
-ËùÒÔÊÂÊµÉÏµÄÂ·¾¶Îª
+æ‰€ä»¥äº‹å®ä¸Šçš„è·¯å¾„ä¸º
 http://172.24.55.138/M00/00/00/rBg3il5j2_GAecchAAB_mHYT-FQ18203_big.h
 
 ln -s /home/yuqing/fastdfs/data  /home/yuqing/fastdfs/data/M00
@@ -50,7 +50,7 @@ edit /etc/fdfs/mod_fastdfs.conf
 /usr/local/nginx/sbin/nginx
 * client
 ** java
-ÓÉÓÚ×÷ÕßÃ»ÓĞ·¢²¼³öÈ¥£¬Òò´ËĞèÒª±àÒëºó£¬½øĞĞ°²×°
+ç”±äºä½œè€…æ²¡æœ‰å‘å¸ƒå‡ºå»ï¼Œå› æ­¤éœ€è¦ç¼–è¯‘åï¼Œè¿›è¡Œå®‰è£…
 ref https://github.com/happyfish100/fastdfs-client-java
 * refer
 https://www.cnblogs.com/yufeng218/p/8111961.html install guide

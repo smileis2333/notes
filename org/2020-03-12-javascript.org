@@ -6,7 +6,7 @@ var str = "Visit Runoob!";
 var n = str.search(/Runoob/i);
 * array
 #+BEGIN_SRC javascript
-// 数组合并
+// 鏁扮粍鍚堝苟
 keywords = keywords.concat(result)
 
 keywords.push(xxx)

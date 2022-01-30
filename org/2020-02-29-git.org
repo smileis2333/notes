@@ -7,137 +7,136 @@ choco install git
 ** centos
 * config
 ** --global
-µ±Ç°ÏµÍ³ÓÃ»§µÄÈ«²¿repoÉúĞ§
+å½“å‰ç³»ç»Ÿç”¨æˆ·çš„å…¨éƒ¨repoç”Ÿæ•ˆ
 git config --global user.name "smile2333"
 git config --global user.email "hj980959100@gmail.com"
 git config --global --list
 ** --system
-ÏµÍ³È«²¿ÓÃ»§ÉúĞ§, commandÍ¬ÉÏ
+ç³»ç»Ÿå…¨éƒ¨ç”¨æˆ·ç”Ÿæ•ˆ, commandåŒä¸Š
 ** --local
-µ±Ç°repoÉúĞ§, commandÍ¬ÉÏ
+å½“å‰repoç”Ÿæ•ˆ, commandåŒä¸Š
 * repo
 ** local
 ** remote
 ** create
 git init repoName
-git init µ±Ç°Ä¿Â¼×ª»¯Îªrepo
-** °æ±¾¿â
-** ¹¤×÷Çø
+git init å½“å‰ç›®å½•è½¬åŒ–ä¸ºrepo
+** ç‰ˆæœ¬åº“
+** å·¥ä½œåŒº
 ** remote
 git push remoteRepo localBranchName:remoteBranchName
-git push localBranchNameºÍremoteBranchNameÍ¬ÃûÊ±£¬¿ÉÒÔÖ±½Ó¼òĞ´
-git push -u orgin localBranchName[:remoteBranchName] ±¾µØĞÂ½¨ÍÆËÍµ½Ô¶³Ì·ÖÖ§£¬Í¬Ê±½«Ô¶³Ì·ÖÖ§ÉèÖÃµ±Ç°·ÖÖ§µÄÉÏÓÎ·ÖÖ§£¬µ±remoteBranchName²»Ğ´Ê±£¬´ú±íÍ¬Ãû
+git push localBranchNameå’ŒremoteBranchNameåŒåæ—¶ï¼Œå¯ä»¥ç›´æ¥ç®€å†™
+git push -u orgin localBranchName[:remoteBranchName] æœ¬åœ°æ–°å»ºæ¨é€åˆ°è¿œç¨‹åˆ†æ”¯ï¼ŒåŒæ—¶å°†è¿œç¨‹åˆ†æ”¯è®¾ç½®å½“å‰åˆ†æ”¯çš„ä¸Šæ¸¸åˆ†æ”¯ï¼Œå½“remoteBranchNameä¸å†™æ—¶ï¼Œä»£è¡¨åŒå
 git remote add origin repoName[such as git@github.com:smile-2333/qa_client.git]
 git remote -v
 git remote rm [repoName]
-*** ¸ú×Ù·ÖÖ§
-½«Ô¶³Ì·ÖÖ§µÄĞÅÏ¢±£´æÔÚ±¾µØµÄ·ÖÖ§¸ÅÄî
+*** è·Ÿè¸ªåˆ†æ”¯
+å°†è¿œç¨‹åˆ†æ”¯çš„ä¿¡æ¯ä¿å­˜åœ¨æœ¬åœ°çš„åˆ†æ”¯æ¦‚å¿µ
 git branch -avv
-*** ÆÕÍ¨·ÖÖ§
-Êµ¼Ê¹¤×÷µÄ·ÖÖ§£¬Èç¹û´æÔÚremote repo£¬Ôò¿ÉÒÔ½«Æä¶ÔÓ¦µ½Ò»¸ö¸ú×Ù·ÖÖ§ÉÏ£¬È»ºóÍ¨¹ıgit push/fetch½øĞĞ²Ù×÷
-*** ×Ô½¨Ô¶³Ì²Ö¿â
+*** æ™®é€šåˆ†æ”¯
+å®é™…å·¥ä½œçš„åˆ†æ”¯ï¼Œå¦‚æœå­˜åœ¨remote repoï¼Œåˆ™å¯ä»¥å°†å…¶å¯¹åº”åˆ°ä¸€ä¸ªè·Ÿè¸ªåˆ†æ”¯ä¸Šï¼Œç„¶åé€šè¿‡git push/fetchè¿›è¡Œæ“ä½œ
+*** è‡ªå»ºè¿œç¨‹ä»“åº“
 // create
 mkdir  project.git
 cd  project.git
 git  --bare inti
 
-// ±¾µØÏîÄ¿
+// æœ¬åœ°é¡¹ç›®
 git remote add origin [username]@[host]:[path]/project.git
 git push origin master
 * command
 git log --oneline
-git cat-file -t hashCodeSeg ²é¿´hashCode¶ÔÓ¦µÄgit¶ÔÏóÀàĞÍ
-git cat-file -p hashCodeSeg ²é¿´hashCode¶ÔÓ¦µÄgit¶ÔÏóÄÚÈİ
-git rev-parse hashCodeSeg/branchName »ñÈ¡ÍêÕûµÄhashCode/·ÖÖ§¶ÔÓ¦µÄhashCode
-git ls-files -s ²é¿´µ±Ç°Ë÷ÒıÇøµÄË÷ÒıµÄ¶ÔÏó
+git cat-file -t hashCodeSeg æŸ¥çœ‹hashCodeå¯¹åº”çš„gitå¯¹è±¡ç±»å‹
+git cat-file -p hashCodeSeg æŸ¥çœ‹hashCodeå¯¹åº”çš„gitå¯¹è±¡å†…å®¹
+git rev-parse hashCodeSeg/branchName è·å–å®Œæ•´çš„hashCode/åˆ†æ”¯å¯¹åº”çš„hashCode
+git ls-files -s æŸ¥çœ‹å½“å‰ç´¢å¼•åŒºçš„ç´¢å¼•çš„å¯¹è±¡
 git reset --hard hashCodeSeg
-git reflog ²é¿´È«²¿µÄÌá½»
-git commit -amd '×¢ÊÍÄÚÈİ' Ö±½ÓÔİ´æ£¬²¢Ìá½»
-git mv fileName1 fileName2 ¸ÄÃû¹¤×÷ÇøÎÄ¼ş£¬È»ºóÒ²Ôİ´æ
-git rm fileName É¾³ıÎÄ¼ş£¬²¢½«±ä¸üÔİ´æ
+git reflog æŸ¥çœ‹å…¨éƒ¨çš„æäº¤
+git commit -amd 'æ³¨é‡Šå†…å®¹' ç›´æ¥æš‚å­˜ï¼Œå¹¶æäº¤
+git mv fileName1 fileName2 æ”¹åå·¥ä½œåŒºæ–‡ä»¶ï¼Œç„¶åä¹Ÿæš‚å­˜
+git rm fileName åˆ é™¤æ–‡ä»¶ï¼Œå¹¶å°†å˜æ›´æš‚å­˜
 git hash-object [target]
 git cherry-pick [hash]
 * branch
 git branch
 git branch -v
-git branch branchName ´´½¨»ùÓÚ·ÖÖ§µÄĞÂ·ÖÖ§
-git checkout branchName ÇĞµ½µ½Ö¸¶¨·ÖÖ§
-git checkout -b branchName ´´½¨²¢Í¬Ê±ÇĞ»»µ½·ÖÖ§
-git branch -d branchName ºÏ²¢ºó£¬»ù±¾ÉÏ¶¼¿ÉÒÔ°ÑÌØĞÔ·ÖÖ§(¿ª·¢¸ÅÄî)É¾µôÁË£¬Èç¹û»¹Ã»ºÏ²¢£¬»á¾¯¸æ£¬Ö»ÄÜÊ¹ÓÃÏÂ¸öÃüÁîÇ¿ÖÆÉ¾³ı
+git branch branchName åˆ›å»ºåŸºäºåˆ†æ”¯çš„æ–°åˆ†æ”¯
+git checkout branchName åˆ‡åˆ°åˆ°æŒ‡å®šåˆ†æ”¯
+git checkout -b branchName åˆ›å»ºå¹¶åŒæ—¶åˆ‡æ¢åˆ°åˆ†æ”¯
+git branch -d branchName åˆå¹¶åï¼ŒåŸºæœ¬ä¸Šéƒ½å¯ä»¥æŠŠç‰¹æ€§åˆ†æ”¯(å¼€å‘æ¦‚å¿µ)åˆ æ‰äº†ï¼Œå¦‚æœè¿˜æ²¡åˆå¹¶ï¼Œä¼šè­¦å‘Šï¼Œåªèƒ½ä½¿ç”¨ä¸‹ä¸ªå‘½ä»¤å¼ºåˆ¶åˆ é™¤
 git branch -D branchName
 ** merge
-git merge branchName ½«Ö¸¶¨·ÖÖ§ºÏ²¢µ½µ±Ç°·ÖÖ§
-git merge --no-ff branchName ¼´Ê¹Âú×ãfast-forward£¬Ò²Õû³öĞÂÌá½»
-git merge --ff-only branchName fast-forward£¬²ÅÄÜmerge³É¹¦
-git merge -no-commit branchName Ã»³åÍ»²ÅºÏ²¢
+git merge branchName å°†æŒ‡å®šåˆ†æ”¯åˆå¹¶åˆ°å½“å‰åˆ†æ”¯
+git merge --no-ff branchName å³ä½¿æ»¡è¶³fast-forwardï¼Œä¹Ÿæ•´å‡ºæ–°æäº¤
+git merge --ff-only branchName fast-forwardï¼Œæ‰èƒ½mergeæˆåŠŸ
+git merge -no-commit branchName æ²¡å†²çªæ‰åˆå¹¶
 *** fast-forward
 ** conflicts
-*** È¡Ïû
+*** å–æ¶ˆ
 git merge --aborr
 *** testfile
 
 * HEAD
-Ê¹Î»ÓÚ.git/headµÄÒ»ÖÖÂß¼­¸ÅÄî£¬ÓÃÓÚÈ·¶¨µ±Ç°¹¤×÷ÔÚÄÄ¸ö·ÖÖ§ÉÏ£¬Ö¸Ïò.git/refs/headsÏÂµÄ·ÖÖ§Ö®Ò»(¸ÃÄ¿Â¼´ú±íÁËµ±Ç°Ëù¿ª±ÙµÄ·ÖÖ§£¬ÄÚÈİÎªÖ¸Ïò¶ÔÓ¦µÄcommit¶ÔÏó)
+ä½¿ä½äº.git/headçš„ä¸€ç§é€»è¾‘æ¦‚å¿µï¼Œç”¨äºç¡®å®šå½“å‰å·¥ä½œåœ¨å“ªä¸ªåˆ†æ”¯ä¸Šï¼ŒæŒ‡å‘.git/refs/headsä¸‹çš„åˆ†æ”¯ä¹‹ä¸€(è¯¥ç›®å½•ä»£è¡¨äº†å½“å‰æ‰€å¼€è¾Ÿçš„åˆ†æ”¯ï¼Œå†…å®¹ä¸ºæŒ‡å‘å¯¹åº”çš„commitå¯¹è±¡)
 ** detached HEAD
-µ±Ö±½ÓÖ¸Ïòcommit¶ÔÏó¶ø·Ç·ÖÖ§Ê±
-git checkout hashCodeSeg Ö±½ÓÇĞ»»µ½¶ÔÏócommit¶ÔÏó
-git checkout -b branchName ÔÚµ±Ç°µÄÄäÃû·ÖÖ§±ä¸üºó£¬×÷ÎªĞÂ·ÖÖ§±£´æ
-git checkout branchName hashCodeSeg ½«Ö¸¶¨µÄcommit¶ÔÏóÖ±½Ó´´½¨Ò»¸öĞÂ·Ö
+å½“ç›´æ¥æŒ‡å‘commitå¯¹è±¡è€Œéåˆ†æ”¯æ—¶
+git checkout hashCodeSeg ç›´æ¥åˆ‡æ¢åˆ°å¯¹è±¡commitå¯¹è±¡
+git checkout -b branchName åœ¨å½“å‰çš„åŒ¿ååˆ†æ”¯å˜æ›´åï¼Œä½œä¸ºæ–°åˆ†æ”¯ä¿å­˜
+git checkout branchName hashCodeSeg å°†æŒ‡å®šçš„commitå¯¹è±¡ç›´æ¥åˆ›å»ºä¸€ä¸ªæ–°åˆ†
 ** HEAD~
-µ±Ç°×îĞÂÌá½»µÄÉÏÒ»´Î£¬Í¬Àí¿ÉµÃHEAD~~,HEAD~~~£¬¸ü³¤µÄĞ´·¨
+å½“å‰æœ€æ–°æäº¤çš„ä¸Šä¸€æ¬¡ï¼ŒåŒç†å¯å¾—HEAD~~,HEAD~~~ï¼Œæ›´é•¿çš„å†™æ³•
 HEAD==HEAD~0
 HEAD~==HEAD~1
 HEAD~~==HEAD~2
 HEAD~~~==HEAD~3
 * diff
-git diff ±È½Ïµ±Ç°¹¤×÷ÇøºÍÔİ´æÇøµÄÈ«²¿ÎÄ¼şÄÚÈİ²îÒì
-git diff -- fileName Ö»±È½ÏÒ»¸öÎÄ¼ş
-git diff HEAD ±È½Ï¹¤×÷ÇøÓë×îĞÂÌá½»µÄ²îÒì
-git diff hashCodeSeg Í¬ÉÏ£¬Ò²ÊÇ´Ó¹¤×÷Çø¿ªÊ¼±È
-git diff --cached ±È½ÏÔİ´æÇøÓë×îĞÂÌá½»µÄ²îÒì
-git diff --cached hashCodeSeg ´ÓÔİ´æÇø¿ªÊ¼±È£¬ÆäËûÍ¬ÉÏ
-git diff hashCodeSeg1 hashCodeSeg2 ±È½ÏÁ½´ÎÌá½»µÄÄÚÈİ²îÒì
+git diff æ¯”è¾ƒå½“å‰å·¥ä½œåŒºå’Œæš‚å­˜åŒºçš„å…¨éƒ¨æ–‡ä»¶å†…å®¹å·®å¼‚
+git diff -- fileName åªæ¯”è¾ƒä¸€ä¸ªæ–‡ä»¶
+git diff HEAD æ¯”è¾ƒå·¥ä½œåŒºä¸æœ€æ–°æäº¤çš„å·®å¼‚
+git diff hashCodeSeg åŒä¸Šï¼Œä¹Ÿæ˜¯ä»å·¥ä½œåŒºå¼€å§‹æ¯”
+git diff --cached æ¯”è¾ƒæš‚å­˜åŒºä¸æœ€æ–°æäº¤çš„å·®å¼‚
+git diff --cached hashCodeSeg ä»æš‚å­˜åŒºå¼€å§‹æ¯”ï¼Œå…¶ä»–åŒä¸Š
+git diff hashCodeSeg1 hashCodeSeg2 æ¯”è¾ƒä¸¤æ¬¡æäº¤çš„å†…å®¹å·®å¼‚
 git diff hashCodeSeg HEAD
-git diff branchName1 branchName2 ±È½ÏÁ½¸ö·ÖÖ§µÄ²îÒì
-* ³·Ïú
-git reset (--mixed) HEAD È¡ÏûÔİ´æÇøµÄËùÓĞÎÄ¼ş±ä¸ü£¬ÈÃÆä¸úÉÏÒ»´Î×îĞÂÌá½»±£³ÖÒ»ÖÂ(¹¤×÷ÇøºÍÔİ´æÇøÒ»¶¨²»Ò»ÖÂ)
-git reset HEAD -- fileName Í¬ÉÏ£¬µ«ÊÇÖ»³·Ïúµ¥Ò»ÎÄ¼ş
-git reset --hard HEAD ¹¤×÷ÇøºÍÔİ´æÇøÒ»Æğ¶ªµôËùÓĞ±ä¸ü(¹¤×÷ÇøºÍÔİ´æÇøÒ»¶¨Ò»ÖÂ)
-git reset --mixed/hard commitId µ±Ç°·ÖÖ§µÄ×îĞÂÌá½»±äÎªÖ¸¶¨µÄcommitId
-git reset --mixed/hard commitId -- fileName ²»»áµ¼ÖÂÉÏÊöÇé¿ö£¬µ«ÊÇÎÄ¼ş»áÇĞ»»¹ıÈ¥
-git reset --soft commitId Ö»¸Äµ±Ç°µÄ×îĞÂÌá½»£¬Ôİ´æÇøºÍ¹¤×÷Çø²»¶¯
+git diff branchName1 branchName2 æ¯”è¾ƒä¸¤ä¸ªåˆ†æ”¯çš„å·®å¼‚
+* æ’¤é”€
+git reset (--mixed) HEAD å–æ¶ˆæš‚å­˜åŒºçš„æ‰€æœ‰æ–‡ä»¶å˜æ›´ï¼Œè®©å…¶è·Ÿä¸Šä¸€æ¬¡æœ€æ–°æäº¤ä¿æŒä¸€è‡´(å·¥ä½œåŒºå’Œæš‚å­˜åŒºä¸€å®šä¸ä¸€è‡´)
+git reset HEAD -- fileName åŒä¸Šï¼Œä½†æ˜¯åªæ’¤é”€å•ä¸€æ–‡ä»¶
+git reset --hard HEAD å·¥ä½œåŒºå’Œæš‚å­˜åŒºä¸€èµ·ä¸¢æ‰æ‰€æœ‰å˜æ›´(å·¥ä½œåŒºå’Œæš‚å­˜åŒºä¸€å®šä¸€è‡´)
+git reset --mixed/hard commitId å½“å‰åˆ†æ”¯çš„æœ€æ–°æäº¤å˜ä¸ºæŒ‡å®šçš„commitId
+git reset --mixed/hard commitId -- fileName ä¸ä¼šå¯¼è‡´ä¸Šè¿°æƒ…å†µï¼Œä½†æ˜¯æ–‡ä»¶ä¼šåˆ‡æ¢è¿‡å»
+git reset --soft commitId åªæ”¹å½“å‰çš„æœ€æ–°æäº¤ï¼Œæš‚å­˜åŒºå’Œå·¥ä½œåŒºä¸åŠ¨
 
-git restore -- glob ½«Í¨Åä·ûÆ¥ÅäµÄ¹¤¾ßÇøµÄÎÄ¼ş»Ø¹öµ½ÓëÔİ´æÇøÒ»ÖÂ£¬¾É°æ±¾²»ÊÇrestore¶øÊÇcheckout£¬Ôİ´æÇø±äÁËÔòÊÇ³·Ïú
-git restore --staged glob Í¬ÉÏ£¬µ«ÊÇÊÇ½«Ôİ´æÇø»Ø¹öµ½Óëµ±Ç°·ÖÖ§µÄ×îĞÂÌá½»
-* ÍĞ¹Ü
+git restore -- glob å°†é€šé…ç¬¦åŒ¹é…çš„å·¥å…·åŒºçš„æ–‡ä»¶å›æ»šåˆ°ä¸æš‚å­˜åŒºä¸€è‡´ï¼Œæ—§ç‰ˆæœ¬ä¸æ˜¯restoreè€Œæ˜¯checkoutï¼Œæš‚å­˜åŒºå˜äº†åˆ™æ˜¯æ’¤é”€
+git restore --staged glob åŒä¸Šï¼Œä½†æ˜¯æ˜¯å°†æš‚å­˜åŒºå›æ»šåˆ°ä¸å½“å‰åˆ†æ”¯çš„æœ€æ–°æäº¤
+* æ‰˜ç®¡
 ** bitbucket
 git remote add origin git@bitbucket.org:smile2333/rabbitmqdemo.git
 git push -u origin master
 ** github
 * principle
-** git¶ÔÏó
+** gitå¯¹è±¡
 *** type
 **** blob 
-Ò»¸öblob¾ÍÊÇÓÉÒ»¸öÎÄ¼ş×ª»»¶øÀ´£¬blob¶ÔÏóÖĞÖ»»á´æ´¢ÎÄ¼şµÄÊı¾İ£¬¶ø²»»á´æ´¢ÎÄ¼şµÄÔªÊı¾İ¡£
+ä¸€ä¸ªblobå°±æ˜¯ç”±ä¸€ä¸ªæ–‡ä»¶è½¬æ¢è€Œæ¥ï¼Œblobå¯¹è±¡ä¸­åªä¼šå­˜å‚¨æ–‡ä»¶çš„æ•°æ®ï¼Œè€Œä¸ä¼šå­˜å‚¨æ–‡ä»¶çš„å…ƒæ•°æ®ã€‚
 **** tree
-Ò»¸ötree¾ÍÊÇÓÉÒ»¸öÄ¿Â¼×ª»¯¶øÀ´£¬tree¶ÔÏóÖĞÖ»»á´æ´¢Ò»²ãÄ¿Â¼µÄĞÅÏ¢£¬ËüÖ»´æ´¢ËüµÄÖ±½ÓÎÄ¼şºÍÖ±½Ó×ÓÄ¿Â¼µÄĞÅÏ¢£¬µ«ÊÇ×ÓÄ¿Â¼ÖĞµÄÄÚÈİËü²¢²»»á±£´æ¡£
+ä¸€ä¸ªtreeå°±æ˜¯ç”±ä¸€ä¸ªç›®å½•è½¬åŒ–è€Œæ¥ï¼Œtreeå¯¹è±¡ä¸­åªä¼šå­˜å‚¨ä¸€å±‚ç›®å½•çš„ä¿¡æ¯ï¼Œå®ƒåªå­˜å‚¨å®ƒçš„ç›´æ¥æ–‡ä»¶å’Œç›´æ¥å­ç›®å½•çš„ä¿¡æ¯ï¼Œä½†æ˜¯å­ç›®å½•ä¸­çš„å†…å®¹å®ƒå¹¶ä¸ä¼šä¿å­˜ã€‚
 **** commit 
-Ò»¸öcommit¾ÍÊÇÒ»¸öÎÒÃÇËù´´½¨µÄÌá½»£¬ËüÖ¸ÏòÁËÒ»¸ötree£¬Õâ¸ötree±£´æÁËÄ³Ò»Ê±¿ÌÏîÄ¿¸ùÄ¿Â¼ÖĞµÄÖ±½ÓÎÄ¼şĞÅÏ¢ºÍÖ±½ÓÄ¿Â¼ĞÅÏ¢£¬Ò²¾ÍÊÇËµ£¬Õâ¸ötree»áÖ¸ÏòÖ±½ÓÎÄ¼şµÄblob¶ÔÏó£¬²¢ÇÒÖ¸ÏòÖ±½Ó×ÓÄ¿Â¼µÄtree¶ÔÏó£¬×ÓÄ¿Â¼µÄtree¶ÔÏóÓÖÖ¸ÏòÁË×ÓÄ¿Â¼ÖĞÖ±½ÓÎÄ¼şµÄblob£¬ÒÔ¼°×ÓÄ¿Â¼µÄÖ±½Ó×ÓÄ¿Â¼µÄtree£¬ÒÀ´ËÀàÍÆ¡£
-*** ¹şÏ£Âë
-±êÊ¶Ã¿¸ögit¶ÔÏó
+ä¸€ä¸ªcommitå°±æ˜¯ä¸€ä¸ªæˆ‘ä»¬æ‰€åˆ›å»ºçš„æäº¤ï¼Œå®ƒæŒ‡å‘äº†ä¸€ä¸ªtreeï¼Œè¿™ä¸ªtreeä¿å­˜äº†æŸä¸€æ—¶åˆ»é¡¹ç›®æ ¹ç›®å½•ä¸­çš„ç›´æ¥æ–‡ä»¶ä¿¡æ¯å’Œç›´æ¥ç›®å½•ä¿¡æ¯ï¼Œä¹Ÿå°±æ˜¯è¯´ï¼Œè¿™ä¸ªtreeä¼šæŒ‡å‘ç›´æ¥æ–‡ä»¶çš„blobå¯¹è±¡ï¼Œå¹¶ä¸”æŒ‡å‘ç›´æ¥å­ç›®å½•çš„treeå¯¹è±¡ï¼Œå­ç›®å½•çš„treeå¯¹è±¡åˆæŒ‡å‘äº†å­ç›®å½•ä¸­ç›´æ¥æ–‡ä»¶çš„blobï¼Œä»¥åŠå­ç›®å½•çš„ç›´æ¥å­ç›®å½•çš„treeï¼Œä¾æ­¤ç±»æ¨ã€‚
+*** å“ˆå¸Œç 
+æ ‡è¯†æ¯ä¸ªgitå¯¹è±¡
 * genral
-** statics
 #+BEGIN_SRC bash
-#ÌŞ³ı±»Îó¼ÓÈëVCSµÄÎÄ¼ş£¬-rµİ¹é
+#å‰”é™¤è¢«è¯¯åŠ å…¥VCSçš„æ–‡ä»¶ï¼Œ-ré€’å½’
 git rm -r --cached .gradle 
 
-#Í³¼Æ´úÂëÔö¼õÊıÁ¿
+#ç»Ÿè®¡ä»£ç å¢å‡æ•°é‡
 git log --author="huangjie" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s, removed lines: %s, total lines: %s\n", add, subs, loc }' -
 
-# È«²¿Í³¼Æ
+# å…¨éƒ¨ç»Ÿè®¡
 git log --format='%aN' | sort -u | while read name; do printf '%-14s\t' "$name"; git log --author="$name" --pretty=tformat: --numstat | awk '{add += $1; subs += $2; loc += $1 - $2} END {printf "added lines: %-15s removed lines: %-15s total lines: %-15s\r\n", add, subs, loc}' -; done
 
-#Í³¼ÆÊµ¼Ê´úÂëĞĞÊı£¬ĞèÒªcloc²å¼ş
+#ç»Ÿè®¡å®é™…ä»£ç è¡Œæ•°ï¼Œéœ€è¦clocæ’ä»¶
 git ls-files | xargs cloc 
 
 #+END_SRC

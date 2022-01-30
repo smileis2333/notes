@@ -1,4 +1,4 @@
-#+TITLE: Àÿ—¯
+#+TITLE: Á¥†ÂÖª
 #+STARTUP: indent
 * free software
 https://www.gnu.org/philosophy/free-sw.zh-cn.html free software
@@ -8,7 +8,7 @@ https://www.gnu.org/licenses/gpl-3.0.en.html
 https://www.gnu.org/licenses/lgpl-3.0.en.html
 https://www.apache.org/licenses/LICENSE-2.0
 https://opensource.org/licenses/MIT
-* ‘”œÓ
+* ÊùÇÈ°π
 https://en.wikipedia.org/wiki/Software_requirements_specification
 https://en.wikipedia.org/wiki/Class_diagram
 https://www.cnblogs.com/JacZhu/p/9779975.html jwt cons

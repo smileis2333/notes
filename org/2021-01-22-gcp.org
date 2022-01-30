@@ -1,16 +1,16 @@
 #+TITLE: gcp
 #+STARTUP: indent
 * user account
-´øÕËºÅÃÜÂë£¬¿ÉµÇÂ¼£¬ÓÃÍ¾:
-1. Ö÷ÒªÍ¨ĞĞÓÚ¸÷¸ö¹È¸è¿Í»§¶Ë·şÎñ£¬Èçkeep£¬drive,gmail
-2. ×÷Îª¸÷¸öGCP infraµÄ¸¸¼¶ÕËºÅ(ÈçGA)£¬ºÍGCPµÄ·şÎñÕËºÅ(°ó¶¨¶ÔÓÚÓÃ»§ĞÅÏ¢µÄ¶ÁÈ¡ºÍ¾ßÌåÖîÈçGAÕËºÅµÄĞÅÏ¢¶ÁÈ¡£¬ÓÃÓÚGCP²¿ÊğÈ¨ÏŞµÄÏ¸»¯)
+å¸¦è´¦å·å¯†ç ï¼Œå¯ç™»å½•ï¼Œç”¨é€”:
+1. ä¸»è¦é€šè¡Œäºå„ä¸ªè°·æ­Œå®¢æˆ·ç«¯æœåŠ¡ï¼Œå¦‚keepï¼Œdrive,gmail
+2. ä½œä¸ºå„ä¸ªGCP infraçš„çˆ¶çº§è´¦å·(å¦‚GA)ï¼Œå’ŒGCPçš„æœåŠ¡è´¦å·(ç»‘å®šå¯¹äºç”¨æˆ·ä¿¡æ¯çš„è¯»å–å’Œå…·ä½“è¯¸å¦‚GAè´¦å·çš„ä¿¡æ¯è¯»å–ï¼Œç”¨äºGCPéƒ¨ç½²æƒé™çš„ç»†åŒ–)
 * recaptcha
-v2Í¨³£²»»á³öÎÊÌâ
+v2é€šå¸¸ä¸ä¼šå‡ºé—®é¢˜
 ** keycloak demo
-- ¹Ø±Õ²¿·Ö°²È«ĞÔ¼ì²â
+- å…³é—­éƒ¨åˆ†å®‰å…¨æ€§æ£€æµ‹
 Realm Settings --> Security Defenses
 X-Frame-Options: ALLOW-FROM https://www.google.com
 Content-Security-Policy: frame-src 'self' https://www.google.com https://www.recaptcha.net; frame-ancestors 'self'; object-src 'none';
-- ÅäÖÃsecret
-Authentication --> Registration --> Recaptcha --> config --> ÅäÖÃsitekeyºÍsecret
-- ¸Ähostºó·ÃÎÊhttp://ssomytest.com:8080/auth/realms/test/account/#/
+- é…ç½®secret
+Authentication --> Registration --> Recaptcha --> config --> é…ç½®sitekeyå’Œsecret
+- æ”¹hoståè®¿é—®http://ssomytest.com:8080/auth/realms/test/account/#/

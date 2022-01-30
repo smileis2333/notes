@@ -1,8 +1,8 @@
 #+TITLE: system design
 #+STARTUP: indent
 * log
-ÓÃ»§²Ù×÷ÈÕÖ¾: https://www.zhihu.com/question/26848331/answer/34261466
-ÈÕÖ¾¾ÛºÏ: https://www.jianshu.com/p/bcf0445a1b8f
+ç”¨æˆ·æ“ä½œæ—¥å¿—: https://www.zhihu.com/question/26848331/answer/34261466
+æ—¥å¿—èšåˆ: https://www.jianshu.com/p/bcf0445a1b8f
 * estimate
 ** traffic
 ** speed
@@ -13,25 +13,25 @@
 https://medium.com/@jayphelps/backpressure-explained-the-flow-of-data-through-software-2350b3e77ce7
 * oop model
 https://kb.cnblogs.com/page/520743/
-* ²Ù×÷Á÷
-** ¿ìËÙÔ­ĞÍ
-** ÖĞ¼ä²ã³éÏó
-** ¸÷ÀàÖ¸±ê
-** ÎÈ¶¨ÒµÎñ
-** Ä£¿é²ğ·Ö
+* æ“ä½œæµ
+** å¿«é€ŸåŸå‹
+** ä¸­é—´å±‚æŠ½è±¡
+** å„ç±»æŒ‡æ ‡
+** ç¨³å®šä¸šåŠ¡
+** æ¨¡å—æ‹†åˆ†
 * steps
-** ĞèÇóÈ·ÈÏ
-** ÈİÁ¿¹À¼Æ(´ø¿íºÍÊı¾İ)
-DAU£¬ÊıÖµ´óĞ¡£¬²Ù×÷±ÈÀı
-** ÏµÍ³APIÉè¼Æ
+** éœ€æ±‚ç¡®è®¤
+** å®¹é‡ä¼°è®¡(å¸¦å®½å’Œæ•°æ®)
+DAUï¼Œæ•°å€¼å¤§å°ï¼Œæ“ä½œæ¯”ä¾‹
+** ç³»ç»ŸAPIè®¾è®¡
 ** High level system design
 1. figure to show op flow
-2. È·ÈÏ¿ÉÄÜ³öÏÖµÄÎÊÌâ£¬Ìá³öÃ¿¸ösolution(fan in/out write/read)µÄcons/pros
+2. ç¡®è®¤å¯èƒ½å‡ºç°çš„é—®é¢˜ï¼Œæå‡ºæ¯ä¸ªsolution(fan in/out write/read)çš„cons/pros
 
 ** Data Storage
-½á¹¹Éè¼Æ
+ç»“æ„è®¾è®¡
 *** SQL
-±íÉè¼Æ
+è¡¨è®¾è®¡
 *** NoSQL
 *** File system
 ** Scalability

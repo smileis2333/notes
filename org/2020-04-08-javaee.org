@@ -6,7 +6,7 @@
 #+BEGIN_SRC xml
 <servlet>
   <servlet-name>Internal name 1</servlet-name>    
-  <servlet-class>foo.Servlet1</servlet-class>  <!--You put in the fully-qualified name of the class (but you don¡¯t add the ¡°.class¡± extension-->
+  <servlet-class>foo.Servlet1</servlet-class>  <!--You put in the fully-qualified name of the class (but you donâ€™t add the â€œ.classâ€ extension-->
 
   <init-param>
     <param-name>adminEmail</param-name>
@@ -24,12 +24,12 @@
 *** javax.servlet.ServletRequest(interface)->javax.servlet.http.HttpServletRequest(interface)
 *** javax.servlet.ServletResponse(interface)->javax.servlet.http.HttpServletResponse(interface)
 ** dispatch
-RequestDispatcher view = request.getRequestDispatcher(¡°result.jsp¡±)
+RequestDispatcher view = request.getRequestDispatcher(â€œresult.jspâ€)
 view.forward(request, response);
 ** life cycle
 *** construct/init()
 it be invoke after the servlet instance, before it can sevice any client request
-¿ª·Å½Ó¿Ú£¬´´½¨ºó£¬Ö´ĞĞ(±È´¦ÀíÇëÇóÇ°¸üÔç)
+å¼€æ”¾æ¥å£ï¼Œåˆ›å»ºåï¼Œæ‰§è¡Œ(æ¯”å¤„ç†è¯·æ±‚å‰æ›´æ—©)
 *** initialized(the only state)
 *** destroy()
 *** service()
@@ -41,7 +41,7 @@ params are configured in dd
 #+BEGIN_SRC xml
 <servlet>
   <servlet-name>Internal name 1</servlet-name>    
-  <servlet-class>foo.Servlet1</servlet-class>  <!--You put in the fully-qualified name of the class (but you don¡¯t add the ¡°.class¡± extension-->
+  <servlet-class>foo.Servlet1</servlet-class>  <!--You put in the fully-qualified name of the class (but you donâ€™t add the â€œ.classâ€ extension-->
 
   <init-param>
     <param-name>adminEmail</param-name>
@@ -53,7 +53,7 @@ params are configured in dd
 #+END_SRC
 
 // get init param defined in dd
-out.println(getServletConfig().getInitParameter(¡°adminEmail¡±));
+out.println(getServletConfig().getInitParameter(â€œadminEmailâ€));
 ** ServletContext
 one servletContext per webapp
 uses to access webapp params(also configured in dd)
@@ -65,7 +65,7 @@ get relevant info about container
 </context-param>
 #+END_SRC
 
-out.println(getServletContext().getInitParameter(¡°adminEmail¡±));
+out.println(getServletContext().getInitParameter(â€œadminEmailâ€));
 ** eventlistener
 *** ServletContextListener
 #+BEGIN_SRC xml
@@ -96,7 +96,7 @@ valueUnbound
 #+BEGIN_SRC java
 class Dog implement HttpSessionBindingListener{
   public void valueBound(HttpSessionBindingEvent event) {     
-  // code to run now that I know I¡¯m in a session   
+  // code to run now that I know Iâ€™m in a session   
   }   
   public void valueUnbound(HttpSessionBindingEvent event) {    
  // code to run now that I know I am no longer part of a session  
@@ -140,16 +140,16 @@ HttpSessionBindingListener->(the attibute value of class that implement this int
 getCookies() // in javax.servlet.http.HttpServletRequest
 addCookie() // in javax.servlet.http.HttpServletResponse
 #+BEGIN_SRC java
-Cookie cookie = new Cookie(¡°username¡±, name);
+Cookie cookie = new Cookie(â€œusernameâ€, name);
 cookie.setMaxAge(30*60);
 response.addCookie(cookie);
 
 Cookie[] cookies = request.getCookies();
 for (int i = 0; i < cookies.length; i++) {    
   Cookie cookie = cookies[i];    
-  if (cookie.getName().equals(¡°username¡±)) {        
+  if (cookie.getName().equals(â€œusernameâ€)) {        
     String userName = cookie.getValue();        
-    out.println(¡°Hello ¡° + userName);        
+    out.println(â€œHello â€œ + userName);        
   break;    
 }}
 #+END_SRC
@@ -157,16 +157,16 @@ for (int i = 0; i < cookies.length; i++) {
 #+BEGIN_SRC java
 
 // request usage
-request.getParameter(¡°color¡±);
-String [] sizes = request.getParameterValues(¡°sizes¡±);
-String client = request.getHeader(¡°User-Agent¡±);
+request.getParameter(â€œcolorâ€);
+String [] sizes = request.getParameterValues(â€œsizesâ€);
+String client = request.getHeader(â€œUser-Agentâ€);
 Cookie[] cookies = request.getCookies();
 HttpSession session = request.getSession();
 String theMethod = request.getMethod();
 InputStream input = request.getInputStream();
-getRemotePort() // ·¢ÆğÇëÇóÒ»·½µÄ¶Ë¿Ú
-getLocalPort() // ±¾µØ½ÓÊÜrequestµÄ¶Ë¿Ú
-getServerPort() // ÓÃ»§Ï£ÍûÁ¬µ½µÄ¶Ë¿Ú£¬±È·½ËµapacheÅäºÏtomcat£¬¸ÃÊôĞÔÊÇ80£¬¶ølocalportÊÇ8080
+getRemotePort() // å‘èµ·è¯·æ±‚ä¸€æ–¹çš„ç«¯å£
+getLocalPort() // æœ¬åœ°æ¥å—requestçš„ç«¯å£
+getServerPort() // ç”¨æˆ·å¸Œæœ›è¿åˆ°çš„ç«¯å£ï¼Œæ¯”æ–¹è¯´apacheé…åˆtomcatï¼Œè¯¥å±æ€§æ˜¯80ï¼Œè€Œlocalportæ˜¯8080
 
 
 // response usage
@@ -176,10 +176,10 @@ PrintWriter writer = response.getWriter();
 ServletOutputStream out = response.getOutputStream();
 out.write(aByteArray);
 
-response.setHeader(¡°foo¡±, ¡°bar¡±);
-response.addHeader(¡°foo¡±, ¡°bar¡±);
-response.setIntHeader(¡°foo¡±, 42);
-response.sendRedirect(¡°http://www.oreilly.com¡±); // Ö§³ÖÏà¶ÔÂ·¾¶
+response.setHeader(â€œfooâ€, â€œbarâ€);
+response.addHeader(â€œfooâ€, â€œbarâ€);
+response.setIntHeader(â€œfooâ€, 42);
+response.sendRedirect(â€œhttp://www.oreilly.comâ€); // æ”¯æŒç›¸å¯¹è·¯å¾„
 
 #+END_SRC
 ** web container
@@ -191,7 +191,7 @@ the projectName is the part of path such as http://localhost:8080/[projectName]
 ******* classes
 ******* lib
 ******* tags
-×Ô¶¨Òåjsp±êÇ©
+è‡ªå®šä¹‰jspæ ‡ç­¾
 ******* web.xml
 ****** other resources such as form.html and form.jsp
 **** authentication
@@ -221,8 +221,8 @@ the projectName is the part of path such as http://localhost:8080/[projectName]
 ** deploment
 *** directory
 *** war
-·â×°[projectName]ÏÂµÄËùÓĞÎÄ¼ş£¬½âÎöºóÏîÄ¿·ÃÎÊ¸ùÂ·¾¶¸ù¾İ¾ßÌåÊµÏÖ¶ø¶¨£¬tomcatÊÇÊ¹ÓÃwarµÄÃû×Ö×÷Îª¸ùÂ·¾¶£¬±È¾ÉµÄÄ¿Â¼²¿Êğ¶àÁËÒ»¸öMETA-INF(¿ÉÒÔĞ´ÈëÏîÄ¿ÒÀÀµ)
-tomcat»á½âÑ¹ºóÊ¹ÓÃ£¬Ä¿Â¼ÃûÎªwarµÄÃû×Ö£¬ÆäËûÓëÔ­Ê¼·½Ê½Ò»Ñù(¼´ÊÇËµ£¬war°üÃ»ÓĞÒâÒå£¬ÓĞÒâÒåµÄÊÇÆä±»container½âÑ¹ºó´¦ÀíµÄÄ¿Â¼)
+å°è£…[projectName]ä¸‹çš„æ‰€æœ‰æ–‡ä»¶ï¼Œè§£æåé¡¹ç›®è®¿é—®æ ¹è·¯å¾„æ ¹æ®å…·ä½“å®ç°è€Œå®šï¼Œtomcatæ˜¯ä½¿ç”¨warçš„åå­—ä½œä¸ºæ ¹è·¯å¾„ï¼Œæ¯”æ—§çš„ç›®å½•éƒ¨ç½²å¤šäº†ä¸€ä¸ªMETA-INF(å¯ä»¥å†™å…¥é¡¹ç›®ä¾èµ–)
+tomcatä¼šè§£å‹åä½¿ç”¨ï¼Œç›®å½•åä¸ºwarçš„åå­—ï¼Œå…¶ä»–ä¸åŸå§‹æ–¹å¼ä¸€æ ·(å³æ˜¯è¯´ï¼ŒwaråŒ…æ²¡æœ‰æ„ä¹‰ï¼Œæœ‰æ„ä¹‰çš„æ˜¯å…¶è¢«containerè§£å‹åå¤„ç†çš„ç›®å½•)
 *** access rule
 WEB-INF and META-INF cann't access directly, so they can use for prevent directly access
 http://www.wickedlysmart.com/MyTestApp/register/signUp.jsp //may be right
@@ -231,7 +231,7 @@ http://www.wickedlysmart.com/MyTestApp/WEB-INF/process.jsp // must error
 1. find the match pattern(if many exist, the most long match it) that config in dd
 2. if 1 fail, then find directory
 *** welcome page
-Ã¿´ÎÊäÈëÂ·¾¶Ê±£¬ÈôÊÇÄ¿Â¼£¬´ÓÄ¿Â¼ÀïÃæÕÒ·ûºÏÅäÖÃµÄwelcome page£¬ÓÅÏÈ¼¶°´ÅäÖÃË³ĞòÅÅÁĞ£¬Èç¹ûÊ²Ã´¶¼ÕÒ²»µ½£¬ÔòÈ¡¾öÓÚvendor's implement£¬tomcat»áÕ¹Ê¾Ä¿Â¼ÎÄ¼şÁĞ±íÕªÒªĞÅÏ¢
+æ¯æ¬¡è¾“å…¥è·¯å¾„æ—¶ï¼Œè‹¥æ˜¯ç›®å½•ï¼Œä»ç›®å½•é‡Œé¢æ‰¾ç¬¦åˆé…ç½®çš„welcome pageï¼Œä¼˜å…ˆçº§æŒ‰é…ç½®é¡ºåºæ’åˆ—ï¼Œå¦‚æœä»€ä¹ˆéƒ½æ‰¾ä¸åˆ°ï¼Œåˆ™å–å†³äºvendor's implementï¼Œtomcatä¼šå±•ç¤ºç›®å½•æ–‡ä»¶åˆ—è¡¨æ‘˜è¦ä¿¡æ¯
 #+BEGIN_SRC xml
 <webapp ...>
   <welcome-file-list>
@@ -262,7 +262,7 @@ Any non-negative value for <load-on-startup> tells the Container to initialize t
 </servlet>
 #+END_SRC
 *** mime-mapping
-ÅäÖÃ×Ô¶¨ÒåµÄmimeÀàĞÍ
+é…ç½®è‡ªå®šä¹‰çš„mimeç±»å‹
 #+BEGIN_SRC xml
 <mime-mapping>
   <extension>mpg</extension>
@@ -381,7 +381,7 @@ add this in dd
 ***** basic
  encoding scheme (base64)
 ***** digest
-the encryption mechanism isn¡¯t widely used, J2EE containers aren¡¯t required to support it.
+the encryption mechanism isnâ€™t widely used, J2EE containers arenâ€™t required to support it.
 ***** client-cert
 using Public Key Certificates (PKC)
 ***** form
@@ -417,10 +417,10 @@ it's not the spec, but virtually container that implement this to protect data
 #+END_SRC
 ** filter
 *** order
-1. ÕÒ³öËùÓĞurl-patternÆ¥ÅäµÄ£¬È»ºó°´ÕÕÉùÃ÷Ë³Ğò¼ÓÈëfilteChain
-2. ÔÚ1Ö®ºó£¬ÕÒ³öËùÓĞÆ¥Åäservlet-name, °´ÉùÃ÷Ë³Ğò¼ÓÈëfilterChain,¼´ÊÇËµ£¬url-patternÆ¥ÅäµÄÓÅÏÈ¼¶±ğ¸ß
+1. æ‰¾å‡ºæ‰€æœ‰url-patternåŒ¹é…çš„ï¼Œç„¶åæŒ‰ç…§å£°æ˜é¡ºåºåŠ å…¥filteChain
+2. åœ¨1ä¹‹åï¼Œæ‰¾å‡ºæ‰€æœ‰åŒ¹é…servlet-name, æŒ‰å£°æ˜é¡ºåºåŠ å…¥filterChain,å³æ˜¯è¯´ï¼Œurl-patternåŒ¹é…çš„ä¼˜å…ˆçº§åˆ«é«˜
 *** config
-ÈçÏÂËÄ¸öfilter´òÓ¡Æä¶ÔÓ¦µÄÀàÃü£¬°´ÕÕÓÅÏÈ¼¶Ë³Ğò£¬´ò³ö"filter1,filter3,filter2, filter4"
+å¦‚ä¸‹å››ä¸ªfilteræ‰“å°å…¶å¯¹åº”çš„ç±»å‘½ï¼ŒæŒ‰ç…§ä¼˜å…ˆçº§é¡ºåºï¼Œæ‰“å‡º"filter1,filter3,filter2, filter4"
 #+BEGIN_SRC xml
 
 <?xml version="1.0" encoding="UTF-8"?>
@@ -486,12 +486,12 @@ it's not the spec, but virtually container that implement this to protect data
 
 #+END_SRC
 *** key
-**** Ô­Àí
-¹æ·¶Ã»ÓĞ¶¨ÒåfilterÈçºÎÊµÏÖ£¬µ«ÊÇ´ó²¿·ÖµÄÈİÆ÷ÊµÏÖÊÇ´¿´âµÄµ÷ÓÃÕ»£¬
-**** ÊµÏÖrequestFilter/responseFilter(Âß¼­ÉÏ)
+**** åŸç†
+è§„èŒƒæ²¡æœ‰å®šä¹‰filterå¦‚ä½•å®ç°ï¼Œä½†æ˜¯å¤§éƒ¨åˆ†çš„å®¹å™¨å®ç°æ˜¯çº¯ç²¹çš„è°ƒç”¨æ ˆï¼Œ
+**** å®ç°requestFilter/responseFilter(é€»è¾‘ä¸Š)
 ***** requestFilter
-»ùÓÚÆäÊµÏÖÔ­Àí¾ÍÊÇµ¥ÏòµÄµ÷ÓÃÕ»£¬ËùÒÔ¶ÔÓÚrequestFilterÕâÖÖÂß¼­¸ÅÄîÀ´½²£¬Ö»ÒªÔÚchain.doFilter(request,response)Ö®Ç°´¦Àí¾ÍÊÇ¶ÔÓ¦µÄrequestFilter×ö·¨
+åŸºäºå…¶å®ç°åŸç†å°±æ˜¯å•å‘çš„è°ƒç”¨æ ˆï¼Œæ‰€ä»¥å¯¹äºrequestFilterè¿™ç§é€»è¾‘æ¦‚å¿µæ¥è®²ï¼Œåªè¦åœ¨chain.doFilter(request,response)ä¹‹å‰å¤„ç†å°±æ˜¯å¯¹åº”çš„requestFilteråšæ³•
 ***** responseFilter
-¶øÈç¹ûÒª×öµ½responseFilterµÄÂß¼­¸ÅÄî£¬ÊÜÏŞÓÚ¹æ·¶(¼´ÇëÇó¹ıÁËfilterµ½´ïservletÊ±£¬Èô²»×öÈÎºÎ´¦Àí£¬Êä³öÁ÷Ö±½ÓÊÇÈİÆ÷±¾ÉíÀ´¹Ü£¬Ğ´³öÊ±£¬Ò²ÊÇÖ±½ÓĞ´»Ø¿Í»§¶Ë£¬²¢²»»áÔÙ¾­¹ıFliter),ËùÒÔ¿ÉĞĞµÄ·½Ê½ÊÇÔÚchain.doFilter(request,response)Ê±°Ñresponse»»³É×Ô¶¨ÒåµÄHttpServletResponse(¿ÉÒÔ¼Ì³ĞÌá¹©µÄwrapperÀà£¬²¢ÊµÏÖ²¿·Ö·½·¨ÒÔÊµÏÖ¹¦ÄÜ)
+è€Œå¦‚æœè¦åšåˆ°responseFilterçš„é€»è¾‘æ¦‚å¿µï¼Œå—é™äºè§„èŒƒ(å³è¯·æ±‚è¿‡äº†filteråˆ°è¾¾servletæ—¶ï¼Œè‹¥ä¸åšä»»ä½•å¤„ç†ï¼Œè¾“å‡ºæµç›´æ¥æ˜¯å®¹å™¨æœ¬èº«æ¥ç®¡ï¼Œå†™å‡ºæ—¶ï¼Œä¹Ÿæ˜¯ç›´æ¥å†™å›å®¢æˆ·ç«¯ï¼Œå¹¶ä¸ä¼šå†ç»è¿‡Fliter),æ‰€ä»¥å¯è¡Œçš„æ–¹å¼æ˜¯åœ¨chain.doFilter(request,response)æ—¶æŠŠresponseæ¢æˆè‡ªå®šä¹‰çš„HttpServletResponse(å¯ä»¥ç»§æ‰¿æä¾›çš„wrapperç±»ï¼Œå¹¶å®ç°éƒ¨åˆ†æ–¹æ³•ä»¥å®ç°åŠŸèƒ½)
 ** SPI
-3.0Ö®ºóÖ§³ÖSPI, META-INF/sevices/javax.servlet.ServletContainerInitializer
+3.0ä¹‹åæ”¯æŒSPI, META-INF/sevices/javax.servlet.ServletContainerInitializer

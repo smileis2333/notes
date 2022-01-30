@@ -1,8 +1,8 @@
 #+TITLE: vuex
 #+STARTUP: indent
-ÓÃÓÚÈ«¾Ö¹ÜÀí×´Ì¬¡£²¢ÏŞÖÆ×´Ì¬±ä¶¯Ö»ÄÜÍ¨¹ı¶¨ÒåµÄmutation
-Ò»°ã°ÑÆä¹ÒÔÚ¸ùÊµÀıÉÏ£¬È»ºó×Ó×é¼ş¿ÉÒÔÖ±½ÓÍ¨¹ıthis.$store.xxxxÀ´·ÃÎÊ
-* mapState ¸¨Öúº¯Êı
+ç”¨äºå…¨å±€ç®¡ç†çŠ¶æ€ã€‚å¹¶é™åˆ¶çŠ¶æ€å˜åŠ¨åªèƒ½é€šè¿‡å®šä¹‰çš„mutation
+ä¸€èˆ¬æŠŠå…¶æŒ‚åœ¨æ ¹å®ä¾‹ä¸Šï¼Œç„¶åå­ç»„ä»¶å¯ä»¥ç›´æ¥é€šè¿‡this.$store.xxxxæ¥è®¿é—®
+* mapState è¾…åŠ©å‡½æ•°
 #+BEGIN_SRC javascript
 import { mapState } from 'vuex'
 
@@ -15,17 +15,17 @@ export default{
   }
 }
 
-// ¿ÉÒÔ¼òĞ´ºÜ¶à
+// å¯ä»¥ç®€å†™å¾ˆå¤š
 export default {
   // ...
   computed: mapState({
-    // ¼ıÍ·º¯Êı¿ÉÊ¹´úÂë¸ü¼òÁ·
+    // ç®­å¤´å‡½æ•°å¯ä½¿ä»£ç æ›´ç®€ç»ƒ
     count: state => state.count,
 
-    // ´«×Ö·û´®²ÎÊı 'count' µÈÍ¬ÓÚ `state => state.count`
+    // ä¼ å­—ç¬¦ä¸²å‚æ•° 'count' ç­‰åŒäº `state => state.count`
     countAlias: 'count',
 
-    // ÎªÁËÄÜ¹»Ê¹ÓÃ `this` »ñÈ¡¾Ö²¿×´Ì¬£¬±ØĞëÊ¹ÓÃ³£¹æº¯Êı
+    // ä¸ºäº†èƒ½å¤Ÿä½¿ç”¨ `this` è·å–å±€éƒ¨çŠ¶æ€ï¼Œå¿…é¡»ä½¿ç”¨å¸¸è§„å‡½æ•°
     countPlusLocalState (state) {
       return state.count + this.localCount
     }
@@ -34,7 +34,7 @@ export default {
 //
 //computed: {
 //  localComputed () { /* ... */ },
-//  // Ê¹ÓÃ¶ÔÏóÕ¹¿ªÔËËã·û½«´Ë¶ÔÏó»ìÈëµ½Íâ²¿¶ÔÏóÖĞ
+//  // ä½¿ç”¨å¯¹è±¡å±•å¼€è¿ç®—ç¬¦å°†æ­¤å¯¹è±¡æ··å…¥åˆ°å¤–éƒ¨å¯¹è±¡ä¸­
 //  ...mapState({
 //    // ...
 //  })
@@ -57,7 +57,7 @@ const store = new Vuex.Store({
   }
 })
 
-// ·ÃÎÊ
+// è®¿é—®
 store.getters.doneTodos
 #+END_SRC
 ** mapGetters
@@ -67,7 +67,7 @@ import { mapGetters } from 'vuex'
 export default {
   // ...
   computed: {
-  // Ê¹ÓÃ¶ÔÏóÕ¹¿ªÔËËã·û½« getter »ìÈë computed ¶ÔÏóÖĞ
+  // ä½¿ç”¨å¯¹è±¡å±•å¼€è¿ç®—ç¬¦å°† getter æ··å…¥ computed å¯¹è±¡ä¸­
     ...mapGetters([
       'doneTodosCount',
       'anotherGetter',
@@ -77,12 +77,12 @@ export default {
 }
 
 mapGetters({
-  // °Ñ `this.doneCount` Ó³ÉäÎª `this.$store.getters.doneTodosCount`
+  // æŠŠ `this.doneCount` æ˜ å°„ä¸º `this.$store.getters.doneTodosCount`
   doneCount: 'doneTodosCount'
 })
 #+END_SRC
 * Mutation
-** »ù±¾²Ù×÷
+** åŸºæœ¬æ“ä½œ
 #+BEGIN_SRC javascript
 const store = new Vuex.Store({
   state: {
@@ -90,16 +90,16 @@ const store = new Vuex.Store({
   },
   mutations: {
     increment (state) {
-      // ±ä¸ü×´Ì¬
+      // å˜æ›´çŠ¶æ€
       state.count++
     }
   }
 })
 
-// Ê¹ÓÃ
+// ä½¿ç”¨
 store.commit('increment')
 
-// Ìá½»Payload,mutation´ø²ÎÊı,´ó²¿·ÖÇé¿öÏÂpayloadÊÇ¶ÔÏó£¬¶ø·Çµ¥Ò»ÊıÖµ
+// æäº¤Payload,mutationå¸¦å‚æ•°,å¤§éƒ¨åˆ†æƒ…å†µä¸‹payloadæ˜¯å¯¹è±¡ï¼Œè€Œéå•ä¸€æ•°å€¼
 mutations: {
   increment (state, n) {
     state.count += n
@@ -108,20 +108,20 @@ mutations: {
 
 store.commit('increment', 10)
 
-// Ìá½»¶ÔÏó·ç¸ñ
+// æäº¤å¯¹è±¡é£æ ¼
 store.commit({
   type: 'increment',
   amount: 10
 })
 #+END_SRC
-** ×ñÊØ¹æÔò
+** éµå®ˆè§„åˆ™
 #+BEGIN_SRC javascript
-// Á½ÕßµÈ¼Û
+// ä¸¤è€…ç­‰ä»·
 Vue.set(obj, 'newProp', 123)
 state.obj = { ...state.obj, newProp: 123 }
 #+END_SRC
 ** mapMutations 
-Í¬getter£¬¶¼ÊÇÓÃÓÚ½«vuexµÄ·½ÏòÓ³ÉäÎª±¾×é¼ş¿ÉÒÔÊ¹ÓÃ
+åŒgetterï¼Œéƒ½æ˜¯ç”¨äºå°†vuexçš„æ–¹å‘æ˜ å°„ä¸ºæœ¬ç»„ä»¶å¯ä»¥ä½¿ç”¨
 #+BEGIN_SRC javascript
 import { mapMutations } from 'vuex'
 
@@ -129,13 +129,13 @@ export default {
   // ...
   methods: {
     ...mapMutations([
-      'increment', // ½« `this.increment()` Ó³ÉäÎª `this.$store.commit('increment')`
+      'increment', // å°† `this.increment()` æ˜ å°„ä¸º `this.$store.commit('increment')`
 
-      // `mapMutations` Ò²Ö§³ÖÔØºÉ£º
-      'incrementBy' // ½« `this.incrementBy(amount)` Ó³ÉäÎª `this.$store.commit('incrementBy', amount)`
+      // `mapMutations` ä¹Ÿæ”¯æŒè½½è·ï¼š
+      'incrementBy' // å°† `this.incrementBy(amount)` æ˜ å°„ä¸º `this.$store.commit('incrementBy', amount)`
     ]),
     ...mapMutations({
-      add: 'increment' // ½« `this.add()` Ó³ÉäÎª `this.$store.commit('increment')`
+      add: 'increment' // å°† `this.add()` æ˜ å°„ä¸º `this.$store.commit('increment')`
     })
   }
 }
@@ -159,14 +159,14 @@ const store = new Vuex.Store({
   }
 })
 
-// es-2015²ÎÊı½â¹¹
+// es-2015å‚æ•°è§£æ„
 actions: {
   increment ({ commit }) {
     commit('increment')
   }
 }
 
-// ·Ö·¢action
+// åˆ†å‘action
 store.dispatch('increment')
 #+END_SRC
 ** mapActions 
@@ -180,19 +180,19 @@ actions: {
   }
 }
 
-// ÒÔÔØºÉĞÎÊ½·Ö·¢
+// ä»¥è½½è·å½¢å¼åˆ†å‘
 store.dispatch('incrementAsync', {
   amount: 10
 })
 
-// ÒÔ¶ÔÏóĞÎÊ½·Ö·¢
+// ä»¥å¯¹è±¡å½¢å¼åˆ†å‘
 store.dispatch({
   type: 'incrementAsync',
   amount: 10
 })
 #+END_SRC
 * Module
-** ÇĞ¸î
+** åˆ‡å‰²
 #+BEGIN_SRC javascript
 const moduleA = {
   state: { ... },
@@ -214,16 +214,16 @@ const store = new Vuex.Store({
   }
 })
 
-store.state.a // -> moduleA µÄ×´Ì¬
-store.state.b // -> moduleB µÄ×´Ì¬
+store.state.a // -> moduleA çš„çŠ¶æ€
+store.state.b // -> moduleB çš„çŠ¶æ€
 #+END_SRC
-** ¾Ö²¿×´Ì¬
+** å±€éƒ¨çŠ¶æ€
 #+BEGIN_SRC javascript
 const moduleA = {
   state: { count: 0 },
   mutations: {
     increment (state) {
-      // ÕâÀïµÄ `state` ¶ÔÏóÊÇÄ£¿éµÄ¾Ö²¿×´Ì¬
+      // è¿™é‡Œçš„ `state` å¯¹è±¡æ˜¯æ¨¡å—çš„å±€éƒ¨çŠ¶æ€
       state.count++
     }
   },
@@ -235,7 +235,7 @@ const moduleA = {
   }
 }
 
-// ¶ÔÓÚÄ£¿éÄÚ²¿µÄ action£¬¾Ö²¿×´Ì¬Í¨¹ı context.state ±©Â¶³öÀ´£¬¸ù½Úµã×´Ì¬ÔòÎª context.rootState
+// å¯¹äºæ¨¡å—å†…éƒ¨çš„ actionï¼Œå±€éƒ¨çŠ¶æ€é€šè¿‡ context.state æš´éœ²å‡ºæ¥ï¼Œæ ¹èŠ‚ç‚¹çŠ¶æ€åˆ™ä¸º context.rootState
 const moduleA = {
   // ...
   actions: {
@@ -247,7 +247,7 @@ const moduleA = {
   }
 }
 
-// ¶ÔÓÚÄ£¿éÄÚ²¿µÄ getter£¬¸ù½Úµã×´Ì¬»á×÷ÎªµÚÈı¸ö²ÎÊı±©Â¶³öÀ´£º
+// å¯¹äºæ¨¡å—å†…éƒ¨çš„ getterï¼Œæ ¹èŠ‚ç‚¹çŠ¶æ€ä¼šä½œä¸ºç¬¬ä¸‰ä¸ªå‚æ•°æš´éœ²å‡ºæ¥ï¼š
 const moduleA = {
   // ...
   getters: {
@@ -257,15 +257,15 @@ const moduleA = {
   }
 }
 #+END_SRC
-** ÃüÃû¿Õ¼ä
+** å‘½åç©ºé—´
 #+BEGIN_SRC javascript
 const store = new Vuex.Store({
   modules: {
     account: {
       namespaced: true,
 
-      // Ä£¿éÄÚÈİ£¨module assets£©
-      state: { ... }, // Ä£¿éÄÚµÄ×´Ì¬ÒÑ¾­ÊÇÇ¶Ì×µÄÁË£¬Ê¹ÓÃ `namespaced` ÊôĞÔ²»»á¶ÔÆä²úÉúÓ°Ïì
+      // æ¨¡å—å†…å®¹ï¼ˆmodule assetsï¼‰
+      state: { ... }, // æ¨¡å—å†…çš„çŠ¶æ€å·²ç»æ˜¯åµŒå¥—çš„äº†ï¼Œä½¿ç”¨ `namespaced` å±æ€§ä¸ä¼šå¯¹å…¶äº§ç”Ÿå½±å“
       getters: {
         isAdmin () { ... } // -> getters['account/isAdmin']
       },
@@ -276,9 +276,9 @@ const store = new Vuex.Store({
         login () { ... } // -> commit('account/login')
       },
 
-      // Ç¶Ì×Ä£¿é
+      // åµŒå¥—æ¨¡å—
       modules: {
-        // ¼Ì³Ğ¸¸Ä£¿éµÄÃüÃû¿Õ¼ä
+        // ç»§æ‰¿çˆ¶æ¨¡å—çš„å‘½åç©ºé—´
         myPage: {
           state: { ... },
           getters: {
@@ -286,7 +286,7 @@ const store = new Vuex.Store({
           }
         },
 
-        // ½øÒ»²½Ç¶Ì×ÃüÃû¿Õ¼ä
+        // è¿›ä¸€æ­¥åµŒå¥—å‘½åç©ºé—´
         posts: {
           namespaced: true,
 
@@ -300,7 +300,7 @@ const store = new Vuex.Store({
   }
 })
 #+END_SRC
-*** ´øÃüÃû¿Õ¼äµÄ°ó¶¨º¯Êı
+*** å¸¦å‘½åç©ºé—´çš„ç»‘å®šå‡½æ•°
 #+BEGIN_SRC javascript
 computed: {
   ...mapState({
@@ -334,14 +334,14 @@ const { mapState, mapActions } = createNamespacedHelpers('some/nested/module')
 
 export default {
   computed: {
-    // ÔÚ `some/nested/module` ÖĞ²éÕÒ
+    // åœ¨ `some/nested/module` ä¸­æŸ¥æ‰¾
     ...mapState({
       a: state => state.a,
       b: state => state.b
     })
   },
   methods: {
-    // ÔÚ `some/nested/module` ÖĞ²éÕÒ
+    // åœ¨ `some/nested/module` ä¸­æŸ¥æ‰¾
     ...mapActions([
       'foo',
       'bar'
@@ -349,18 +349,18 @@ export default {
   }
 }
 #+END_SRC
-** Ä£¿é×¢²á
+** æ¨¡å—æ³¨å†Œ
 #+BEGIN_SRC javascript
-// ×¢²áÄ£¿é `myModule`
+// æ³¨å†Œæ¨¡å— `myModule`
 store.registerModule('myModule', {
   // ...
 })
-// ×¢²áÇ¶Ì×Ä£¿é `nested/myModule`
+// æ³¨å†ŒåµŒå¥—æ¨¡å— `nested/myModule`
 store.registerModule(['nested', 'myModule'], {
   // ...
   })
 
-// Ö®ºó¾Í¿ÉÒÔÍ¨¹ı store.state.myModule ºÍ store.state.nested.myModule ·ÃÎÊÄ£¿éµÄ×´Ì¬¡£
+// ä¹‹åå°±å¯ä»¥é€šè¿‡ store.state.myModule å’Œ store.state.nested.myModule è®¿é—®æ¨¡å—çš„çŠ¶æ€ã€‚
 #+END_SRC
 * ref
 https://www.jianshu.com/p/120eaf50331c

@@ -3,7 +3,7 @@
 * data lab
 * bomb lab
 * attack lab
-** ¼ÆËãÖ¸Õë
+** è®¡ç®—æŒ‡é’ˆ
  lea    (%rdi,%rsi,1),%rax
 ** construct path
 
@@ -43,12 +43,12 @@
 
 
 
-4019a2 ¿ÉÒÔ´«%raxµ½%rdi
+4019a2 å¯ä»¥ä¼ %raxåˆ°%rdi
 
 4019dd
 401a69
 401a13
-×éºÏ¿ÉÒÔ´«Êä%raxµ½%rsi
+ç»„åˆå¯ä»¥ä¼ è¾“%raxåˆ°%rsi
 
 
 

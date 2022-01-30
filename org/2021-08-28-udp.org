@@ -4,12 +4,12 @@
 * format
 [[file:../img/udp_format.gif][udp format]]
 * checksum
-��ip checksumһ������ͬ���ڰ����������ֶ���ļ����
+与ip checksum一样，不同在于包含了两部分额外的计算快
 [[file:../img/udp_checksum_field.gif][udp checksum field]]
 
-�ص�:
-- ���ʱ�����һ����αͷ(ʵ�ʽṹ�����洢)
-- ����2bytesż���������pad 0(ʵ�ʽ�������洢)
-- ����ֵΪ0ʱ֮λ65535��������ʱֵ�ſ��趨Ϊ0
-* ע������
-tcp��udp���ǿ���ռ��ͬһ���˿ڵģ�ֻ�ǲ���������Ϊ�����ϴ�ip��demultiplex�Ĺ��̸���ip header��Э��Ͷ˿ڣ������ǿ�����ȫ�˿ڲ�������ȫ�ı�ʶ��
+特点:
+- 算的时候多了一部分伪头(实际结构并不存储)
+- 不满2bytes偶数的情况下pad 0(实际结果并不存储)
+- 计算值为0时之位65535，不计算时值才可设定为0
+* 注意事项
+tcp和udp，是可以占用同一个端口的，只是不常见，因为本质上从ip层demultiplex的过程根据ip header和协议和端口，所以是可以完全端口并不是完全的标识符

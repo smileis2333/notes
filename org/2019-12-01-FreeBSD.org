@@ -2,12 +2,12 @@
 #+STARTUP: indent
 * Getting Started
 ** install and configure
-rufus¿ÌÂ¼memstick.img½øuÅÌ£¬Õû¸öÓ²ÅÌ×÷Îª°²×°µÄÇé¿öÏÂ£¬ĞèÒªÏÈÓÃpeÖ®Àà³¹µ×Çå³ıÔ­Ó²ÅÌ·ÖÇø£¬·ñÔòÒıµ¼ÎŞ·¨Õı³£Ğ´Èë
+rufusåˆ»å½•memstick.imgè¿›uç›˜ï¼Œæ•´ä¸ªç¡¬ç›˜ä½œä¸ºå®‰è£…çš„æƒ…å†µä¸‹ï¼Œéœ€è¦å…ˆç”¨peä¹‹ç±»å½»åº•æ¸…é™¤åŸç¡¬ç›˜åˆ†åŒºï¼Œå¦åˆ™å¼•å¯¼æ— æ³•æ­£å¸¸å†™å…¥
 ** basic
 *** tty
-switch alt+fn(n=1,2,3,4...) ÇĞ»»µ½¶ÔÓ¦tty
+switch alt+fn(n=1,2,3,4...) åˆ‡æ¢åˆ°å¯¹åº”tty
 *** single user mode
-ÓµÓĞ×î¸ßÈ¨ÏŞ£¬ÓÃÓÚĞŞ¸´Òıµ¼ºÍ¸ÄÃÜÂë£¬¿ÉÒÔÍ¨¹ıÉèÖÃ/etc/ttysµÄ°²È«²ßÂÔÉèÖÃÊÇ·ñ½øÈëÊ±ĞèÒªÃÜÂë
+æ‹¥æœ‰æœ€é«˜æƒé™ï¼Œç”¨äºä¿®å¤å¼•å¯¼å’Œæ”¹å¯†ç ï¼Œå¯ä»¥é€šè¿‡è®¾ç½®/etc/ttysçš„å®‰å…¨ç­–ç•¥è®¾ç½®æ˜¯å¦è¿›å…¥æ—¶éœ€è¦å¯†ç 
 *** Users and Basic Account Management
 **** system account
 **** user account
@@ -16,16 +16,16 @@ switch alt+fn(n=1,2,3,4...) ÇĞ»»µ½¶ÔÓ¦tty
  - UID
  - GID
  - Login class: extension of user group
- - passworc change time: Ç¿ÖÆÕË»§ÔÚ¶à¾Ãºó¸ÄÃÜÂë
+ - passworc change time: å¼ºåˆ¶è´¦æˆ·åœ¨å¤šä¹…åæ”¹å¯†ç 
  - account exppired time
  - user's full name
  - home directory
  - user shell
 **** superuser account
 ***** su
-switch to root user(can with - to change with root env),ÓÃ»§±ØĞëÔÚwheel×é
+switch to root user(can with - to change with root env),ç”¨æˆ·å¿…é¡»åœ¨wheelç»„
 ***** sudo
-¿ÉÒÔ¿ØÖÆÄÄĞ©ÓÃ»§¿ÉÒÔÒÔrootÓÃ»§ÔËĞĞÄÄĞ©ÃüÁî
+å¯ä»¥æ§åˆ¶å“ªäº›ç”¨æˆ·å¯ä»¥ä»¥rootç”¨æˆ·è¿è¡Œå“ªäº›å‘½ä»¤
 
 **** management
 ***** adduser	The recommended command-line application for adding new users.
@@ -34,17 +34,17 @@ switch to root user(can with - to change with root env),ÓÃ»§±ØĞëÔÚwheel×é
 ***** passwd    The command-line tool to change user passwords.
 ***** pw	A powerful and flexible tool for modifying all aspects of user accounts.
 - pw groupadd teamtwo
-- pw groupmod teamtwo -M jru ÁĞ±íÍêÈ«Ìæ»»×é
-- pw groupmod teamtwo -m db appendµ±Ç°×éµÄºóÃæ
+- pw groupmod teamtwo -M jru åˆ—è¡¨å®Œå…¨æ›¿æ¢ç»„
+- pw groupmod teamtwo -m db appendå½“å‰ç»„çš„åé¢
 - pw groupshow teamtwo
 *** Permissions
 **** file flags
 chflags sunlink file1
 chflags nosunlink file1
 **** addition permission
-- suid ÆÕÍ¨ÓÃ»§ÔËĞĞÊ±ÓµÓĞownerµÄÈ¨ÏŞ
-- sgid ÆÕÍ¨ÓÃ»§ÔËĞĞÊ±ÓµÓĞgroupµÄÈ¨ÏŞ
-- sticky ÉèÖÃÔÚÄ¿Â¼ÉÏÊ±£¬¼´Ê¹ÆäËûÓÃ»§ÓµÓĞ¶Ô¸ÃÄ¿Â¼µÄĞ´È¨ÏŞ£¬Ò²ÎŞ·¨É¾³ıÆäËûÈËµÄÎÄ¼ş£¬Ö»ÄÜÉ¾³ıÊôÓÚ×Ô¼ºµÄ
+- suid æ™®é€šç”¨æˆ·è¿è¡Œæ—¶æ‹¥æœ‰ownerçš„æƒé™
+- sgid æ™®é€šç”¨æˆ·è¿è¡Œæ—¶æ‹¥æœ‰groupçš„æƒé™
+- sticky è®¾ç½®åœ¨ç›®å½•ä¸Šæ—¶ï¼Œå³ä½¿å…¶ä»–ç”¨æˆ·æ‹¥æœ‰å¯¹è¯¥ç›®å½•çš„å†™æƒé™ï¼Œä¹Ÿæ— æ³•åˆ é™¤å…¶ä»–äººçš„æ–‡ä»¶ï¼Œåªèƒ½åˆ é™¤å±äºè‡ªå·±çš„
 *** Directory Structure
 Directory	Description
 /	Root directory of the file system.
@@ -86,7 +86,7 @@ Directory	Description
 **** Partition
 **** slices
 Disks in FreeBSD are divided into slices
-¡°ada1s3e¡± is the fifth partition in the third slice of the second SATA disk drive.
+â€œada1s3eâ€ is the fifth partition in the third slice of the second SATA disk drive.
 *** Mounting and Unmounting File Systems
 **** The fstab File
 /etc/fstab
@@ -106,7 +106,7 @@ auxww
 % pgrep -l inetd
 % su
 Password:
-# /bin/kill -s HUP 198 Ğí¶àshellÄÚÖÃÁËkill£¬µ«ÆäÓï·¨²»Í¬£¬Ö±½ÓÊ¹ÓÃ/bin/kill
+# /bin/kill -s HUP 198 è®¸å¤šshellå†…ç½®äº†killï¼Œä½†å…¶è¯­æ³•ä¸åŒï¼Œç›´æ¥ä½¿ç”¨/bin/kill
 *** Shells
 **** tcsh
 % setenv EDITOR /usr/local/bin/emacs
@@ -120,8 +120,8 @@ Password:
 
 ** Packages and Ports
 *** Finding Software
-pkg search subversion Èí¼ş°übriefĞÅÏ¢
-pkg search -o subversion ¿ÉÒÔ¿´µ½¸ÃpackageÊÇ´ÓÄÄ¸öport±àÒë¶øÀ´
+pkg search subversion è½¯ä»¶åŒ…briefä¿¡æ¯
+pkg search -o subversion å¯ä»¥çœ‹åˆ°è¯¥packageæ˜¯ä»å“ªä¸ªportç¼–è¯‘è€Œæ¥
 
 # whereis lsof, look port info
 lsof: /usr/ports/sysutils/lsof
@@ -137,28 +137,28 @@ lsof: /usr/ports/sysutils/lsof
 *** Using pkg for Binary Package Management
 # pkg info pkg
 # pkg install packagename
-# pkg info ËùÓĞÒÑ°²×°µÄÈí¼ş°üĞÅÏ¢(°üº¬ÒÀÀµÏî)
+# pkg info æ‰€æœ‰å·²å®‰è£…çš„è½¯ä»¶åŒ…ä¿¡æ¯(åŒ…å«ä¾èµ–é¡¹)
 # pkg delete curl
 # pkg upgrade
-# pkg audit -F ²é¿´Â©¶´
-# pkg autoremove È¥³ıÄ³¸öÈí¼şĞ¶ÔØºóÁôÏÂµÄ·ÇÒÀÀµÏî
-# pkg prime-list ÁĞ³ö×Ô¼ºÖ÷¶¯°²×°µÄpackage(²»°üº¬ÒÀÀµÏî)
-# pkg prime-origins ÁĞ³ö×Ô¼ºÖ÷¶¯°²×°µÄport(²»°üº¬ÒÀÀµÏî)
-# pkg set -A 1 devel/cmake (ÉèÖÃ¸ÃpackageÎªautomatic£¬¼´·ÇÖ÷¶¯°²×°µÄpackage)
-# pkg set -A 0 devel/cmake (ÌáÉı¸ÃpackageÎªÖ÷¶¯°²×°£¬ÕâÑùpkg autoremove²»»á°üº¬¸Ã°ü)
+# pkg audit -F æŸ¥çœ‹æ¼æ´
+# pkg autoremove å»é™¤æŸä¸ªè½¯ä»¶å¸è½½åç•™ä¸‹çš„éä¾èµ–é¡¹
+# pkg prime-list åˆ—å‡ºè‡ªå·±ä¸»åŠ¨å®‰è£…çš„package(ä¸åŒ…å«ä¾èµ–é¡¹)
+# pkg prime-origins åˆ—å‡ºè‡ªå·±ä¸»åŠ¨å®‰è£…çš„port(ä¸åŒ…å«ä¾èµ–é¡¹)
+# pkg set -A 1 devel/cmake (è®¾ç½®è¯¥packageä¸ºautomaticï¼Œå³éä¸»åŠ¨å®‰è£…çš„package)
+# pkg set -A 0 devel/cmake (æå‡è¯¥packageä¸ºä¸»åŠ¨å®‰è£…ï¼Œè¿™æ ·pkg autoremoveä¸ä¼šåŒ…å«è¯¥åŒ…)
 
-# pkg backup -r /path/to/pkg.sql ´Ó±¸·İÊı¾İ»Ö¸´
-# pkg backup -d /path/to/pkg.sql dumpÊı¾İ
+# pkg backup -r /path/to/pkg.sql ä»å¤‡ä»½æ•°æ®æ¢å¤
+# pkg backup -d /path/to/pkg.sql dumpæ•°æ®
 
-# pkg clean É¾³ı´æÔÚÔÚPKG_CACHEDIR in pkg.confÖ¸¶¨Ä¿Â¼µÄpackageµÄcache£¬Ã¿´ÎÉı¼¶»áÏÂÔØĞÂµÄ°ü£¬¸Ã²Ù×÷¿ÉÒÔÇåÀí³ıÁËµ±Ç°°æ±¾ÒÔÍâµÄ°üµÄcache
-# pkg clean -a Í¬ÉÏ£¬µ«ÊÇÈ«²¿Çåµô
+# pkg clean åˆ é™¤å­˜åœ¨åœ¨PKG_CACHEDIR in pkg.confæŒ‡å®šç›®å½•çš„packageçš„cacheï¼Œæ¯æ¬¡å‡çº§ä¼šä¸‹è½½æ–°çš„åŒ…ï¼Œè¯¥æ“ä½œå¯ä»¥æ¸…ç†é™¤äº†å½“å‰ç‰ˆæœ¬ä»¥å¤–çš„åŒ…çš„cache
+# pkg clean -a åŒä¸Šï¼Œä½†æ˜¯å…¨éƒ¨æ¸…æ‰
 *** Modifying Package Metadata
-portÖĞµÄÈí¼ş°æ±¾ºÅ»á¸üµü£¬¿ÉÒÔÍ¨¹ıÉèÖÃmetadataÀ´¹æ±Ü±ä¸ü
+portä¸­çš„è½¯ä»¶ç‰ˆæœ¬å·ä¼šæ›´è¿­ï¼Œå¯ä»¥é€šè¿‡è®¾ç½®metadataæ¥è§„é¿å˜æ›´
 # pkg set -o lang/php5:lang/php53
 # pkg set -o lang/ruby18:lang/ruby19
 # pkg set -o graphics/libglut:graphics/freeglut
 
-# pkg install -Rf graphics/freeglut ¸ü¸ÄÀ´Ô´ºóÖØĞÂ°²×°°ü
+# pkg install -Rf graphics/freeglut æ›´æ”¹æ¥æºåé‡æ–°å®‰è£…åŒ…
 *** Using the Ports Collection
 **** metadata
 # portsnap fetch
@@ -199,13 +199,13 @@ make deinstall
 *** wm
 - i3wm
 *** drm-kmod
-pkg install drm-kmod Èç¹û²»ĞĞ£¬¾ÍĞèÒª´Óport±àÒë¸Ã
-°²×°ºó£¬kldload /boot/modules/i915kms.ko Èç¹ûÖÕ¶Ë·Ö±æÂÊÕı³£ËµÃ÷Õı³££¬Èç¹ûÉÁÍË£¬ÉõÖÁÖØÆô£¬ĞèÒª´Óport±àÒë£¬¸üÉõÕß£¬½µ¼¶Ê¹ÓÃµÄFreeBSD
-Èç¹ûkldload¿ÉÒÔÕı³£ÉúĞ§£¬add kld_list="/boot/modules/i915kms.ko" to /etc/rc.conf
+pkg install drm-kmod å¦‚æœä¸è¡Œï¼Œå°±éœ€è¦ä»portç¼–è¯‘è¯¥
+å®‰è£…åï¼Œkldload /boot/modules/i915kms.ko å¦‚æœç»ˆç«¯åˆ†è¾¨ç‡æ­£å¸¸è¯´æ˜æ­£å¸¸ï¼Œå¦‚æœé—ªé€€ï¼Œç”šè‡³é‡å¯ï¼Œéœ€è¦ä»portç¼–è¯‘ï¼Œæ›´ç”šè€…ï¼Œé™çº§ä½¿ç”¨çš„FreeBSD
+å¦‚æœkldloadå¯ä»¥æ­£å¸¸ç”Ÿæ•ˆï¼Œadd kld_list="/boot/modules/i915kms.ko" to /etc/rc.conf
 
 * ref
 https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/
-* ÉèÖÃ
+* è®¾ç½®
 ** sshd
 PermitRootLogin yes #/etc/ssh/sshd_config
 /etc/rc.d/sshd restart

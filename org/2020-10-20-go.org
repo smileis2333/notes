@@ -1,8 +1,8 @@
 #+TITLE: go
 #+STARTUP:indent
 * convension
-1. ´óĞ´¿ªÍ·µÄname±íÊ¾µ¼³ö¿ÉÍâ²¿·ÃÎÊ£¬·´Ö®£¬Ö»ÊÊÓÃÔÚpackageÄÚ²¿
-2. ÍÕ·åÊ½ÃüÃû
+1. å¤§å†™å¼€å¤´çš„nameè¡¨ç¤ºå¯¼å‡ºå¯å¤–éƒ¨è®¿é—®ï¼Œåä¹‹ï¼Œåªé€‚ç”¨åœ¨packageå†…éƒ¨
+2. é©¼å³°å¼å‘½å
 * declaration
 ** complete
  var [variableName] [variableType] = [varaibleValue]

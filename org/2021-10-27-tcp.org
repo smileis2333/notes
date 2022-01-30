@@ -3,7 +3,7 @@
 * state transition
 [[file:../img/tcp_state_transition.gif][tcp state transition]]
 ** Establishment
-ÊÕµ½ack²Å»áµ¼ÖÂseq = seq +1£¬Òò´Ë£¬Èç¹ûtelnetÁ¬ÉÏÁ¢¿Ì¹Ø£¬client½¨Á¢Á¬½ÓµÄack£¬ÓëfinµÄseqÒ»ÖÂ£¬ÒòÎªthree way handshake·şÎñ¶Ë²»ÓÃack
+æ”¶åˆ°ackæ‰ä¼šå¯¼è‡´seq = seq +1ï¼Œå› æ­¤ï¼Œå¦‚æœtelnetè¿ä¸Šç«‹åˆ»å…³ï¼Œclientå»ºç«‹è¿æ¥çš„ackï¼Œä¸finçš„seqä¸€è‡´ï¼Œå› ä¸ºthree way handshakeæœåŠ¡ç«¯ä¸ç”¨ack
 ** Termination
 * format
 [[file:../img/tcp_format.gif][tcp format]]
@@ -12,34 +12,34 @@ avoid ip fragment
 ** win
 
 * about application
-Ó¦ÓÃ³ÌĞòÓÀÔ¶Ö»ÄÜÄÃµ½three way handshakeÍê³ÉºóµÄÁ´½Ó£¬Ã¿¸ölisten endpointµÄbacklog¶ÓÁĞÀï
+åº”ç”¨ç¨‹åºæ°¸è¿œåªèƒ½æ‹¿åˆ°three way handshakeå®Œæˆåçš„é“¾æ¥ï¼Œæ¯ä¸ªlisten endpointçš„backlogé˜Ÿåˆ—é‡Œ
 
 * data flow
 ** interactive data flow
 *** Nagle algorithm
-ÔÚÊÕµ½ackÇ°£¬ÀÛ»ı´«ÊäµÄÊı¾İ£¬ÊÕµ½Ö®ºóÒ»´ÎĞÔ´«¹ıÈ¥£¬½»»¥ĞÔÏµÍ³²»¿ÉÊ¹ÓÃ£¬Èç
+åœ¨æ”¶åˆ°ackå‰ï¼Œç´¯ç§¯ä¼ è¾“çš„æ•°æ®ï¼Œæ”¶åˆ°ä¹‹åä¸€æ¬¡æ€§ä¼ è¿‡å»ï¼Œäº¤äº’æ€§ç³»ç»Ÿä¸å¯ä½¿ç”¨ï¼Œå¦‚
 - X window
-- ½»»¥ĞÔµÄÔ¶³Ìshell£¬ÈçtabÄÜ²¹È«
-- LAN²»½¨Òé£¬ÒòÎªRTTµÍ£¬ÈË¹¤ÊäÈëÆµÂÊÔ¶µÍÓÚ´«ÊäĞ§ÂÊ
+- äº¤äº’æ€§çš„è¿œç¨‹shellï¼Œå¦‚tabèƒ½è¡¥å…¨
+- LANä¸å»ºè®®ï¼Œå› ä¸ºRTTä½ï¼Œäººå·¥è¾“å…¥é¢‘ç‡è¿œä½äºä¼ è¾“æ•ˆç‡
 *** delayed acknowledgments
-ackÔÚ200ms(¼´Çø¼äÎª1-200ms£¬200msÎªkernel timer£¬ËùÒÔdelay ackÖ»ÄÜ±£Ö¤»Ø´«ackµÄÉÏ½ç)Èç¹ûÓĞÊı¾İ£¬¾ÍÒ»Æğ´«»ØÈ¥
+ackåœ¨200ms(å³åŒºé—´ä¸º1-200msï¼Œ200msä¸ºkernel timerï¼Œæ‰€ä»¥delay ackåªèƒ½ä¿è¯å›ä¼ ackçš„ä¸Šç•Œ)å¦‚æœæœ‰æ•°æ®ï¼Œå°±ä¸€èµ·ä¼ å›å»
 ** bulk data flow
 *** sliding windows protocol
 [[file:../img/sliding_window.gif][client caculate windows]]
 *** slow start
 cwnd(congestion window)
-sender³õÊ¼»¯1 segment£¬Ã¿ÊÕµ½Ç°Ò»¸ösegmentµÄack(Ò»¸öack¿ÉÒÔack¶à¸ö)£¬windows+1£¬ÔÚÈ«²¿²»¶ªÊ§ÇÒÈ«²¿°´ĞòµÄÇé¿öÏÂ£¬³ÊÖ¸Êı¼¶Ôö³¤
+senderåˆå§‹åŒ–1 segmentï¼Œæ¯æ”¶åˆ°å‰ä¸€ä¸ªsegmentçš„ack(ä¸€ä¸ªackå¯ä»¥ackå¤šä¸ª)ï¼Œwindows+1ï¼Œåœ¨å…¨éƒ¨ä¸ä¸¢å¤±ä¸”å…¨éƒ¨æŒ‰åºçš„æƒ…å†µä¸‹ï¼Œå‘ˆæŒ‡æ•°çº§å¢é•¿
 * timer
 ** connection
 *** retransmission
 **** RTT
-Ã¿´ÎRTTÒ»Ö±ÔÚ±ä£¬ÒòÎªackÒ»¸ö¿ÉÄÜ¶ÔÓ¦sender·¢µÄ¶à¸ösegment£¬ÁíÒ»µãÔòÊÇWANµÄ´«ÊäÇé¿öÊÇ¿ÉÒÔ·¢ËÍ±ä»¯µÄ£¬ÖØ´«È¡¾öÓÚRTT
+æ¯æ¬¡RTTä¸€ç›´åœ¨å˜ï¼Œå› ä¸ºackä¸€ä¸ªå¯èƒ½å¯¹åº”senderå‘çš„å¤šä¸ªsegmentï¼Œå¦ä¸€ç‚¹åˆ™æ˜¯WANçš„ä¼ è¾“æƒ…å†µæ˜¯å¯ä»¥å‘é€å˜åŒ–çš„ï¼Œé‡ä¼ å–å†³äºRTT
 
-»ù±¾µÄ±¶ÂÊ¼ÆËã:
-R <-- ¦ÁR + (1-a)M  (RÊÇÉÏÒ»´ÎµÄRTT£¬MÊÇµ±´Î²â³öÀ´µÄÖµ£¬¦Á=10%)
-RTO = R¦Â (³¬Ê±ÖØ´«£¬¦Â=2)
+åŸºæœ¬çš„å€ç‡è®¡ç®—:
+R <-- Î±R + (1-a)M  (Ræ˜¯ä¸Šä¸€æ¬¡çš„RTTï¼ŒMæ˜¯å½“æ¬¡æµ‹å‡ºæ¥çš„å€¼ï¼ŒÎ±=10%)
+RTO = RÎ² (è¶…æ—¶é‡ä¼ ï¼ŒÎ²=2)
 
-»ùÓÚ·½²î:
+åŸºäºæ–¹å·®:
 Err = M - A
 A <-- A + gErr
 D <-- D + h(|Err| - D)
@@ -52,5 +52,5 @@ window size update
 *** keepalive
 detect idle connection
 *** 2MSL
-±¾ÖÊÎªÍ¨Ñ¶Ë«·½£¬×îºóÒ»¸öÊÕµ½ĞÅÏ¢µÄ¿ÉÒÔÖ±½ÓÈ·¶¨×´Ì¬ÖÕ½á£¬¶ø·¢ËÍ·½ÎŞ·¨Ö±½ÓÈ·ÈÏ
-clientÊÕµ½fin¿ªÊ¼¼ÆÊ±
+æœ¬è´¨ä¸ºé€šè®¯åŒæ–¹ï¼Œæœ€åä¸€ä¸ªæ”¶åˆ°ä¿¡æ¯çš„å¯ä»¥ç›´æ¥ç¡®å®šçŠ¶æ€ç»ˆç»“ï¼Œè€Œå‘é€æ–¹æ— æ³•ç›´æ¥ç¡®è®¤
+clientæ”¶åˆ°finå¼€å§‹è®¡æ—¶

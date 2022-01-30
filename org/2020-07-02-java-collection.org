@@ -1,6 +1,6 @@
 #+TITLE:  java collection
 #+STARTUP: indent
-·ÖÎö°æ±¾openjdk11.0.6
+åˆ†æç‰ˆæœ¬openjdk11.0.6
 * hierarchy
 - Iterable
   - Collection
@@ -17,52 +17,52 @@
   - ListIterator
 - RandomAccess
 * LinkedList
-** ²éÕÒ
-¼ì²éindex±ß½ç£¬>0 <size
-´Ófirst¿ªÊ¼µü´ú£¬Ö±½Óµü´ú´ÎÊıÂú×ãindex
-** ±éÀú
-ÓÃfirst¿ªÊ¼µü´ú
-** ²åÈë
-ÊÇ½áÎ²->²åÈëÎ²²¿
-²åÈëÖĞ¼ä
-** É¾³ı
-»ñÈ¡Ç°Çı£¬ºó¼Ì£¬Ç°ÇıÖ¸Ïòºó¼Ì
+** æŸ¥æ‰¾
+æ£€æŸ¥indexè¾¹ç•Œï¼Œ>0 <size
+ä»firstå¼€å§‹è¿­ä»£ï¼Œç›´æ¥è¿­ä»£æ¬¡æ•°æ»¡è¶³index
+** éå†
+ç”¨firstå¼€å§‹è¿­ä»£
+** æ’å…¥
+æ˜¯ç»“å°¾->æ’å…¥å°¾éƒ¨
+æ’å…¥ä¸­é—´
+** åˆ é™¤
+è·å–å‰é©±ï¼Œåç»§ï¼Œå‰é©±æŒ‡å‘åç»§
 * ArrayList
 ** modCount
-modCountÈç×ÖÃæÒâË¼£¬ÊÇĞŞ¸Ä´ÎÊı£¬ÒòÎª¸ÃÈİÆ÷ÊÇÏß³Ì²»°²È«µÄ£¬ËùÒÔmodCount¿ÉÒÔÔÚremove»òÕßÆäËûÇé¿öÏÂ£¬¼ì³µmodCountÊÇ·ñÓëµü´úÆ÷Itr¿ªÊ¼Ê±£¬²»Ò»ÖÂ£¬ÔòËµÃ÷£¬ÓĞÆäËûµÄÔÚ¶¯£¬Ö±½ÓÅ×ConcurrentModificationException
-** À©Èİ»úÖÆÎªÒ»°ã
-** ²åÈë
+modCountå¦‚å­—é¢æ„æ€ï¼Œæ˜¯ä¿®æ”¹æ¬¡æ•°ï¼Œå› ä¸ºè¯¥å®¹å™¨æ˜¯çº¿ç¨‹ä¸å®‰å…¨çš„ï¼Œæ‰€ä»¥modCountå¯ä»¥åœ¨removeæˆ–è€…å…¶ä»–æƒ…å†µä¸‹ï¼Œæ£€è½¦modCountæ˜¯å¦ä¸è¿­ä»£å™¨Itrå¼€å§‹æ—¶ï¼Œä¸ä¸€è‡´ï¼Œåˆ™è¯´æ˜ï¼Œæœ‰å…¶ä»–çš„åœ¨åŠ¨ï¼Œç›´æ¥æŠ›ConcurrentModificationException
+** æ‰©å®¹æœºåˆ¶ä¸ºä¸€èˆ¬
+** æ’å…¥
 *** append
 modCount++
-È·±£ÊÇ·ñĞèÒªÀ©Èİ£¬ÊÇ¾ÍÀ©Èİ£¬È»ºó¸´ÖÆ£¬×îºóÔÚ¼ÓÔªËØ
-*** Ö¸¶¨Î»ÖÃ²åÈë£¬ÆäËû²¿·ÖÍùºóÅ²
-** É¾³ı
-** ±éÀú
+ç¡®ä¿æ˜¯å¦éœ€è¦æ‰©å®¹ï¼Œæ˜¯å°±æ‰©å®¹ï¼Œç„¶åå¤åˆ¶ï¼Œæœ€ååœ¨åŠ å…ƒç´ 
+*** æŒ‡å®šä½ç½®æ’å…¥ï¼Œå…¶ä»–éƒ¨åˆ†å¾€åæŒª
+** åˆ é™¤
+** éå†
 * HashMap
-** hash´¦Àí
-ÄÃµ½hashcodeºó£¬¾­¹ıÒÆÎ»ºÍÒì»òÔËËã£¬Éú³ÉhashÖµ
-** ²åÈë
-** À©Èİ»úÖÆ
-1. ÔÚ×î¿ªÊ¼¿ÕµÄÊ±ºòµ÷ÓÃÄ¬ÈÏÖµ1<<4½øĞĞ¿Õ¼ä¿ª±Ù
-2. Ö®ºó£¬µ±µ½´ïãĞÖµÊ±£¬Ã¿´ÎÀ©ÈİÎª×îĞ¡µÄ2µÄn´ÎÃİ£¬´óÓÚÔªËØ×ÜÊı£¬È»ºó½øĞĞÖØÅÅ
-** ĞòÁĞ»¯
+** hashå¤„ç†
+æ‹¿åˆ°hashcodeåï¼Œç»è¿‡ç§»ä½å’Œå¼‚æˆ–è¿ç®—ï¼Œç”Ÿæˆhashå€¼
+** æ’å…¥
+** æ‰©å®¹æœºåˆ¶
+1. åœ¨æœ€å¼€å§‹ç©ºçš„æ—¶å€™è°ƒç”¨é»˜è®¤å€¼1<<4è¿›è¡Œç©ºé—´å¼€è¾Ÿ
+2. ä¹‹åï¼Œå½“åˆ°è¾¾é˜ˆå€¼æ—¶ï¼Œæ¯æ¬¡æ‰©å®¹ä¸ºæœ€å°çš„2çš„næ¬¡å¹‚ï¼Œå¤§äºå…ƒç´ æ€»æ•°ï¼Œç„¶åè¿›è¡Œé‡æ’
+** åºåˆ—åŒ–
 ** trick
-1. 1.7¼°Ö®Ç°ÊÇ¾­µäµÄ¹şÏ£±íÊµÏÖ£¬1.8¿ªÊ¼¸ÄÎªÍ°+Á´±í/ºìºÚÊ÷
-2. 1.7 hashÊµÏÖ²»Á¼
-3. Í°´óĞ¡±ØĞëÎª2^nÔ­ÒòÎª£¬×÷È¡Ä£Ê±£¬Ê¹ÓÃÁËÎ»ÔËËã
-4. 1.8 hashÊµÏÖÎªÈ¡µÃhashCodeÖ®ºó£¬½«¸ßÎ»²¿·ÖºÍµÍÎ»²¿·Ö½øĞĞÒì»ò
+1. 1.7åŠä¹‹å‰æ˜¯ç»å…¸çš„å“ˆå¸Œè¡¨å®ç°ï¼Œ1.8å¼€å§‹æ”¹ä¸ºæ¡¶+é“¾è¡¨/çº¢é»‘æ ‘
+2. 1.7 hashå®ç°ä¸è‰¯
+3. æ¡¶å¤§å°å¿…é¡»ä¸º2^nåŸå› ä¸ºï¼Œä½œå–æ¨¡æ—¶ï¼Œä½¿ç”¨äº†ä½è¿ç®—
+4. 1.8 hashå®ç°ä¸ºå–å¾—hashCodeä¹‹åï¼Œå°†é«˜ä½éƒ¨åˆ†å’Œä½ä½éƒ¨åˆ†è¿›è¡Œå¼‚æˆ–
 * PriorityQueue
-ÍêÈ«¶ş²æÊ÷£¬ÓÃÊı×éÊµÏÖ£¬¸ù¾İ¸¸½Úµã£¬×ó½Úµã£¬ÓÒ½ÚµãµÄ¿ÉÍêÈ«ÍÆµ¼¾ö¶¨
+å®Œå…¨äºŒå‰æ ‘ï¼Œç”¨æ•°ç»„å®ç°ï¼Œæ ¹æ®çˆ¶èŠ‚ç‚¹ï¼Œå·¦èŠ‚ç‚¹ï¼Œå³èŠ‚ç‚¹çš„å¯å®Œå…¨æ¨å¯¼å†³å®š
 leftNo = parentNo*2+1
 rightNo = parentNo*2+2
 parentNo = (nodeNo-1)/2
 
-[[file:~/study-record/img/PriorityQueue_sigup_process.png][siftup process]] Ìí¼Ó¹ı³Ì£¬¼Óµ½µ×²¿£¬ÔÚ´Óµ×²¿£¬Íù¸¸½Úµã×ß
-[[file:~/study-record/img/PriorityQueue_poll.png][poll process]] ÒÆ³ı¹ı³Ì£¬ÄÃµ½¸ù½Úµã£¬×îºóÒ»¸öÌî½ø¸ù½Úµã£¬´Ó¸¸½ÚµãÍùÏÂ×ß
+[[file:~/study-record/img/PriorityQueue_sigup_process.png][siftup process]] æ·»åŠ è¿‡ç¨‹ï¼ŒåŠ åˆ°åº•éƒ¨ï¼Œåœ¨ä»åº•éƒ¨ï¼Œå¾€çˆ¶èŠ‚ç‚¹èµ°
+[[file:~/study-record/img/PriorityQueue_poll.png][poll process]] ç§»é™¤è¿‡ç¨‹ï¼Œæ‹¿åˆ°æ ¹èŠ‚ç‚¹ï¼Œæœ€åä¸€ä¸ªå¡«è¿›æ ¹èŠ‚ç‚¹ï¼Œä»çˆ¶èŠ‚ç‚¹å¾€ä¸‹èµ°
 
-ÔÚÌí¼ÓºÍÒÆ³ıµÄÊ±ºòĞèÒªµ÷ÕûÎ»ÖÃ£¬·ÀÖ¹¶Ô¶Ñ½á¹¹µÄÆÆ»µ
+åœ¨æ·»åŠ å’Œç§»é™¤çš„æ—¶å€™éœ€è¦è°ƒæ•´ä½ç½®ï¼Œé˜²æ­¢å¯¹å †ç»“æ„çš„ç ´å
 * LinkedHashMap
-¼Ì³ĞÁËHashMap£¬ÖØĞ´ÁËNewNode·½·¨£¬²¢½«È«²¿EntryÁ´½ÓÆğÀ´£¬½µµÍÁËµü´úµÄ´ú¼Û
+ç»§æ‰¿äº†HashMapï¼Œé‡å†™äº†NewNodeæ–¹æ³•ï¼Œå¹¶å°†å…¨éƒ¨Entryé“¾æ¥èµ·æ¥ï¼Œé™ä½äº†è¿­ä»£çš„ä»£ä»·
 * TreeMap
 * collections
 ** Collection
@@ -83,19 +83,19 @@ public interface Iterator<E>{
 }
 #+END_SRC
 * WeakHashMap
-¸ÃÀàµÄ±£´æÊÇÈõÒıÓÃ£¬ÈôÆäËûÔÚÆäËûµØ·½µÄÒıÓÃÒÑÈ¡Ïû£¬¸ÃÀàµÄÔªËØ¿ÉÒÔ±»À¬»øÊÕ¼¯Æ÷»ØÊÕ
+è¯¥ç±»çš„ä¿å­˜æ˜¯å¼±å¼•ç”¨ï¼Œè‹¥å…¶ä»–åœ¨å…¶ä»–åœ°æ–¹çš„å¼•ç”¨å·²å–æ¶ˆï¼Œè¯¥ç±»çš„å…ƒç´ å¯ä»¥è¢«åƒåœ¾æ”¶é›†å™¨å›æ”¶
 * Map views
 * TreeMap
 * Maps
 ** Map views
-³öÓÚJava±¾ÉíÊı¾İ½á¹¹Éè¼ÆµÄÓ°Ïì£¬Map±¾Éí²»Á¥ÊôÓÚCollection½Ó¿Ú£¬µ«ÊÇ»ñµÃÆä¶ÔÏóµÄkeyµÄcollectin»òÕßÖµµÄcolletion£¬»òÕß£¬»òÕßµÄEntryµÄ¼¯ºÏ
+å‡ºäºJavaæœ¬èº«æ•°æ®ç»“æ„è®¾è®¡çš„å½±å“ï¼ŒMapæœ¬èº«ä¸éš¶å±äºCollectionæ¥å£ï¼Œä½†æ˜¯è·å¾—å…¶å¯¹è±¡çš„keyçš„collectinæˆ–è€…å€¼çš„colletionï¼Œæˆ–è€…ï¼Œæˆ–è€…çš„Entryçš„é›†åˆ
 Set<K>keySet()
 Collection<V>values()
 Set<Map.Entry<K,V>> entrySet()
 ** WeakHashMap
-¸ÃÀàµÄ±£´æÊÇÈõÒıÓÃ£¬ÈôÆäËûÔÚÆäËûµØ·½µÄÒıÓÃÒÑÈ¡Ïû£¬¸ÃÀàµÄÔªËØ¿ÉÒÔ±»À¬»øÊÕ¼¯Æ÷»ØÊÕ
+è¯¥ç±»çš„ä¿å­˜æ˜¯å¼±å¼•ç”¨ï¼Œè‹¥å…¶ä»–åœ¨å…¶ä»–åœ°æ–¹çš„å¼•ç”¨å·²å–æ¶ˆï¼Œè¯¥ç±»çš„å…ƒç´ å¯ä»¥è¢«åƒåœ¾æ”¶é›†å™¨å›æ”¶
 * views and wrapper
-½èÖúviewµÄ¸ÅÄî£¬Ê¹ÓÃ½«¶ÔÓÚ³éÈ¡³öÀ´µÄ×Ó¼¯ºÏÓ°Ïìµ½¸¸¼¯ºÏÉíÉÏ(Çå³ı¸¸¼¯ºÏ´´½¨³öÀ´µÄ×Óview£¬¸¸¼¯ºÏ¸ú×ÅÇåµô)£¬ÒÔ¼°MapÓ³ÉäÎªCollectionµÄ²Ù×÷
+å€ŸåŠ©viewçš„æ¦‚å¿µï¼Œä½¿ç”¨å°†å¯¹äºæŠ½å–å‡ºæ¥çš„å­é›†åˆå½±å“åˆ°çˆ¶é›†åˆèº«ä¸Š(æ¸…é™¤çˆ¶é›†åˆåˆ›å»ºå‡ºæ¥çš„å­viewï¼Œçˆ¶é›†åˆè·Ÿç€æ¸…æ‰)ï¼Œä»¥åŠMapæ˜ å°„ä¸ºCollectionçš„æ“ä½œ
 ** small collections
 #+BEGIN_SRC java
 List<String> names = List.of("Peter", "Paul", "Mary");
@@ -103,14 +103,14 @@ Set<Integer> numbers = Set.of(2, 3, 5);
 #+END_SRC
 ** subranges
 ** Unmodifiable Views
-¸ÄÁË¾ÍÅ×Òì³£
+æ”¹äº†å°±æŠ›å¼‚å¸¸
 ** Synchronized Views
-´´½¨³öÏß³Ì°²È«µÄ¿ÉÓÃ¼¯ºÏview
+åˆ›å»ºå‡ºçº¿ç¨‹å®‰å…¨çš„å¯ç”¨é›†åˆview
 ** Checked Views
 #+BEGIN_SRC java
 var strings = new ArrayList<String>();
 ArrayList rawList = strings; 
-rawList.add(new Date()) // ÄÜÍ¨¹ı±àÒë
+rawList.add(new Date()) // èƒ½é€šè¿‡ç¼–è¯‘
 
 List<String> safeStrings =Collections.checkedList(strings, String.class);
 ArrayList rawList = safeStrings;rawList.add(new Date()); // checked list throws aClassCastException
@@ -138,8 +138,8 @@ static int lastIndexOfSubList(List<?> l, List<?>s)
 static void swap(List<?> l, int i, int j)
 static void reverse(List<?> l)
 static void rotate(List<?> l, int d)
-static int frequency(Collection<?> c, Object o) // Í³¼ÆÊıÄ¿
-boolean disjoint(Collection<?> c1, Collection<?>c2) // Ã»ÓĞ½»¼¯
+static int frequency(Collection<?> c, Object o) // ç»Ÿè®¡æ•°ç›®
+boolean disjoint(Collection<?> c1, Collection<?>c2) // æ²¡æœ‰äº¤é›†
 default boolean removeIf(Predicate<? super E>filter)
 * bulk operation
 coll1.removeAll(coll2);

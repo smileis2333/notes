@@ -2,33 +2,33 @@
 #+STARTUP: indent
 * mode
 ** authorization-code
-Ö÷Á÷ÊÚÈ¨Ä£Ê½£¬ÅäºÏÓÃ»§ÈÏÖ¤ºÍwebsiteµÄclient_idºÍclient_secret»»token£¬¼´ÄÜ·ÀÖ¹Ğ¹Â¶µÄ·çÏÕ£¬ÓÖÄÜ·ûºÏwebsite server¸ú×ÙuserµÄactivities£¬auth server vendor»¹ÄÜ×¬Ç®£¬Ò»¾Ù¶àµÃ
-±äÖÖÄ£Ê½: Èçwechat
+ä¸»æµæˆæƒæ¨¡å¼ï¼Œé…åˆç”¨æˆ·è®¤è¯å’Œwebsiteçš„client_idå’Œclient_secretæ¢tokenï¼Œå³èƒ½é˜²æ­¢æ³„éœ²çš„é£é™©ï¼Œåˆèƒ½ç¬¦åˆwebsite serverè·Ÿè¸ªuserçš„activitiesï¼Œauth server vendorè¿˜èƒ½èµšé’±ï¼Œä¸€ä¸¾å¤šå¾—
+å˜ç§æ¨¡å¼: å¦‚wechat
 [[file:~/Desktop/personal/study/img/oauth2_code_mode.webp][code mode]]
 ** implicit
-ÓÃ»§×Ô¼ºÈÏÖ¤ºó£¬tokenÒÔhashµÄĞÎÊ½·µ»Øµ½redirect_urlÉÏ£¬ÔÚofflineµÄÇ°¶ËÓ¦ÓÃ²ÅÓĞÓÃ
+ç”¨æˆ·è‡ªå·±è®¤è¯åï¼Œtokenä»¥hashçš„å½¢å¼è¿”å›åˆ°redirect_urlä¸Šï¼Œåœ¨offlineçš„å‰ç«¯åº”ç”¨æ‰æœ‰ç”¨
 ** password
-ÓÃ»§¶ª¸øwebsite server usernameºÍpassword£¬website serverÖ±½ÓÈ¥»»token£¬ÔÚ»ñÈ¡user info
+ç”¨æˆ·ä¸¢ç»™website server usernameå’Œpasswordï¼Œwebsite serverç›´æ¥å»æ¢tokenï¼Œåœ¨è·å–user info
 ** client credentials
-website server×Ô¼ºÄÃclient_idºÍclient_secret»»token£¬ÄÃ×Ô¼ºÏà¹ØµÄĞÅÏ¢£¬»òÕß×Ô¼º×Ô½¨resource serverµÄ×ÊÔ´
+website serverè‡ªå·±æ‹¿client_idå’Œclient_secretæ¢tokenï¼Œæ‹¿è‡ªå·±ç›¸å…³çš„ä¿¡æ¯ï¼Œæˆ–è€…è‡ªå·±è‡ªå»ºresource serverçš„èµ„æº
 * ref
 https://www.jianshu.com/p/84a4b4a1e833
 http://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html
 https://www.cnblogs.com/xusir/p/3473554.html
-https://160668873.gitbook.io/tkey-docs/ren-shi-jie-duan-bi-du/tkey-baisc //»ù±¾¸ÅÄî
+https://160668873.gitbook.io/tkey-docs/ren-shi-jie-duan-bi-du/tkey-baisc //åŸºæœ¬æ¦‚å¿µ
 https://auth0.com/docs/authorization/which-oauth-2-0-flow-should-i-use auth flow select
 * spring oauth
 ** client
 http://localhost:56789/oauth2/authorization/github 
-//±ØĞëÈÃ·şÎñÆ÷Òıµ¼redirect£¬²»È»ÎŞ·¨»ñÈ¡state(³ı·Ç¹Øµô,²»½¨Òé)
-'/logi'n Ä¬ÈÏµÄlogin page£¬»á¸úSecurity³åÍ»£¬¿ÉÒÔÓÃorder´¦Àíµô
+//å¿…é¡»è®©æœåŠ¡å™¨å¼•å¯¼redirectï¼Œä¸ç„¶æ— æ³•è·å–state(é™¤éå…³æ‰,ä¸å»ºè®®)
+'/logi'n é»˜è®¤çš„login pageï¼Œä¼šè·ŸSecurityå†²çªï¼Œå¯ä»¥ç”¨orderå¤„ç†æ‰
 ** principle
 @AuthenticationPrincipal OAuth2User user
 * core
-** ¸ù±¾Ô­Òò
-²»¿çÓò²»´æÔÚµ¥µãµÇÂ¼ÎÊÌâ£»
-·Çä¯ÀÀÆ÷¶Ë²»´æÔÚµ¥µãµÇÂ¼ÎÊÌâ£»
-ä¯ÀÀÆ÷¿çÓò½â¾öµ¥µãµÇÂ¼µÄ·½·¨¾ÍÖ»ÓĞ£ºredirect£¬cors
-Ê²Ã´session£¬Ê²Ã´ÁîÅÆ£¬ÕâĞ©¶¼ÊÇµÇÂ¼ÎÊÌâ£¬²»ÊÇµ¥µãµÇÂ¼ÎÊÌâ¡£
-** state²ÎÊı
+** æ ¹æœ¬åŸå› 
+ä¸è·¨åŸŸä¸å­˜åœ¨å•ç‚¹ç™»å½•é—®é¢˜ï¼›
+éæµè§ˆå™¨ç«¯ä¸å­˜åœ¨å•ç‚¹ç™»å½•é—®é¢˜ï¼›
+æµè§ˆå™¨è·¨åŸŸè§£å†³å•ç‚¹ç™»å½•çš„æ–¹æ³•å°±åªæœ‰ï¼šredirectï¼Œcors
+ä»€ä¹ˆsessionï¼Œä»€ä¹ˆä»¤ç‰Œï¼Œè¿™äº›éƒ½æ˜¯ç™»å½•é—®é¢˜ï¼Œä¸æ˜¯å•ç‚¹ç™»å½•é—®é¢˜ã€‚
+** stateå‚æ•°
 https://stackoverflow.com/questions/35985551/how-does-csrf-work-without-state-parameter-in-oauth2-0x
