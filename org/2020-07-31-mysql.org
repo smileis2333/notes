@@ -226,6 +226,26 @@ begin
 end$$
 DELIMITER ;
 call presetuser();
+** loop query result
+DECLARE CONTINUE HANDLER  FOR NOT FOUND SET finished = 1;
+
+OPEN tables_columns_cursor;
+
+check_table: loop
+	FETCH tables_columns_cursor INTO column_item,table_item;
+	IF finished = 1 then
+		LEAVE check_table;
+	END IF;
+	set @check_invalid_column_str = concat("select count(*) into @column_count  from ",table_item," where length(",column_item,")>16");
+	PREPARE check_invalid_column from @check_invalid_column_str;
+	EXECUTE check_invalid_column;
+	DEALLOCATE PREPARE check_invalid_column;
+	if @column_count > 0 then
+			insert into length_check(table_name,column_name,`count`,help_sql)values(table_item,column_item,@column_count,@check_invalid_column_str);
+	end if;
+END LOOP check_table;
+
+CLOSE tables_columns_cursor;
 * config
 ** cluster
 *** docker

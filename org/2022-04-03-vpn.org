@@ -1,0 +1,19 @@
+关闭连接的默认网关，属性->网络->TCP4->高级->在远程网络上使用默认网关
+eg
+route -p add 118.31.18.127 mask 255.255.255.255 192.168.3.25
+route -p add 120.55.60.202 mask 255.255.255.255 192.168.3.25
+* 链接可能出现的问题
+VPN提供商            默认
+服务器名称或者地址   x.y.z.w
+VPN类型             使用预共享秘钥的 L2TP/IPsec
+
+网络适配器(对应VPN配置)->属性->安全->允许使用这些协议(未加密的密码，质询握手身份协议，Microsoft CHAP)
+
+注册表
+HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Rasman\Parameters
+键入类型为DWORD的且值为1的ProhibitIpSec字段
+allowL2TPweakcryphto值改为1
+重启在连接
+* ref
+https://docs.microsoft.com/en-US/troubleshoot/windows-server/networking/cannot-connect-to-internet-vpn-server
+https://www.nstec.com/can-in-windows-make-vpn-for-one-application/

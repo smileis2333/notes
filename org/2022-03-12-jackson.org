@@ -1,0 +1,4 @@
+* warn
+jacknson
+被标注为
+@JsonValue的可以从该标注进行反序列号为enum，但是如果为数值，传参必须为"1"之类，因为默认数值走的是ordinal的反序列化

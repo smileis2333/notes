@@ -1,0 +1,169 @@
+#+TITLE:  Tasker
+#+STARTUP: indent
+* 事件驱动
+根据具体事件触发行为
+* 注意事项
+js引擎有小毛病，root后用shell执行比较靠谱
+* 自动打卡
+原理
+1. 被控机开启自动打卡
+2. 被控机模拟操作流程(开发者模式进行打点定位)
+3. 主力机收到登录验证码短信进行抽取，发送给受控机
+4. 被控机获取验证码进行登录
+** 被控机
+    任务: 自动打卡
+    
+    A1: 定位模式 [
+         模式: 高精准度 ]
+    
+    A2: 结束应用 [
+         程序: 企业微信 ]
+    
+    A3: 启动应用 [
+         包名/应用名: 企业微信 ]
+    
+    <等待界面载入>
+    A4: 等待 [
+         MS: 0
+         秒: 4
+         分: 0
+         小时: 0
+         天: 0 ]
+    
+    A5: 结束应用 [
+         程序: 企业微信 ]
+    
+    A6: 启动应用 [
+         包名/应用名: 企业微信 ]
+    
+    <等待页面刷新出按钮>
+    A7: 等待 [
+         MS: 0
+         秒: 5
+         分: 0
+         小时: 0
+         天: 0 ]
+    
+    <点击手机号登陆按钮>
+    A8: 运行Shell命令 [
+         命令: input tap 518 2014
+         超时（秒）: 0
+         使用Root: 开
+         Use Global Namespace: 开 ]
+    
+    <等待登陆表单刷新>
+    A9: 等待 [
+         MS: 0
+         秒: 2
+         分: 0
+         小时: 0
+         天: 0 ]
+    
+    <挪出光标防止输入失败>
+    A10: 运行Shell命令 [
+          命令: input tap 500 1200
+          超时（秒）: 0
+          使用Root: 开
+          Use Global Namespace: 开 ]
+    
+    <输入手机号>
+    A11: 输入文字 [
+          文字: 15815817741
+          重复次数: 1 ]
+    
+    <点击下一步按钮>
+    A12: 运行Shell命令 [
+          命令: input tap 534 698
+          超时（秒）: 0
+          使用Root: 开
+          Use Global Namespace: 开 ]
+    
+    A13: 亮屏时间 [
+          秒: 59
+          分: 0
+          小时: 0 ]
+    
+    A14: 等待 [
+          MS: 0
+          秒: 40
+          分: 0
+          小时: 0
+          天: 0 ]
+    
+    <挪出光标>
+    A15: 运行Shell命令 [
+          命令: input tap 537 1216
+          超时（秒）: 0
+          使用Root: 开
+          Use Global Namespace: 开 ]
+    
+    <输入验证码>
+    A16: 输入文字 [
+          文字: %VCODE
+          重复次数: 1 ]
+    
+    <点击下一步按钮>
+    A17: 运行Shell命令 [
+          命令: input tap 534 698
+          超时（秒）: 0
+          使用Root: 开
+          Use Global Namespace: 开 ]
+    
+    A18: 等待 [
+          MS: 0
+          秒: 3
+          分: 0
+          小时: 0
+          天: 0 ]
+    
+    <进入企业>
+    A19: 运行Shell命令 [
+          命令: input tap 468 437
+          超时（秒）: 0
+          使用Root: 开
+          Use Global Namespace: 开 ]
+    
+    A20: 等待 [
+          MS: 0
+          秒: 3
+          分: 0
+          小时: 0
+          天: 0 ]
+    
+    <进入>
+    A21: 运行Shell命令 [
+          命令: input tap 514 832
+          超时（秒）: 0
+          使用Root: 开
+          Use Global Namespace: 开 ]
+    
+    
+** 主力机
+Profile: 收到短信后发给受控机
+     Event: Received Text [ Type:Any Sender:* Content:* SIM Card:中国移动 MMS Body:* ]
+    
+    
+    
+    Enter Task: 解析短信
+    
+    A1: JavaScriptlet [
+         Code: setClip("%SMSRB",false);
+         Auto Exit: On
+         Timeout (Seconds): 45 ]
+    
+    A2: JavaScriptlet [
+         Code: setClip(/【腾讯科技】(\d{6,6}) （企业微信验证码），你正在登录企业微信App，15分钟内有效，请勿泄漏。/.exec(global("CLIP"))[1] , false);
+         Auto Exit: On
+         Timeout (Seconds): 45 ]
+    
+    A3: JavaScriptlet [
+         Code: setGlobal("%VERIFICATION_CODE",global( "CLIP") );
+         Auto Exit: On
+         Timeout (Seconds): 45 ]
+    
+    A4: Send SMS [
+         Number: 18024099018
+         Message: %VERIFICATION_CODE
+         SIM Card: 中国移动 ]
+* ref
+https://www.bilibili.com/read/cv8314979

@@ -1,0 +1,19 @@
+#+TITLE: jrebel
+#+STARTUP: indent
+* 激活
+http://www.cicoding.cn/other/jrebel-activation/
+http://jrebel.cicoding.cn
+
+GUID生成器：
+
+http://jrebel.cicoding.cn/guid
+
+监听配置格式：
+
+http://jrebel.cicoding.cn/GUID
+* 远程部署
+1. 根据IDE对应插件的startup进行服务器端设置
+2. 在idea本地激活要对应的jrebel模块，该操作生成对应的配置文件，jrebel用于插入热更新的URL，重新打包
+3. 如果需要远程调试，使用JVM默认提供的调试机制
+* ref
+https://www.cnblogs.com/hanganglin/p/9922654.html

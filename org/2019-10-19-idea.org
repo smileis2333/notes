@@ -86,17 +86,6 @@ noremap ,wj <C-W>j<CR>
 noremap ,wk <C-W>k<CR>
 ** actionlist
 https://gist.github.com/zchee/9c78f91cc5ad771c1f5d
-* jrebel
-http://www.cicoding.cn/other/jrebel-activation/
-http://jrebel.cicoding.cn
-
-GUID生成器：
-
-http://jrebel.cicoding.cn/guid
-
-监听配置格式：
-
-http://jrebel.cicoding.cn/GUID
 * terminal
 ** git bash
 terminal --> "C:\Program Files\Git\bin\bash.exe" --login -i
@@ -108,3 +97,9 @@ https://github.com/VPraharsha03/GentooWSL2
 * command line to long
   <component name="PropertiesComponent">
     <property name="dynamic.classpath" value="true" />
+* hot deploy
+https://www.frankfeekr.cn/2019/07/17/springboot-idea-jrebel-hotswap/index.html
+** jrebel
+需要在panel激活，生成对应jrebel的xml文件，多模块下需要支持的部分都要勾选
+*** 原理
+文件配合其so，在启动后往应用插入热部署的endpoint，监听本地文件目录变化，刷新spring context

@@ -77,3 +77,9 @@ locale分为三层
 系统支持的全部locale(超级多)
 管理员配置的系统支持可被选择的子集
 普通用户选其中一个locale
+* systemd
+stop via kill pid
+https://serverfault.com/questions/501694/systemd-httpd-stop-very-slow-under-arch-linux
+
+clean systemd unit
+https://superuser.com/questions/513159/how-to-remove-systemd-services

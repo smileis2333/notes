@@ -379,5 +379,12 @@ public class ArticleTypeHandler extends BaseTypeHandler<ArticleTypeEnum> {
     }
 }
 #+END_SRC
+* 注意事项
+** 一级缓存
+在整合使用连接池后，默认commit导致一级缓存实质上是无法生效的，除非使用事务机制诸如手动声明/@Transactional
+** 二级缓存
+mybatis激活L2，XML和Mapper不兼容，如果要一起来(典型的场景如用MP的BaseMapper)，Mapper需要
+1. @CacheNamespaceRef引用自己的命名空间(如果xml激活)
+2. xml不需要激活，@CacheNamespace直接激活自己
 * trick
 一级缓存为Sqlsession，默认开启，二级缓存配置在映射文件中，需要开启才有效

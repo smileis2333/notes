@@ -53,7 +53,175 @@ String emmanuelMessage() default "Not Emmanuel";
 1. 重复声明的一类注解，使用内嵌类@List统一处理，建议重复声明统一注解
 2. jsr303不允许出现side effect
 
-
-
 * ref
 https://beanvalidation.org/specification/
+
+* hv
+单校验器多violation
+    public boolean isValid(List<? extends BillGoodsDetailData> goodsInfos, ConstraintValidatorContext constraintValidatorContext) {
+        if (CollUtil.isEmpty(goodsInfos)) {
+            return true;
+        }
+        boolean pass = true;
+        HibernateConstraintValidatorContext context = constraintValidatorContext.unwrap(HibernateConstraintValidatorContext.class);
+        // close default constraint violation because we generate more detail violation
+        context.disableDefaultConstraintViolation();
+
+        AcceptMode mode = getAcceptMode(goodsInfos, context);
+        if (mode == null) {
+            return false;
+        }
+
+        if (mode == AcceptMode.BARCODE) {
+            Set<String> barcodes = new HashSet<>();
+            Map<String, Long> barcodeCodeIdMap = null;
+            if (CollUtil.isNotEmpty(barcodes)) {
+                barcodeCodeIdMap = barcodeDao.selectList(Wrappers.lambdaQuery(Barcode.class).in(Barcode::getBarcode, barcodes)).stream().collect(toMap(Barcode::getBarcode, Barcode::getId));
+            }
+            for (int i = 0; i < goodsInfos.size(); i++) {
+                BillGoodsDetailData item = goodsInfos.get(i);
+                if (StrUtil.isNotEmpty(item.getBarcode()) && !barcodeCodeIdMap.containsKey(item.getBarcode())) {
+                    pass = false;
+                    context.addExpressionVariable("validatedValue", item.getBarcode());
+                    context.buildConstraintViolationWithTemplate("{regent.validation.constraints.mapNotFound}").addPropertyNode("barcode").inIterable().atIndex(i).addConstraintViolation();
+                }
+            }
+        } else if (mode == AcceptMode.DETAIL_INFO) {
+            List<String> goodsCodes = CollUtil.distinct(CollUtil.map(goodsInfos, BillGoodsDetailData::getGoodsCode, true));
+            Map<String, Long> goodsCodeIdMap = null;
+            Map<String, Goods> goodsCodeGoodsMap = null;
+            List<Long> goodsIds = null;
+            if (CollUtil.isNotEmpty(goodsCodes)) {
+                List<Goods> goods = goodsDao.selectList(Wrappers.lambdaQuery(Goods.class).in(Goods::getCode, goodsCodes));
+                goodsCodeIdMap = goods.stream().collect(toMap(Goods::getCode, Goods::getId));
+                goodsCodeGoodsMap = goods.stream().collect(toMap(Goods::getCode, Function.identity()));
+                goodsIds = goods.stream().map(Goods::getId).distinct().collect(Collectors.toList());
+            }
+
+            for (int i = 0; i < goodsInfos.size(); i++) {
+                BillGoodsDetailData item = goodsInfos.get(i);
+                if (StrUtil.isNotEmpty(item.getGoodsCode()) && !goodsCodeIdMap.containsKey(item.getGoodsCode())) {
+                    pass = false;
+                    context.addExpressionVariable("validatedValue", item.getGoodsCode());
+                    context.buildConstraintViolationWithTemplate("{regent.validation.constraints.mapNotFound}").addPropertyNode("goodsCode").inIterable().atIndex(i).addConstraintViolation();
+                }
+            }
+
+            if (!pass) {
+                return false;
+            }
+
+            GoodsType goodsType = getGoodsType(goodsInfos, goodsCodeGoodsMap, context);
+            if (goodsType == null) {
+                return false;
+            }
+
+            if (goodsType == GoodsType.NORMAL) {
+                List<String> colorCodes = CollUtil.distinct(CollUtil.map(goodsInfos, BillGoodsDetailData::getColorCode, true));
+                List<String> longNames = CollUtil.distinct(CollUtil.map(goodsInfos, BillGoodsDetailData::getLongName, true));
+                Map<Long, Set<String>> goodsIdColorCodesMap = null;
+                Map<Long, Set<String>> goodsIdLongNamesMap = null;
+                Map<String, Long> colorCodeIdMap = null;
+                Map<String, Long> longNameIdMap = null;
+                if (CollUtil.isNotEmpty(colorCodes)) {
+                    List<GoodsColorDto> goodsColorDtos = goodsColorDao.selectGoodsColorByGoodsIds(goodsIds);
+                    goodsIdColorCodesMap = goodsColorDtos.stream().collect(Collectors.groupingBy(GoodsColorDto::getGoodsId, Collectors.mapping(GoodsColorDto::getColorCode, toSet())));
+                    colorCodeIdMap = goodsColorDtos.stream().collect(Collectors.toMap(GoodsColorDto::getColorCode, GoodsColorDto::getColorId, (x1, x2) -> x1));
+                }
+                if (CollUtil.isNotEmpty(longNames)) {
+                    List<GoodsLongDto> goodsLongDtos = goodsLongDao.selectGoodsLongByGoodsIds(goodsIds);
+                    goodsIdLongNamesMap = goodsLongDtos.stream().collect(Collectors.groupingBy(GoodsLongDto::getGoodsId, Collectors.mapping(GoodsLongDto::getLongName, toSet())));
+                    longNameIdMap = goodsLongDtos.stream().collect(Collectors.toMap(GoodsLongDto::getLongName, GoodsLongDto::getLongId, (x1, x2) -> x1));
+                }
+                // require not blank param
+                for (int i = 0; i < goodsInfos.size(); i++) {
+                    BillGoodsDetailData item = goodsInfos.get(i);
+                    if (StrUtil.isBlank(item.getColorCode())) {
+                        pass = false;
+                        context.buildConstraintViolationWithTemplate("{javax.validation.constraints.NotBlank.message}").addPropertyNode("colorCode").inIterable().atIndex(i).addConstraintViolation();
+                    }
+                    if (StrUtil.isBlank(item.getLongName())) {
+                        pass = false;
+                        context.buildConstraintViolationWithTemplate("{javax.validation.constraints.NotBlank.message}").addPropertyNode("longName").inIterable().atIndex(i).addConstraintViolation();
+                    }
+                    if (StrUtil.isBlank(item.getSize())) {
+                        pass = false;
+                        context.buildConstraintViolationWithTemplate("{javax.validation.constraints.NotBlank.message}").addPropertyNode("size").inIterable().atIndex(i).addConstraintViolation();
+                    }
+                }
+
+                if (!pass) {
+                    return false;
+                }
+
+                // check for exist
+                // warn!!! 可以短路校验，但是不建议(所以该处又进行了一次非空判断)，尽可能把报错信息一次性给全，降低用户二次确认传输失败的可能性
+                for (int i = 0; i < goodsInfos.size(); i++) {
+                    BillGoodsDetailData item = goodsInfos.get(i);
+                    Long goodsId = goodsCodeIdMap.get(item.getGoodsCode());
+                    if (StrUtil.isNotEmpty(item.getColorCode()) && !goodsIdColorCodesMap.get(goodsId).contains(item.getColorCode())) {
+                        pass = false;
+                        context.addExpressionVariable("validatedValue", item.getColorCode());
+                        context.buildConstraintViolationWithTemplate("{regent.validation.constraints.mapNotFound}").addPropertyNode("colorCode").inIterable().atIndex(i).addConstraintViolation();
+                    }
+                    if (StrUtil.isNotEmpty(item.getLongName()) && !goodsIdLongNamesMap.get(goodsId).contains(item.getLongName())) {
+                        pass = false;
+                        context.addExpressionVariable("validatedValue", item.getLongName());
+                        context.buildConstraintViolationWithTemplate("{regent.validation.constraints.mapNotFound}").addPropertyNode("longName").inIterable().atIndex(i).addConstraintViolation();
+                    }
+                }
+
+                // special case about size, because it must
+                // 1. align sizeName and goodsCode
+                // 2. goodsCode must be valid as its precondition
+                // 3. run as goodsCode mode
+                Map<Long, Map<String, Long>> sizeDetailMap = null;
+                if (pass) {
+                    // for align then query size map
+                    List<String> sizeNames = CollUtil.distinct(CollUtil.map(goodsInfos, BillGoodsDetailData::getSize, true));
+                    sizeDetailMap = baseDbDao.getSizeNameList(goodsIds, sizeNames).stream().collect(Collectors.groupingBy(SizeDetail::getGoodsId, Collectors.collectingAndThen(toMap(SizeDetail::getName, SizeDetail::getId), Collections::unmodifiableMap)));
+                    for (int i = 0; i < goodsInfos.size(); i++) {
+                        Long goodsId = null;
+                        BillGoodsDetailData item = goodsInfos.get(i);
+                        goodsId = goodsCodeIdMap.get(item.getGoodsCode());
+                        if (!sizeDetailMap.containsKey(goodsId) || !sizeDetailMap.get(goodsId).containsKey(item.getSize())) {
+                            pass = false;
+                            context.addExpressionVariable("validatedValue", item.getSize());
+                            context.buildConstraintViolationWithTemplate("{regent.validation.constraints.mapNotFound}").addPropertyNode("size").inIterable().atIndex(i).addConstraintViolation();
+                        }
+                    }
+                }
+
+                if (!pass) {
+                    return false;
+                }
+
+                // 规格限制
+                Map<Long, List<SizeDisable>> sizeDisablesMap = sizeDisableDao.selectList(Wrappers.lambdaQuery(SizeDisable.class).in(SizeDisable::getGoodsId, goodsIds)).stream().collect(Collectors.groupingBy(SizeDisable::getGoodsId));
+                for (int i = 0; i < goodsInfos.size(); i++) {
+                    BillGoodsDetailData item = goodsInfos.get(i);
+                    Long goodsId = goodsCodeIdMap.get(item.getGoodsCode());
+                    Long colorId = colorCodeIdMap.get(item.getColorCode());
+                    Long longId = longNameIdMap.get(item.getLongName());
+                    Long sizeId = sizeDetailMap.get(goodsId).get(item.getSize());
+
+                    List<SizeDisable> sizeDisables = sizeDisablesMap.get(goodsId);
+                    for (SizeDisable sizeDisable : sizeDisables) {
+                        if (sizeDisable.match(goodsId, colorId, longId, sizeId)) {
+                            pass = false;
+                            context.addExpressionVariable("validatedValue", String.format("%s|%s|%s", item.getColorCode(), item.getLongName(), item.getSize()));
+                            context.buildConstraintViolationWithTemplate("${validatedValue}规格被限制").addBeanNode().inIterable().atIndex(i).addConstraintViolation();
+                            break;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        return pass;
+    }    
+* order control
+https://stackoverflow.com/questions/5571231/control-validation-annotations-order
+* split config
+https://www.cnblogs.com/grey-wolf/p/12037311.html

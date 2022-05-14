@@ -9,3 +9,5 @@ bash startup.sh -m standalone
 * 从本地读取配置
 spring.cloud.bootstrap.location=file:///C:/Users/Administrator.DESKTOP-RL96PC3/Desktop/bootstrap.yml
 spring.cloud.nacos.config.enabled=false
+* systemd
+https://www.jianshu.com/p/e7fe8002c6fb
