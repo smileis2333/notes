@@ -238,3 +238,5 @@ ${hj:+"haha"} # 不替换，但是不为空时返回haha
 ${hj:?"error_info"} # 为空时，显示的错误信息
 
 #+END_SRC
+* ref
+https://stackoverflow.com/questions/2854655/command-to-escape-a-string-in-bash 输入转义

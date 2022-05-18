@@ -11,9 +11,17 @@ http://jrebel.cicoding.cn/guid
 监听配置格式：
 
 http://jrebel.cicoding.cn/GUID
-* 远程部署
+* ref
+https://www.cnblogs.com/hanganglin/p/9922654.html
+https://www.jrebel.com/products/jrebel/download/prev-releases 服务端下载链接
+* remote deploy
+原理
+通过agent插入url进行提供上传更新接口
+在需要启用的模块上开启rebel支持，生成rebel.xml和rebel-remote.xml
+
+** 步骤
 1. 根据IDE对应插件的startup进行服务器端设置
 2. 在idea本地激活要对应的jrebel模块，该操作生成对应的配置文件，jrebel用于插入热更新的URL，重新打包
 3. 如果需要远程调试，使用JVM默认提供的调试机制
-* ref
-https://www.cnblogs.com/hanganglin/p/9922654.html
+eg.
+java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=40011 "-agentpath:/mnt/rbp/rbp_exec/remoteDebug/jrebel/lib/libjrebel64.so" -Drebel.remoting_plugin=true -jar rbp-app-0.0.0.8-exec.jar --spring.cloud.bootstrap.location=./bootstrap.yml

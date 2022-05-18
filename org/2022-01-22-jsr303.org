@@ -53,9 +53,6 @@ String emmanuelMessage() default "Not Emmanuel";
 1. 重复声明的一类注解，使用内嵌类@List统一处理，建议重复声明统一注解
 2. jsr303不允许出现side effect
 
-* ref
-https://beanvalidation.org/specification/
-
 * hv
 单校验器多violation
     public boolean isValid(List<? extends BillGoodsDetailData> goodsInfos, ConstraintValidatorContext constraintValidatorContext) {
@@ -225,3 +222,7 @@ https://beanvalidation.org/specification/
 https://stackoverflow.com/questions/5571231/control-validation-annotations-order
 * split config
 https://www.cnblogs.com/grey-wolf/p/12037311.html
+* ref
+https://beanvalidation.org/specification/
+https://www.baeldung.com/spring-custom-validation-message-source 消息输出自定义
+

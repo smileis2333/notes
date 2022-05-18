@@ -62,3 +62,30 @@ java -jar xx.jar --server.port=8080
 )
 public class ExcludeConfig {
 }
+* trick
+** speed
+https://www.baeldung.com/spring-boot-startup-speed
+根据具体的业务系统排除非常用组件，如metric，config，初始化加载等
+springboot从2.2开始，可以设置后进行懒加载
+@Profile("speedDev")
+@Component
+public class LazyProcessor implements BeanFactoryPostProcessor {
+
+    @Override
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        Iterator<String> beanNames = beanFactory.getBeanNamesIterator();
+        beanNames.forEachRemaining(beanName -> {
+            try {
+                BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
+                int role = beanDefinition.getRole();
+                if (role == ROLE_APPLICATION) {
+                    beanDefinition.setLazyInit(true);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
+        beanFactory.getBeanDefinition("applicationContextUtil").setLazyInit(false); // 处理部分和系统绑定不能懒加载的组件，或必选组件
+    }
+}

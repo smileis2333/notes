@@ -272,3 +272,6 @@ java -XX:+PrintFlagsFinal
 jstat -gcutil 2815 1000 
 ** jdb
 自带调试器，与IDE基于同一套底层API
+* remote debug
+可以理解为最快全部模拟部署环境的手段，速度有毛病，因为通过stub来做，所以每个调用都是远程，传输效率低，如果不用全接入，建议ssh端口转发配置主要部件转发
+-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044

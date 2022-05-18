@@ -108,6 +108,73 @@ public class FeignConfig {
 }
 
 #+END_SRC
+*** 用途
+**** 内部微服务调用
+**** 封装三方rest接口(没sdk的处理方案)
+处理配置时，如果需要外部结构，需要单独在声明一段，因为默认的被覆盖了
+#+begin_src java
+@Configuration
+public class RawDecoderConfig {
+    @Autowired
+    private ObjectFactory<HttpMessageConverters> messageConverters;
+
+    @Bean
+    public Decoder rawDecoder() {
+        return new ResponseEntityDecoder(new SpringDecoder(this.messageConverters));
+    }
+}
+
+
+实现feign.codec.Decoder
+@Override
+public Object decode(Response response, Type type) throws IOException, FeignException {
+    String body = Util.toString(response.body().asReader(Util.UTF_8));
+    if (body == null) {
+        return null;
+    }
+    // 不建议用反射来解开外部的封装类型(搞笑rest接口)，因为没有缓存，每次都会过一遍，下面的样例是正统做法
+    final JavaType javaType = mapper.getTypeFactory().constructType(type);
+    final JavaType targetType = mapper.getTypeFactory().constructParametricType(YumeiRes.class, javaType);  //将指定的类型嵌套成三方rest的外层结构
+
+    final YumeiRes yumeiRes;
+    try {
+        yumeiRes = (YumeiRes) mapper.readValue(body, targetType);
+        if (yumeiRes.isSuccess()) {
+            return yumeiRes.getData();
+        } else {
+            log(response, body);
+        }
+    } catch (IOException e) {
+        // decode fail, must be error
+        log(response, body);
+        throw new DecodeException(response.status(),
+                format("%s is not a type supported by this decoder. response body", type, body));
+    }
+
+    throw new DecodeException(response.status(),
+            format("%s is not a type supported by this decoder.", type));
+}
+
+@FeignClient(value = "yumeiSaleorder", url = "${yumei.url}",configuration = YumeiResouceClientConfiguration.class)
+public interface SaleOrderResource {
+    @RequestMapping(method = RequestMethod.POST, value = "/api/trade/orderQuery")
+    YumeiOrderQueryPageResp orderQuery(@RequestBody YumeiOrderQueryReq param);
+}
+
+@FeignClient(value = "yumeiTokenResource", url = "${yumei.url}", configuration = RawDecoderConfig.class)
+public interface TokenResource {
+    @RequestMapping(method = RequestMethod.POST, value = "/auth/accessToken")
+    YumeiRes<YumeiToken> getYumeiToken(@RequestBody FetchTokenParam param);
+
+    @Data
+    @AllArgsConstructor
+    public static class FetchTokenParam{
+        private String account;
+        private String password;
+    }
+}
+
+#+end_src
 * 服务降级
 ** Hystrix
 *** 降级
@@ -493,3 +560,5 @@ public Object discovery(){
 * trick
 ** loadbalancer client not found
 https://stackoverflow.com/questions/63702885/java-lang-illegalstateexception-no-feign-client-for-loadbalancing-defined-did
+* ref
+https://www.baeldung.com/spring-cloud-openfeign
