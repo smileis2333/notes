@@ -1,0 +1,9 @@
+
+* spring mail client
+spring:
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: 980959100@qq.com
+    password: 授权码
+    properties.mail.smtp.ssl.enable: true # 必填，否则无法连接smtp服务器

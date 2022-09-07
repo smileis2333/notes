@@ -62,6 +62,12 @@ java -jar xx.jar --server.port=8080
 )
 public class ExcludeConfig {
 }
+* beanname冲突
+1. 改名(类名/component name)
+2. 排除依赖图中对于重名部分依赖的类
+
+
+不能通过BeanNameGenerator来处理冲突，冲突是在Beandefinition级别产生的
 * trick
 ** speed
 https://www.baeldung.com/spring-boot-startup-speed

@@ -387,4 +387,12 @@ mybatis激活L2，XML和Mapper不兼容，如果要一起来(典型的场景如�
 1. @CacheNamespaceRef引用自己的命名空间(如果xml激活)
 2. xml不需要激活，@CacheNamespace直接激活自己
 * trick
+** 缓存
 一级缓存为Sqlsession，默认开启，二级缓存配置在映射文件中，需要开启才有效
+mapper缓存只能开一边，两边开会出异常
+诸如MP的要开二级的，只能从mapper处开启，否则无法被识别
+** batch mode相关
+https://www.codeleading.com/article/41212960054/
+https://developer.aliyun.com/ask/327958
+https://pretius.com/blog/mybatis-batch-update-insert-delete/
+https://juejin.cn/post/7078237987011559460

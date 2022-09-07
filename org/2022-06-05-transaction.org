@@ -1,0 +1,7 @@
+#+TITLE: transaction
+#+STARTUP: indent
+2PC
+3PC
+* ref
+Transaction and third-party invocation association
+https://softwareengineering.stackexchange.com/questions/280324/is-it-better-to-make-database-calls-or-external-api-calls-first-in-the-context-o

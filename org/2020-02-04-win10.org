@@ -76,3 +76,5 @@ eg:
 ip: 11.11.11.11
 账号： DESKTOP-E9HAFIJ\smile2333
 密码： 123456
+* sshd
+应用 -> 可选功能 --> 安装sshd --> 服务 --> OpenSSH SSH Server ->启用
