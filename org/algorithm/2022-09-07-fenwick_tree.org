@@ -1,0 +1,72 @@
+#+TITLE: BIT/fenwick tree
+* 来源
+range query
+[2,5,-1,3,6]
+q(2,4)
+直接实现为，时间复杂度O(n)
+
+DP实现前n项和，
+q(2,4)=q(1,4)-q(1,2)
+,时间复杂度O(1)，限制，数组不变才可满足
+* 实现机制
+数值特性基于1，申请数组时一般size+1
+从1开始
+传播数值变化，前进 +lowbot(注意别漏了设置原数据源，因为下一次更新的差值取决于当前值)
+求和，前进 -lowbot
+* code
+#+begin_src java
+
+class NumArray {
+    FenwickTree tree;
+    int[] nums;
+
+
+    public NumArray(int[] nums) {
+        this.nums = nums;
+        tree = new FenwickTree(nums.length);
+        for (int i = 0; i < nums.length; i++) {
+            tree.update(i + 1, nums[i]);
+        }
+    }
+
+    public void update(int index, int val) {
+        tree.update(index + 1, val - nums[index]);
+        nums[index] = val;
+    }
+
+    public int sumRange(int left, int right) {
+        return tree.query(right + 1) - tree.query(left);
+    }
+}
+
+class FenwickTree {
+    int[] nums;
+
+    public FenwickTree(int n) {
+        this.nums = new int[n + 1];
+    }
+
+    public void update(int i, int delta) {
+        while (i < nums.length) {
+            nums[i] += delta;
+            i += lowbit(i);
+        }
+    }
+
+    public int query(int i) {
+        int sum = 0;
+        while (i > 0) {
+            sum += nums[i];
+            i -= lowbit(i);
+        }
+        return sum;
+    }
+
+    private int lowbit(int x) {
+        return x & (-x);
+    }
+}
+#+end_src
+
+* video
+https://www.youtube.com/watch?v=WbafSgetDDk&t=977s

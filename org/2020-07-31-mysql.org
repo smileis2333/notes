@@ -424,6 +424,14 @@ mysql -uroot -p123123 -e 'create database if not exists testdb;show databases;'
 help获取帮助信息
 help content 获取分类的信息
 help command(command代表具体指令，如create)
+* statement op
+replace into 
+尝试插入，如果已存在，进行覆盖，多用于导入性操作覆盖
+
+insert into
+多用于导入性操作，不进行覆盖，主键/唯一索引重复时跳过
+
+两者的主要用途在于系统设置时的设置性导入，或者客户端如dbeaver提供的导入机制下用于设置导入的replace method生成代码模板
 * 注意事项
 ** ID
 InnoDB对于最大主键的记录是不做处理的，如果产生空洞了，默认主键从空洞处开始算
