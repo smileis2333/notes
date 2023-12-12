@@ -2243,3 +2243,6 @@ use invocation API to construct VM, the rest is like invoke java method of nativ
 JVM run path
 ** java.class.path
 ** file.encoding
+* trick
+** simple lock by key
+https://www.baeldung.com/java-acquire-lock-by-key

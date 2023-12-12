@@ -495,3 +495,7 @@ it's not the spec, but virtually container that implement this to protect data
 而如果要做到responseFilter的逻辑概念，受限于规范(即请求过了filter到达servlet时，若不做任何处理，输出流直接是容器本身来管，写出时，也是直接写回客户端，并不会再经过Fliter),所以可行的方式是在chain.doFilter(request,response)时把response换成自定义的HttpServletResponse(可以继承提供的wrapper类，并实现部分方法以实现功能)
 ** SPI
 3.0之后支持SPI, META-INF/sevices/javax.servlet.ServletContainerInitializer
+* jndi
+eg
+中间件暴露给war Datasource
+https://www.digitalocean.com/community/tutorials/tomcat-datasource-jndi-example-java

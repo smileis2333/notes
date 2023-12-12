@@ -62,7 +62,12 @@ class Main {
 #+end_src
 * a = a + b 与 a += b 的区别
 直接加会先提升到int在加和
-+=会在提升的基础上进行一次类型转化
++=会在提升的基础上多了一层类型自动转化
+
+eg.
+short a = 0;
+int b = 1;
+a = (short)(a+b) 等价于 a+=b;
 * 关于finally
 finally不管有没有异常都要处理
 当try和catch中有return时，finally仍然会执行，finally比return先执行

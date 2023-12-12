@@ -111,3 +111,19 @@ properties定义属性xxx，version处使用${xxx}
 #+END_SRC
 * 注意事项
 maven3.6之后不支持http，如果私服是http，需要手动下载降级maven
+* script
+** upgrade
+mvn versions:set -DnewVersion=2.0.2.0 versions:update-child-modules
+* proxy
+idea指定maven vm参数
+** settings.xml
+  <proxies>
+    <proxy>
+        <id>httpproxy</id>
+        <active>true</active>
+        <protocol>http</protocol>
+        <host>127.0.0.1</host>
+        <port>10809</port>
+        <nonProxyHosts>local.net|some.host.com</nonProxyHosts>
+    </proxy>
+  </proxies>

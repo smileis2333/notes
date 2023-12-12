@@ -440,6 +440,13 @@ MyISAM则是会记录当前最大的主键
 $r=mysql_query(xxx);
 ** intersect and except
 mysql没有提供支持，需要使用in/not in自己处理
+** select into truncate double false
+select 语句如果查询条件存在true/faslse字段(比如字段f)的情况下，单纯查询不会出现问题，如果
+用于select into
+语句解析会存在进行值转换，导致truncate double，可以通过concat规避转换
+eg:
+insert into xxx
+
 * ref
 #  cluster
 https://www.cnblogs.com/byxxw/p/11433571.html  配置有误，需要my.cnf改动为包含conf.d,否则无法生效

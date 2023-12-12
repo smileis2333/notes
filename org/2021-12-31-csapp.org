@@ -61,22 +61,28 @@
 * arch lab
 sudo apt-get install tcl-dev
 sudo apt-get install tk-dev
+sudo apt-get install flex
+sudo apt-get install bison
+
+cd sim
+make clean; make
 ** partA
 cd misc
 ./yas  sum.ys && ./yis sum.yo
 ./yas rsum.ys && ./yis  rsum.yo
-./yas  copy.ys && ./yis  copy.yo
+./yas  copy_block.ys && ./yis  copy_block.yo
 ** partb
 
-rchlab_base_dir=`pwd`
+archlab_base_dir=`pwd`
 cd $archlab_base_dir
 
-cd sim; make VERSION=full
+cd sim
+make VERSION=full
 cd $archlab_base_dir/sim/seq;./ssim -t ../y86-code/asumi.yo 
 cd $archlab_base_dir/sim/y86-code;make testssim
 cd $archlab_base_dir/sim/ptest;make SIM=../seq/ssim;make SIM=../seq/ssim TFLAGS=-i
 ** partc
- mke psim VERSION=full
+ make psim VERSION=full
  ./psim -t sdriver.yo
  ./psim -t ldriver.yo
  ./correctness.pl

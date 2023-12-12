@@ -103,3 +103,6 @@ https://www.frankfeekr.cn/2019/07/17/springboot-idea-jrebel-hotswap/index.html
 需要在panel激活，生成对应jrebel的xml文件，多模块下需要支持的部分都要勾选
 *** 原理
 文件配合其so，在启动后往应用插入热部署的endpoint，监听本地文件目录变化，刷新spring context
+* link
+激活码
+http://idea.hicxy.com/
